@@ -31,7 +31,7 @@ pipelines:
             - sfdx --version
             - sfdx plugins --core
       - step:
-          name: Auth to Staging
+          name: Validate to Staging
           deployment: Staging
           script:
             - echo $SFDX_AUTH_URL > sfdx_auth_url.txt
@@ -47,7 +47,7 @@ pipelines:
             - sfdx --version
             - sfdx plugins --core
       - step:
-          name: Auth to Production
+          name: Validate to Production
           deployment: Production
           script:
             - echo $SFDX_AUTH_URL > sfdx_auth_url.txt
@@ -64,7 +64,7 @@ pipelines:
             - sfdx --version
             - sfdx plugins --core
       - step:
-          name: Auth to Test
+          name: Deploy to Test
           deployment: Test
           script:
             - echo $SFDX_AUTH_URL > sfdx_auth_url.txt
@@ -80,7 +80,7 @@ pipelines:
             - sfdx --version
             - sfdx plugins --core
       - step:
-          name: Auth to Staging
+          name: Deploy to Staging
           deployment: Staging
           script:
             - echo $SFDX_AUTH_URL > sfdx_auth_url.txt
@@ -96,7 +96,7 @@ pipelines:
             - sfdx --version
             - sfdx plugins --core
       - step:
-          name: Auth to Production
+          name: Deploy to Production
           deployment: Production
           script:
             - echo $SFDX_AUTH_URL > sfdx_auth_url.txt
