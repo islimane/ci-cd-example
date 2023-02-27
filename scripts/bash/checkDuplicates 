@@ -1,0 +1,8 @@
+#!/bin/bash
+return_value=0
+for fileName in $(find $1 -type f | sed 's_.*/__' | sort|  uniq -d| grep "${2}$" )
+do
+find $1 -type f | grep "$fileName$"
+return_value=1
+done
+exit $return_value

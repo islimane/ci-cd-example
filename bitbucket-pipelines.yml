@@ -1,0 +1,107 @@
+image: nubika/sfdxplus
+
+pipelines:
+  pull-requests:
+    feature/*:
+      - step:
+          name: Show SFDX Version
+          script:
+            - sfdx update
+            - sfdx --version
+            - sfdx plugins --core
+      - step:
+          name: Check for Duplicates
+          script:
+            - chmod +x scripts/bash/checkDuplicates
+            - scripts/bash/checkDuplicates ./force-app .cls
+      - step:
+          name: Validate to Test
+          deployment: Test
+          script:
+            - echo $SFDX_AUTH_URL > sfdx_auth_url.txt
+            - sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth_url.txt --setalias $SF_USERNAME --json
+            - sfdx force:config:set defaultusername=$SF_USERNAME
+            - tests=$(sfdx sfpowerkit:source:apextest:list -p force-app --json | jq -r '.result | join(",")')
+            - '[[ -z "$tests" ]] && sfdx force:source:deploy -p force-app/ --loglevel fatal --testlevel NoTestRun --checkonly || sfdx force:source:deploy -p force-app/ --loglevel fatal --testlevel RunSpecifiedTests --runtests $tests --checkonly'
+    develop:
+      - step:
+          name: Show SFDX Version
+          script:
+            - sfdx update
+            - sfdx --version
+            - sfdx plugins --core
+      - step:
+          name: Auth to Staging
+          deployment: Staging
+          script:
+            - echo $SFDX_AUTH_URL > sfdx_auth_url.txt
+            - sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth_url.txt --setalias $SF_USERNAME --json
+            - sfdx force:config:set defaultusername=$SF_USERNAME
+            - tests=$(sfdx sfpowerkit:source:apextest:list -p force-app --json | jq -r '.result | join(",")')
+            - '[[ -z "$tests" ]] && sfdx force:source:deploy -p force-app/ --loglevel fatal --testlevel NoTestRun --checkonly || sfdx force:source:deploy -p force-app/ --loglevel fatal --testlevel RunSpecifiedTests --runtests $tests --checkonly'
+    release:
+      - step:
+          name: Show SFDX Version
+          script:
+            - sfdx update
+            - sfdx --version
+            - sfdx plugins --core
+      - step:
+          name: Auth to Production
+          deployment: Production
+          script:
+            - echo $SFDX_AUTH_URL > sfdx_auth_url.txt
+            - sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth_url.txt --setalias $SF_USERNAME --json
+            - sfdx force:config:set defaultusername=$SF_USERNAME
+            - tests=$(sfdx sfpowerkit:source:apextest:list -p force-app --json | jq -r '.result | join(",")')
+            - '[[ -z "$tests" ]] && sfdx force:source:deploy -p force-app/ --loglevel fatal --testlevel NoTestRun --checkonly || sfdx force:source:deploy -p force-app/ --loglevel fatal --testlevel RunSpecifiedTests --runtests $tests --checkonly'
+  branches:
+    develop:
+      - step:
+          name: Show SFDX Version
+          script:
+            - sfdx update
+            - sfdx --version
+            - sfdx plugins --core
+      - step:
+          name: Auth to Test
+          deployment: Test
+          script:
+            - echo $SFDX_AUTH_URL > sfdx_auth_url.txt
+            - sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth_url.txt --setalias $SF_USERNAME --json
+            - sfdx force:config:set defaultusername=$SF_USERNAME
+            - tests=$(sfdx sfpowerkit:source:apextest:list -p force-app --json | jq -r '.result | join(",")')
+            - '[[ -z "$tests" ]] && sfdx force:source:deploy -p force-app/ --loglevel fatal --testlevel NoTestRun || sfdx force:source:deploy -p force-app/ --loglevel fatal --testlevel RunSpecifiedTests --runtests $tests'
+    release:
+      - step:
+          name: Show SFDX Version
+          script:
+            - sfdx update
+            - sfdx --version
+            - sfdx plugins --core
+      - step:
+          name: Auth to Staging
+          deployment: Staging
+          script:
+            - echo $SFDX_AUTH_URL > sfdx_auth_url.txt
+            - sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth_url.txt --setalias $SF_USERNAME --json
+            - sfdx force:config:set defaultusername=$SF_USERNAME
+            - tests=$(sfdx sfpowerkit:source:apextest:list -p force-app --json | jq -r '.result | join(",")')
+            - '[[ -z "$tests" ]] && sfdx force:source:deploy -p force-app/ --loglevel fatal --testlevel NoTestRun || sfdx force:source:deploy -p force-app/ --loglevel fatal --testlevel RunSpecifiedTests --runtests $tests'
+    main:
+      - step:
+          name: Show SFDX Version
+          script:
+            - sfdx update
+            - sfdx --version
+            - sfdx plugins --core
+      - step:
+          name: Auth to Production
+          deployment: Production
+          script:
+            - echo $SFDX_AUTH_URL > sfdx_auth_url.txt
+            - sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth_url.txt --setalias $SF_USERNAME --json
+            - sfdx force:config:set defaultusername=$SF_USERNAME
+            - tests=$(sfdx sfpowerkit:source:apextest:list -p force-app --json | jq -r '.result | join(",")')
+            - '[[ -z "$tests" ]] && sfdx force:source:deploy -p force-app/ --loglevel fatal --testlevel NoTestRun || sfdx force:source:deploy -p force-app/ --loglevel fatal --testlevel RunSpecifiedTests --runtests $tests'
+
