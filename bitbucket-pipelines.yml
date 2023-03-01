@@ -5,17 +5,23 @@ pipelines:
     feature/*:
       - step:
           name: Show SFDX Version
+          runs-on:
+            - self.hosted
           script:
             - sfdx update
             - sfdx --version
             - sfdx plugins --core
       - step:
           name: Check for Duplicates
+          runs-on:
+            - self.hosted
           script:
             - chmod +x scripts/bash/checkDuplicates
             - scripts/bash/checkDuplicates ./force-app .cls
       - step:
           name: Validate to Test
+          runs-on:
+            - self.hosted
           deployment: Test
           script:
             - echo $SFDX_AUTH_URL > sfdx_auth_url.txt
@@ -26,12 +32,16 @@ pipelines:
     develop:
       - step:
           name: Show SFDX Version
+          runs-on:
+            - self.hosted
           script:
             - sfdx update
             - sfdx --version
             - sfdx plugins --core
       - step:
           name: Validate to Staging
+          runs-on:
+            - self.hosted
           deployment: Staging
           script:
             - echo $SFDX_AUTH_URL > sfdx_auth_url.txt
@@ -39,15 +49,19 @@ pipelines:
             - sfdx force:config:set defaultusername=$SF_USERNAME
             - tests=$(sfdx sfpowerkit:source:apextest:list -p force-app --json | jq -r '.result | join(",")')
             - '[[ -z "$tests" ]] && sfdx force:source:deploy -p force-app/ --loglevel fatal --testlevel NoTestRun --checkonly || sfdx force:source:deploy -p force-app/ --loglevel fatal --testlevel RunSpecifiedTests --runtests $tests --checkonly'
-    release:
+    uat:
       - step:
           name: Show SFDX Version
+          runs-on:
+            - self.hosted
           script:
             - sfdx update
             - sfdx --version
             - sfdx plugins --core
       - step:
           name: Validate to Production
+          runs-on:
+            - self.hosted
           deployment: Production
           script:
             - echo $SFDX_AUTH_URL > sfdx_auth_url.txt
@@ -59,12 +73,16 @@ pipelines:
     develop:
       - step:
           name: Show SFDX Version
+          runs-on:
+            - self.hosted
           script:
             - sfdx update
             - sfdx --version
             - sfdx plugins --core
       - step:
           name: Deploy to Test
+          runs-on:
+            - self.hosted
           deployment: Test
           script:
             - echo $SFDX_AUTH_URL > sfdx_auth_url.txt
@@ -72,15 +90,19 @@ pipelines:
             - sfdx force:config:set defaultusername=$SF_USERNAME
             - tests=$(sfdx sfpowerkit:source:apextest:list -p force-app --json | jq -r '.result | join(",")')
             - '[[ -z "$tests" ]] && sfdx force:source:deploy -p force-app/ --loglevel fatal --testlevel NoTestRun || sfdx force:source:deploy -p force-app/ --loglevel fatal --testlevel RunSpecifiedTests --runtests $tests'
-    release:
+    uat:
       - step:
           name: Show SFDX Version
+          runs-on:
+            - self.hosted
           script:
             - sfdx update
             - sfdx --version
             - sfdx plugins --core
       - step:
           name: Deploy to Staging
+          runs-on:
+            - self.hosted
           deployment: Staging
           script:
             - echo $SFDX_AUTH_URL > sfdx_auth_url.txt
@@ -91,12 +113,16 @@ pipelines:
     main:
       - step:
           name: Show SFDX Version
+          runs-on:
+            - self.hosted
           script:
             - sfdx update
             - sfdx --version
             - sfdx plugins --core
       - step:
           name: Deploy to Production
+          runs-on:
+            - self.hosted
           deployment: Production
           script:
             - echo $SFDX_AUTH_URL > sfdx_auth_url.txt
