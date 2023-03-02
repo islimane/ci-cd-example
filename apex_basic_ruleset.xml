@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ruleset
+	xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	name="Basic ruleset used by the Nubika Team for Salesforce.com Apex"
+	xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd"
+>
+	<description>Basic ruleset used by the Nubika Team for Salesforce.com Apex</description>
+	<exclude-pattern>.*/.sfdx/.*</exclude-pattern>
+
+	<!-- Error Prone -->
+	<rule
+		ref="category/apex/errorprone.xml/ApexCSRF"
+		message="Avoid making DML operations in Apex class constructor/init method"
+	>
+		<priority>1</priority>
+	</rule>
+	<rule
+		ref="category/apex/errorprone.xml/AvoidDirectAccessTriggerMap"
+		message="Avoid directly accessing Trigger.old and Trigger.new"
+	>
+		<priority>1</priority>
+	</rule>
+	<rule ref="category/apex/errorprone.xml/AvoidHardcodingId" message="Avoid hardcoding ID's">
+		<priority>1</priority>
+	</rule>
+	<rule ref="category/apex/errorprone.xml/AvoidNonExistentAnnotations">
+		<priority>1</priority>
+	</rule>
+	<rule ref="category/apex/errorprone.xml/EmptyCatchBlock" message="Avoid empty catch blocks">
+		<priority>1</priority>
+	</rule>
+	<rule ref="category/apex/errorprone.xml/EmptyIfStmt" message="Avoid empty 'if' statements">
+		<priority>1</priority>
+	</rule>
+	<!-- TODO: THIS RULE NEEDS TO BE CUSTOMIZED -->
+	<rule ref="category/apex/errorprone.xml/EmptyStatementBlock" message="Avoid empty block statements.">
+		<priority>3</priority>
+	</rule>
+	<rule ref="category/apex/errorprone.xml/EmptyTryOrFinallyBlock" message="Avoid empty try or finally blocks">
+		<priority>1</priority>
+	</rule>
+	<rule ref="category/apex/errorprone.xml/EmptyWhileStmt" message="Avoid empty 'while' statements">
+		<priority>1</priority>
+	</rule>
+	<rule
+		ref="category/apex/errorprone.xml/MethodWithSameNameAsEnclosingClass"
+		message="Classes should not have non-constructor methods with the same name as the class"
+	>
+		<priority>1</priority>
+	</rule>
+	<rule ref="category/apex/errorprone.xml/TestMethodsMustBeInTestClasses">
+		<priority>1</priority>
+	</rule>
+	<rule ref="category/apex/errorprone.xml/OverrideBothEqualsAndHashcode">
+		<priority>1</priority>
+	</rule>
+
+
+	<!-- Performance -->
+	<rule ref="category/apex/performance.xml/OperationWithLimitsInLoop">
+		<priority>1</priority>
+	</rule>
+
+
+	<!-- Security -->
+	<rule ref="category/apex/security.xml/ApexBadCrypto" message="Apex Crypto should use random IV/key">
+		<priority>1</priority>
+	</rule>
+	<rule ref="category/apex/security.xml/ApexCRUDViolation" message="Validate CRUD permission before SOQL/DML operation">
+		<priority>2</priority>
+	</rule>
+	<rule ref="category/apex/security.xml/ApexDangerousMethods" message="Calling potentially dangerous method">
+		<priority>3</priority>
+	</rule>
+	<rule
+		ref="category/apex/security.xml/ApexInsecureEndpoint"
+		message="Apex callouts should use encrypted communication channels"
+	>
+		<priority>3</priority>
+	</rule>
+	<rule
+		ref="category/apex/security.xml/ApexOpenRedirect"
+		message="Apex classes should safely redirect to a known location"
+	>
+		<priority>3</priority>
+	</rule>
+	<rule
+		ref="category/apex/security.xml/ApexSharingViolations"
+		message="Apex classes should declare a sharing model if DML or SOQL is used"
+	>
+		<priority>2</priority>
+	</rule>
+	<rule
+		ref="category/apex/security.xml/ApexSOQLInjection"
+		message="Apex classes should escape variables merged in DML query"
+	>
+		<priority>1</priority>
+	</rule>
+	<rule
+		ref="category/apex/security.xml/ApexSuggestUsingNamedCred"
+		message="Consider using named credentials for authenticated callouts"
+	>
+		<priority>3</priority>
+	</rule>
+	<rule ref="category/apex/security.xml/ApexXSSFromEscapeFalse" message="Apex classes should escape addError strings">
+		<priority>1</priority>
+	</rule>
+	<rule
+		ref="category/apex/security.xml/ApexXSSFromURLParam"
+		message="Apex classes should escape Strings obtained from URL parameters"
+	>
+		<priority>1</priority>
+	</rule>
+
+
+	<!-- Visual Force -->
+	<rule ref="category/vf/security.xml/VfCsrf">
+		<priority>1</priority>
+	</rule>
+	<rule ref="category/vf/security.xml/VfUnescapeEl">
+		<priority>1</priority>
+	</rule>
+</ruleset>
