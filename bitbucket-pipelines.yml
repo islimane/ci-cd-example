@@ -17,7 +17,7 @@ pipelines:
             - self.hosted
           script:
             - chmod +x scripts/bash/checkDuplicates
-            - scripts/bash/checkDuplicates ./force-app .cls
+            - scripts/bash/checkDuplicates ./force-app ".cls\|.trigger"
       - step:
           name: Validate to Test
           runs-on:
