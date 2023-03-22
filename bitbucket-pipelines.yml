@@ -2,7 +2,7 @@ image: nubika/sfdxplus
 
 pipelines:
   pull-requests:
-    feature/*:
+    '{feature/**,bugfix/**}':
       - step:
           name: Show SFDX Version
           runs-on:
@@ -49,7 +49,7 @@ pipelines:
             - sfdx force:config:set defaultusername=$SF_USERNAME
             - tests=$(sfdx sfpowerkit:source:apextest:list -p force-app --json | jq -r '.result | join(",")')
             - '[[ -z "$tests" ]] && sfdx force:source:deploy -p force-app/ --loglevel fatal --testlevel NoTestRun --checkonly || sfdx force:source:deploy -p force-app/ --loglevel fatal --testlevel RunSpecifiedTests --runtests $tests --checkonly'
-    uat:
+    '{uat,hotfix/**}':
       - step:
           name: Show SFDX Version
           runs-on:
