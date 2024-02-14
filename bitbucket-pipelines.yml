@@ -76,7 +76,7 @@ pipelines:
             - sfdx force:config:set defaultusername=$SF_USERNAME
             - sfdx config:get defaultusername
             - tests=$(sfdx sfpowerkit:source:apextest:list -p force-app --json | jq -r '.result | join(",")')
-            - '[[ -z "$tests" ]] && sfdx force:source:deploy -p force-app/ --loglevel fatal --testlevel NoTestRun || sfdx force:source:deploy -p force-app/ --loglevel fatal --testlevel RunSpecifiedTests --runtests $tests'
+            - '[[ -z "$tests" ]] && sfdx force:source:deploy -p force-app/ --loglevel fatal --testlevel RunLocalTests || sfdx force:source:deploy -p force-app/ --loglevel fatal --testlevel RunSpecifiedTests --runtests $tests'
     main:
       - step:
           name: Show SFDX Version
@@ -97,4 +97,4 @@ pipelines:
             - sfdx force:config:set defaultusername=$SF_USERNAME
             - sfdx config:get defaultusername
             - tests=$(sfdx sfpowerkit:source:apextest:list -p force-app --json | jq -r '.result | join(",")')
-            - '[[ -z "$tests" ]] && sfdx force:source:deploy -p force-app/ --loglevel fatal --testlevel NoTestRun || sfdx force:source:deploy -p force-app/ --loglevel fatal --testlevel RunSpecifiedTests --runtests $tests'
+            - '[[ -z "$tests" ]] && sfdx force:source:deploy -p force-app/ --loglevel fatal --testlevel RunLocalTests || sfdx force:source:deploy -p force-app/ --loglevel fatal --testlevel RunSpecifiedTests --runtests $tests'
