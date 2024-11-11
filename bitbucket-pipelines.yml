@@ -29,6 +29,7 @@ pipelines:
             - LAST_PACKAGE_XML=$(cat package/package.xml)
             - echo $LAST_PACKAGE_XML
             - tests=$(cat ci-config/specified_tests.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
+            - echo $tests
             - '[[ -z "$tests" ]] && sf project deploy validate -x package/package.xml --test-level RunLocalTests || sf project deploy validate -x package/package.xml  --test-level RunSpecifiedTests --tests $tests'
   branches:
     dev:
