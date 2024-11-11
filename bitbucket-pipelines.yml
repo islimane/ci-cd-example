@@ -24,7 +24,7 @@ pipelines:
             - sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth_url.txt --setalias $SF_USERNAME --json
             - sfdx force:config:set defaultusername=$SF_USERNAME
             - sfdx config:get defaultusername
-            - tests=$(cat ci-config/specified-test.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
+            - tests=$(cat ci-config/specified_tests.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
             - '[[ -z "$tests" ]] && sf project deploy validate --source-dir force-app/ --test-level RunLocalTests || sf project deploy validate --source-dir force-app/  --test-level RunSpecifiedTests --tests $tests'
   branches:
     dev:
@@ -48,7 +48,7 @@ pipelines:
             - sfdx config:get defaultusername
             - LAST_SUCCESSFUL_COMMIT=$(cat ci-config/last_successful_commit.txt)
             - sfdx sgd:source:delta --to $BITBUCKET_COMMIT --from $LAST_SUCCESSFUL_COMMIT --output .
-            - tests=$(cat ci-config/specified-test.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
+            - tests=$(cat ci-config/specified_tests.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
             - '[[ -z "$tests" ]] && sf project deploy start -x package/package.xml --test-level RunLocalTests || sf project deploy start -x package/package.xml --test-level RunSpecifiedTests --tests $tests'
             - echo $BITBUCKET_COMMIT > ci-config/last_successful_commit.txt
             - git add ci-config/last_successful_commit.txt
@@ -75,7 +75,7 @@ pipelines:
             - sfdx config:get defaultusername
             - LAST_SUCCESSFUL_COMMIT=$(cat ci-config/last_successful_commit.txt)
             - sfdx sgd:source:delta --to $BITBUCKET_COMMIT --from $LAST_SUCCESSFUL_COMMIT --output .
-            - tests=$(cat ci-config/specified-test.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
+            - tests=$(cat ci-config/specified_tests.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
             - '[[ -z "$tests" ]] && sf project deploy start -x package/package.xml --test-level RunLocalTests || sf project deploy start -x package/package.xml --test-level RunSpecifiedTests --tests $tests'
             - echo $BITBUCKET_COMMIT > ci-config/last_successful_commit.txt
             - git add ci-config/last_successful_commit.txt
@@ -103,7 +103,7 @@ pipelines:
             - sfdx config:get defaultusername
             - LAST_SUCCESSFUL_COMMIT=$(cat ci-config/last_successful_commit.txt)
             - sfdx sgd:source:delta --to $BITBUCKET_COMMIT --from $LAST_SUCCESSFUL_COMMIT --output .
-            - tests=$(cat ci-config/specified-test.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
+            - tests=$(cat ci-config/specified_tests.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
             - '[[ -z "$tests" ]] && sf project deploy start -x package/package.xml --test-level RunLocalTests || sf project deploy start -x package/package.xml --test-level RunSpecifiedTests --tests $tests'
             - echo $BITBUCKET_COMMIT > ci-config/last_successful_commit.txt
             - git add ci-config/last_successful_commit.txt
