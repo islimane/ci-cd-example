@@ -93,8 +93,8 @@ pipelines:
             - echo $BITBUCKET_REPO_SLUG
             - echo $BITBUCKET_BRANCH
             - RESPONSE=$(curl -s "https://api.bitbucket.org/2.0/repositories/${BITBUCKET_WORKSPACE}/${BITBUCKET_REPO_SLUG}/pipelines/?target.ref_name=${BITBUCKET_BRANCH}&status=SUCCESSFUL")
-             - echo "Respuesta completa de la API:"
-             - echo "$RESPONSE"
+            - echo "Respuesta completa de la API:"
+            - echo "$RESPONSE"
             - sfdx sgd:source:delta --to $BITBUCKET_COMMIT --from e270a3a --output .
             - tests=$(cat ci-config/specified-test.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
             - '[[ -z "$tests" ]] && sf project deploy start --source-dir force-app/ --test-level RunLocalTests || sf project deploy start --source-dir force-app/  --test-level RunSpecifiedTests --tests $tests'
