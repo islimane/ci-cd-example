@@ -71,6 +71,15 @@ pipelines:
             - '[[ -z "$tests" ]] && sf project deploy start --source-dir force-app/ --test-level RunLocalTests || sf project deploy start --source-dir force-app/  --test-level RunSpecifiedTests --tests $tests'
     main:
       - step:
+          name: "Check Commit Message"
+          script:
+            - echo "Check Commit message"
+            - COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+            - if [[ "$COMMIT_MESSAGE" == *"[skip pipeline]"* ]]; then
+                echo "Pipeline omitido debido al mensaje del commit.";
+                exit 0;
+              fi
+      - step:
           name: Show SFDX Version
           runs-on:
             - self.hosted
@@ -78,15 +87,7 @@ pipelines:
             - sfdx update
             - sfdx --version
             - sfdx plugins --core
-      - step:
-          name: "Verificar mensaje del commit"
-          script:
-            - echo "Verificando mensaje del commit..."
-            - COMMIT_MESSAGE=$(git log -1 --pretty=%B)
-            - if [[ "$COMMIT_MESSAGE" == *"[skip pipeline]"* ]]; then
-                echo "Pipeline omitido debido al mensaje del commit.";
-                exit 0;
-              fi
+      
       - step:
           name: Deploy to Production
           runs-on:
