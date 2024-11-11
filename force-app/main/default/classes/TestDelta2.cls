@@ -13,5 +13,6 @@ public with sharing class TestDelta2 {
     public static void test_testMethod2() {
         integer i = 0;
         Integer e = 2;
+        Integer a = 2;
     }
 }
