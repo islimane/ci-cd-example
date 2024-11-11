@@ -93,5 +93,5 @@ pipelines:
             - sfdx config:get defaultusername
             #- tests=$(sfdx sfpowerkit:source:apextest:list -p force-app --json | jq -r '.result | join(",")')
             - tests=$(cat ci-config/specified-test.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
-            - '[[ -z "$tests" ]] && sf project deploy start --source-dir force-app/ --loglevel fatal --test-level RunLocalTests || sf project deploy start --source-dir force-app/ --loglevel fatal --test-level RunSpecifiedTests --tests $tests'
+            - '[[ -z "$tests" ]] && sf project deploy start --source-dir force-app/ --test-level RunLocalTests || sf project deploy start --source-dir force-app/  --test-level RunSpecifiedTests --tests $tests'
 
