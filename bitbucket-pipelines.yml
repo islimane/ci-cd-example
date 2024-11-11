@@ -88,6 +88,9 @@ pipelines:
             - sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth_url.txt --setalias $SF_USERNAME --json
             - sfdx force:config:set defaultusername=$SF_USERNAME
             - sfdx config:get defaultusername
+            - COMMIT_HASH=$(curl -s "https://api.bitbucket.org/2.0/repositories/${BITBUCKET_WORKSPACE}/${BITBUCKET_REPO_SLUG}/pipelines/?target.ref_name=${BITBUCKET_BRANCH}&status=SUCCESSFUL" | jq -r '.values[0].target.commit.hash')
+            - 'echo El commit del PR es: $COMMIT_HASH'
+            - sfdx sgd:source:delta --to $BITBUCKET_COMMIT --from 045e0b05bfe82364e6937a0e8d4d477c0954a534 --output .
             - tests=$(cat ci-config/specified-test.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
             - '[[ -z "$tests" ]] && sf project deploy start --source-dir force-app/ --test-level RunLocalTests || sf project deploy start --source-dir force-app/  --test-level RunSpecifiedTests --tests $tests'
 
