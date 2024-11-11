@@ -98,4 +98,8 @@ pipelines:
             - sfdx sgd:source:delta --to $BITBUCKET_COMMIT --from e270a3a --output .
             - tests=$(cat ci-config/specified-test.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
             - '[[ -z "$tests" ]] && sf project deploy start --source-dir force-app/ --test-level RunLocalTests || sf project deploy start --source-dir force-app/  --test-level RunSpecifiedTests --tests $tests'
+            - echo $BITBUCKET_COMMIT > last_successful_commit.txt
+            - git add last_successful_commit.txt
+            - git commit -m 'last commit'
+            - git push origin ${BITBUCKET_BRANCH}
 
