@@ -6,6 +6,7 @@
  * @group        : 
  * @see          : 
 **/
+@isTest
 public with sharing class TestDelta {
     public TestDelta() {
         System.debug('ey 4');

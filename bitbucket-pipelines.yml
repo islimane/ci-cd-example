@@ -4,13 +4,13 @@ pipelines:
   pull-requests:
     '**': #this runs as default for any branch not elsewhere defined
       - step:
-          name: Show Salesforce CLI Version
+          name: Show SFDX Version
           runs-on:
             - self.hosted
           script:
-            - sf update
-            - sf --version
-            - sf plugins --core
+            - sfdx update
+            - sfdx --version
+            - sfdx plugins --core
       - step:
           name: Validate
           runs-on:
@@ -20,73 +20,74 @@ pipelines:
             - '[[ "${BITBUCKET_PR_DESTINATION_BRANCH}" == "uat" ]] && SFDX_AUTH_URL=$UAT_SFDX_AUTH_URL'
             - '[[ "${BITBUCKET_PR_DESTINATION_BRANCH}" == "dev" ]] && SFDX_AUTH_URL=$DEV_SFDX_AUTH_URL'
             - if [ -z "$SFDX_AUTH_URL" ]; then echo "No SFDX_AUTH_URL defined for branch ${BITBUCKET_PR_DESTINATION_BRANCH}"; exit; fi
-            - echo $SFDX_AUTH_URL > sf_auth_url.txt
-            - sf org login auth:web:login --sfdx-url-file sf_auth_url.txt --set-alias $SF_USERNAME --json
-            - sf config set target-org=$SF_USERNAME
-            - sf config get target-org
+            - echo $SFDX_AUTH_URL > sfdx_auth_url.txt
+            - sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth_url.txt --setalias $SF_USERNAME --json
+            - sfdx force:config:set defaultusername=$SF_USERNAME
+            - sfdx config:get defaultusername
             - tests=$(cat ci-config/specified-test.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
-            - '[[ -z "$tests" ]] && sf project deploy start --source-dir force-app/ --test-level NoTestRun --checkonly --verbose || sf project deploy start --source-dir force-app/ --test-level RunSpecifiedTests --tests $tests --checkonly --verbose'
+            - '[[ -z "$tests" ]] && sf project deploy validate --source-dir force-app/ --test-level RunLocalTests || sf project deploy validate --source-dir force-app/  --test-level RunSpecifiedTests --tests $tests'
   branches:
     dev:
       - step:
-          name: Show Salesforce CLI Version
+          name: Show SFDX Version
           runs-on:
             - self.hosted
           script:
-            - sf update
-            - sf --version
-            - sf plugins --core
+            - sfdx update
+            - sfdx --version
+            - sfdx plugins --core
       - step:
           name: Deploy to Test
           runs-on:
             - self.hosted
           deployment: Test
           script:
-            - echo $DEV_SFDX_AUTH_URL > sf_auth_url.txt
-            - sf org login auth:web:login --sfdx-url-file sf_auth_url.txt --set-alias $SF_USERNAME --json
-            - sf config set target-org=$SF_USERNAME
-            - sf config get target-org
+            - echo $DEV_SFDX_AUTH_URL > sfdx_auth_url.txt
+            - sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth_url.txt --setalias $SF_USERNAME --json
+            - sfdx force:config:set defaultusername=$SF_USERNAME
+            - sfdx config:get defaultusername
             - tests=$(cat ci-config/specified-test.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
-            - '[[ -z "$tests" ]] && sf project deploy start --source-dir force-app/ --test-level NoTestRun || sf project deploy start --source-dir force-app/ --test-level RunSpecifiedTests --tests $tests'
+            - '[[ -z "$tests" ]] && sf project deploy start --source-dir force-app/ --test-level RunLocalTests || sf project deploy start --source-dir force-app/  --test-level RunSpecifiedTests --tests $tests'
     uat:
       - step:
-          name: Show Salesforce CLI Version
+          name: Show SFDX Version
           runs-on:
             - self.hosted
           script:
-            - sf update
-            - sf --version
-            - sf plugins --core
+            - sfdx update
+            - sfdx --version
+            - sfdx plugins --core
       - step:
           name: Deploy to Staging
           runs-on:
             - self.hosted
           deployment: Staging
           script:
-            - echo $UAT_SFDX_AUTH_URL > sf_auth_url.txt
-            - sf org login auth:web:login --sfdx-url-file sf_auth_url.txt --set-alias $SF_USERNAME --json
-            - sf config set target-org=$SF_USERNAME
-            - sf config get target-org
+            - echo $UAT_SFDX_AUTH_URL > sfdx_auth_url.txt
+            - sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth_url.txt --setalias $SF_USERNAME --json
+            - sfdx force:config:set defaultusername=$SF_USERNAME
+            - sfdx config:get defaultusername
             - tests=$(cat ci-config/specified-test.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
-            - '[[ -z "$tests" ]] && sf project deploy start --source-dir force-app/ --test-level NoTestRun || sf project deploy start --source-dir force-app/ --test-level RunSpecifiedTests --tests $tests'
+            - '[[ -z "$tests" ]] && sf project deploy start --source-dir force-app/ --test-level RunLocalTests || sf project deploy start --source-dir force-app/  --test-level RunSpecifiedTests --tests $tests'
     main:
       - step:
-          name: Show Salesforce CLI Version
+          name: Show SFDX Version
           runs-on:
             - self.hosted
           script:
-            - sf update
-            - sf --version
-            - sf plugins --core
+            - sfdx update
+            - sfdx --version
+            - sfdx plugins --core
       - step:
           name: Deploy to Production
           runs-on:
             - self.hosted
           deployment: Production
           script:
-            - echo $PRO_SFDX_AUTH_URL > sf_auth_url.txt
-            - sf org login auth:web:login --sfdx-url-file sf_auth_url.txt --set-alias $SF_USERNAME --json
-            - sf config set target-org=$SF_USERNAME
-            - sf config get target-org
+            - echo $PRO_SFDX_AUTH_URL > sfdx_auth_url.txt
+            - sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth_url.txt --setalias $SF_USERNAME --json
+            - sfdx force:config:set defaultusername=$SF_USERNAME
+            - sfdx config:get defaultusername
             - tests=$(cat ci-config/specified-test.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
-            - '[[ -z "$tests" ]] && sf project deploy start --source-dir force-app/ --test-level NoTestRun || sf project deploy start --source-dir force-app/ --test-level RunSpecifiedTests --tests $tests'
+            - '[[ -z "$tests" ]] && sf project deploy start --source-dir force-app/ --test-level RunLocalTests || sf project deploy start --source-dir force-app/  --test-level RunSpecifiedTests --tests $tests'
+
