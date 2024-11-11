@@ -10,7 +10,7 @@
 public with sharing class TestDelta {
     public TestDelta() {
         System.debug('ey 4');
-        System.debug('ey 5');
+        System.debug('ey 5');ghjhj
         System.debug('ey 6');
     }
 }
