@@ -12,5 +12,6 @@ public with sharing class TestDelta2 {
     @isTest
     public TestDelta2() {
         integer i = 0;
+        Integer e = 1;
     }
 }
