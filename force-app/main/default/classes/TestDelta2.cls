@@ -10,7 +10,7 @@
 public with sharing class TestDelta2 {
     
     @isTest
-    public TestDelta2() {
+    public static void testMethod() {
         integer i = 0;
         Integer e = 1;
     }
