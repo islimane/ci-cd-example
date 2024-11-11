@@ -76,7 +76,7 @@ pipelines:
             - echo "Check Commit message"
             - COMMIT_MESSAGE=$(git log -1 --pretty=%B)
             - if [[ "$COMMIT_MESSAGE" == *"[skip pipeline]"* ]]; then
-                echo "Pipeline omitido debido al mensaje del commit.";
+                echo "Pipeline skipped";
                 exit 0;
               fi
       - step:
