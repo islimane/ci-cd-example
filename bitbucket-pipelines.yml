@@ -92,7 +92,7 @@ pipelines:
             - echo $BITBUCKET_WORKSPACE
             - echo $BITBUCKET_REPO_SLUG
             - echo $BITBUCKET_BRANCH
-            - RESPONSE=$(curl -s "https://api.bitbucket.org/2.0/repositories/${BITBUCKET_WORKSPACE}/${BITBUCKET_REPO_SLUG}/pipelines/?target.ref_name=${BITBUCKET_BRANCH}&status=SUCCESSFUL")
+            - RESPONSE=$(curl -s "https://api.bitbucket.org/2.0/repositories/${BITBUCKET_WORKSPACE}/${BITBUCKET_REPO_SLUG}/pipelines")
             - echo "Respuesta completa de la API:"
             - echo "$RESPONSE"
             - sfdx sgd:source:delta --to $BITBUCKET_COMMIT --from e270a3a --output .
