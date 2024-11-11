@@ -1,4 +1,4 @@
-image: nubika/sfdxplus
+image: nubika/sfdxplus-delta:latest
 
 pipelines:
   pull-requests:
