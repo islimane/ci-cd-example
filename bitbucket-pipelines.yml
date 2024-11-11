@@ -103,10 +103,14 @@ pipelines:
             - sfdx config:get defaultusername
             - LAST_SUCCESSFUL_COMMIT=$(cat ci-config/last_successful_commit.txt)
             - sfdx sgd:source:delta --to $BITBUCKET_COMMIT --from $LAST_SUCCESSFUL_COMMIT --output .
+            - LAST_PACKAGE_XML=$(cat package/package.xml)
+            - echo $LAST_PACKAGE_XML
             - tests=$(cat ci-config/specified_tests.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
             - '[[ -z "$tests" ]] && sf project deploy start -x package/package.xml --test-level RunLocalTests || sf project deploy start -x package/package.xml --test-level RunSpecifiedTests --tests $tests'
             - echo $BITBUCKET_COMMIT > ci-config/last_successful_commit.txt
+            - echo $LAST_PACKAGE_XML > ci-config/last_package.xml
             - git add ci-config/last_successful_commit.txt
+            - git add ci-config/last_package.xml
             - git commit -m '[skip ci]'
             - git push origin ${BITBUCKET_BRANCH}
 
