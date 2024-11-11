@@ -79,6 +79,15 @@ pipelines:
             - sfdx --version
             - sfdx plugins --core
       - step:
+          name: "Verificar mensaje del commit"
+          script:
+            - echo "Verificando mensaje del commit..."
+            - COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+            - if [[ "$COMMIT_MESSAGE" == *"[skip pipeline]"* ]]; then
+                echo "Pipeline omitido debido al mensaje del commit.";
+                exit 0;
+              fi
+      - step:
           name: Deploy to Production
           runs-on:
             - self.hosted
@@ -94,6 +103,6 @@ pipelines:
             - '[[ -z "$tests" ]] && sf project deploy start --source-dir force-app/ --test-level RunLocalTests || sf project deploy start --source-dir force-app/  --test-level RunSpecifiedTests --tests $tests'
             - echo $BITBUCKET_COMMIT > ci-config/last_successful_commit.txt
             - git add ci-config/last_successful_commit.txt
-            - git commit -m 'last commit success'
+            - git commit -m '[skip pipeline]'
             - git push origin ${BITBUCKET_BRANCH}
 
