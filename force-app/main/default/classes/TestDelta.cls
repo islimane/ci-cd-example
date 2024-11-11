@@ -13,5 +13,6 @@ public with sharing class TestDelta {
         System.debug('ey 5');
         System.debug('ey 6');
         System.debug('ey 7');
+        System.debug('ey 8');
     }
 }
