@@ -8,6 +8,6 @@
 **/
 public with sharing class TestDelta {
     public TestDelta() {
-        System.debug('ey 1');
+        System.debug('ey 2');
     }
 }
