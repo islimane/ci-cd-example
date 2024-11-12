@@ -24,12 +24,18 @@ pipelines:
             - sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth_url.txt --setalias $SF_USERNAME --json
             - sfdx force:config:set defaultusername=$SF_USERNAME
             - sfdx config:get defaultusername
-            - LAST_SUCCESSFUL_COMMIT=$(cat ci-config/last_successful_commit.txt)
-            - sfdx sgd:source:delta --to $BITBUCKET_COMMIT --from $LAST_SUCCESSFUL_COMMIT --output .
-            - LAST_PACKAGE_XML=$(cat package/package.xml)
-            - echo $LAST_PACKAGE_XML
+            - |
+              if [ ! -s ci-config/last_successful_commit.txt ]; then
+                echo "Using manifest/package.xml for deployment"
+                MANIFEST_PATH="manifest/package.xml"
+              else
+                LAST_SUCCESSFUL_COMMIT=$(cat ci-config/last_successful_commit.txt)
+                sfdx sgd:source:delta --to $BITBUCKET_COMMIT --from $LAST_SUCCESSFUL_COMMIT --output .
+                MANIFEST_PATH="package/package.xml"
+              fi
+            - echo $MANIFEST_PATH
             - tests=$(cat ci-config/specified_tests.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
-            - '[[ -z "$tests" ]] && sf project deploy validate -x package/package.xml --test-level RunLocalTests || sf project deploy validate -x package/package.xml  --test-level RunSpecifiedTests --tests $tests'
+            - '[[ -z "$tests" ]] && sf project deploy validate --manifest $MANIFEST_PATH --test-level RunLocalTests || sf project deploy validate --manifest $MANIFEST_PATH --test-level RunSpecifiedTests --tests $tests'
   branches:
     dev:
       - step:
@@ -46,18 +52,24 @@ pipelines:
             - self.hosted
           deployment: Test
           script:
-            - echo $PRO_SFDX_AUTH_URL > sfdx_auth_url.txt
+            - echo $DEV_SFDX_AUTH_URL > sfdx_auth_url.txt
             - sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth_url.txt --setalias $SF_USERNAME --json
             - sfdx force:config:set defaultusername=$SF_USERNAME
             - sfdx config:get defaultusername
-            - LAST_SUCCESSFUL_COMMIT=$(cat ci-config/last_successful_commit.txt)
-            - sfdx sgd:source:delta --to $BITBUCKET_COMMIT --from $LAST_SUCCESSFUL_COMMIT --output .
-            - LAST_PACKAGE_XML=$(cat package/package.xml)
-            - echo $LAST_PACKAGE_XML
+            - |
+              if [ ! -s ci-config/last_successful_commit.txt ]; then
+                echo "Using manifest/package.xml for deployment"
+                MANIFEST_PATH="manifest/package.xml"
+              else
+                LAST_SUCCESSFUL_COMMIT=$(cat ci-config/last_successful_commit.txt)
+                sfdx sgd:source:delta --to $BITBUCKET_COMMIT --from $LAST_SUCCESSFUL_COMMIT --output .
+                MANIFEST_PATH="package/package.xml"
+              fi
+            - echo $MANIFEST_PATH
             - tests=$(cat ci-config/specified_tests.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
-            - '[[ -z "$tests" ]] && sf project deploy start -x package/package.xml --test-level NoTestRun || sf project deploy start -x package/package.xml --test-level RunSpecifiedTests --tests $tests'
+            - '[[ -z "$tests" ]] && sf project deploy start --manifest $MANIFEST_PATH --test-level NoTestRun || sf project deploy start --manifest $MANIFEST_PATH --test-level RunSpecifiedTests --tests $tests'
             - echo $BITBUCKET_COMMIT > ci-config/last_successful_commit.txt
-            - echo $LAST_PACKAGE_XML > ci-config/last_package.xml
+            - echo $MANIFEST_PATH > ci-config/last_package.xml
             - git add ci-config/last_successful_commit.txt
             - git add ci-config/last_package.xml
             - git commit -m '[skip ci]'
@@ -77,18 +89,24 @@ pipelines:
             - self.hosted
           deployment: Staging
           script:
-            - echo $PRO_SFDX_AUTH_URL > sfdx_auth_url.txt
+            - echo $UAT_SFDX_AUTH_URL > sfdx_auth_url.txt
             - sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth_url.txt --setalias $SF_USERNAME --json
             - sfdx force:config:set defaultusername=$SF_USERNAME
             - sfdx config:get defaultusername
-            - LAST_SUCCESSFUL_COMMIT=$(cat ci-config/last_successful_commit.txt)
-            - sfdx sgd:source:delta --to $BITBUCKET_COMMIT --from $LAST_SUCCESSFUL_COMMIT --output .
-            - LAST_PACKAGE_XML=$(cat package/package.xml)
-            - echo $LAST_PACKAGE_XML
+            - |
+              if [ ! -s ci-config/last_successful_commit.txt ]; then
+                echo "Using manifest/package.xml for deployment"
+                MANIFEST_PATH="manifest/package.xml"
+              else
+                LAST_SUCCESSFUL_COMMIT=$(cat ci-config/last_successful_commit.txt)
+                sfdx sgd:source:delta --to $BITBUCKET_COMMIT --from $LAST_SUCCESSFUL_COMMIT --output .
+                MANIFEST_PATH="package/package.xml"
+              fi
+            - echo $MANIFEST_PATH
             - tests=$(cat ci-config/specified_tests.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
-            - '[[ -z "$tests" ]] && sf project deploy start -x package/package.xml --test-level RunLocalTests || sf project deploy start -x package/package.xml --test-level RunSpecifiedTests --tests $tests'
+            - '[[ -z "$tests" ]] && sf project deploy start --manifest $MANIFEST_PATH --test-level RunLocalTests || sf project deploy start --manifest $MANIFEST_PATH --test-level RunSpecifiedTests --tests $tests'
             - echo $BITBUCKET_COMMIT > ci-config/last_successful_commit.txt
-            - echo $LAST_PACKAGE_XML > ci-config/last_package.xml
+            - echo $MANIFEST_PATH > ci-config/last_package.xml
             - git add ci-config/last_successful_commit.txt
             - git add ci-config/last_package.xml
             - git commit -m '[skip ci]'
@@ -102,7 +120,6 @@ pipelines:
             - sfdx update
             - sfdx --version
             - sfdx plugins --core
-      
       - step:
           name: Deploy to Production
           runs-on:
@@ -113,16 +130,21 @@ pipelines:
             - sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth_url.txt --setalias $SF_USERNAME --json
             - sfdx force:config:set defaultusername=$SF_USERNAME
             - sfdx config:get defaultusername
-            - LAST_SUCCESSFUL_COMMIT=$(cat ci-config/last_successful_commit.txt)
-            - sfdx sgd:source:delta --to $BITBUCKET_COMMIT --from $LAST_SUCCESSFUL_COMMIT --output .
-            - LAST_PACKAGE_XML=$(cat package/package.xml)
-            - echo $LAST_PACKAGE_XML
+            - |
+              if [ ! -s ci-config/last_successful_commit.txt ]; then
+                echo "Using manifest/package.xml for deployment"
+                MANIFEST_PATH="manifest/package.xml"
+              else
+                LAST_SUCCESSFUL_COMMIT=$(cat ci-config/last_successful_commit.txt)
+                sfdx sgd:source:delta --to $BITBUCKET_COMMIT --from $LAST_SUCCESSFUL_COMMIT --output .
+                MANIFEST_PATH="package/package.xml"
+              fi
+            - echo $MANIFEST_PATH
             - tests=$(cat ci-config/specified_tests.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
-            - '[[ -z "$tests" ]] && sf project deploy start -x package/package.xml --test-level RunLocalTests || sf project deploy start -x package/package.xml --test-level RunSpecifiedTests --tests $tests'
+            - '[[ -z "$tests" ]] && sf project deploy start --manifest $MANIFEST_PATH --test-level RunLocalTests || sf project deploy start --manifest $MANIFEST_PATH --test-level RunSpecifiedTests --tests $tests'
             - echo $BITBUCKET_COMMIT > ci-config/last_successful_commit.txt
-            - echo $LAST_PACKAGE_XML > ci-config/last_package.xml
+            - echo $MANIFEST_PATH > ci-config/last_package.xml
             - git add ci-config/last_successful_commit.txt
             - git add ci-config/last_package.xml
             - git commit -m '[skip ci]'
             - git push origin ${BITBUCKET_BRANCH}
-
