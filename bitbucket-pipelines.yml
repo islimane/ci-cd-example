@@ -34,7 +34,7 @@ pipelines:
                 MANIFEST_PATH="package/package.xml"
               fi
             - echo $MANIFEST_PATH
-            - tests=$(cat ci-config/specified_tests.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
+            - tests=$(cat ci-config/specified_tests.txt | tr '\n' ' ' | sed 's/ $//')
             - '[[ -z "$tests" ]] && sf project deploy validate --manifest $MANIFEST_PATH --test-level RunLocalTests || sf project deploy validate --manifest $MANIFEST_PATH --test-level RunSpecifiedTests --tests $tests'
   branches:
     dev:
@@ -66,7 +66,7 @@ pipelines:
                 MANIFEST_PATH="package/package.xml"
               fi
             - echo $MANIFEST_PATH
-            - tests=$(cat ci-config/specified_tests.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
+            - tests=$(cat ci-config/specified_tests.txt | tr '\n' ' ' | sed 's/ $//')
             - '[[ -z "$tests" ]] && sf project deploy start --manifest $MANIFEST_PATH --test-level NoTestRun || sf project deploy start --manifest $MANIFEST_PATH --test-level RunSpecifiedTests --tests $tests'
             - echo $BITBUCKET_COMMIT > ci-config/last_successful_commit.txt
             - echo $MANIFEST_PATH > ci-config/last_package.xml
@@ -103,7 +103,7 @@ pipelines:
                 MANIFEST_PATH="package/package.xml"
               fi
             - echo $MANIFEST_PATH
-            - tests=$(cat ci-config/specified_tests.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
+            - tests=$(cat ci-config/specified_tests.txt | tr '\n' ' ' | sed 's/ $//')
             - '[[ -z "$tests" ]] && sf project deploy start --manifest $MANIFEST_PATH --test-level RunLocalTests || sf project deploy start --manifest $MANIFEST_PATH --test-level RunSpecifiedTests --tests $tests'
             - echo $BITBUCKET_COMMIT > ci-config/last_successful_commit.txt
             - echo $MANIFEST_PATH > ci-config/last_package.xml
@@ -140,7 +140,7 @@ pipelines:
                 MANIFEST_PATH="package/package.xml"
               fi
             - echo $MANIFEST_PATH
-            - tests=$(cat ci-config/specified_tests.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
+            - tests=$(cat ci-config/specified_tests.txt | tr '\n' ' ' | sed 's/ $//')
             - '[[ -z "$tests" ]] && sf project deploy start --manifest $MANIFEST_PATH --test-level RunLocalTests || sf project deploy start --manifest $MANIFEST_PATH --test-level RunSpecifiedTests --tests $tests'
             - echo $BITBUCKET_COMMIT > ci-config/last_successful_commit.txt
             - echo $MANIFEST_PATH > ci-config/last_package.xml
