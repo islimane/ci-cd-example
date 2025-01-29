@@ -1,0 +1,18 @@
+.table-container {
+    display: flex;
+    width: 100%; /* Ensure the table container spans the full width */
+}
+
+.fixed-table {
+    flex-shrink: 0; /* Prevent shrinking of the fixed table */
+    width: auto; /* Automatically size based on content */
+    border-right: 2px solid #dcdcdc;
+    overflow: hidden; /* Ensure no scrollbars appear */
+    z-index: 2;
+}
+
+.scrollable-table {
+    flex-grow: 1; /* Allow scrollable table to take remaining width */
+    overflow-x: auto;
+    position: relative;
+}

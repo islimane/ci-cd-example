@@ -1,0 +1,25 @@
+<template>
+    <div class="table-container">
+        <!-- Fixed Columns Table -->
+        <div class="fixed-table">
+            <lightning-datatable
+                key-field="id"
+                data={fixedTableData}
+                columns={fixedColumns}
+                resize-column-disabled="true"
+                lwc:ref="fixedTable"
+            ></lightning-datatable>
+        </div>
+
+        <!-- Scrollable Columns Table -->
+        <div class="scrollable-table">
+            <lightning-datatable
+                key-field="id"
+                data={scrollableTableData}
+                columns={scrollableColumns}
+                hide-checkbox-column
+                lwc:ref="scrollableTable"
+            ></lightning-datatable>
+        </div>
+    </div>
+</template>
