@@ -1,0 +1,2 @@
+ci-config/last_successful_commit.txt merge=ours
+ci-config/last_package.xml merge=ours
