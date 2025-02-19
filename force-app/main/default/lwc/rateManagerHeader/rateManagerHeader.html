@@ -1,0 +1,30 @@
+<!--
+  @description  : 
+  @author       : Inetum Team
+  @version      : 1.0.0
+  @date         : 19-02-2025
+  @group        : 
+  @see          : 
+-->
+<template>
+    <div class="slds-grid slds-gutters slds-m-top_medium">
+        <div class="slds-col slds-size_1-of-4">
+            <label class="slds-form-element__label" for="start-date">{labels.startDate}</label>
+            <div class="slds-form-element__control">
+                <div id="start-date" class="slds-input slds-input_readonly">{startDate}</div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_1-of-4">
+            <label class="slds-form-element__label" for="end-date">{labels.endDate}</label>
+            <div class="slds-form-element__control">
+                <div id="end-date" class="slds-input slds-input_readonly">{endDate}</div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_2-of-4">
+            <label class="slds-form-element__label" for="config-mode">{labels.configurationMode}</label>
+            <div class="slds-form-element__control">
+                <div id="config-mode" class="slds-input slds-input_readonly">{configMode}</div>
+            </div>
+        </div>
+    </div>
+</template>
