@@ -2,7 +2,7 @@
     * Apex Class Name: RatePlannerValidationService
     * Version:         1.0
     * Created Date:    03/04/2024
-    * Function:        XXXX
+    * Function:        Validation service for RatePlanner__c records.
 ----------------------------------------------------------------------------------------------------------------------------------------*/
 public with sharing class RatePlannerValidationService {
 
@@ -19,14 +19,14 @@ public with sharing class RatePlannerValidationService {
         }
     }
 
-    public static void validateRatePrice(RatePlanner__c ratePlanner) {
+    private static void validateRatePrice(RatePlanner__c ratePlanner) {
         Boolean condition = false;
         if (condition) {
             throw new RatePlannerValidationException('ErrorMessage');
         }
     }
 
-    public static void validateDateRange(RatePlanner__c ratePlanner) {
+    private static void validateDateRange(RatePlanner__c ratePlanner) {
         Boolean condition = false;
         if (condition) {
             throw new RatePlannerValidationException('ErrorMessage');
