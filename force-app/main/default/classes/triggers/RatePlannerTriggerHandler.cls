@@ -21,7 +21,7 @@ public with sharing class RatePlannerTriggerHandler extends TriggerHandler{
      * Handles operations before updating RatePlanner__c records.
      */
     public override void beforeUpdate(){
-        RatePlannerTriggerHelper.example((List<RatePlanner__c>) Trigger.new);
+        RatePlannerTriggerHelper.validateRatePlanner((List<RatePlanner__c>) Trigger.new);
     }
 
     /**
