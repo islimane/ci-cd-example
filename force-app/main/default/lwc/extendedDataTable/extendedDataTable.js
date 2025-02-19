@@ -1,3 +1,11 @@
+/**
+ * @description  : 
+ * @author       : Inetum Team 
+ * @version      : 1.0.0
+ * @date         : 19-02-2025
+ * @group        : 
+ * @see          : 
+**/
 import { LightningElement, api, track } from 'lwc';
 
 export default class FixedColumnsTable extends LightningElement {
@@ -18,7 +26,7 @@ export default class FixedColumnsTable extends LightningElement {
     @track scrollableColumns = [];
     @track fixedTableData = [];
     @track scrollableTableData = [];
-    @track leftCSSProperty = 0;
+    @track leftCSSProperty = 0; 
 
     connectedCallback() {
         this.splitColumns();
