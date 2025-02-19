@@ -14,5 +14,7 @@ export default class RateManagerHeader extends LightningElement {
 
     startDate = '2023-12-23';
     endDate = '2024-12-22';
-    configMode = 'inventory';
+    configMode = 'By inventory / Base + room supplements';
+
+    
 }
