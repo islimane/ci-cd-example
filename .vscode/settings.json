@@ -17,7 +17,7 @@
   // Determines at what priority level 'warnings' will be added. Anything less will be a hint
   "apexPMD.priorityWarnThreshold": 3,
   "SFDoc.DateFormat": "DD-MM-YYYY",
-  "SFDoc.username": "Nubika Team <example@nubika.com>",
+  "SFDoc.username": "Inetum Team",
   "SFDoc.FileHeaderProperties": [
     {
       "name": "description"
