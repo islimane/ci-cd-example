@@ -4,7 +4,7 @@
     * Created Date:    03/04/2024
     * Function:        Validation service for RatePlanner__c records.
 ----------------------------------------------------------------------------------------------------------------------------------------*/
-public with sharing class RatePlannerValidationService {
+public with sharing class RatePlannerValidationService{
 
     public class RatePlannerValidationException extends Exception {}
 
@@ -13,14 +13,20 @@ public with sharing class RatePlannerValidationService {
             try {
                 validateRatePrice(ratePlanner);
                 validateDateRange(ratePlanner);
-            } catch (RatePlannerValidationException e) {
-                ratePlanner.addError(e.getMessage());
+            }catch (RatePlannerValidationException validationError) {
+                ratePlanner.addError(validationError.getMessage());
+                Logger.warn(validationError.getMessage());
+                Logger.saveLog();
+            }catch (Exception e) {
+                ratePlanner.addError('Unexpected error occurred. Please contact support.');
+                Logger.error('Unexpected error in RatePlannerValidationService', e.getMessage());
+                Logger.saveLog();
             }
         }
     }
 
     private static void validateRatePrice(RatePlanner__c ratePlanner) {
-        Boolean condition = false;
+        Boolean condition = true;
         if (condition) {
             throw new RatePlannerValidationException('ErrorMessage');
         }
