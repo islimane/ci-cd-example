@@ -15,7 +15,7 @@ public with sharing class RatePlannerValidationService{
                 validateDateRange(ratePlanner);
             }catch (RatePlannerValidationException validationError) {
                 ratePlanner.addError(validationError.getMessage());
-                Logger.warn(validationError.getMessage());
+                Logger.warn('RatePlanner ' + ratePlanner.Id + ': ' + validationError.getMessage());
                 Logger.saveLog();
             }catch (Exception e) {
                 ratePlanner.addError('Unexpected error occurred. Please contact support.');
