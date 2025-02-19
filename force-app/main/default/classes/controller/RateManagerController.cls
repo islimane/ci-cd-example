@@ -6,6 +6,6 @@
  * @group        : 
  * @see          : 
 **/
-public  class RateManagerController extends DC_DynamicController{
+public class RateManagerController extends DC_DynamicController{
     
 }
