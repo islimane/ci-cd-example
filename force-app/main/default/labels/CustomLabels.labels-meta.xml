@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>DC_ControllerEmpty</fullName>
+        <categories>Dynamic Controller</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Error Controller Empty</shortDescription>
+        <value>You should specify the controller param</value>
+    </labels>
+    <labels>
+        <fullName>DC_ParamsEmpty</fullName>
+        <categories>Dynamic Controller</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Error Params Empty</shortDescription>
+        <value>Data should not be empty</value>
+    </labels>
+    <labels>
+        <fullName>Rate_Configuration_Title</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Título de Configuración de Tarifas</shortDescription>
+        <value>Configuración de Tarifario</value>
+    </labels>
+    <labels>
+        <fullName>Season</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Temporada</shortDescription>
+        <value>Temporada</value>
+    </labels>
+    <labels>
+        <fullName>Start_Date</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Fecha de Inicio</shortDescription>
+        <value>Fecha de inicio</value>
+    </labels>
+    <labels>
+        <fullName>End_Date</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Fecha de Fin</shortDescription>
+        <value>Fecha de fin</value>
+    </labels>
+    <labels>
+        <fullName>Configuration_Mode</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Modo de Configuración</shortDescription>
+        <value>Modalidad de configuración</value>
+    </labels>
+    <labels>
+        <fullName>Periods</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Períodos</shortDescription>
+        <value>Períodos</value>
+    </labels>
+    <labels>
+        <fullName>Events</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Eventos</shortDescription>
+        <value>Eventos</value>
+    </labels>
+    <labels>
+        <fullName>Blackouts</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Blackouts</shortDescription>
+        <value>Blackouts</value>
+    </labels>
+    <labels>
+        <fullName>Rate_Groups</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Grupos de Tarifa</shortDescription>
+        <value>Grupos de tarifa</value>
+    </labels>
+    <labels>
+        <fullName>Cancel</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Cancelar</shortDescription>
+        <value>Cancelar</value>
+    </labels>
+    <labels>
+        <fullName>Save</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Guardar</shortDescription>
+        <value>Guardar</value>
+    </labels>
+</CustomLabels>
