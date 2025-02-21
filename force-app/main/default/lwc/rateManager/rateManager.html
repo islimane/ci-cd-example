@@ -14,22 +14,22 @@
             <div class="slds-p-vertical_medium">
                 <lightning-accordion allow-multiple-sections-open>
                     <lightning-accordion-section name="periods" label={labels.periods}>
-                        <c-rate-manager-period-list></c-rate-manager-period-list>
+                        <c-rate-manager-period-list parent-id={recordId}></c-rate-manager-period-list>
                     </lightning-accordion-section>
 
                     <!-- Events Section -->
                     <lightning-accordion-section name="events" label={labels.events}>
-                        <c-rate-manager-event-list></c-rate-manager-event-list>
+                        <c-rate-manager-event-list parent-id={recordId}></c-rate-manager-event-list>
                     </lightning-accordion-section>
 
                     <!-- Blackouts Section -->
                     <lightning-accordion-section name="blackouts" label={labels.blackouts}>
-                        <c-rate-manager-blackout-list></c-rate-manager-blackout-list>
+                        <c-rate-manager-blackout-list parent-id={recordId}></c-rate-manager-blackout-list>
                     </lightning-accordion-section>
 
                     <!-- Rate Groups Section -->
-                    <lightning-accordion-section name="rateGroups" label={labels.rateGroups}>
-                        <c-rate-manager-rate-group-list></c-rate-manager-rate-group-list>
+                    <lightning-accordion-section name="rates" label={labels.rateGroups}>
+                        <c-rate-manager-rates-list parent-id={recordId}></c-rate-manager-rates-list>
                     </lightning-accordion-section>
                 </lightning-accordion>
             </div>

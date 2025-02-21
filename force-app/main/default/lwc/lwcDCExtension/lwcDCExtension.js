@@ -44,6 +44,9 @@ export default class LwcDCExtension extends
         return obj? JSON.parse(JSON.stringify(obj)) : obj;
     }
 
+    _recordId;
+    _parentId;
+
     @api
     set recordId(value){
         this._recordId = value;
@@ -52,14 +55,15 @@ export default class LwcDCExtension extends
         return this._recordId;
     } 
 
-    parentId;
+    @api
+    set parentId(value){
+        this._parentId = value;
+    }
+    get parentId(){
+        return this._parentId;
+    }
+
+    @api
     editMode = false;
 
-    /**
-     * Save the record.
-     * @abstract
-     */
-    save(){
-        
-    }
 }
