@@ -1,3 +1,1 @@
-TriggerHandler_Test
-TriggerUtils_Test
-TP_TestExecutorTest
+RateManagementTestExecutor

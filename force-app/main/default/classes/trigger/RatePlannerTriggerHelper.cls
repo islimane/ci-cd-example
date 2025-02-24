@@ -11,7 +11,7 @@ public with sharing class RatePlannerTriggerHelper extends TriggerUtils {
     ***************************************/
 
     public static void validateRatePlanner(List<RatePlanner__c> lNew, Map<Id,RatePlanner__c> mOld){
-        List<RatePlanner__c> lRatePlannerToProcess = getChangedAndFilterRecordsByFieldSet(lNew, mOld, 'ValidateTriggerFields', new Map<String,Object>{'Active__c'=>true}, new RatePlanner__c());
+        List<RatePlanner__c> lRatePlannerToProcess = getChangedAndFilterRecordsByFieldSet(lNew, mOld, 'ValidateTriggerFields', new Map<String,Object>{'Status__c'=>'PendingApproved'}, new RatePlanner__c());
         if(!lRatePlannerToProcess.isEmpty()) new RatePlannerValidationService(lRatePlannerToProcess);
     }
 }
