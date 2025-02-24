@@ -6,14 +6,14 @@
  * @last modified by  : Inetum Team <sara.gerico@inetum.com>
 **/
 @isTest
-public with sharing class RatePlannerTrigger_Test implements TestHandler{
+public with sharing class RatePlannerTrigger_Test implements TP_ExecutableInterface{
 
     /***************************************
     *           Setup Data                 *
     ***************************************/
 
     @testSetup
-    public static void testSetup(){
+    public static void setupData(){
         TP_SetupDataTest.generateMassiveData();
     }
 
@@ -42,6 +42,8 @@ public with sharing class RatePlannerTrigger_Test implements TestHandler{
     ***************************************/
 
     public static void testAll(){
-        beforeUpdate_Method();
+        Test.startTest();
+            beforeUpdate_Method();
+        Test.stopTest();
     }
 }

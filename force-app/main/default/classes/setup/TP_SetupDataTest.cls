@@ -42,7 +42,7 @@ public class TP_SetupDataTest {
      * Handles bypass triggers during data generation and cleans up afterward.
      * @return void
      */
-    public static void generateMassiveData(){
+    public static void generateAllTestData(){
         insert setByPassTriggers();
         for(Integer i = 0; i < BATTERY_NUM; i++){
             batteryName = '_' + BATTERY_CODE + (i+1);
