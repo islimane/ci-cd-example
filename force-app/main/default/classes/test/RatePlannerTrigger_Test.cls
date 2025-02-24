@@ -14,7 +14,7 @@ public with sharing class RatePlannerTrigger_Test implements TP_ExecutableInterf
 
     @testSetup
     public static void setupData(){
-        TP_SetupDataTest.generateMassiveData();
+        TP_SetupDataTest.generateAllTestData();
     }
 
     /***************************************
