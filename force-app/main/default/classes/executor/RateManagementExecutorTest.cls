@@ -5,6 +5,7 @@
  * @last modified on  : 24-02-2025
  * @last modified by  : Inetum Team <sara.gerico@inetum.com>
 **/
+@isTest
 public with sharing class RateManagementExecutorTest {
 
     /***************************************
