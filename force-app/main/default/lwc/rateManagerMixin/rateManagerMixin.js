@@ -39,7 +39,7 @@ export const RateManagerMixin = (BaseClass) => class extends BaseClass {
 
     
     save(callback) {
-        if(this.validateInputs()){
+        if(this.validateInputs('lightning-input, lightning-combobox, lightning-textarea')){
             callback();
         }
     }
