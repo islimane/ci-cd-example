@@ -16,13 +16,12 @@ public with sharing class RatePlannerValidationService{
             }catch (RatePlannerValidationException validationError) {
                 ratePlanner.addError(validationError.getMessage());
                 Logger.warn('RatePlanner ' + ratePlanner.Id + ': ' + validationError.getMessage());
-                Logger.saveLog();
             }catch (Exception e) {
                 ratePlanner.addError('Unexpected error occurred. Please contact support.');
                 Logger.error('Unexpected error in RatePlannerValidationService', e.getMessage());
-                Logger.saveLog();
             }
         }
+        Logger.saveLog();
     }
 
     private static void validateRatePrice(RatePlanner__c ratePlanner) {
