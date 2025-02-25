@@ -1,0 +1,26 @@
+<!--
+  @description       : 
+  @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
+  @group             : 
+  @last modified on  : 25-02-2025
+  @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+-->
+<template>
+    <div>
+        <slot onclick={handleOpen} name="button-open"></slot>
+        <template if:true={showModal}>
+            <div class="shadow-box">
+                <lightning-modal-header label="headerLabel">
+                    <slot name="header"></slot>
+                </lightning-modal-header>
+                <lightning-modal-body>
+                    <slot name="body"></slot>
+                </lightning-modal-body>
+                <lightning-modal-footer>
+                    <slot onclick={handleClose} name="button-close"></slot>
+                    <slot name="footer"></slot>
+                </lightning-modal-footer>
+            </div>
+        </template>
+    </div>
+</template>

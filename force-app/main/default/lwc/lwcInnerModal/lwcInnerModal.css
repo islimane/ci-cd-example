@@ -1,0 +1,6 @@
+:host .shadow-box{
+    border-radius:8px;
+    -webkit-box-shadow: 100vh 100vh 100vh 400vw rgba(126, 140, 153, 0.8);
+    -moz-box-shadow: 100vh 100vh 100vh 400vw rgba(126, 140, 153, 0.8);
+    box-shadow: 100vh 100vh 100vh 400vw rgba(126, 140, 153, 0.8);
+}

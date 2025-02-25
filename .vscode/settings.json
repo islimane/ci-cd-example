@@ -17,28 +17,25 @@
   // Determines at what priority level 'warnings' will be added. Anything less will be a hint
   "apexPMD.priorityWarnThreshold": 3,
   "SFDoc.DateFormat": "DD-MM-YYYY",
-  "SFDoc.username": "Inetum Team",
+  "SFDoc.username": "Inetum Team <alberto.martinez-lopez@inetum.com>",
   "SFDoc.FileHeaderProperties": [
     {
-      "name": "description"
+        "name": "description"
     },
     {
-      "name": "author",
-      "defaultValue": "$username"
+        "name": "author",
+        "defaultValue": "$username"
     },
     {
-      "name": "version",
-      "defaultValue": "1.0.0"
+        "name": "group"
     },
     {
-      "name": "date",
-      "defaultValue": "$date"
+        "name": "last modified on",
+        "defaultValue": "$date"
     },
     {
-      "name": "group"
-    },
-    {
-      "name": "see"
+        "name": "last modified by",
+        "defaultValue": "$username"
     }
-  ]
+]
 }

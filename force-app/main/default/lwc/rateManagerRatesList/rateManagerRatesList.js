@@ -2,13 +2,14 @@
  * @description  : 
  * @author       : Inetum Team
  * @version      : 1.0.0
- * @date         : 19-02-2025
+ * @date         : 24-02-2025
  * @group        : 
  * @see          : 
 **/
 import LwcDCExtension from 'c/lwcDCExtension';
+import { RateManagerMixin } from 'c/rateManagerMixin';
 import LABELS from './labels.js';
 
-export default class RateManagerRateGroupList extends LwcDCExtension {
+export default class RateManagerRateGroupList extends RateManagerMixin(LwcDCExtension) {
     labels = LABELS;
 }
