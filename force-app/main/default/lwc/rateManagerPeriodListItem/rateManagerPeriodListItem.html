@@ -1,0 +1,62 @@
+<!--
+  @description       : 
+  @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
+  @group             : 
+  @last modified on  : 25-02-2025
+  @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+-->
+<template>
+    <div class="slds-p-horizontal_small">
+        <lightning-card hide-header>
+            <template if:false={editMode}>
+                <lightning-record-view-form
+                    record-id={recordId}
+                    object-api-name="Period__c"
+                    density="Comfy">
+                    <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_small">
+                            <lightning-output-field field-name="StartDate__c"></lightning-output-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_small">
+                            <lightning-output-field field-name="EndDate__c"></lightning-output-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_small">
+                            <lightning-output-field field-name="Type__c"></lightning-output-field>
+                        </div>
+                        <div class="slds-col slds-size-1-of-4 slds-p-horizontal_small slds-grid slds-grid_align-end">
+                            <lightning-button-icon  class="slds-col" icon-name="utility:edit" onclick={handleEdit}></lightning-button-icon>
+                        </div>
+                    </div>
+                </lightning-record-view-form>
+            </template>
+            <template if:true={editMode}>
+                <lightning-record-edit-form
+                    record-id={recordId}
+                    object-api-name="Period__c"
+                    density="Comfy"
+                    onsubmit={handleSubmit}
+                    onsuccess={handleSuccess}
+                    onerror={handleError}>
+                    <div class="slds-grid slds-wrap slds-grid_vertical-align-center ">
+                        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_small">
+                            <lightning-input-field field-name="StartDate__c"></lightning-input-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_small"> 
+                            <lightning-input-field field-name="EndDate__c"></lightning-input-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_small">
+                            <lightning-input-field field-name="Type__c"></lightning-input-field>
+                        </div>
+                        <div class="slds-col slds-size-1-of-4 slds-p-horizontal_small slds-grid slds-grid_align-end">
+                            <lightning-button
+                                class="slds-col"
+                                type="submit"
+                                label={labels.FORM_SUBMIT_BTN}
+                            ></lightning-button>
+                        </div>
+                    </div>
+                </lightning-record-edit-form>
+            </template>
+        </lightning-card>
+    </div>
+</template>
