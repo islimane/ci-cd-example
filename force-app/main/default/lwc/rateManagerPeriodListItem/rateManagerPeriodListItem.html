@@ -23,11 +23,7 @@
                         <lightning-output-field field-name="Type__c"></lightning-output-field>
                     </div>
                     <div class="slds-col slds-size-1-of-4 slds-p-horizontal_small slds-grid slds-grid_align-end">
-                        <c-lwc-inner-modal header-label={labels.editPeriod}>
-                            <lightning-button-icon slot="button-open" class="slds-col slds-p-horizontal_xx-small" icon-name="utility:edit"></lightning-button-icon>
-                            <c-rate-manager-period-handler slot="body" record-id={recordId}></c-rate-manager-period-handler>
-                            <lightning-button slot="button-close" class="slds-col slds-p-horizontal_xx-small" variant="neutral" label="Close" onclick={handleClose}></lightning-button>
-                        </c-lwc-inner-modal>
+                        <lightning-button-icon class="slds-col slds-p-horizontal_xx-small" icon-name="utility:edit" onclick={handleEdit}></lightning-button-icon>
                         <lightning-button-icon class="slds-col slds-p-horizontal_xx-small" icon-name="utility:delete" onclick={handleRemove}></lightning-button-icon>
                     </div>
                 </div>

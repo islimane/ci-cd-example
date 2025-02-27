@@ -7,16 +7,25 @@
  * @see          : 
 **/
 import LwcDCExtension from 'c/lwcDCExtension';
-import { track } from 'lwc';
+import { track, api } from 'lwc';
 import { RateManagerMixin } from 'c/rateManagerMixin';
 import LABELS from './labels.js';
-import { api } from 'lwc';
+import rateManagerModalPeriodHandler from 'c/rateManagerModalPeriodHandler';
 
 export default class RateManagerPeriodList extends RateManagerMixin(LwcDCExtension) {
     labels = LABELS;
 
+    connectedCallback(){
+        this._wireParams = {recordId: this.parentId, controller: 'RateManagerPeriodListController'};
+    }   
+
+    fetch = (response) => {
+        console.log('@@@ Fetch Periods', response);
+        this._periodList = JSON.parse(JSON.stringify(response?.data)) || response.data;
+    }
+
     @track
-    _periodList = [{Id:'a0TS8000008mAjeMAE'},{Id:'a0TS8000008mC5WMAU'},{Id:'a0TS8000008mDRNMA2'},{Id:'a0TS8000008mCDaMAM'}];
+    _periodList = [];
 
 
     get periodList(){
@@ -42,7 +51,36 @@ export default class RateManagerPeriodList extends RateManagerMixin(LwcDCExtensi
     }
 
 
-    handleAddPeriod() {
-        this._periodList.push({Id:null});
+    async handleAddPeriodModal() {
+
+        const result = await rateManagerModalPeriodHandler.open({
+            // it is set on lightning-modal-header instead
+            dateIntervals: this._periodList,
+            size: 'large',
+            headerLabel: this.labels.addPeriod,
+            onconfirm: (e) => {
+                // stop further propagation of the event
+                e.stopPropagation();
+                this.handleAddPeriod(e);
+              }
+        });
+
+        console.log(result);
+    }
+
+    handleAddPeriod(period){
+        console.log('handleAddPeriod', period);
+        try{
+            const index = this._periodList.findIndex(interval => interval.Id === period.Id);
+            
+            if (index !== -1) {
+                this._periodList[index] = period;
+            } else {
+                this._periodList.push(period);
+            }
+        }catch(e){
+            console.error(e.message);
+        }
+
     }
 }

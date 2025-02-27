@@ -14,6 +14,10 @@ export default class RateManager extends LwcDCExtension{
 
     labels = LABELS;
 
+    connectedCallback(){
+        this.recordId = 'a06S800000A7EOfIAN';
+    }
+
     renderedCallback(){
 
     }

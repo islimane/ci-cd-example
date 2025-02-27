@@ -9,14 +9,14 @@
 <template>
     <div class="main-container slds-p-around_small">
         <template for:each={periodList} for:item="period">
-            <c-rate-manager-period-list-item key={period.index} record-id={period.Id}></c-rate-manager-period-list-item>
+            <c-rate-manager-period-list-item key={period.index} record-id={period.Id} date-intervals={periodList}></c-rate-manager-period-list-item>
         </template>
         <div class="slds-grid slds-grid_align-end slds-p-around_small">
             <div class="slds-col">
                 <lightning-button 
                     label={labels.addPeriod} 
-                    variant="neutral" 
-                    onclick={handleAddPeriod}>
+                    variant="neutral"
+                    onclick={handleAddPeriodModal}>
                 </lightning-button>
             </div>
         </div>

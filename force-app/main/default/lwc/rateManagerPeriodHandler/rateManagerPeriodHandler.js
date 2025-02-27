@@ -5,54 +5,37 @@
  * @last modified on  : 27-02-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
-import { LightningElement, track, api } from "lwc"
-import LABELS from "./labels"
+import { api } from "lwc"
+import LwcDCExtension from "c/lwcDCExtension"
 
-export default class RateManagerPeriodHandler extends LightningElement {
-  @api resortName = "Maya Beach Resort"
-  @api seasonName = "Season 24"
 
-  @track startDate = "2024-04-08"
-  @track endDate = "2024-04-30"
-  @track selectedType = "Temporada media"
-  @track release = 7
-  @track minimumStay = 3
 
-  labels = LABELS
+export default class RateManagerPeriodHandler extends LwcDCExtension {
 
-  get typeOptions() {
-    return [
-      { label: this.labels.lowSeason, value: "Temporada baja" },
-      { label: this.labels.midSeason, value: "Temporada media" },
-      { label: this.labels.highSeason, value: "Temporada alta" },
-    ]
-  }
+    _recordId;
 
-  handleInputChange(event) {
-    const field = event.target.name
-    const value = event.target.value
-
-    this[field] = value
-  }
-
-  handleClose() {
-    this.dispatchEvent(new CustomEvent("close"))
-  }
-
-  handleSave() {
-    const periodData = {
-      startDate: this.startDate,
-      endDate: this.endDate,
-      type: this.selectedType,
-      release: this.release,
-      minimumStay: this.minimumStay,
+    @api
+    save(){
+        this.template.querySelector('lightning-record-edit-form').submit();
     }
 
-    this.dispatchEvent(
-      new CustomEvent("save", {
-        detail: periodData,
-      }),
-    )
-  }
+    @api 
+    set recordId(value) {
+        this._recordId = value;
+    }
+
+    get recordId() {
+        return this._recordId;
+    }
+
+    
+
+    handleSave(event) {
+        event.preventDefault();       // stop the form from submitting
+        const fields = event.detail.fields;
+        console.log(fields);
+    }
+
+
 }
 
