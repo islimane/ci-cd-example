@@ -9,27 +9,15 @@
 <template>
     <div class="main-container slds-p-around_small">
         <template for:each={periodList} for:item="period">
-            <c-rate-manager-period-list-item key={period.Id} record-id={period.Id}></c-rate-manager-period-list-item>
+            <c-rate-manager-period-list-item key={period.index} record-id={period.Id}></c-rate-manager-period-list-item>
         </template>
         <div class="slds-grid slds-grid_align-end slds-p-around_small">
             <div class="slds-col">
-                <lightning-button-group>
-                    <lightning-button 
-                        label={labels.addPeriod} 
-                        variant="neutral" 
-                        onclick={handleAddPeriod}>
-                    </lightning-button>
-                    <lightning-button 
-                        label={labels.addEvent} 
-                        variant="neutral" 
-                        onclick={handleAddEvent}>
-                    </lightning-button>
-                    <lightning-button 
-                        label={labels.addBlackout} 
-                        variant="neutral" 
-                        onclick={handleAddBlackout}>
-                    </lightning-button>
-                </lightning-button-group>
+                <lightning-button 
+                    label={labels.addPeriod} 
+                    variant="neutral" 
+                    onclick={handleAddPeriod}>
+                </lightning-button>
             </div>
         </div>
     </div>

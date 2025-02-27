@@ -7,6 +7,7 @@
  * @see          : 
 **/
 import LwcDCExtension from 'c/lwcDCExtension';
+import { track } from 'lwc';
 import { RateManagerMixin } from 'c/rateManagerMixin';
 import LABELS from './labels.js';
 import { api } from 'lwc';
@@ -14,7 +15,19 @@ import { api } from 'lwc';
 export default class RateManagerPeriodList extends RateManagerMixin(LwcDCExtension) {
     labels = LABELS;
 
-    periodList = [{Id:'a0TS8000008mAjeMAE'},{Id:'a0TS8000008mC5WMAU'},{Id:'a0TS8000008mDRNMA2'},{Id:'a0TS8000008mCDaMAM'}];
+    @track
+    _periodList = [{Id:'a0TS8000008mAjeMAE'},{Id:'a0TS8000008mC5WMAU'},{Id:'a0TS8000008mDRNMA2'},{Id:'a0TS8000008mCDaMAM'}];
+
+
+    get periodList(){
+        let periodList = this._periodList.map((Id, index) => {
+            return {
+                ...Id,
+                index
+            }
+        })
+        return periodList;
+    }
 
     /**
      * @description Saves the period list by invoking the save method.
@@ -30,17 +43,6 @@ export default class RateManagerPeriodList extends RateManagerMixin(LwcDCExtensi
 
 
     handleAddPeriod() {
-        // Lógica para añadir periodo
-        console.log('Añadir periodo clicked');
-    }
-
-    handleAddEvent() {
-        // Lógica para añadir evento
-        console.log('Añadir evento clicked');
-    }
-
-    handleAddBlackout() {
-        // Lógica para añadir blackout
-        console.log('Añadir blackout clicked');
+        this._periodList.push({Id:null});
     }
 }

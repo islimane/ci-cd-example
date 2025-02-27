@@ -22,6 +22,13 @@
         <value>Añadir período</value>
     </labels>
     <labels>
+        <fullName>Edit_Period</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Editar Período</shortDescription>
+        <value>Editar período</value>
+    </labels>
+    <labels>
         <fullName>Blackouts</fullName>
         <language>es</language>
         <protected>false</protected>
@@ -155,5 +162,125 @@
         <protected>false</protected>
         <shortDescription>Variación</shortDescription>
         <value>Variación (%)</value>
+    </labels>
+    <labels>
+        <fullName>CreatePeriod</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Create Period</shortDescription>
+        <value>Crear Período</value>
+    </labels>
+    <labels>
+        <fullName>StartDate</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Start Date</shortDescription>
+        <value>Fecha de inicio</value>
+    </labels>
+    <labels>
+        <fullName>EndDate</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>End Date</shortDescription>
+        <value>Fecha de fin</value>
+    </labels>
+    <labels>
+        <fullName>PeriodType</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Type</shortDescription>
+        <value>Tipo</value>
+    </labels>
+    <labels>
+        <fullName>Release</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Release</shortDescription>
+        <value>Release</value>
+    </labels>
+    <labels>
+        <fullName>MinimumStay</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Minimum Stay</shortDescription>
+        <value>Estancia mínima</value>
+    </labels>
+    <labels>
+        <fullName>LowSeason</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Low Season</shortDescription>
+        <value>Temporada baja</value>
+    </labels>
+    <labels>
+        <fullName>MidSeason</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Mid Season</shortDescription>
+        <value>Temporada media</value>
+    </labels>
+    <labels>
+        <fullName>HighSeason</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>High Season</shortDescription>
+        <value>Temporada alta</value>
+    </labels>
+    <labels>
+        <fullName>Cancel</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Cancel</shortDescription>
+        <value>Cancelar</value>
+    </labels>
+    <labels>
+        <fullName>Save</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Save</shortDescription>
+        <value>Guardar</value>
+    </labels>
+    <labels>
+        <fullName>Close</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Close</shortDescription>
+        <value>Cerrar</value>
+    </labels>
+    <labels>
+        <fullName>PeriodManagement</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Period Management</shortDescription>
+        <value>Gestión de Períodos</value>
+    </labels>
+    <labels>
+        <fullName>Success</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Success</shortDescription>
+        <value>Éxito</value>
+    </labels>
+    <labels>
+        <fullName>PeriodCreatedSuccessfully</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Period Created Successfully</shortDescription>
+        <value>Período creado correctamente</value>
     </labels>
 </CustomLabels>
