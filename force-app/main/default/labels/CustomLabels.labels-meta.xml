@@ -236,6 +236,22 @@
         <value>Temporada alta</value>
     </labels>
     <labels>
+        <fullName>Overlap_Error</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Error de solapamiento de periodo</shortDescription>
+        <value>Las fechas introducidas se solapan con otros periódos de la temporada</value>
+    </labels>
+    <labels>
+        <fullName>Invalid_Date</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Error de fechas</shortDescription>
+        <value>La fecha de inicio no puede ser posterior a la fecha de fin</value>
+    </labels>
+    <labels>
         <fullName>Cancel</fullName>
         <categories>PeriodManagement</categories>
         <language>es</language>

@@ -59,7 +59,6 @@ export default class RateManagerPeriodListItem extends LwcDCExtension {
     }
 
     handleEditPeriod(e){
-        console.log('handleEditPeriod');
-        //AL EDITAR SI MERECE LA PENA GUARDAR DIRECTAMENTE
+        this.fireEvent('refresh');
     }
 }

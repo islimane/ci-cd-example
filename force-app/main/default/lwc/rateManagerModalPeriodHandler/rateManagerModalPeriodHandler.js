@@ -2,15 +2,18 @@
  * @description       : 
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             : 
- * @last modified on  : 27-02-2025
+ * @last modified on  : 28-02-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 import { api } from 'lwc';
 import LightningModal from 'lightning/modal';
+import LABELS from './labels';
 import RateManagerPeriodInterval from './rateManagerPeriodInterval';
 import {LWCEventMixin} from 'c/dcMixin';
 
 export default class RateManagerModalPeriodHandler extends LWCEventMixin(LightningModal) {
+
+    labels = LABELS;
 
     _recordId;
     _dateIntervals = [];
@@ -24,16 +27,12 @@ export default class RateManagerModalPeriodHandler extends LWCEventMixin(Lightni
             });
         }catch(e){
             console.error(e.message);
+            this.showToast('Error', this.labels.invalid_date, 'error');
         }
     }
 
     get dateIntervals(){
         return this._dateIntervals;
-    }
-    
-    @api
-    save(){
-        this.template.querySelector('lightning-record-edit-form').submit();
     }
 
     @api 
@@ -45,30 +44,29 @@ export default class RateManagerModalPeriodHandler extends LWCEventMixin(Lightni
         return this._recordId;
     }
 
-    handleConfirm(event) {
+    handleSave(event) {
         event.preventDefault();       // stop the form from submitting
-        const fields = event.detail.fields;
-        console.log(fields);
+        const formData = event.detail.fields;
+
         try{
-            this.checkSlots(fields);
+            this.checkSlots(formData);
             this.close('modal-closed');
-            console.log('this._dateIntervals.length', this._dateIntervals.length);
-            console.log('this._dateIntervals', JSON.parse(JSON.stringify(this._dateIntervals)));
-            this.dispatchConfirmEvent(fields);
+            this.template.querySelector('lightning-record-edit-form').submit();
+            this.dispatchConfirmEvent(formData);
         }catch(e){
             console.error(e.message);
             this.showToast('Error', e.message, 'error');
         }
     }
 
-    checkSlots(fields) {
-        const newInterval = new RateManagerPeriodInterval(fields);
+    checkSlots(formData) {
+        const newInterval = new RateManagerPeriodInterval(formData);
         for (const interval of this._dateIntervals) {
             if (newInterval.overlapsWith(interval)) {
-                throw new Error("New interval overlaps with an existing one");
+                throw new Error(this.labels.overlap_error);
             }
         }
-        this._dateIntervals.push(fields);
+        this._dateIntervals.push(formData);
     }
 
     dispatchConfirmEvent(dateInverval) {

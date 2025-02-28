@@ -6,15 +6,19 @@
  * @group        : 
  * @see          : 
 **/
-import { LightningElement } from 'lwc';
+import { LightningElement, api } from 'lwc';
 import LABELS from './labels.js';
 
 export default class RateManagerHeader extends LightningElement {
+
+    _recordId;
+
+    @api
+    set recordId(value) {
+        this._recordId = value; 
+    }
+    get recordId() {
+        return this._recordId;
+    }
     labels = LABELS;
-
-    startDate = '2023-12-23';
-    endDate = '2024-12-22';
-    configMode = 'By inventory / Base + room supplements';
-
-    
 }

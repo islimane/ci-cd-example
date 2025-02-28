@@ -9,7 +9,7 @@
 <template>
     <div class="main-container slds-p-around_small">
         <template for:each={periodList} for:item="period">
-            <c-rate-manager-period-list-item key={period.index} record-id={period.Id} date-intervals={periodList} ondelete={handleDeletePeriod}></c-rate-manager-period-list-item>
+            <c-rate-manager-period-list-item key={period.index} record-id={period.Id} date-intervals={periodList} onrefresh={handleRefreshPeriod} ondelete={handleDeletePeriod}></c-rate-manager-period-list-item>
         </template>
         <div class="slds-grid slds-grid_align-end slds-p-around_small">
             <div class="slds-col">

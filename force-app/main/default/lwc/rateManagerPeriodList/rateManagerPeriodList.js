@@ -84,6 +84,10 @@ export default class RateManagerPeriodList extends RateManagerMixin(LwcDCExtensi
 
     }
 
+    handleRefreshPeriod(event){
+        this.refreshFetch();
+    }
+
     async handleDeletePeriod(event){
         try{
             const result = await this.remoteAction({
