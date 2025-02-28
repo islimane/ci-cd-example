@@ -10,10 +10,19 @@ import LwcDCExtension from 'c/lwcDCExtension';
 import LABELS from './labels.js';
 import { track } from 'lwc';
 
+
 export default class RateManager extends LwcDCExtension{
 
     labels = LABELS;
 
+    connectedCallback(){
+        this.recordId = 'a06S800000A7EOfIAN';
+    }
+
+    /**
+     * Called when the component has been rendered.
+     * @override
+     */
     renderedCallback(){
 
     }

@@ -1,6 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
     <labels>
+        <fullName>Add_Blackout</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Añadir Blackout</shortDescription>
+        <value>Añadir blackout</value>
+    </labels>
+    <labels>
+        <fullName>Add_Event</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Añadir Evento</shortDescription>
+        <value>Añadir evento</value>
+    </labels>
+    <labels>
+        <fullName>Add_Period</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Añadir Período</shortDescription>
+        <value>Añadir período</value>
+    </labels>
+    <labels>
+        <fullName>Edit_Period</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Editar Período</shortDescription>
+        <value>Editar período</value>
+    </labels>
+    <labels>
+        <fullName>Blackouts</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Blackouts</shortDescription>
+        <value>Blackouts</value>
+    </labels>
+    <labels>
+        <fullName>Cancel</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Cancelar</shortDescription>
+        <value>Cancelar</value>
+    </labels>
+    <labels>
+        <fullName>Configuration_Mode</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Modo de Configuración</shortDescription>
+        <value>Modalidad de configuración</value>
+    </labels>
+    <labels>
+        <fullName>Configure</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Configurar</shortDescription>
+        <value>CONFIGURAR</value>
+    </labels>
+    <labels>
+        <fullName>Configure_Rate_Groups</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Configurar Grupos de Tarifa</shortDescription>
+        <value>Configurar grupos de tarifas</value>
+    </labels>
+    <labels>
         <fullName>DC_ControllerEmpty</fullName>
         <categories>Dynamic Controller</categories>
         <language>en_US</language>
@@ -17,46 +80,11 @@
         <value>Data should not be empty</value>
     </labels>
     <labels>
-        <fullName>Rate_Configuration_Title</fullName>
-        <language>es</language>
-        <protected>false</protected>
-        <shortDescription>Título de Configuración de Tarifas</shortDescription>
-        <value>Configuración de Tarifario</value>
-    </labels>
-    <labels>
-        <fullName>Season</fullName>
-        <language>es</language>
-        <protected>false</protected>
-        <shortDescription>Temporada</shortDescription>
-        <value>Temporada</value>
-    </labels>
-    <labels>
-        <fullName>Start_Date</fullName>
-        <language>es</language>
-        <protected>false</protected>
-        <shortDescription>Fecha de Inicio</shortDescription>
-        <value>Fecha de inicio</value>
-    </labels>
-    <labels>
         <fullName>End_Date</fullName>
         <language>es</language>
         <protected>false</protected>
         <shortDescription>Fecha de Fin</shortDescription>
         <value>Fecha de fin</value>
-    </labels>
-    <labels>
-        <fullName>Configuration_Mode</fullName>
-        <language>es</language>
-        <protected>false</protected>
-        <shortDescription>Modo de Configuración</shortDescription>
-        <value>Modalidad de configuración</value>
-    </labels>
-    <labels>
-        <fullName>Periods</fullName>
-        <language>es</language>
-        <protected>false</protected>
-        <shortDescription>Períodos</shortDescription>
-        <value>Períodos</value>
     </labels>
     <labels>
         <fullName>Events</fullName>
@@ -66,11 +94,25 @@
         <value>Eventos</value>
     </labels>
     <labels>
-        <fullName>Blackouts</fullName>
+        <fullName>Name</fullName>
         <language>es</language>
         <protected>false</protected>
-        <shortDescription>Blackouts</shortDescription>
-        <value>Blackouts</value>
+        <shortDescription>Nombre</shortDescription>
+        <value>Nombre</value>
+    </labels>
+    <labels>
+        <fullName>Periods</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Períodos</shortDescription>
+        <value>Períodos</value>
+    </labels>
+    <labels>
+        <fullName>Rate_Configuration_Title</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Título de Configuración de Tarifas</shortDescription>
+        <value>Configuración de Tarifario</value>
     </labels>
     <labels>
         <fullName>Rate_Groups</fullName>
@@ -80,17 +122,181 @@
         <value>Grupos de tarifa</value>
     </labels>
     <labels>
-        <fullName>Cancel</fullName>
-        <language>es</language>
-        <protected>false</protected>
-        <shortDescription>Cancelar</shortDescription>
-        <value>Cancelar</value>
-    </labels>
-    <labels>
         <fullName>Save</fullName>
         <language>es</language>
         <protected>false</protected>
         <shortDescription>Guardar</shortDescription>
         <value>Guardar</value>
+    </labels>
+    <labels>
+        <fullName>Season</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Temporada</shortDescription>
+        <value>Temporada</value>
+    </labels>
+    <labels>
+        <fullName>Standard</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Estándar</shortDescription>
+        <value>Estándar</value>
+    </labels>
+    <labels>
+        <fullName>Start_Date</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Fecha de Inicio</shortDescription>
+        <value>Fecha de inicio</value>
+    </labels>
+    <labels>
+        <fullName>Type</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Tipo</shortDescription>
+        <value>Tipo</value>
+    </labels>
+    <labels>
+        <fullName>Variation</fullName>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Variación</shortDescription>
+        <value>Variación (%)</value>
+    </labels>
+    <labels>
+        <fullName>CreatePeriod</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Create Period</shortDescription>
+        <value>Crear Período</value>
+    </labels>
+    <labels>
+        <fullName>StartDate</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Start Date</shortDescription>
+        <value>Fecha de inicio</value>
+    </labels>
+    <labels>
+        <fullName>EndDate</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>End Date</shortDescription>
+        <value>Fecha de fin</value>
+    </labels>
+    <labels>
+        <fullName>PeriodType</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Type</shortDescription>
+        <value>Tipo</value>
+    </labels>
+    <labels>
+        <fullName>Release</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Release</shortDescription>
+        <value>Release</value>
+    </labels>
+    <labels>
+        <fullName>MinimumStay</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Minimum Stay</shortDescription>
+        <value>Estancia mínima</value>
+    </labels>
+    <labels>
+        <fullName>LowSeason</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Low Season</shortDescription>
+        <value>Temporada baja</value>
+    </labels>
+    <labels>
+        <fullName>MidSeason</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Mid Season</shortDescription>
+        <value>Temporada media</value>
+    </labels>
+    <labels>
+        <fullName>HighSeason</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>High Season</shortDescription>
+        <value>Temporada alta</value>
+    </labels>
+    <labels>
+        <fullName>Overlap_Error</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Error de solapamiento de periodo</shortDescription>
+        <value>Las fechas introducidas se solapan con otros periódos de la temporada</value>
+    </labels>
+    <labels>
+        <fullName>Invalid_Date</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Error de fechas</shortDescription>
+        <value>La fecha de inicio no puede ser posterior a la fecha de fin</value>
+    </labels>
+    <labels>
+        <fullName>Cancel</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Cancel</shortDescription>
+        <value>Cancelar</value>
+    </labels>
+    <labels>
+        <fullName>Save</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Save</shortDescription>
+        <value>Guardar</value>
+    </labels>
+    <labels>
+        <fullName>Close</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Close</shortDescription>
+        <value>Cerrar</value>
+    </labels>
+    <labels>
+        <fullName>PeriodManagement</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Period Management</shortDescription>
+        <value>Gestión de Períodos</value>
+    </labels>
+    <labels>
+        <fullName>Success</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Success</shortDescription>
+        <value>Éxito</value>
+    </labels>
+    <labels>
+        <fullName>PeriodCreatedSuccessfully</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Period Created Successfully</shortDescription>
+        <value>Período creado correctamente</value>
     </labels>
 </CustomLabels>
