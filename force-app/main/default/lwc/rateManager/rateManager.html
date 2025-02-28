@@ -5,13 +5,15 @@
             <div class="slds-text-heading_medium slds-align_absolute-center">{labels.rateConfigurationTitle}</div>
             <div class="slds-text-title slds-align_absolute-center">{resortName} - {labels.season} {seasonNumber}</div>
 
+            <div class="slds-m-vertical_medium slds-border_bottom"></div>
+
             <!-- Main dates -->
-            <div class="slds-p-vertical_medium">
+            <div class="slds-p-horizontal_medium">
                 <c-rate-manager-header  record-id={recordId}></c-rate-manager-header>
             </div>
 
             <!-- Periods Section -->
-            <div class="slds-p-vertical_medium">
+            <div class="slds-p-horizontal_medium slds-p-vertical_medium">
                 <lightning-accordion allow-multiple-sections-open>
                     <lightning-accordion-section name="periods" label={labels.periods}>
                         <c-rate-manager-period-list parent-id={recordId}></c-rate-manager-period-list>
