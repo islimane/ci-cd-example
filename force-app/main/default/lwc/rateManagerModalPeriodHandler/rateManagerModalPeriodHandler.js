@@ -51,7 +51,7 @@ export default class RateManagerModalPeriodHandler extends LWCEventMixin(Lightni
         console.log(fields);
         try{
             this.checkSlots(fields);
-            //this.close('okay');
+            this.close('modal-closed');
             console.log('this._dateIntervals.length', this._dateIntervals.length);
             console.log('this._dateIntervals', JSON.parse(JSON.stringify(this._dateIntervals)));
             this.dispatchConfirmEvent(fields);

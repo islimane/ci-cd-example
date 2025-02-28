@@ -62,7 +62,7 @@ export default class RateManagerPeriodList extends RateManagerMixin(LwcDCExtensi
                 // stop further propagation of the event
                 e.stopPropagation();
                 this.handleAddPeriod(e);
-              }
+            }
         });
 
         console.log(result);
@@ -82,5 +82,19 @@ export default class RateManagerPeriodList extends RateManagerMixin(LwcDCExtensi
             console.error(e.message);
         }
 
+    }
+
+    async handleDeletePeriod(event){
+        try{
+            const result = await this.remoteAction({
+                controller: 'RateManagerPeriodListController',
+                action: 'deletePeriod',
+                recordIds: [event.detail.recordId],
+            });
+            this.refreshFetch();
+        }catch(e){
+            console.error(e.message);
+        }
+        
     }
 }

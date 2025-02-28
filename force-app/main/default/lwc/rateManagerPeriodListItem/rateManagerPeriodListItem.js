@@ -2,14 +2,15 @@
  * @description       : 
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             : 
- * @last modified on  : 27-02-2025
+ * @last modified on  : 28-02-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
-import { LightningElement, api } from 'lwc';
+import { api } from 'lwc';
+import LwcDCExtension from 'c/lwcDCExtension';
 import rateManagerModalPeriodHandler from 'c/rateManagerModalPeriodHandler';
 import LABELS from './labels.js';
 
-export default class RateManagerPeriodListItem extends LightningElement {
+export default class RateManagerPeriodListItem extends LwcDCExtension {
 
     labels = LABELS;
 
@@ -31,8 +32,8 @@ export default class RateManagerPeriodListItem extends LightningElement {
         return this._recordId;
     }   
 
-    handleRemove(){
-        console.log('handleRemove');
+    handleDelete(){
+        this.fireEvent('delete', {recordId: this.recordId});
     }
 
     async handleEdit(){
@@ -41,7 +42,12 @@ export default class RateManagerPeriodListItem extends LightningElement {
             recordId: this.recordId,
             dateIntervals: this._restOfIntervals,
             size: 'large',
-            headerLabel: this.labels.editPeriod
+            headerLabel: this.labels.editPeriod,
+            onconfirm: (e) => {
+                // stop further propagation of the event
+                e.stopPropagation();
+                this.handleEditPeriod(e);
+            }
         });
         // if modal closed with X button, promise returns result = 'undefined'
         // if modal closed with OK button, promise returns result = 'okay'
@@ -50,5 +56,10 @@ export default class RateManagerPeriodListItem extends LightningElement {
 
     handleError(event){
         console.log(event.detail);
+    }
+
+    handleEditPeriod(e){
+        console.log('handleEditPeriod');
+        //AL EDITAR SI MERECE LA PENA GUARDAR DIRECTAMENTE
     }
 }

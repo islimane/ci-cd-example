@@ -15,7 +15,7 @@ export const LWCEventMixin = (BaseClass) =>
          */
         fireEvent(eventName, eventData, bubbles, composed) {
             const evt = new CustomEvent(eventName, {
-                detail: { eventData },
+                detail: eventData,
                 bubbles: bubbles,
                 composed: composed
             });
