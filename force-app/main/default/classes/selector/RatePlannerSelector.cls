@@ -14,7 +14,7 @@ public with sharing class RatePlannerSelector {
     * @return List<RatePlanner__c> 
     **/
     public static List<RatePlanner__c> getRatePlannerById(Set<Id> recordIds) {
-        return [SELECT Id, Name, Season__c FROM RatePlanner__c WHERE Id IN :recordIds];
+        return [SELECT Id, Name, Season__c, Season__r.Name FROM RatePlanner__c WHERE Id IN :recordIds];
     }
 
 }

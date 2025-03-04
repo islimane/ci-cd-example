@@ -8,15 +8,38 @@
 **/
 import LwcDCExtension from 'c/lwcDCExtension';
 import LABELS from './labels.js';
-import { track } from 'lwc';
+import { api } from 'lwc';
 
 
 export default class RateManager extends LwcDCExtension{
 
+    _ratePlannerRecord;
+
+    get ratePlannerRecord() {
+        return this._ratePlannerRecord;
+    }
+
+
     labels = LABELS;
+
+    @api
+    set recordId(value) {
+        this._recordId = value;
+    }
+
+    get recordId() {
+        return this._recordId;
+    }
 
     connectedCallback(){
         this.recordId = 'a06S800000A7EOfIAN';
+        this._wireParams = {recordId: this.recordId, controller: 'RateManagerController'};
+    }
+
+    fetch = (response) => {
+        if(response.data){
+            this._ratePlannerRecord = response.data;
+        }
     }
 
     /**
@@ -41,13 +64,10 @@ export default class RateManager extends LwcDCExtension{
 
     handleSave() {
         try {
-            console.log('handleSave');
             const rateManagerComponents = this.template.querySelectorAll('c-rate-manager-period-list, c-rate-manager-event-list, c-rate-manager-blackout-list, c-rate-manager-rates-list');
             rateManagerComponents.forEach(component => {
                 component['handleSave'] ? component.handleSave() : null;
             });
-
-            console.log('Found Rate Managers:', rateManagerComponents.length);
         } catch (error) {
             console.error(error);
         }
