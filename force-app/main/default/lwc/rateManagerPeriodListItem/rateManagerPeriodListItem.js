@@ -28,7 +28,7 @@ export default class RateManagerPeriodListItem extends RateManagerMixin(LwcDCExt
     async handleDelete(){
 
         const result = await LightningConfirm.open({
-            message: 'this is the prompt message',
+            message: this.labels.removePeriodConfirmationMessage,
             variant: 'headerless',
             label: 'this is the aria-label value',
             // setting theme would have no effect
