@@ -1,0 +1,104 @@
+/**
+ * @description       : 
+ * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
+ * @group             : 
+ * @last modified on  : 04-03-2025
+ * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+**/
+
+import RateManagerPeriodInterval from './rateManagerPeriodInterval';
+import LABELS from './labels';
+
+
+class RateManagerPeriodUtils {
+
+    labels = LABELS;
+
+    constructor(dateIntervals) {
+        this._dateIntervals = [];
+        dateIntervals.forEach( interval => {
+            this._dateIntervals.push(new RateManagerPeriodInterval(interval));
+        });
+    }
+
+    findFirstAvailableInterval() {
+        // Get the current year and define its start and end dates
+        const currentYear = new Date().getFullYear();
+        const startOfYear = new Date(currentYear, 0, 1);
+        const endOfYear = new Date(currentYear, 11, 31);
+        
+        // If there are no existing intervals, return the full year
+        if (!this._dateIntervals || this._dateIntervals.length === 0) {
+            return new RateManagerPeriodInterval({
+                StartDate__c: startOfYear,
+                EndDate__c: endOfYear
+            }).getISOFormattedDates();
+        }
+        
+        // Sort intervals by start date
+        const sortedIntervals = [...this._dateIntervals].sort((a, b) => a.StartDate__c - b.StartDate__c);
+        
+        // Filter intervals that overlap with the current year
+        const relevantIntervals = sortedIntervals.filter(interval => 
+            interval.overlapsWith(new RateManagerPeriodInterval({
+                StartDate__c: startOfYear,
+                EndDate__c: endOfYear
+            }))
+        );
+        
+        // If no relevant intervals exist, return the full year
+        if (relevantIntervals.length === 0) {
+            return new RateManagerPeriodInterval({
+                StartDate__c: startOfYear,
+                EndDate__c: endOfYear
+            }).getISOFormattedDates();
+        }
+        
+        // Check for a gap at the beginning of the year
+        if (relevantIntervals[0].StartDate__c > startOfYear) {
+            const endDate = new Date(relevantIntervals[0].StartDate__c.getTime() - 86400000);
+            if (endDate >= startOfYear) {
+                return new RateManagerPeriodInterval({
+                    StartDate__c: startOfYear,
+                    EndDate__c: endDate
+                }).getISOFormattedDates();
+            }
+        }
+        
+        // Look for gaps between intervals
+        for (let i = 0; i < relevantIntervals.length - 1; i++) {
+            const currentEnd = relevantIntervals[i].EndDate__c;
+            const nextStart = relevantIntervals[i + 1].StartDate__c;
+            
+            if (nextStart - currentEnd > 86400000) { // More than one day gap
+                return new RateManagerPeriodInterval({
+                    StartDate__c: new Date(currentEnd.getTime() + 86400000),
+                    EndDate__c: new Date(nextStart.getTime() - 86400000)
+                }).getISOFormattedDates();
+            }
+        }
+        
+        // Check for a gap at the end of the year
+        const lastInterval = relevantIntervals[relevantIntervals.length - 1];
+        if (lastInterval.EndDate__c < endOfYear) {
+            return new RateManagerPeriodInterval({
+                StartDate__c: new Date(lastInterval.EndDate__c.getTime() + 86400000),
+                EndDate__c: endOfYear
+            }).getISOFormattedDates();
+        }
+        
+        // No available gaps found in the current year
+        return null;
+    }
+
+    checkSlots(formData) {
+        const newInterval = new RateManagerPeriodInterval(formData);
+        for (const interval of this._dateIntervals) {
+            if (newInterval.overlapsWith(interval)) {
+                throw new Error(this.labels.overlap_error);
+            }
+        }
+    }
+}
+
+export default RateManagerPeriodUtils

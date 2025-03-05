@@ -2,32 +2,47 @@
  * @description       : 
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             : 
- * @last modified on  : 28-02-2025
+ * @last modified on  : 05-03-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
-import { api } from 'lwc';
+import { api} from 'lwc';
 import LightningModal from 'lightning/modal';
 import LABELS from './labels';
-import RateManagerPeriodInterval from './rateManagerPeriodInterval';
-import {LWCEventMixin} from 'c/dcMixin';
+import RateManagerPeriodUtils from 'c/rateManagerPeriodUtils';
+import { RateManagerMixin } from 'c/rateManagerMixin';
+import PERIOD_OBJECT from "@salesforce/schema/Period__c"
 
-export default class RateManagerModalPeriodHandler extends LWCEventMixin(LightningModal) {
+export default class RateManagerModalPeriodHandler extends RateManagerMixin(LightningModal) {
 
     labels = LABELS;
-
-    _recordId;
     _dateIntervals = [];
+    _proposedInterval = {};
+    _IntervalUtils;
+    _onLoadFormData = {};
+
+    connectedCallback(){
+        super._sObjectApiName = PERIOD_OBJECT;
+        super._sObjectRTName = 'Period';
+    }
+
     @api headerLabel;
 
     @api 
     set dateIntervals(value){
         try{
-            value.forEach(element => { 
-                this._dateIntervals.push(new RateManagerPeriodInterval(element));
-            });
+            this._IntervalUtils = new RateManagerPeriodUtils(value);
+            this._proposedInterval = this._IntervalUtils.findFirstAvailableInterval();
         }catch(e){
             console.error(e.message);
-            this.showToast('Error', this.labels.invalid_date, 'error');
+            this.showToast('Error', e.message, 'error');
+        }
+    }
+
+    get proposedInterval(){
+        if(this._recordId && this._onLoadFormData){
+            return { StartDate__c : this._onLoadFormData?.StartDate__c?.value, EndDate__c : this._onLoadFormData?.EndDate__c?.value };
+        }else{
+            return this._proposedInterval;
         }
     }
 
@@ -35,24 +50,30 @@ export default class RateManagerModalPeriodHandler extends LWCEventMixin(Lightni
         return this._dateIntervals;
     }
 
-    @api 
-    set recordId(value) {
-        this._recordId = value;
+    handleLoad(event) {
+        if(this._recordId){
+            this._onLoadFormData = event.detail.records[this._recordId]?.fields;
+        }
     }
 
-    get recordId() {
-        return this._recordId;
+    handleSuccess(event){
+        console.log('handleSuccess');
+        const payload = event.detail;
+        this.dispatchConfirmEvent(payload);
+    }
+
+    handleError(event){
+        console.log('handleError');
+        console.log(event.detail);
     }
 
     handleSave(event) {
         event.preventDefault();       // stop the form from submitting
         const formData = event.detail.fields;
-
         try{
             this.checkSlots(formData);
             this.close('modal-closed');
             this.template.querySelector('lightning-record-edit-form').submit();
-            this.dispatchConfirmEvent(formData);
         }catch(e){
             console.error(e.message);
             this.showToast('Error', e.message, 'error');
@@ -60,12 +81,7 @@ export default class RateManagerModalPeriodHandler extends LWCEventMixin(Lightni
     }
 
     checkSlots(formData) {
-        const newInterval = new RateManagerPeriodInterval(formData);
-        for (const interval of this._dateIntervals) {
-            if (newInterval.overlapsWith(interval)) {
-                throw new Error(this.labels.overlap_error);
-            }
-        }
+        if (this._IntervalUtils.checkSlots(formData));
         this._dateIntervals.push(formData);
     }
 

@@ -299,4 +299,12 @@
         <shortDescription>Period Created Successfully</shortDescription>
         <value>Período creado correctamente</value>
     </labels>
+    <labels>
+        <fullName>Remove_Confirmation_Message</fullName>
+        <categories>PeriodManagement</categories>
+        <language>es</language>
+        <protected>false</protected>
+        <shortDescription>Atención. Los cambios eliminarán todos los datos asociados a este período</shortDescription>
+        <value>Atención. Los cambios eliminarán todos los datos asociados a este período</value>
+    </labels>
 </CustomLabels>

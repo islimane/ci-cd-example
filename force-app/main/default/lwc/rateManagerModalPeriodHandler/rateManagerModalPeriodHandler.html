@@ -2,19 +2,19 @@
   @description       : 
   @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
   @group             : 
-  @last modified on  : 28-02-2025
+  @last modified on  : 05-03-2025
   @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 -->
 <template>
     <lightning-modal-header label={headerLabel}></lightning-modal-header>
-    <lightning-record-edit-form object-api-name="Period__c" record-id={recordId} onsubmit={handleSave} density="Comfy">
+    <lightning-record-edit-form object-api-name="Period__c" record-type-id={_recordTypeId} record-id={recordId} onsubmit={handleSave} onsuccess={handleSuccess} onload={handleLoad} onerror={handleError} density="Comfy">
         <lightning-modal-body>
-            <lightning-layout>
+            <lightning-layout multiple-rows>
                 <lightning-layout-item size="4" padding="around-small">
-                    <lightning-input-field field-name="StartDate__c" required></lightning-input-field>
+                    <lightning-input-field field-name="StartDate__c" value={proposedInterval.StartDate__c} required></lightning-input-field>
                 </lightning-layout-item>
                 <lightning-layout-item size="4" padding="around-small">
-                    <lightning-input-field field-name="EndDate__c" required></lightning-input-field>
+                    <lightning-input-field field-name="EndDate__c" value={proposedInterval.EndDate__c} required></lightning-input-field>
                 </lightning-layout-item>
                 <lightning-layout-item size="4" padding="around-small">
                     <lightning-input-field field-name="Type__c"></lightning-input-field>
@@ -23,8 +23,16 @@
                     <lightning-input-field field-name="Release__c"></lightning-input-field>
                 </lightning-layout-item>
                 <lightning-layout-item size="4" padding="around-small">
-                    <lightning-input-field field-name="Minimum_Stay__c"></lightning-input-field>
+                    <lightning-input-field field-name="MinimumStay__c"></lightning-input-field>
                 </lightning-layout-item>
+                <div class="slds-hidden">
+                    <lightning-layout-item size="4" padding="around-small">
+                        <lightning-input-field field-name="RatePlanner__c" value={parentId}></lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="4" padding="around-small">
+                        <lightning-input-field field-name="RecordTypeId" value={_recordTypeId}></lightning-input-field>
+                    </lightning-layout-item>
+                </div>
             </lightning-layout>
         </lightning-modal-body>
         <lightning-modal-footer>

@@ -2,15 +2,17 @@
  * @description       : 
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             : 
- * @last modified on  : 28-02-2025
+ * @last modified on  : 05-03-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 import { api } from 'lwc';
+import { RateManagerMixin } from 'c/rateManagerMixin';
 import LwcDCExtension from 'c/lwcDCExtension';
 import rateManagerModalPeriodHandler from 'c/rateManagerModalPeriodHandler';
+import LightningConfirm from 'lightning/confirm';
 import LABELS from './labels.js';
 
-export default class RateManagerPeriodListItem extends LwcDCExtension {
+export default class RateManagerPeriodListItem extends RateManagerMixin(LwcDCExtension) {
 
     labels = LABELS;
 
@@ -21,25 +23,29 @@ export default class RateManagerPeriodListItem extends LwcDCExtension {
     }
     get dateIntervals() {
         return this._restOfIntervals;
-    }
+    } 
 
-    _recordId;
-    @api
-    set recordId(value) {
-        this._recordId = value;
-    }
-    get recordId() {
-        return this._recordId;
-    }   
+    async handleDelete(){
 
-    handleDelete(){
-        this.fireEvent('delete', {recordId: this.recordId});
+        const result = await LightningConfirm.open({
+            message: this.labels.removePeriodConfirmationMessage,
+            variant: 'headerless',
+            label: 'this is the aria-label value',
+            // setting theme would have no effect
+        });
+        //Confirm has been closed
+        //result is true if OK was clicked
+        //and false if cancel was clicked
+        if(result){
+            this.fireEvent('delete', {recordId: this.recordId});
+        }
     }
 
     async handleEdit(){
         const result = await rateManagerModalPeriodHandler.open({
             // it is set on lightning-modal-header instead
             recordId: this.recordId,
+            parentId: this.parentId,
             dateIntervals: this._restOfIntervals,
             size: 'large',
             headerLabel: this.labels.editPeriod,

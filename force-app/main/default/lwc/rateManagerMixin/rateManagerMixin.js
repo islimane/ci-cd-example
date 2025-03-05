@@ -5,6 +5,7 @@
 import { wire, api } from 'lwc';
 import { MessageContext, subscribe } from "lightning/messageService";
 import RATE_MANAGER_CHANNEL from "@salesforce/messageChannel/RateManagerChannel__c";
+import { getObjectInfo } from "lightning/uiObjectInfoApi"
 
 /**
  * A mixin that provides common functionality for rateManagers.
@@ -13,7 +14,6 @@ import RATE_MANAGER_CHANNEL from "@salesforce/messageChannel/RateManagerChannel_
  * @returns {Class} The extended class.
  */
 export const RateManagerMixin = (BaseClass) => class extends BaseClass {
-
 
     _recordId;
     _parentId;
@@ -90,4 +90,23 @@ export const RateManagerMixin = (BaseClass) => class extends BaseClass {
             console.error(e);
         }
     }
+
+    _sObjectApiName;
+    _sObjectRTName;
+    _recordTypeId;
+    @wire(getObjectInfo, { objectApiName: '$_sObjectApiName' })    
+    handleObjectInfo(response) {
+        const { data } = response;
+        if (data) {
+            this.sObjectInfo(data);
+            const rtInfo = Object.values(data.recordTypeInfos).find(
+                (rt) => rt.name === this._sObjectRTName || rt.developerName === this._sObjectRTName,
+            )
+            if (rtInfo) {
+                this._recordTypeId = rtInfo.recordTypeId
+            }
+            
+        }
+    }
+    sObjectInfo = (response) => {} 
 }
