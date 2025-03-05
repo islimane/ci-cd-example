@@ -16,22 +16,30 @@
             <div class="slds-p-horizontal_medium slds-p-vertical_medium">
                 <lightning-accordion allow-multiple-sections-open>
                     <lightning-accordion-section name="periods" label={labels.periods}>
-                        <c-rate-manager-period-list parent-id={recordId}></c-rate-manager-period-list>
+                        <div class="accordion-container slds-p-around_medium">
+                            <c-rate-manager-period-list parent-id={recordId}></c-rate-manager-period-list>
+                        </div>
                     </lightning-accordion-section>
 
                     <!-- Events Section -->
                     <lightning-accordion-section name="events" label={labels.events}>
-                        <c-rate-manager-event-list parent-id={recordId}></c-rate-manager-event-list>
+                        <div class="accordion-container slds-p-around_medium">
+                            <c-rate-manager-event-list parent-id={recordId}></c-rate-manager-event-list>
+                        </div>
                     </lightning-accordion-section>
 
                     <!-- Blackouts Section -->
                     <lightning-accordion-section name="blackouts" label={labels.blackouts}>
-                        <c-rate-manager-blackout-list parent-id={recordId}></c-rate-manager-blackout-list>
+                        <div class="accordion-container slds-p-around_medium">
+                            <c-rate-manager-blackout-list parent-id={recordId}></c-rate-manager-blackout-list>
+                        </div>
                     </lightning-accordion-section>
 
                     <!-- Rate Groups Section -->
                     <lightning-accordion-section name="rates" label={labels.rateGroups}>
-                        <c-rate-manager-rates-list parent-id={recordId}></c-rate-manager-rates-list>
+                        <div class="accordion-container slds-p-around_medium">
+                            <c-rate-manager-rates-list parent-id={recordId}></c-rate-manager-rates-list>
+                        </div>
                     </lightning-accordion-section>
                 </lightning-accordion>
             </div>
