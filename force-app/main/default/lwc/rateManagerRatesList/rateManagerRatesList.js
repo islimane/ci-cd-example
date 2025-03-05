@@ -18,8 +18,15 @@ export default class RateManagerRateGroupList extends RateManagerMixin(LwcDCExte
         configureGroups: "Configurar grupos de tarifas",
     }
 
+    connectedCallback() {
+        this._wireParams = {recordId: this.parentId, controller: 'RateManagerRatesListController'};
+    }
 
-    _ratesList = [{Id:'a0QS800000AFfLFMA1'}, {Id:'a0QS800000AFfLFMA1'}];
+    _ratesList = [];
+
+    fetch = (response) => {
+        this._ratesList = JSON.parse(JSON.stringify(response?.data)) || response.data;
+    }
 
     handleConfigureClick(event) {
         // Handle the configure button click

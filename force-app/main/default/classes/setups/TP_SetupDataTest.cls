@@ -25,6 +25,7 @@ public class TP_SetupDataTest {
     public static Map<String, sObject> mHotel = new Map<String, sObject>();
     public static Map<String, sObject> mSeason = new Map<String, sObject>();
     public static Map<String, sObject> mPeriod = new Map<String, sObject>();
+    public static Map<String, sObject> mRate = new Map<String, sObject>();
 
     /*********************************/
     /*       BATTERY DEFINITIONS     */
@@ -65,6 +66,7 @@ public class TP_SetupDataTest {
         Hotel__c hotel = generateHotel(null);
         RatePlanner__c ratePlanner = generateRatePlanner(null,null);
         Period__c period = generatePeriod();
+        Rate__c rate = generateRate();
     }
 
 
@@ -132,8 +134,8 @@ public class TP_SetupDataTest {
     }
 
     /**
-     * Generates an Season__c object with dummy values for testing purposes.
-     * @return A new Season__c object with dummy values for a test environment.
+     * Generates an Period__c object with dummy values for testing purposes.
+     * @return A new Period__c object with dummy values for a test environment.
      */
     public static Period__c generatePeriod() {
         Period__c period = new Period__c(
@@ -143,6 +145,21 @@ public class TP_SetupDataTest {
         );
         mPeriod = TP_SetupDataUtilsTest.setMapByName(mPeriod, new List<sObject>{period});
         return period;
+    }
+
+
+    /**
+     * Generates an Rate__c object with dummy values for testing purposes.
+     * @return A new Rate__c object with dummy values for a test environment.
+     */
+    public static Rate__c generateRate() {
+        Rate__c rate = new Rate__c(
+            Rate_Name__c = GlobalConstants.RATE_RATE_NAME_PICKLIST_BEST,
+            RateType__c = 'BAR',
+            TaxAmount__c = 10
+        );
+        mRate = TP_SetupDataUtilsTest.setMapByName(mRate, new List<sObject>{rate});
+        return rate;
     }
 
     /**
@@ -196,6 +213,7 @@ public class TP_SetupDataTest {
         insertHotelData();
         insertRatePlannerData();
         insertPeriodData();
+        insertRateData();
     }
 
     /**
@@ -241,6 +259,15 @@ public class TP_SetupDataTest {
         TP_SetupDataUtilsTest.genericParentChildRelationship(mRatePlanner.values(), mPeriod.values(), 'RatePlanner__c');
         lPeriodToInsert.addAll((List<Period__c>)mPeriod.values());
         insert lPeriodToInsert;
+    }
+
+    /**
+    * @description 
+    * @author Inetum Team <alberto.martinez-lopez@inetum.com> | 05-03-2025 
+    **/
+    private static void insertRateData(){
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mRatePlanner.values(), mRate.values(), 'RatePlanner__c');
+        insert mRate.values();
     }
 
 
