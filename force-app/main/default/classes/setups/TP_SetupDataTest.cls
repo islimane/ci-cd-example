@@ -2,8 +2,8 @@
  * @description       : Unit Test Class for Setup Data Methods
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 24-02-2025
- * @last modified by  : Inetum Team <sara.gerico@inetum.com>
+ * @last modified on  : 05-03-2025
+ * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 @isTest
 public class TP_SetupDataTest {
@@ -24,6 +24,7 @@ public class TP_SetupDataTest {
     public static Map<String, sObject> mRatePlanner = new Map<String, sObject>();
     public static Map<String, sObject> mHotel = new Map<String, sObject>();
     public static Map<String, sObject> mSeason = new Map<String, sObject>();
+    public static Map<String, sObject> mPeriod = new Map<String, sObject>();
 
     /*********************************/
     /*       BATTERY DEFINITIONS     */
@@ -63,6 +64,7 @@ public class TP_SetupDataTest {
         Season__c season = generateSeason();
         Hotel__c hotel = generateHotel(null);
         RatePlanner__c ratePlanner = generateRatePlanner(null,null);
+        Period__c period = generatePeriod();
     }
 
 
@@ -103,13 +105,13 @@ public class TP_SetupDataTest {
             BillingStreet = '1234 Elm Street',
             BillingCity = 'Springfield',
             BillingPostalCode = '12345',
-            BillingCountry = 'Neverland',
-            BillingState = 'Imaginary State',
+            BillingCountry = 'Spain',
+            BillingState = 'Madrid',
             ShippingStreet = '5678 Oak Avenue',
             ShippingCity = 'Gotham',
             ShippingPostalCode = '67890',
-            ShippingCountry = 'Narnia',
-            ShippingState = 'Fantasy Zone',
+            ShippingCountry = 'Spain',
+            ShippingState = 'Madrid',
             Description = 'Test account for unit testing',
             OwnerId = UserInfo.getUserId()
         );
@@ -127,6 +129,20 @@ public class TP_SetupDataTest {
         );
         mSeason = TP_SetupDataUtilsTest.setMapByName(mSeason, new List<sObject>{season});
         return season;
+    }
+
+    /**
+     * Generates an Season__c object with dummy values for testing purposes.
+     * @return A new Season__c object with dummy values for a test environment.
+     */
+    public static Period__c generatePeriod() {
+        Period__c period = new Period__c(
+            RecordTypeId = GlobalConstants.PERIOD_RT_PERIOD_ID,
+            StartDate__c = Date.today(),
+            EndDate__c = Date.today().addDays(2)
+        );
+        mPeriod = TP_SetupDataUtilsTest.setMapByName(mPeriod, new List<sObject>{period});
+        return period;
     }
 
     /**
@@ -150,8 +166,7 @@ public class TP_SetupDataTest {
         RatePlanner__c ratePlanner = new RatePlanner__c(
             Name = 'Default'+batteryName,
             Description__c = 'Test rate planner for unit testing',
-            StartDate__c = Date.today().addDays(1),
-            EndDate__c = Date.today().addDays(10),
+
             Hotel__c = hotel?.Id,
             Season__c = season?.Id,
             Status__c = 'Draft',
@@ -167,6 +182,7 @@ public class TP_SetupDataTest {
 
     public static List<Account> lAccountToInsert = new List<Account>();
     public static List<RatePlanner__c> lRatePlannerToInsert = new List<RatePlanner__c>();
+    public static List<Period__c> lPeriodToInsert = new List<Period__c>();
     public static List<Hotel__c> lHotelToInsert = new List<Hotel__c>();
     public static List<Season__c> lSeasonToInsert = new List<Season__c>();
 
@@ -179,6 +195,7 @@ public class TP_SetupDataTest {
         insertSeasonData();
         insertHotelData();
         insertRatePlannerData();
+        insertPeriodData();
     }
 
     /**
@@ -213,9 +230,17 @@ public class TP_SetupDataTest {
     private static void insertRatePlannerData() {
         TP_SetupDataUtilsTest.genericParentChildRelationship(mHotel.values(), mRatePlanner.values(), 'Hotel__c');
         TP_SetupDataUtilsTest.genericParentChildRelationship(mSeason.values(), mRatePlanner.values(), 'Season__c');
-
         lRatePlannerToInsert.addAll((List<RatePlanner__c>)mRatePlanner.values());
         insert lRatePlannerToInsert;
+    }
+
+    /**
+     * Inserts all Period__c records and sets relationships.
+     */
+    private static void insertPeriodData() {
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mRatePlanner.values(), mPeriod.values(), 'RatePlanner__c');
+        lPeriodToInsert.addAll((List<Period__c>)mPeriod.values());
+        insert lPeriodToInsert;
     }
 
 

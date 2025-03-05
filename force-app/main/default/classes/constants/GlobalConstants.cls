@@ -2,7 +2,7 @@
  * @description       : Global constants class for the entire system.
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 28-02-2025
+ * @last modified on  : 05-03-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 @SuppressWarnings('PMD')
@@ -30,6 +30,20 @@ public without sharing class GlobalConstants {
     public static String STATUS_EXAMPLE_PENDING { get { return 'Pending'; } }
     public static String STATUS_EXAMPLE_APPROVED { get { return 'Approved'; } }
     public static String STATUS_EXAMPLE_REJECTED { get { return 'Rejected'; } }
+
+    /** Period__c */
+    public static Map<String,Schema.RecordTypeInfo> PERIOD_RT_BY_DEV_NAME {
+        get{
+            if(PERIOD_RT_BY_DEV_NAME == null) PERIOD_RT_BY_DEV_NAME = Schema.SObjectType.Period__c.getRecordTypeInfosByDeveloperName();
+            return PERIOD_RT_BY_DEV_NAME;
+        }set;
+    }
+    public static String PERIOD_RT_PERIOD_NAME { get { return 'Period'; } }
+    public static String PERIOD_RT_BLACKOUT_NAME { get { return 'Blackout'; } }
+    public static String PERIOD_RT_EVENT_NAME { get { return 'Event'; } }
+    public static Id PERIOD_RT_PERIOD_ID { get { return PERIOD_RT_BY_DEV_NAME.get(PERIOD_RT_PERIOD_NAME).getRecordTypeId();}}
+    public static Id PERIOD_RT_BLACKOUT_ID { get { return PERIOD_RT_BY_DEV_NAME.get(PERIOD_RT_BLACKOUT_NAME).getRecordTypeId();}}
+    public static Id PERIOD_RT_EVENT_ID { get { return PERIOD_RT_BY_DEV_NAME.get(PERIOD_RT_EVENT_NAME).getRecordTypeId();}}
 
 
 }

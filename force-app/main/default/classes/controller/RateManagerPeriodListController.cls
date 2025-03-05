@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             : 
- * @last modified on  : 28-02-2025
+ * @last modified on  : 05-03-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 public with sharing class RateManagerPeriodListController extends DC_DynamicController {

@@ -9,6 +9,12 @@ class RateManagerPeriodInterval {
         }
     }
 
+    getISOFormattedDates(){
+        this.StartDate__c = new Date(this.StartDate__c).toISOString().split("T")[0];
+        this.EndDate__c = new Date(this.EndDate__c).toISOString().split("T")[0];
+        return this;
+    }
+
     overlapsWith(otherInterval) {
         return this.StartDate__c < otherInterval.EndDate__c && this.EndDate__c > otherInterval.StartDate__c;
     }

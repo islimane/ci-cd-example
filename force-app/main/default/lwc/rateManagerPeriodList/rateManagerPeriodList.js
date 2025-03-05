@@ -20,7 +20,6 @@ export default class RateManagerPeriodList extends RateManagerMixin(LwcDCExtensi
     }   
 
     fetch = (response) => {
-        console.log('@@@ Fetch Periods', response);
         this._periodList = JSON.parse(JSON.stringify(response?.data)) || response.data;
     }
 
@@ -56,6 +55,7 @@ export default class RateManagerPeriodList extends RateManagerMixin(LwcDCExtensi
         const result = await rateManagerModalPeriodHandler.open({
             // it is set on lightning-modal-header instead
             dateIntervals: this._periodList,
+            parentId: this.parentId,
             size: 'large',
             headerLabel: this.labels.addPeriod,
             onconfirm: (e) => {
@@ -68,20 +68,8 @@ export default class RateManagerPeriodList extends RateManagerMixin(LwcDCExtensi
         console.log(result);
     }
 
-    handleAddPeriod(period){
-        console.log('handleAddPeriod', period);
-        try{
-            const index = this._periodList.findIndex(interval => interval.Id === period.Id);
-            
-            if (index !== -1) {
-                this._periodList[index] = period;
-            } else {
-                this._periodList.push(period);
-            }
-        }catch(e){
-            console.error(e.message);
-        }
-
+    handleAddPeriod(event){
+        this.refreshFetch();
     }
 
     handleRefreshPeriod(event){
