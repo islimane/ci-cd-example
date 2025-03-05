@@ -72,8 +72,10 @@ export default class RateManagerModalPeriodHandler extends RateManagerMixin(Ligh
         const formData = event.detail.fields;
         try{
             this.checkSlots(formData);
+            formData.RecordTypeId = this._recordTypeId;
+            formData.RatePlanner__c = this._parentId;
+            this.template.querySelector('lightning-record-edit-form').submit(formData);
             this.close('modal-closed');
-            this.template.querySelector('lightning-record-edit-form').submit();
         }catch(e){
             console.error(e.message);
             this.showToast('Error', e.message, 'error');
