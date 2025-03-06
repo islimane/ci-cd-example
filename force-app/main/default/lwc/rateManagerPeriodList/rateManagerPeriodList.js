@@ -64,8 +64,6 @@ export default class RateManagerPeriodList extends RateManagerMixin(LwcDCExtensi
                 this.handleAddPeriod(e);
             }
         });
-
-        console.log(result);
     }
 
     handleAddPeriod(event){
