@@ -1,12 +1,12 @@
 /**
- * @description       : RateManagerEventListController Test
+ * @description       : RateManagerBlackoutListController Test
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Test Class
  * @last modified on  : 06-03-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 @isTest
-public with sharing class RateManagerEventListController_Test implements TP_ExecutableInterface{
+public with sharing class RateManagerBlackoutListController_Test implements TP_ExecutableInterface{
 
     /***************************************
     *           Setup Data                 *
@@ -34,7 +34,7 @@ public with sharing class RateManagerEventListController_Test implements TP_Exec
 
     private static void initMethod(){
         Map<String, Object> params = new Map<String, Object>{
-            'controller' => 'RateManagerEventListController',
+            'controller' => 'RateManagerBlackoutListController',
             'recordId' => TP_SetupSelectorTest.getRatePlanner(1, 'TEST').Id
         };
         Map<String, Object> mResult = (Map<String,Object>)JSON.deserializeUntyped(DC_ControllerExecuter.getControllerData(params));

@@ -39,6 +39,16 @@ public class TP_TestExecutorTest implements TP_ExecutableInterface{
         RateManagerController_Test.testAll();
     }
 
+    @IsTest
+    static void RateManagerBlackoutListController_Test(){
+        RateManagerBlackoutListController_Test.testAll();
+    }
+
+    @IsTest
+    static void RateManagerEventListController_Test(){
+        RateManagerEventListController_Test.testAll();
+    }
+
 
 
 
