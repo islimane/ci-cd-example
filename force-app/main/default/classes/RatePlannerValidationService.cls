@@ -25,14 +25,14 @@ public with sharing class RatePlannerValidationService{
     }
 
     private static void validateRatePrice(RatePlanner__c ratePlanner) {
-        Boolean condition = true;
+        Boolean condition = false;
         if (condition) {
             throw new RatePlannerValidationException('ErrorMessage');
         }
     }
 
     private static void validateDateRange(RatePlanner__c ratePlanner) {
-        Boolean condition = false;
+        Boolean condition = true;
         if (condition) {
             throw new RatePlannerValidationException('ErrorMessage');
         }
