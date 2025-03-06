@@ -16,14 +16,48 @@ public class TP_TestExecutorTest implements TP_ExecutableInterface{
 
 
     /*********************************** */
-    /**         EXECUTOR METHODS         **/
+    /*         EXECUTOR METHODS          */
     /*********************************** */
-
 
     @IsTest
     static void RatePlannerTrigger_Test(){
         RatePlannerTrigger_Test.testAll();
     }
+
+    @IsTest
+    static void RatePlannerValidationService_Test(){
+        RatePlannerValidationService_Test.testAll();
+    }
+
+    @IsTest
+    static void RatePlannerSelector_Test(){
+        RatePlannerSelector_Test.testAll();
+    }
+
+    @IsTest
+    static void RateManagerController_Test(){
+        RateManagerController_Test.testAll();
+    }
+
+    @IsTest
+    static void RateManagerBlackoutListController_Test(){
+        RateManagerBlackoutListController_Test.testAll();
+    }
+
+    @IsTest
+    static void RateManagerEventListController_Test(){
+        RateManagerEventListController_Test.testAll();
+    }
+
+    @IsTest
+    static void RateManagerRatesListController_Test(){
+        RateManagerRatesListController_Test.testAll();
+    }
+
+
+
+
+
 
     /*
     @IsTest
