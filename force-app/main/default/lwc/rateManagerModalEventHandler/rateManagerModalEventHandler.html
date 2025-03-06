@@ -1,0 +1,32 @@
+<!--
+  @description       : 
+  @author            : Inetum Team <alvaro.marin@inetum.com>
+  @group             : 
+  @last modified on  : 05-03-2025
+  @last modified by  : Inetum Team <alvaro.marin@inetum.com>
+-->
+<template>
+    <lightning-modal-header label={headerLabel}></lightning-modal-header>
+    <lightning-record-edit-form object-api-name="Period__c" record-type-id={_recordTypeId} record-id={recordId} onsubmit={handleSave} onsuccess={handleSuccess} onload={handleLoad} onerror={handleError} density="Comfy">
+        <lightning-modal-body>
+            <lightning-layout multiple-rows>
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-input-field field-name="StartDate__c" required></lightning-input-field>
+                </lightning-layout-item>
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-input-field field-name="EndDate__c" required></lightning-input-field>
+                </lightning-layout-item>
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-input-field field-name="Description__c"></lightning-input-field>
+                </lightning-layout-item>
+            </lightning-layout>
+        </lightning-modal-body>
+        <lightning-modal-footer>
+            <lightning-button
+                class="slds-m-top_small"
+                type="submit"
+                label={labels.save}
+            ></lightning-button>
+        </lightning-modal-footer>
+    </lightning-record-edit-form>
+</template>
