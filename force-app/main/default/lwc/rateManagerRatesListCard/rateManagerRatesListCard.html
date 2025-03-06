@@ -1,0 +1,48 @@
+<!--
+  @description       : 
+  @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
+  @group             : 
+  @last modified on  : 05-03-2025
+  @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+-->
+<template>
+    <lightning-card hide-header>
+        <div class="slds-p-around_medium">
+            <lightning-record-view-form record-id={recordId} object-api-name="Rate__c" density="Comfy">
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col slds-size_1-of-2">
+                        <div class="slds-m-around_small slds-border_bottom">
+                            <lightning-output-field field-name="Name"></lightning-output-field>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <div class="slds-m-around_small slds-border_bottom">
+                            <lightning-output-field field-name="RateType__c"></lightning-output-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-gutters slds-m-top_small">
+                    <div class="slds-col slds-size_1-of-2">
+                        <div class="slds-m-around_small slds-border_bottom">
+                            <lightning-output-field field-name="TaxIncluded__c" ></lightning-output-field>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <div class="slds-m-around_small slds-border_bottom">
+                            <lightning-output-field field-name="TaxAmount__c"></lightning-output-field>
+                        </div>
+                    </div>
+                </div>
+            </lightning-record-view-form>
+            <div class="slds-grid slds-grid_align-end slds-m-top_medium">
+                <div class="slds-col">
+                    <lightning-button 
+                        label={labels.configure} 
+                        variant="brand" 
+                        onclick={handleConfigureClick}>
+                    </lightning-button>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+</template>

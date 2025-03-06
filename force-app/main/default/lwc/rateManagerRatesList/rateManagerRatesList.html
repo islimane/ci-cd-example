@@ -1,3 +1,25 @@
+<!--
+  @description       : 
+  @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
+  @group             : 
+  @last modified on  : 05-03-2025
+  @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+-->
 <template>
-    
+    <div class="slds-grid slds-gutters slds-wrap slds-p-around_medium">
+        <template for:each={_ratesList} for:item="rate">
+            <div key={rate.Id} class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                <c-rate-manager-rates-list-card record-id={rate.Id} parent-id={recordId}></c-rate-manager-rates-list-card>
+            </div>
+        </template>
+    </div>
+    <!-- Configure Rate Groups Link -->
+    <div class="slds-grid slds-grid_align-end slds-p-horizontal_medium">
+        <lightning-button 
+            label={labels.configureGroups} 
+            variant="neutral" 
+            onclick={handleConfigureGroupsClick}>
+        </lightning-button>
+    </div>
 </template>
+

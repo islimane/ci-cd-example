@@ -34,4 +34,9 @@ public with sharing class RateManagementExecutor_Test {
     public static void RateManagerPeriodListControllerTest(){
         RateManagerPeriodListController_Test.testAll();
     }
+
+    @isTest
+    public static void RateManagerRateListControllerTest(){
+        RateManagerRatesListController_Test.testAll();
+    }
 }

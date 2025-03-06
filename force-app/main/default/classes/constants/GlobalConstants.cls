@@ -38,12 +38,16 @@ public without sharing class GlobalConstants {
             return PERIOD_RT_BY_DEV_NAME;
         }set;
     }
-    public static String PERIOD_RT_PERIOD_NAME { get { return 'Period'; } }
-    public static String PERIOD_RT_BLACKOUT_NAME { get { return 'Blackout'; } }
-    public static String PERIOD_RT_EVENT_NAME { get { return 'Event'; } }
-    public static Id PERIOD_RT_PERIOD_ID { get { return PERIOD_RT_BY_DEV_NAME.get(PERIOD_RT_PERIOD_NAME).getRecordTypeId();}}
-    public static Id PERIOD_RT_BLACKOUT_ID { get { return PERIOD_RT_BY_DEV_NAME.get(PERIOD_RT_BLACKOUT_NAME).getRecordTypeId();}}
-    public static Id PERIOD_RT_EVENT_ID { get { return PERIOD_RT_BY_DEV_NAME.get(PERIOD_RT_EVENT_NAME).getRecordTypeId();}}
+    public static final String PERIOD_RT_PERIOD_NAME { get { return 'Period'; } }
+    public static final String PERIOD_RT_BLACKOUT_NAME { get { return 'Blackout'; } }
+    public static final String PERIOD_RT_EVENT_NAME { get { return 'Event'; } }
+    public static final Id PERIOD_RT_PERIOD_ID { get { return PERIOD_RT_BY_DEV_NAME.get(PERIOD_RT_PERIOD_NAME).getRecordTypeId();}}
+    public static final Id PERIOD_RT_BLACKOUT_ID { get { return PERIOD_RT_BY_DEV_NAME.get(PERIOD_RT_BLACKOUT_NAME).getRecordTypeId();}}
+    public static final Id PERIOD_RT_EVENT_ID { get { return PERIOD_RT_BY_DEV_NAME.get(PERIOD_RT_EVENT_NAME).getRecordTypeId();}}
 
+
+    /** RATE */
+
+    public static final String RATE_RATE_NAME_PICKLIST_BEST { get { return 'BEST'; } }
 
 }
