@@ -17,6 +17,7 @@ export const RateManagerMixin = (BaseClass) => class extends BaseClass {
 
     _recordId;
     _parentId;
+    _parent;
 
     @api
     set recordId(value) {
@@ -32,6 +33,15 @@ export const RateManagerMixin = (BaseClass) => class extends BaseClass {
     }
     get parentId() {
         return this._parentId;
+    }
+
+    @api
+    set parent(value) {
+        this._parent = value;
+        this._parentId = value?.Id;
+    }
+    get parent() {
+        return this._parent;
     }
 
     @api

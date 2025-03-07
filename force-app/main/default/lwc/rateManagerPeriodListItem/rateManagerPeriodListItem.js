@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             : 
- * @last modified on  : 05-03-2025
+ * @last modified on  : 07-03-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 import { api } from 'lwc';
@@ -45,8 +45,8 @@ export default class RateManagerPeriodListItem extends RateManagerMixin(LwcDCExt
         const result = await rateManagerModalPeriodHandler.open({
             // it is set on lightning-modal-header instead
             recordId: this.recordId,
+            intervalsData: { dateIntervals: this._restOfIntervals, parent: this.parent },
             parentId: this.parentId,
-            dateIntervals: this._restOfIntervals,
             size: 'large',
             headerLabel: this.labels.editPeriod,
             onconfirm: (e) => {

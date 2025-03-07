@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             : 
- * @last modified on  : 04-03-2025
+ * @last modified on  : 07-03-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 
@@ -14,8 +14,9 @@ class RateManagerPeriodUtils {
 
     labels = LABELS;
 
-    constructor(dateIntervals) {
+    constructor(dateIntervals, season) {
         this._dateIntervals = [];
+        this._season = season;
         dateIntervals.forEach( interval => {
             this._dateIntervals.push(new RateManagerPeriodInterval(interval));
         });
@@ -23,15 +24,14 @@ class RateManagerPeriodUtils {
 
     findFirstAvailableInterval() {
         // Get the current year and define its start and end dates
-        const currentYear = new Date().getFullYear();
-        const startOfYear = new Date(currentYear, 0, 1);
-        const endOfYear = new Date(currentYear, 11, 31);
+        const startOfSeason = new Date(this._season.StartDate__c);
+        const endOfSeason = new Date(this._season.EndDate__c);
         
         // If there are no existing intervals, return the full year
         if (!this._dateIntervals || this._dateIntervals.length === 0) {
             return new RateManagerPeriodInterval({
-                StartDate__c: startOfYear,
-                EndDate__c: endOfYear
+                StartDate__c: startOfSeason,
+                EndDate__c: endOfSeason
             }).getISOFormattedDates();
         }
         
@@ -41,25 +41,25 @@ class RateManagerPeriodUtils {
         // Filter intervals that overlap with the current year
         const relevantIntervals = sortedIntervals.filter(interval => 
             interval.overlapsWith(new RateManagerPeriodInterval({
-                StartDate__c: startOfYear,
-                EndDate__c: endOfYear
+                StartDate__c: startOfSeason,
+                EndDate__c: endOfSeason
             }))
         );
         
         // If no relevant intervals exist, return the full year
         if (relevantIntervals.length === 0) {
             return new RateManagerPeriodInterval({
-                StartDate__c: startOfYear,
-                EndDate__c: endOfYear
+                StartDate__c: startOfSeason,
+                EndDate__c: endOfSeason
             }).getISOFormattedDates();
         }
         
         // Check for a gap at the beginning of the year
-        if (relevantIntervals[0].StartDate__c > startOfYear) {
+        if (relevantIntervals[0].StartDate__c > startOfSeason) {
             const endDate = new Date(relevantIntervals[0].StartDate__c.getTime() - 86400000);
-            if (endDate >= startOfYear) {
+            if (endDate >= startOfSeason) {
                 return new RateManagerPeriodInterval({
-                    StartDate__c: startOfYear,
+                    StartDate__c: startOfSeason,
                     EndDate__c: endDate
                 }).getISOFormattedDates();
             }
@@ -80,10 +80,10 @@ class RateManagerPeriodUtils {
         
         // Check for a gap at the end of the year
         const lastInterval = relevantIntervals[relevantIntervals.length - 1];
-        if (lastInterval.EndDate__c < endOfYear) {
+        if (lastInterval.EndDate__c < endOfSeason) {
             return new RateManagerPeriodInterval({
                 StartDate__c: new Date(lastInterval.EndDate__c.getTime() + 86400000),
-                EndDate__c: endOfYear
+                EndDate__c: endOfSeason
             }).getISOFormattedDates();
         }
         
