@@ -12,25 +12,6 @@ public without sharing class GlobalConstants {
      *        Constants Definition         *
      ***************************************/
 
-    /** Example: Record Type Constants */
-    /*public static Map<String,Schema.RecordTypeInfo> EXAMPLE_OBJECT_RT_BY_DEV_NAME {
-        get{
-            if(EXAMPLE_OBJECT_RT_BY_DEV_NAME == null){
-                EXAMPLE_OBJECT_RT_BY_DEV_NAME = Schema.SObjectType.Example_Object__c.getRecordTypeInfosByDeveloperName();
-            }
-            return EXAMPLE_OBJECT_RT_BY_DEV_NAME;
-        }set;
-    }
-
-    public static String EXAMPLE_RECORD_TYPE_DEVNAME { get { return 'Example_Record_Type'; } }
-    public static Id EXAMPLE_RECORD_TYPE_RT_ID { get { return EXAMPLE_OBJECT_RT_BY_DEV_NAME.get(EXAMPLE_RECORD_TYPE_DEVNAME).getRecordTypeId();}}
-    */
-
-    /** Example: Status Constants */
-    public static String STATUS_EXAMPLE_PENDING { get { return 'Pending'; } }
-    public static String STATUS_EXAMPLE_APPROVED { get { return 'Approved'; } }
-    public static String STATUS_EXAMPLE_REJECTED { get { return 'Rejected'; } }
-
     /** Period__c */
     public static Map<String,Schema.RecordTypeInfo> PERIOD_RT_BY_DEV_NAME {
         get{
@@ -45,9 +26,46 @@ public without sharing class GlobalConstants {
     public static final Id PERIOD_RT_BLACKOUT_ID { get { return PERIOD_RT_BY_DEV_NAME.get(PERIOD_RT_BLACKOUT_NAME).getRecordTypeId();}}
     public static final Id PERIOD_RT_EVENT_ID { get { return PERIOD_RT_BY_DEV_NAME.get(PERIOD_RT_EVENT_NAME).getRecordTypeId();}}
 
+    /** HotelTerritory__c */
+    public static Map<String,Schema.RecordTypeInfo> HOTEL_TERRITORY_RT_BY_DEV_NAME {
+        get{
+            if(HOTEL_TERRITORY_RT_BY_DEV_NAME == null) HOTEL_TERRITORY_RT_BY_DEV_NAME = Schema.SObjectType.HotelTerritory__c.getRecordTypeInfosByDeveloperName();
+            return HOTEL_TERRITORY_RT_BY_DEV_NAME;
+        }set;
+    }
+    public static final String HOTEL_TERRITORY_RT_AREA_NAME { get { return 'Area'; } }
+    public static final String HOTEL_TERRITORY_RT_CONTINENT_NAME { get { return 'Continent'; } }
+    public static final String HOTEL_TERRITORY_RT_ZONE_NAME { get { return 'Zone'; } }
+    public static final String HOTEL_TERRITORY_RT_SUBZONE_NAME { get { return 'Subzone'; } }
+    public static final String HOTEL_TERRITORY_RT_HOTEL_NAME { get { return 'Hotel'; } }
+    public static final Id HOTEL_TERRITORY_RT_AREA_ID { get { return HOTEL_TERRITORY_RT_BY_DEV_NAME.get(HOTEL_TERRITORY_RT_AREA_NAME).getRecordTypeId();}}
+    public static final Id HOTEL_TERRITORY_RT_CONTINENT_ID { get { return HOTEL_TERRITORY_RT_BY_DEV_NAME.get(HOTEL_TERRITORY_RT_CONTINENT_NAME).getRecordTypeId();}}
+    public static final Id HOTEL_TERRITORY_RT_ZONE_ID { get { return HOTEL_TERRITORY_RT_BY_DEV_NAME.get(HOTEL_TERRITORY_RT_ZONE_NAME).getRecordTypeId();}}
+    public static final Id HOTEL_TERRITORY_RT_SUBZONE_ID { get { return HOTEL_TERRITORY_RT_BY_DEV_NAME.get(HOTEL_TERRITORY_RT_SUBZONE_NAME).getRecordTypeId();}}
+    public static final Id HOTEL_TERRITORY_RT_HOTEL_ID { get { return HOTEL_TERRITORY_RT_BY_DEV_NAME.get(HOTEL_TERRITORY_RT_HOTEL_NAME).getRecordTypeId();}}
 
-    /** RATE */
+	/** Opportunity */
+    public static String OPPORTUNITY_STAGE_ABIERTO { get { return 'Abierto'; } }
 
+	public static Map<String,Schema.RecordTypeInfo> OPPORTUNITY_RT_BY_DEV_NAME {
+        get{
+            if(OPPORTUNITY_RT_BY_DEV_NAME == null) OPPORTUNITY_RT_BY_DEV_NAME = Schema.SObjectType.Opportunity.getRecordTypeInfosByDeveloperName();
+            return OPPORTUNITY_RT_BY_DEV_NAME;
+        }set;
+    }
+    public static final String OPPORTUNITY_RT_ACUERDO_NAME { get { return 'Acuerdo'; } }
+    public static final String OPPORTUNITY_RT_BARCELO_RES_NAME { get { return 'BarceloRes'; } }
+    public static final String OPPORTUNITY_RT_MICE_NAME { get { return 'MICE'; } }
+    public static final String OPPORTUNITY_RT_TTOO_NAME { get { return 'TTOO'; } }
+    public static final Id OPPORTUNITY_RT_ACUERDO_ID { get { return OPPORTUNITY_RT_BY_DEV_NAME.get(OPPORTUNITY_RT_ACUERDO_NAME).getRecordTypeId();}}
+    public static final Id OPPORTUNITY_RT_BARCELO_RES_ID { get { return OPPORTUNITY_RT_BY_DEV_NAME.get(OPPORTUNITY_RT_BARCELO_RES_NAME).getRecordTypeId();}}
+    public static final Id OPPORTUNITY_RT_MICE_ID { get { return OPPORTUNITY_RT_BY_DEV_NAME.get(OPPORTUNITY_RT_MICE_NAME).getRecordTypeId();}}
+    public static final Id OPPORTUNITY_RT_TTOO_ID { get { return OPPORTUNITY_RT_BY_DEV_NAME.get(OPPORTUNITY_RT_TTOO_NAME).getRecordTypeId();}}
+
+    /** sObjects Share  */
+    public static final String SOBJECT_SHARE_ACCESS_LEVEL_READ { get { return 'Read'; } }
+
+    /** Rate */
     public static final String RATE_RATE_NAME_PICKLIST_BEST { get { return 'BEST'; } }
 
 }

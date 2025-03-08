@@ -53,17 +53,19 @@ public with sharing class OpportunityHotelTriggerHelper extends TriggerUtils {
 
 	private static Map<Id, List<Id>> getGroupIdByOppId(List<Opportunity_Hotel__c> lOpportunityHotel) {
 		Map<Id, Hotel__c> mHotelById = getRelatedHotels(lOpportunityHotel);
-		Map<Id, String> mPublicGroupByOppId = getRelatedGroupNamesFromOpp(lOpportunityHotel, mHotelById);
-		Map<String, Id> mGroupIdByCode = GroupSelector.getGroupIdsByCode(new Set<String>(mPublicGroupByOppId.values()));
+		Map<Id, List<String>> mPublicGroupNamesByOppId = getRelatedGroupNamesFromOpp(lOpportunityHotel, mHotelById);
+		Set<String> sAllPublicGroupNames = new Set<String>();
+		for (List<String> currentListGroupNames : mPublicGroupNamesByOppId.values()) sAllPublicGroupNames.addAll(currentListGroupNames);
+		Map<String, Id> mGroupIdByCode = GroupSelector.getGroupIdsByCode(new Set<String>(sAllPublicGroupNames));
 
 		Map<Id, List<Id>> mGroupIdByOppId = new Map<Id, List<Id>>();
-		for (Id currentOppId : mPublicGroupByOppId.keySet()) {
-			String groupCode = mPublicGroupByOppId.get(currentOppId);
-			if (String.isNotBlank(groupCode)) {
+		for (Id currentOppId : mPublicGroupNamesByOppId.keySet()) {
+			List<String> lGroupCodes = mPublicGroupNamesByOppId.get(currentOppId);
+			for (String groupCode : lGroupCodes) {
 				Id groupId = mGroupIdByCode.get(groupCode);
 				List<Id> lCurrentGroupIds = mGroupIdByOppId.get(currentOppId);
 				if (lCurrentGroupIds == null) lCurrentGroupIds = new List<Id>();
-				lCurrentGroupIds.add(groupId);
+				if (String.isNotBlank(groupId)) lCurrentGroupIds.add(groupId);
 				mGroupIdByOppId.put(currentOppId, lCurrentGroupIds);
 			}
 		}
@@ -78,11 +80,14 @@ public with sharing class OpportunityHotelTriggerHelper extends TriggerUtils {
 		return HotelSelector.getHotelById(sHotelIds);
 	}
 
-	private static Map<Id, String> getRelatedGroupNamesFromOpp(List<Opportunity_Hotel__c> lOpportunityHotel, Map<Id, Hotel__c> mHotelById) {
-		Map<Id, String> mPublicGroupByOppId = new Map<Id, String>();
+	private static Map<Id, List<String>> getRelatedGroupNamesFromOpp(List<Opportunity_Hotel__c> lOpportunityHotel, Map<Id, Hotel__c> mHotelById) {
+		Map<Id, List<String>> mPublicGroupByOppId = new Map<Id, List<String>>();
 		for (Opportunity_Hotel__c currentOppHotel : lOpportunityHotel) {
+			List<String> lCurrentGroupNames = mPublicGroupByOppId.get(currentOppHotel.Opportunity__c);
+			if (lCurrentGroupNames == null) lCurrentGroupNames = new List<String>();
 			Hotel__c relatedHotel = mHotelById.get(currentOppHotel.Hotel__c);
-			mPublicGroupByOppId.put(currentOppHotel.Opportunity__c, relatedHotel?.Hotel__r?.Public_Group_Code__c);
+			lCurrentGroupNames.add(relatedHotel?.Hotel__r?.Public_Group_Code__c);
+			mPublicGroupByOppId.put(currentOppHotel.Opportunity__c, lCurrentGroupNames);
 		}
 		return mPublicGroupByOppId;
 	}
@@ -107,7 +112,7 @@ public with sharing class OpportunityHotelTriggerHelper extends TriggerUtils {
 				lOppShareToCreate.add(new OpportunityShare(
 					OpportunityId = oppId,
 					UserOrGroupId = currentGroupId,
-					OpportunityAccessLevel = 'Read' // Mover a constantes
+					OpportunityAccessLevel = GlobalConstants.SOBJECT_SHARE_ACCESS_LEVEL_READ
 				));
 			}
 		}

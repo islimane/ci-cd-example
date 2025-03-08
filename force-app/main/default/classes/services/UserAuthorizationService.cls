@@ -57,6 +57,7 @@ public with sharing class UserAuthorizationService {
 	 * @param lUserAuthorizationsToAdd User Authorizations to work
 	 */
 	public void addRecords(List<User_authorization__c> lUserAuthorizationsToAdd) {
+		if (this.lUserAuthorizations == null) this.lUserAuthorizations = new List<User_authorization__c>();
 		this.lUserAuthorizations.addAll(lUserAuthorizationsToAdd);
 	}
 
@@ -80,6 +81,20 @@ public with sharing class UserAuthorizationService {
 	 */
 	public void eraseGroupMembers() {
 		this.lGroupMembers = new List<GroupMember>();
+	}
+
+	/**
+	 * Get current list of User Authorizations
+	 */
+	public List<User_authorization__c> getUserAuthorizations() {
+		return this.lUserAuthorizations;
+	}
+
+	/**
+	 * Get current list of Group Members
+	 */
+	public List<GroupMember> getGroupMembers() {
+		return this.lGroupMembers;
 	}
 
 	public void assignPermissions() {
@@ -148,10 +163,7 @@ public with sharing class UserAuthorizationService {
 		
 		for (HotelTerritory__c currentHotelTerritory : lHotelTerritories) {
 			Id groupId = mGroupIdByGroupName.get(currentHotelTerritory.Public_Group_Code__c);
-			lGroupMembersToCreate.add(new GroupMember(
-				GroupId = groupId,
-				UserOrGroupId = userId
-			));
+			if (String.isNotBlank(groupId)) lGroupMembersToCreate.add(new GroupMember(GroupId = groupId, UserOrGroupId = userId));
 		}
 		
 		System.debug('### UserAuthorizationService.buildGroupMembersFromHotelTerritories() - [lGroupMembersToCreate]: ' + lGroupMembersToCreate);
@@ -185,11 +197,7 @@ public with sharing class UserAuthorizationService {
 	}
 	
 	private Id getMainHotelTerritoryFromAuthorization(User_authorization__c authorization) {
-		return 	String.isNotBlank(authorization.Hotel__c) ? authorization.Hotel__c
-			:	String.isNotBlank(authorization.Subzone__c) ? authorization.Subzone__c
-			:	String.isNotBlank(authorization.Zone__c) ? authorization.Zone__c
-			:	String.isNotBlank(authorization.Continent__c) ? authorization.Continent__c
-			:	String.isNotBlank(authorization.Area__c) ? authorization.Area__c : null;
+		return 	String.isNotBlank(authorization.Hotel__c) ? authorization.Hotel__c : String.isNotBlank(authorization.Subzone__c) ? authorization.Subzone__c : String.isNotBlank(authorization.Zone__c) ? authorization.Zone__c : String.isNotBlank(authorization.Continent__c) ? authorization.Continent__c : String.isNotBlank(authorization.Area__c) ? authorization.Area__c : null;
 	}
 
 	private Set<String> getPublicGroupNames(Map<Id, List<HotelTerritory__c>> mHotelTerritoriesByUserId) {
@@ -225,7 +233,7 @@ public with sharing class UserAuthorizationService {
 	private static void createGroupMembers(String lGroupMembersJSON) {
 		List<GroupMember> lGroupMembersToCreate = (List<GroupMember>)JSON.deserialize(lGroupMembersJSON, List<GroupMember>.class);
 		System.debug('### UserAuthorizationService.createGroupMembers() - [lGroupMembersToCreate]: ' + lGroupMembersToCreate);
-		insert lGroupMembersToCreate;
+		if (!lGroupMembersToCreate.isEmpty()) insert lGroupMembersToCreate;
 	}
 
 	@future

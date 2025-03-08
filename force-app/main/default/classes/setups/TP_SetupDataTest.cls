@@ -26,6 +26,17 @@ public class TP_SetupDataTest {
     public static Map<String, sObject> mSeason = new Map<String, sObject>();
     public static Map<String, sObject> mPeriod = new Map<String, sObject>();
     public static Map<String, sObject> mRate = new Map<String, sObject>();
+    public static Map<String, sObject> mHotelTerritoryArea = new Map<String, sObject>();
+    public static Map<String, sObject> mHotelTerritoryContinent = new Map<String, sObject>();
+    public static Map<String, sObject> mHotelTerritoryZone = new Map<String, sObject>();
+    public static Map<String, sObject> mHotelTerritorySubzone = new Map<String, sObject>();
+    public static Map<String, sObject> mHotelTerritoryHotel = new Map<String, sObject>();
+    public static Map<String, sObject> mOpportunity = new Map<String, sObject>();
+    public static Map<String, sObject> mOpportunityHotel = new Map<String, sObject>();
+    public static Map<String, sObject> mUserAuthorization = new Map<String, sObject>();
+    public static Map<String, sObject> mGroup = new Map<String, sObject>();
+    public static Map<String, sObject> mGroupMember = new Map<String, sObject>();
+    public static Map<String, sObject> mOpportunityShare = new Map<String, sObject>();
 
     /*********************************/
     /*       BATTERY DEFINITIONS     */
@@ -46,6 +57,8 @@ public class TP_SetupDataTest {
      */
     public static void generateAllTestData(){
         insert setByPassTriggers();
+		batteryName = '_' + BATTERY_CODE + 'Unique';
+		generateUniqueData();
         for(Integer i = 0; i < BATTERY_NUM; i++){
             batteryName = '_' + BATTERY_CODE + (i+1);
             generateBatteryData();
@@ -53,6 +66,11 @@ public class TP_SetupDataTest {
         insertData();
         delete unsetByPassTriggers();
     }
+
+	private static void generateUniqueData() {
+		Group groupTest = generateGroup();
+		GroupMember groupMember = generateGroupMember(null);
+	}
 
     /**
      * Generates a batch of related test data for various objects.
@@ -67,6 +85,15 @@ public class TP_SetupDataTest {
         RatePlanner__c ratePlanner = generateRatePlanner(null,null);
         Period__c period = generatePeriod();
         Rate__c rate = generateRate();
+        HotelTerritory__c hotelTerritoryArea = generateHotelTerritoryArea();
+        HotelTerritory__c hotelTerritoryContinent = generateHotelTerritoryContinent();
+        HotelTerritory__c hotelTerritoryZone = generateHotelTerritoryZone();
+        HotelTerritory__c hotelTerritorySubzone = generateHotelTerritorySubzone();
+        HotelTerritory__c hotelTerritoryHotel = generateHotelTerritoryHotel();
+        Opportunity opportunity = generateOpportunity(null);
+		Opportunity_Hotel__c opportunityHotel = generateOpportunityHotel(null, null);
+		User_authorization__c userAuthorization = generateUserAuthorization(null);
+		OpportunityShare opportunityShare = generateOpportunityShare(null, null);
     }
 
 
@@ -193,6 +220,156 @@ public class TP_SetupDataTest {
         return ratePlanner;
     }
 
+    /**
+     * Generates an HotelTerritory__c object with dummy values for testing purposes.
+     * @return A new HotelTerritory__c object with dummy values for a test environment.
+     */
+    public static HotelTerritory__c generateHotelTerritoryArea(){
+        HotelTerritory__c hotelTerritoryArea = buildUntypedHotelTerritory(GlobalConstants.HOTEL_TERRITORY_RT_AREA_NAME);
+		hotelTerritoryArea.Code__c = GlobalConstants.HOTEL_TERRITORY_RT_AREA_NAME;
+		hotelTerritoryArea.RecordTypeId = GlobalConstants.HOTEL_TERRITORY_RT_AREA_ID;
+        mHotelTerritoryArea = TP_SetupDataUtilsTest.setMapByName(mHotelTerritoryArea, new List<sObject>{hotelTerritoryArea});
+        return hotelTerritoryArea;
+    }
+
+    /**
+     * Generates an HotelTerritory__c object with dummy values for testing purposes.
+     * @return A new HotelTerritory__c object with dummy values for a test environment.
+     */
+    public static HotelTerritory__c generateHotelTerritoryContinent(){
+        HotelTerritory__c hotelTerritoryContinent = buildUntypedHotelTerritory(GlobalConstants.HOTEL_TERRITORY_RT_CONTINENT_NAME);
+		hotelTerritoryContinent.Code__c = GlobalConstants.HOTEL_TERRITORY_RT_CONTINENT_NAME;
+		hotelTerritoryContinent.RecordTypeId = GlobalConstants.HOTEL_TERRITORY_RT_CONTINENT_ID;
+        mHotelTerritoryContinent = TP_SetupDataUtilsTest.setMapByName(mHotelTerritoryContinent, new List<sObject>{hotelTerritoryContinent});
+        return hotelTerritoryContinent;
+    }
+
+    /**
+     * Generates an HotelTerritory__c object with dummy values for testing purposes.
+     * @return A new HotelTerritory__c object with dummy values for a test environment.
+     */
+    public static HotelTerritory__c generateHotelTerritoryZone(){
+        HotelTerritory__c hotelTerritoryZone = buildUntypedHotelTerritory(GlobalConstants.HOTEL_TERRITORY_RT_ZONE_NAME);
+		hotelTerritoryZone.Code__c = GlobalConstants.HOTEL_TERRITORY_RT_ZONE_NAME;
+		hotelTerritoryZone.RecordTypeId = GlobalConstants.HOTEL_TERRITORY_RT_ZONE_ID;
+        mHotelTerritoryZone = TP_SetupDataUtilsTest.setMapByName(mHotelTerritoryZone, new List<sObject>{hotelTerritoryZone});
+        return hotelTerritoryZone;
+    }
+
+    /**
+     * Generates an HotelTerritory__c object with dummy values for testing purposes.
+     * @return A new HotelTerritory__c object with dummy values for a test environment.
+     */
+    public static HotelTerritory__c generateHotelTerritorySubzone(){
+        HotelTerritory__c hotelTerritorySubzone = buildUntypedHotelTerritory(GlobalConstants.HOTEL_TERRITORY_RT_SUBZONE_NAME);
+		hotelTerritorySubzone.Code__c = GlobalConstants.HOTEL_TERRITORY_RT_SUBZONE_NAME;
+		hotelTerritorySubzone.RecordTypeId = GlobalConstants.HOTEL_TERRITORY_RT_SUBZONE_ID;
+        mHotelTerritorySubzone = TP_SetupDataUtilsTest.setMapByName(mHotelTerritorySubzone, new List<sObject>{hotelTerritorySubzone});
+        return hotelTerritorySubzone;
+    }
+
+    /**
+     * Generates an HotelTerritory__c object with dummy values for testing purposes.
+     * @return A new HotelTerritory__c object with dummy values for a test environment.
+     */
+    public static HotelTerritory__c generateHotelTerritoryHotel(){
+        HotelTerritory__c hotelTerritoryHotel = buildUntypedHotelTerritory(GlobalConstants.HOTEL_TERRITORY_RT_HOTEL_NAME);
+		hotelTerritoryHotel.Code__c = GlobalConstants.HOTEL_TERRITORY_RT_HOTEL_NAME;
+		hotelTerritoryHotel.RecordTypeId = GlobalConstants.HOTEL_TERRITORY_RT_HOTEL_ID;
+        mHotelTerritoryHotel = TP_SetupDataUtilsTest.setMapByName(mHotelTerritoryHotel, new List<sObject>{hotelTerritoryHotel});
+        return hotelTerritoryHotel;
+    }
+
+    /**
+     * Generates an Opportunity object with dummy values for testing purposes.
+     * @return A new Opportunity object with dummy values for a test environment.
+     */
+    public static Opportunity generateOpportunity(Account account) {
+        Opportunity opportunity = new Opportunity(
+            Name = 'Default'+batteryName,
+            AccountId = account?.Id,
+			StageName = GlobalConstants.OPPORTUNITY_STAGE_ABIERTO,
+			CloseDate = Date.today().addYears(1)
+        );
+        mOpportunity = TP_SetupDataUtilsTest.setMapByName(mOpportunity, new List<sObject>{opportunity});
+        return opportunity;
+    }
+
+    /**
+     * Generates an Opportunity_Hotel__c object with dummy values for testing purposes.
+     * @return A new Opportunity_Hotel__c object with dummy values for a test environment.
+     */
+    public static Opportunity_Hotel__c generateOpportunityHotel(Opportunity opportunity, Hotel__c hotel) {
+        Opportunity_Hotel__c opportunityHotel = new Opportunity_Hotel__c(
+			Name = 'Default'+batteryName,
+            Opportunity__c = opportunity?.Id,
+            Hotel__c = hotel?.Id
+        );
+        mOpportunityHotel = TP_SetupDataUtilsTest.setMapByName(mOpportunityHotel, new List<sObject>{opportunityHotel});
+        return opportunityHotel;
+    }
+
+    /**
+     * Generates an User_authorization__c object with dummy values for testing purposes.
+     * @return A new User_authorization__c object with dummy values for a test environment.
+     */
+    public static User_authorization__c generateUserAuthorization(User userRelated) {
+        User_authorization__c userAuthorization = new User_authorization__c(
+            User__c = userRelated?.Id
+        );
+        mUserAuthorization = TP_SetupDataUtilsTest.setMapByName(mUserAuthorization, new List<sObject>{userAuthorization});
+        return userAuthorization;
+    }
+
+    /**
+     * Generates an Group object with dummy values for testing purposes.
+     * @return A new Group object with dummy values for a test environment.
+     */
+    public static Group generateGroup() {
+        Group groupTest = new Group(
+			Name = 'Default'+batteryName,
+			DeveloperName = GlobalConstants.HOTEL_TERRITORY_RT_AREA_NAME+'_'+GlobalConstants.HOTEL_TERRITORY_RT_CONTINENT_NAME+'_'+GlobalConstants.HOTEL_TERRITORY_RT_ZONE_NAME+'_'+GlobalConstants.HOTEL_TERRITORY_RT_SUBZONE_NAME+'_'+GlobalConstants.HOTEL_TERRITORY_RT_HOTEL_NAME
+        );
+        mGroup = TP_SetupDataUtilsTest.setMapByName(mGroup, new List<sObject>{groupTest});
+        return groupTest;
+    }
+
+    /**
+     * Generates an GroupMember object with dummy values for testing purposes.
+     * @return A new User_authorization__c object with dummy values for a test environment.
+     */
+    public static GroupMember generateGroupMember(Group groupRelated) {
+        GroupMember groupMember = new GroupMember(
+            GroupId = groupRelated?.Id
+        );
+        mGroupMember = TP_SetupDataUtilsTest.setMapByName(mGroupMember, new List<sObject>{groupMember});
+        return groupMember;
+    }
+
+    /**
+     * Generates an OpportunityShare object with dummy values for testing purposes.
+     * @return A new OpportunityShare object with dummy values for a test environment.
+     */
+    public static OpportunityShare generateOpportunityShare(Opportunity opportunity, Group groupRelated) {
+        OpportunityShare opportunityShare = new OpportunityShare(
+            OpportunityId = opportunity?.Id,
+            UserOrGroupId = groupRelated?.Id,
+			OpportunityAccessLevel = GlobalConstants.SOBJECT_SHARE_ACCESS_LEVEL_READ
+        );
+        mOpportunityShare = TP_SetupDataUtilsTest.setMapByName(mOpportunityShare, new List<sObject>{opportunityShare});
+        return opportunityShare;
+    }
+
+    /************************************************/
+    /*    			BUILD AUX METHODS     			*/
+    /************************************************/
+
+	private static HotelTerritory__c buildUntypedHotelTerritory(String territoryType) {
+		return new HotelTerritory__c(
+            Name = 'Default_HT'+territoryType+batteryName
+        );
+	}
+
     /************************************************/
     /*    INSERT & RELATIONSHIP FACTORY METHODS     */
     /************************************************/
@@ -202,6 +379,10 @@ public class TP_SetupDataTest {
     public static List<Period__c> lPeriodToInsert = new List<Period__c>();
     public static List<Hotel__c> lHotelToInsert = new List<Hotel__c>();
     public static List<Season__c> lSeasonToInsert = new List<Season__c>();
+    public static List<HotelTerritory__c> lHotelTerritoryToInsert = new List<HotelTerritory__c>();
+    public static List<User_authorization__c> lUserAuthorizationToInsert = new List<User_authorization__c>();
+    public static List<Group> lGroupToInsert = new List<Group>();
+    public static List<GroupMember> lGroupMemberToInsert = new List<GroupMember>();
 
     /**
     * Calls individual methods to insert all records and set up necessary parent-child relationships.
@@ -214,6 +395,13 @@ public class TP_SetupDataTest {
         insertRatePlannerData();
         insertPeriodData();
         insertRateData();
+		insertHotelTerritory();
+		insertOpportunity();
+		insertOpportunityHotel();
+		insertUserAuthorization();
+		insertGroup();
+		insertGroupMember();
+		insertOpportunityShare();
     }
 
     /**
@@ -268,6 +456,88 @@ public class TP_SetupDataTest {
     private static void insertRateData(){
         TP_SetupDataUtilsTest.genericParentChildRelationship(mRatePlanner.values(), mRate.values(), 'RatePlanner__c');
         insert mRate.values();
+    }
+
+    /**
+    * @description 
+    * @author Inetum Team <alvaro.marin@inetum.com> | 06-03-2025 
+    **/
+    private static void insertHotelTerritory(){
+		insert mHotelTerritoryArea.values();
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryArea.values(), mHotelTerritoryContinent.values(), 'Area__c');
+		insert mHotelTerritoryContinent.values();
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryContinent.values(), mHotelTerritoryZone.values(), 'Continent__c');
+		insert mHotelTerritoryZone.values();
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryZone.values(), mHotelTerritorySubzone.values(), 'Zone__c');
+		insert mHotelTerritorySubzone.values();
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritorySubzone.values(), mHotelTerritoryHotel.values(), 'Subzone__c');
+		insert mHotelTerritoryHotel.values();
+    }
+
+    /**
+    * @description 
+    * @author Inetum Team <alvaro.marin@inetum.com> | 06-03-2025 
+    **/
+    private static void insertOpportunity(){
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mAccount.values(), mOpportunity.values(), 'AccountId');
+        insert mOpportunity.values();
+    }
+
+    /**
+    * @description 
+    * @author Inetum Team <alvaro.marin@inetum.com> | 06-03-2025 
+    **/
+    private static void insertOpportunityHotel(){
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mOpportunity.values(), mOpportunityHotel.values(), 'Opportunity__c');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mHotel.values(), mOpportunityHotel.values(), 'Hotel__c');
+        insert mOpportunityHotel.values();
+    }
+
+    /**
+    * @description 
+    * @author Inetum Team <alvaro.marin@inetum.com> | 06-03-2025 
+    **/
+    private static void insertUserAuthorization(){
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryArea.values(), mUserAuthorization.values(), 'Area__c');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryContinent.values(), mUserAuthorization.values(), 'Continent__c');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryZone.values(), mUserAuthorization.values(), 'Zone__c');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritorySubzone.values(), mUserAuthorization.values(), 'Subzone__c');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryHotel.values(), mUserAuthorization.values(), 'Hotel__c');
+        lUserAuthorizationToInsert.addAll((List<User_authorization__c>)mUserAuthorization.values());
+		for (User_authorization__c currentAuthorization : lUserAuthorizationToInsert) currentAuthorization.User__c = UserInfo.getUserId();
+        insert lUserAuthorizationToInsert;
+    }
+
+    /**
+    * @description 
+    * @author Inetum Team <alvaro.marin@inetum.com> | 06-03-2025 
+    **/
+    private static void insertGroup(){
+        lGroupToInsert.addAll((List<Group>)mGroup.values());
+        insert lGroupToInsert;
+    }
+
+    /**
+    * @description 
+    * @author Inetum Team <alvaro.marin@inetum.com> | 06-03-2025 
+    **/
+	@future
+    private static void insertGroupMember(){
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mGroup.values(), mGroupMember.values(), 'GroupId');
+		lGroupMemberToInsert.addAll((List<GroupMember>)mGroupMember.values());
+		for (GroupMember currentGroupMember : lGroupMemberToInsert) currentGroupMember.UserOrGroupId = UserInfo.getUserId();
+        insert lGroupMemberToInsert;
+    }
+
+    /**
+    * @description 
+    * @author Inetum Team <alvaro.marin@inetum.com> | 06-03-2025 
+    **/
+	@future
+    private static void insertOpportunityShare(){
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mOpportunity.values(), mOpportunityShare.values(), 'OpportunityId');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mGroup.values(), mOpportunityShare.values(), 'UserOrGroupId');
+        insert mOpportunityShare.values();
     }
 
 
