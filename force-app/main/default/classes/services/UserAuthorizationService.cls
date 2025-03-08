@@ -1,14 +1,11 @@
-/*----------------------------------------------------------------------------------------------------------------------------------------
-    * Apex Class Name: UserAuthorizationService
-    * Version:         1.0
-    * Created Date:    20/02/2025
-    * Function:        Service clasee of UserAuthorization__c object
-----------------------------------------------------------------------------------------------------------------------------------------*/
+/**
+ * @description       : 
+ * @author            : Inetum Team <alvaro.marin@inetum.com>
+ * @group             : 
+ * @last modified on  : 06-03-2025
+ * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
+**/
 public with sharing class UserAuthorizationService {
-
-	//TODO: control de errores y logs
-	//TODO: clase manager para DML de GroupMember (MIXED DML > metodo future con JSON)
-	//TODO: comentarios
     
 	/**
 	 * Custom exception for User Authorizations service
@@ -174,10 +171,6 @@ public with sharing class UserAuthorizationService {
 	 * PRIVATE AUX METHODS
 	 */
 
-	/**
-	 * Associate user with hotel territories to be assigned to related public group
-	 * @return Map with a list of all territories by user id
-	 */
 	private Map<Id, List<Id>> getHotelTerritoryIdsAssociatedToUser() {
 		Map<Id, List<Id>> mMainTerritoryByAuthorizationUser = new Map<Id, List<Id>>();
 
