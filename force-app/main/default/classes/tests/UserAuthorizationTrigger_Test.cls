@@ -59,6 +59,7 @@ public with sharing class UserAuthorizationTrigger_Test implements TP_Executable
 
     public static void testAll(){
         Test.startTest();
+			beforeInsert_Method();
 			beforeDelete_Method();
         Test.stopTest();
     }

@@ -59,6 +59,7 @@ public with sharing class OpportunityHotelTrigger_Test implements TP_ExecutableI
 
     public static void testAll(){
         Test.startTest();
+			beforeInsert_Method();
 			beforeDelete_Method();
         Test.stopTest();
     }

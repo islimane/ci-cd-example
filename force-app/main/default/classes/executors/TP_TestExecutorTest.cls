@@ -84,4 +84,19 @@ public class TP_TestExecutorTest implements TP_ExecutableInterface{
     static void OpportunityShareSelector_Test(){
         OpportunityShareSelector_Test.testAll();
     }
+
+    @IsTest
+    static void UserAuthorizationTrigger_Test(){
+        UserAuthorizationTrigger_Test.testAll();
+    }
+
+    @IsTest
+    static void UserAuthorizationService_Test(){
+        UserAuthorizationService_Test.testAll();
+    }
+
+    @IsTest
+    static void OpportunityHotelTrigger_Test(){
+        OpportunityHotelTrigger_Test.testAll();
+    }
 }
