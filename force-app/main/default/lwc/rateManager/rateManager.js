@@ -7,11 +7,16 @@
  * @see          : 
 **/
 import LwcDCExtension from 'c/lwcDCExtension';
+import { RateManagerMixin } from 'c/rateManagerMixin';
 import LABELS from './labels.js';
-import { api } from 'lwc';
+const VIEW_MAPPING = {
+    rateManagerRateConfig: () => import("c/RateManagerRateConfig"),
+};
 
 
-export default class RateManager extends LwcDCExtension{
+export default class RateManager extends RateManagerMixin(LwcDCExtension){
+
+    labels = LABELS;
 
     _ratePlannerRecord;
 
@@ -19,21 +24,17 @@ export default class RateManager extends LwcDCExtension{
         return this._ratePlannerRecord;
     }
 
-
-    labels = LABELS;
-
-    @api
-    set recordId(value) {
-        this._recordId = value;
-    }
-
-    get recordId() {
-        return this._recordId;
+    _step = 1;
+    get isStep1(){
+        return this._step === 1;
     }
 
     connectedCallback(){
         this.recordId = 'a06S800000A7EOfIAN';
         this._wireParams = {recordId: this.recordId, controller: 'RateManagerController'};
+        this.listenRateManagerEvents(data => {
+            this.handlerMessageChannel(data);
+        });
     }
 
     fetch = (response) => {
@@ -42,38 +43,57 @@ export default class RateManager extends LwcDCExtension{
         }
     }
 
-    /**
-     * Called when the component has been rendered.
-     * @override
-     */
-    renderedCallback(){
-
-    }
-
-    handleAddPeriod() {
-        // Logic to add period
-    }
-
-    handleAddEvent() {
-        // Logic to add event
-    }
-
-    handleAddBlackout() {
-        // Logic to add blackout
-    }
-
-    handleSave() {
-        try {
-            const rateManagerComponents = this.template.querySelectorAll('c-rate-manager-period-list, c-rate-manager-event-list, c-rate-manager-blackout-list, c-rate-manager-rates-list');
-            rateManagerComponents.forEach(component => {
-                component['handleSave'] ? component.handleSave() : null;
-            });
-        } catch (error) {
-            console.error(error);
+    handlerMessageChannel(data){
+        switch(data.action){
+            case 'createCMP':  this.handleCreateLWC(data.cmpToCreate, data.cmpParams); break;
+            default: break;
         }
     }
 
-    handleCancel() {
-        // Logic to cancel
+    handleClose() {
+        window.history.back();
     }
+
+
+    handleBack() {
+        this._step = this._step - 1;
+        this.stepContainer();
+    }
+
+    handleNextStep(){
+        this._step = this._step + 1;
+        this.stepContainer();
+    }
+
+    componentConstructor;
+    componentParams;
+    handleCreateLWC(cmpName, cmpParams) {
+        VIEW_MAPPING[cmpName]().then(({ default: ctor }) => {
+            this.componentConstructor = ctor;
+            this.componentParams = cmpParams;
+        }).catch((error) => {
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: "Component Load Error",
+                    message: reduceErrors(error).join(", "),
+                    variant: "error",
+                    mode: "pester",
+                })
+            );
+        }).finally(() => {
+            this.handleNextStep();
+        });
+    }
+
+    stepContainer(){
+        this.template.querySelectorAll('div[data-step]').forEach(el => {
+            const stepFromEl = parseInt(el.getAttribute('data-step'));
+            if(stepFromEl !== this._step){
+                el.classList.add('slds-hide');
+            }else{
+                el.classList.remove('slds-hide');
+            }
+        });
+    }
+
 }

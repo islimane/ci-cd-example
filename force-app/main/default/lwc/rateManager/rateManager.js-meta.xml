@@ -3,6 +3,9 @@
     <apiVersion>62.0</apiVersion>
     <isExposed>false</isExposed>
     <masterLabel>Rate Manager</masterLabel>
+    <capabilities>
+        <capability>lightning__dynamicComponent</capability>
+    </capabilities>
     <targets>
         <target>lightning__Tab</target>
     </targets>

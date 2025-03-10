@@ -3,7 +3,7 @@
  * @author       : Inetum Team
 **/
 import { wire, api } from 'lwc';
-import { MessageContext, subscribe } from "lightning/messageService";
+import {publish,subscribe,unsubscribe,APPLICATION_SCOPE,MessageContext} from 'lightning/messageService';
 import RATE_MANAGER_CHANNEL from "@salesforce/messageChannel/RateManagerChannel__c";
 import { getObjectInfo } from "lightning/uiObjectInfoApi"
 
@@ -58,9 +58,19 @@ export const RateManagerMixin = (BaseClass) => class extends BaseClass {
      * Subscribes to the rate manager channel.
      * @param {Function} handler The handler function to be called when a message is received.
      */
-    listenRageManagerEvents(handler) {
+    listenRateManagerEvents(handler) {
         this.rateManagerCmpName = this.template.host.localName;
         subscribe(this.messageContext, RATE_MANAGER_CHANNEL, data => this.rateManagertListEventHandler(handler, data));
+    }
+
+    /**
+     * Publishes a message to the rate manager channel.
+     * 
+     * @param {Object} data The data to be published.
+     * @param {MessageChannel} [mc=RATE_MANAGER_CHANNEL] The message channel to publish to.
+     */
+    publishMessage(data, mc = RATE_MANAGER_CHANNEL){
+        publish(this.messageContext, mc, data);
     }
 
     /**
@@ -72,18 +82,9 @@ export const RateManagerMixin = (BaseClass) => class extends BaseClass {
      */
     rateManagertListEventHandler(handler, data) {
         try {
-            if (data.rateManagerCmpName === this.rateManagerCmpName) {
-                const action = data.action;
-                switch (action) {
-                    case 'save':
-                        this.save();
-                        break;
-                    case 'cancel':
-                        this.cancel();
-                        break;
-                    default:
-                        break;
-                }
+            console.log('rateManagertListEventHandler, ', this.rateManagerCmpName, data.targetCmpName);
+            if (data.targetCmpName === this.rateManagerCmpName) {
+                console.log('rateManagertListEventHandler handler');
                 handler(data);
             }
         } catch (e) {

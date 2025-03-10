@@ -1,0 +1,13 @@
+/**
+ * @description       : 
+ * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
+ * @group             : 
+ * @last modified on  : 10-03-2025
+ * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+**/
+import { LightningElement } from 'lwc';
+import { RateManagerMixin } from 'c/rateManagerMixin';
+
+export default class RateManagerRateConfig extends RateManagerMixin(LightningElement) {
+    
+}

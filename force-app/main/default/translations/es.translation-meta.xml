@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Translations xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customLabels>
+        <label>Añadir blackout</label>
+        <name>Add_Blackout</name>
+    </customLabels>
+    <customLabels>
+        <label>Añadir evento</label>
+        <name>Add_Event</name>
+    </customLabels>
+    <customLabels>
+        <label>Añadir período</label>
+        <name>Add_Period</name>
+    </customLabels>
+    <customLabels>
+        <label>Editar período</label>
+        <name>Edit_Period</name>
+    </customLabels>
+    <customLabels>
+        <label>Blackouts</label>
+        <name>Blackouts</name>
+    </customLabels>
+    <customLabels>
+        <label>Cancelar</label>
+        <name>Cancel</name>
+    </customLabels>
+    <customLabels>
+        <label>Modalidad de configuración</label>
+        <name>Configuration_Mode</name>
+    </customLabels>
+    <customLabels>
+        <label>CONFIGURAR</label>
+        <name>Configure</name>
+    </customLabels>
+    <customLabels>
+        <label>Configurar grupos de tarifas</label>
+        <name>Configure_Rate_Groups</name>
+    </customLabels>
+    <customLabels>
+        <label>Fecha de fin</label>
+        <name>End_Date</name>
+    </customLabels>
+    <customLabels>
+        <label>Eventos</label>
+        <name>Events</name>
+    </customLabels>
+    <customLabels>
+        <label>Nombre</label>
+        <name>Name</name>
+    </customLabels>
+    <customLabels>
+        <label>Períodos</label>
+        <name>Periods</name>
+    </customLabels>
+    <customLabels>
+        <label>Configuración de Tarifario</label>
+        <name>Rate_Configuration_Title</name>
+    </customLabels>
+    <customLabels>
+        <label>Tarifas</label>
+        <name>Rate_Groups</name>
+    </customLabels>
+    <customLabels>
+        <label>Guardar</label>
+        <name>Save</name>
+    </customLabels>
+    <customLabels>
+        <label>Temporada</label>
+        <name>Season</name>
+    </customLabels>
+    <customLabels>
+        <label>Estándar</label>
+        <name>Standard</name>
+    </customLabels>
+    <customLabels>
+        <label>Fecha de inicio</label>
+        <name>Start_Date</name>
+    </customLabels>
+    <customLabels>
+        <label>Tipo</label>
+        <name>Type</name>
+    </customLabels>
+    <customLabels>
+        <label>Variación (%)</label>
+        <name>Variation</name>
+    </customLabels>
+    <customLabels>
+        <label>Crear Período</label>
+        <name>CreatePeriod</name>
+    </customLabels>
+    <customLabels>
+        <label>Fecha de inicio</label>
+        <name>StartDate</name>
+    </customLabels>
+    <customLabels>
+        <label>Fecha de fin</label>
+        <name>EndDate</name>
+    </customLabels>
+    <customLabels>
+        <label>Tipo</label>
+        <name>PeriodType</name>
+    </customLabels>
+    <customLabels>
+        <label>Release</label>
+        <name>Release</name>
+    </customLabels>
+    <customLabels>
+        <label>Estancia mínima</label>
+        <name>MinimumStay</name>
+    </customLabels>
+    <customLabels>
+        <label>Temporada baja</label>
+        <name>LowSeason</name>
+    </customLabels>
+    <customLabels>
+        <label>Temporada media</label>
+        <name>MidSeason</name>
+    </customLabels>
+    <customLabels>
+        <label>Temporada alta</label>
+        <name>HighSeason</name>
+    </customLabels>
+    <customLabels>
+        <label>Las fechas introducidas se solapan con otros periódos de la temporada</label>
+        <name>Overlap_Error</name>
+    </customLabels>
+    <customLabels>
+        <label>La fecha de inicio no puede ser posterior a la fecha de fin</label>
+        <name>Invalid_Date</name>
+    </customLabels>
+    <customLabels>
+        <label>Cancelar</label>
+        <name>Cancel</name>
+    </customLabels>
+    <customLabels>
+        <label>Guardar</label>
+        <name>Save</name>
+    </customLabels>
+    <customLabels>
+        <label>Cerrar</label>
+        <name>Close</name>
+    </customLabels>
+    <customLabels>
+        <label>Gestión de Períodos</label>
+        <name>PeriodManagement</name>
+    </customLabels>
+    <customLabels>
+        <label>Éxito</label>
+        <name>Success</name>
+    </customLabels>
+    <customLabels>
+        <label>Período creado correctamente</label>
+        <name>PeriodCreatedSuccessfully</name>
+    </customLabels>
+    <customLabels>
+        <label>Atención. Los cambios eliminarán todos los datos asociados a este período</label>
+        <name>Remove_Confirmation_Message</name>
+    </customLabels>
+</Translations>
