@@ -62,7 +62,14 @@
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Configure Rate Groups</shortDescription>
-        <value>Configure rate groups</value>
+        <value>Configure rates</value>
+    </labels>
+    <labels>
+        <fullName>Configure_prices</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Configure</shortDescription>
+        <value>Configure Prices</value>
     </labels>
     <labels>
         <fullName>CreatePeriod</fullName>
