@@ -6,7 +6,7 @@ import PERIODS from '@salesforce/label/c.Periods';
 import EVENTS from '@salesforce/label/c.Events';
 import BLACKOUTS from '@salesforce/label/c.Blackouts';
 import RATE_GROUPS from '@salesforce/label/c.Rate_Groups';
-import CANCEL from '@salesforce/label/c.Cancel';
+import CLOSE from '@salesforce/label/c.Close';
 import SAVE from '@salesforce/label/c.Save';
 
 export default {
@@ -16,6 +16,6 @@ export default {
     events: EVENTS,
     blackouts: BLACKOUTS,
     rateGroups: RATE_GROUPS,
-    cancel: CANCEL,
+    close: CLOSE,
     save: SAVE
 };

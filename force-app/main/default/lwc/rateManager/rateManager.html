@@ -1,16 +1,17 @@
 <!-- rateConfiguration.html -->
 <template>
     <lightning-card if:true={ratePlannerRecord}>
-        <div class="slds-p-around_medium">
-            <div class="slds-text-heading_medium slds-align_absolute-center slds-p-around_xx-small">{labels.rateConfigurationTitle}</div>
-            <div class="slds-text-title slds-align_absolute-center slds-p-around_xx-small">{ratePlannerRecord.Name} - {ratePlannerRecord.Season__r.Name}</div>
+        <div data-step="1" class="step-1-container">
+            <div class="slds-p-around_medium">
+                <div class="slds-text-heading_medium slds-align_absolute-center slds-p-around_xx-small">{labels.rateConfigurationTitle}</div>
+                <div if:true={ratePlannerRecord} class="slds-text-title slds-align_absolute-center slds-p-around_xx-small">{ratePlannerRecord.Name} - {ratePlannerRecord.Season__r.Name}</div>
 
-            <div class="slds-m-vertical_medium slds-border_bottom"></div>
+                <div class="slds-m-vertical_medium slds-border_bottom"></div>
 
-            <!-- Main dates -->
-            <div class="slds-p-horizontal_medium">
-                <c-rate-manager-header  record-id={recordId}></c-rate-manager-header>
-            </div>
+                <!-- Main dates -->
+                <div class="slds-p-horizontal_medium">
+                    <c-rate-manager-header  record-id={recordId}></c-rate-manager-header>
+                </div>
 
             <!-- Periods Section -->
             <div class="slds-p-horizontal_medium slds-p-vertical_medium">
@@ -21,44 +22,50 @@
                         </div>
                     </lightning-accordion-section>
 
-                    <!-- Events Section -->
-                    <lightning-accordion-section name="events" label={labels.events}>
-                        <div class="accordion-container slds-p-around_medium">
-                            <c-rate-manager-event-list parent-id={recordId}></c-rate-manager-event-list>
-                        </div>
-                    </lightning-accordion-section>
+                        <!-- Events Section -->
+                        <lightning-accordion-section name="events" label={labels.events}>
+                            <div class="accordion-container slds-p-around_medium">
+                                <c-rate-manager-event-list parent-id={recordId}></c-rate-manager-event-list>
+                            </div>
+                        </lightning-accordion-section>
 
-                    <!-- Blackouts Section -->
-                    <lightning-accordion-section name="blackouts" label={labels.blackouts}>
-                        <div class="accordion-container slds-p-around_medium">
-                            <c-rate-manager-blackout-list parent-id={recordId}></c-rate-manager-blackout-list>
-                        </div>
-                    </lightning-accordion-section>
+                        <!-- Blackouts Section -->
+                        <lightning-accordion-section name="blackouts" label={labels.blackouts}>
+                            <div class="accordion-container slds-p-around_medium">
+                                <c-rate-manager-blackout-list parent-id={recordId}></c-rate-manager-blackout-list>
+                            </div>
+                        </lightning-accordion-section>
 
-                    <!-- Rate Groups Section -->
-                    <lightning-accordion-section name="rates" label={labels.rateGroups}>
-                        <div class="accordion-container slds-p-around_medium">
-                            <c-rate-manager-rates-list parent-id={recordId}></c-rate-manager-rates-list>
-                        </div>
-                    </lightning-accordion-section>
-                </lightning-accordion>
+                        <!-- Rate Groups Section -->
+                        <lightning-accordion-section name="rates" label={labels.rateGroups}>
+                            <div class="accordion-container slds-p-around_medium">
+                                <c-rate-manager-rates-list parent-id={recordId}></c-rate-manager-rates-list>
+                            </div>
+                        </lightning-accordion-section>
+                    </lightning-accordion>
+                </div>
             </div>
+        </div>
+        <div data-step="2" class="step-2-container slds-hide">
+            <lwc:component lwc:is={componentConstructor} lwc:spread={componentParams}></lwc:component>
         </div>
         <!-- Main action buttons -->
         <div slot="footer" class="slds-size_1-of-1 slds-wrap">
             <div class="slds-grid slds-grid_align-end">
+                <template if:false={isStep1}>
+                    <div class="slds-col slds-p-around_medium">
+                        <lightning-button 
+                            label="Back"
+                            variant="neutral"
+                            onclick={handleBack}>
+                        </lightning-button>
+                    </div>
+                </template>
                 <div class="slds-col slds-p-around_medium">
                     <lightning-button 
-                        label={labels.cancel}
+                        label={labels.close}
                         variant="neutral"
-                        onclick={handleCancel}>
-                    </lightning-button>
-                </div>
-                <div class="slds-col slds-p-around_medium">
-                    <lightning-button 
-                        label={labels.save}
-                        variant="brand"
-                        onclick={handleSave}>
+                        onclick={handleClose}>
                     </lightning-button>
                 </div>
             </div>

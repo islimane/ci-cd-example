@@ -2,14 +2,14 @@
   @description       : 
   @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
   @group             : 
-  @last modified on  : 05-03-2025
+  @last modified on  : 10-03-2025
   @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 -->
 <template>
     <div class="slds-grid slds-gutters slds-wrap slds-p-around_medium">
         <template for:each={_ratesList} for:item="rate">
             <div key={rate.Id} class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
-                <c-rate-manager-rates-list-card record-id={rate.Id} parent-id={recordId}></c-rate-manager-rates-list-card>
+                <c-rate-manager-rates-list-card record-id={rate.Id} parent-id={parentId}></c-rate-manager-rates-list-card>
             </div>
         </template>
     </div>
