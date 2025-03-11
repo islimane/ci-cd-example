@@ -6,8 +6,11 @@
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 import { LightningElement } from 'lwc';
+import LABELS from './labels';
 
 export default class ExtendedDataTableManager extends LightningElement {
+
+    labels = LABELS;
 
     get sourceField() {
         return this.flag ? 'period1' : 'period1_2';
