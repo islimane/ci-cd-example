@@ -34,8 +34,8 @@ export default class RateManagerRateConfig extends RateManagerMixin(LwcDCExtensi
         this._wireParams = new WireParams(this.recordId);
     }
     
-    fetch = (reponse) => {
-        this._rateRecord = reponse.data;
+    fetch = (response) => {
+        this._rateRecord = response.data;
     }
 
 }

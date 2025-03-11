@@ -2,7 +2,7 @@
   @description       : 
   @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
   @group             : 
-  @last modified on  : 10-03-2025
+  @last modified on  : 11-03-2025
   @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 -->
 <template>
@@ -12,6 +12,45 @@
 
         <div class="slds-m-vertical_medium slds-border_bottom"></div>
 
-        <p>HELLO FROM RATE CONFIG record ID {recordId}</p>
+        <div class="slds-p-horizontal_medium">
+            <div class="slds-gutters slds-m-top_medium slds-p-vertical_small">
+                <div class="slds-grid slds-grid_align-spread">
+                    <div class="slds-grid slds-col slds-size_2-of-3">
+                        <div class="slds-col slds-size_2-of-3">
+                            <lightning-record-view-form
+                                record-id={parentId}
+                                object-api-name="RatePlanner__c"
+                                density="Comfy">
+                                <div class="slds-grid">
+                                    <div class="slds-col slds-size_2-of-4">
+                                        <div class="slds-m-around_small slds-border_bottom">
+                                            <lightning-output-field field-name="StartDate__c"></lightning-output-field>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_2-of-4">
+                                        <div class="slds-m-around_small slds-border_bottom">
+                                            <lightning-output-field field-name="EndDate__c"></lightning-output-field>
+                                        </div>
+                                    </div>
+                                </div>
+                            </lightning-record-view-form>
+                        </div>
+                        <div class="slds-gutters slds-col slds-size_1-of-3">
+                            <lightning-record-view-form
+                                record-id={recordId}
+                                object-api-name="Rate__c"
+                                density="Comfy">
+                                    <div class="slds-m-around_small slds-border_bottom">
+                                        <lightning-output-field field-name="RateType__c"></lightning-output-field>
+                                    </div>
+                            </lightning-record-view-form>
+                        </div>
+                    </div>
+                    <div class="slds-col">
+                        <p> -- CMP AQUI -- </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>

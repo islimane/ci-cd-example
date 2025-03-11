@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             : 
- * @last modified on  : 10-03-2025
+ * @last modified on  : 11-03-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 import { RateManagerMixin } from 'c/rateManagerMixin';
@@ -25,7 +25,7 @@ export default class RateManagerRatesListCard extends RateManagerMixin(Lightning
 
     handleConfigureClick(){
         try{
-            this.publishMessage({ action: 'createCMP', targetCmpName: 'c-rate-manager', cmpToCreate: 'rateManagerRateConfig', cmpParams: { recordId : this.recordId }});
+            this.publishMessage({ action: 'createCMP', targetCmpName: 'c-rate-manager', cmpToCreate: 'rateManagerRateConfig', cmpParams: { recordId : this.recordId, parentId: this.parentId }});
         }catch(e){
             console.error(e);
         }
