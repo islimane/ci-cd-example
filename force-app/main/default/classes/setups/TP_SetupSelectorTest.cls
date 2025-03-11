@@ -2,8 +2,8 @@
  * @description       : Provides utility methods to retrieve test records based on dynamic naming conventions.
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 24-02-2025
- * @last modified by  : Inetum Team <sara.gerico@inetum.com>
+ * @last modified on  : 11-03-2025
+ * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 
 @isTest
@@ -57,5 +57,13 @@ public with sharing class TP_SetupSelectorTest {
      */
     public static RatePlanner__c getRatePlanner (Integer batteryNum, String batteryCode){
         return [SELECT Id, Name  FROM RatePlanner__c WHERE Name =:(DEF_PREFIX+batteryCode+batteryNum) LIMIT 1];
+    }
+
+    /**
+     * Retrieves a Rate__c record based on the provided battery number and specific Name.
+     * @return A Rate__c record.
+     */
+    public static List<Rate__c> getRates(){
+        return [SELECT Id, Name, RateType__c FROM Rate__c LIMIT 5];
     }
 }
