@@ -69,7 +69,7 @@ pipelines:
             - tests=$(cat ci-config/specified_tests.txt | tr '\n' ' ' | sed 's/ $//')
             - '[[ -z "$tests" ]] && sf project deploy start --manifest $MANIFEST_PATH --test-level NoTestRun || sf project deploy start --manifest $MANIFEST_PATH --test-level RunSpecifiedTests --tests $tests'
             - echo $BITBUCKET_COMMIT > ci-config/last_successful_commit.txt
-            - echo $MANIFEST_PATH > ci-config/last_package.xml
+            - cat "$MANIFEST_PATH" > ci-config/last_package.xml
             - git add ci-config/last_successful_commit.txt
             - git add ci-config/last_package.xml
             - git commit -m '[skip ci]'
@@ -106,7 +106,7 @@ pipelines:
             - tests=$(cat ci-config/specified_tests.txt | tr '\n' ' ' | sed 's/ $//')
             - '[[ -z "$tests" ]] && sf project deploy start --manifest $MANIFEST_PATH --test-level RunLocalTests || sf project deploy start --manifest $MANIFEST_PATH --test-level RunSpecifiedTests --tests $tests'
             - echo $BITBUCKET_COMMIT > ci-config/last_successful_commit.txt
-            - echo $MANIFEST_PATH > ci-config/last_package.xml
+            - cat "$MANIFEST_PATH" > ci-config/last_package.xml
             - git add ci-config/last_successful_commit.txt
             - git add ci-config/last_package.xml
             - git commit -m '[skip ci]'
@@ -143,7 +143,7 @@ pipelines:
             - tests=$(cat ci-config/specified_tests.txt | tr '\n' ' ' | sed 's/ $//')
             - '[[ -z "$tests" ]] && sf project deploy start --manifest $MANIFEST_PATH --test-level RunLocalTests || sf project deploy start --manifest $MANIFEST_PATH --test-level RunSpecifiedTests --tests $tests'
             - echo $BITBUCKET_COMMIT > ci-config/last_successful_commit.txt
-            - echo $MANIFEST_PATH > ci-config/last_package.xml
+            - cat "$MANIFEST_PATH" > ci-config/last_package.xml
             - git add ci-config/last_successful_commit.txt
             - git add ci-config/last_package.xml
             - git commit -m '[skip ci]'
