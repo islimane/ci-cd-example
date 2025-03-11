@@ -54,29 +54,49 @@ public class TP_TestExecutorTest implements TP_ExecutableInterface{
         RateManagerRatesListController_Test.testAll();
     }
 
-
-
-
-
-
-    /*
-    @IsTest
-    static void TP_TemplateClassTest1(){
-        TP_TemplateClassTest1.testAll();
+	@IsTest
+    static void GlobalConstants_Test(){
+        GlobalConstants_Test.testAll();
     }
-    */
 
-    /*
     @IsTest
-    static void TP_TemplateClassTest2(){
-        TP_TemplateClassTest2.testAll();
-    }
-    */
 
-    /*
-    @IsTest
-    static void TP_TemplateClassTest3(){
-        TP_TemplateClassTest3.testAll();
+    static void GroupSelector_Test(){
+        GroupSelector_Test.testAll();
     }
-    */
+
+    @IsTest
+    static void GroupMemberSelector_Test(){
+        GroupMemberSelector_Test.testAll();
+    }
+
+    @IsTest
+    static void HotelSelector_Test(){
+        HotelSelector_Test.testAll();
+    }
+
+    @IsTest
+    static void HotelTerritorySelector_Test(){
+        HotelTerritorySelector_Test.testAll();
+    }
+
+    @IsTest
+    static void OpportunityShareSelector_Test(){
+        OpportunityShareSelector_Test.testAll();
+    }
+
+    @IsTest
+    static void UserAuthorizationTrigger_Test(){
+        UserAuthorizationTrigger_Test.testAll();
+    }
+
+    @IsTest
+    static void UserAuthorizationService_Test(){
+        UserAuthorizationService_Test.testAll();
+    }
+
+    @IsTest
+    static void OpportunityHotelTrigger_Test(){
+        OpportunityHotelTrigger_Test.testAll();
+    }
 }
