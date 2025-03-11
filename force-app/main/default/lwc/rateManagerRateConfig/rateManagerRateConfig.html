@@ -50,6 +50,20 @@
                         <p> -- CMP AQUI -- </p>
                     </div>
                 </div>
+                <div class="slds-p-horizontal_medium slds-p-vertical_medium">
+                    <lightning-accordion allow-multiple-sections-open>
+                        <lightning-accordion-section name="roomsAndSupplements" label={labels.roomsAndSupplements}>
+                            <div class="accordion-container slds-p-around_medium">
+                                <c-extended-data-table-manager></c-extended-data-table-manager>
+                            </div>
+                        </lightning-accordion-section>
+                        <lightning-accordion-section name="supplementsAndReductions" label={labels.supplementsAndReductions}>
+                            <div class="accordion-container slds-p-around_medium">
+                                <c-extended-data-table-manager></c-extended-data-table-manager>
+                            </div>
+                        </lightning-accordion-section>
+                    </lightning-accordion>
+                </div>
             </div>
         </div>
     </div>

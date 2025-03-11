@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             : 
- * @last modified on  : 10-03-2025
+ * @last modified on  : 11-03-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 import LwcDCExtension from 'c/lwcDCExtension';
@@ -37,5 +37,4 @@ export default class RateManagerRateConfig extends RateManagerMixin(LwcDCExtensi
     fetch = (response) => {
         this._rateRecord = response.data;
     }
-
 }

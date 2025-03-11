@@ -1,0 +1,9 @@
+:host .dt-manager-filter-container{
+    height: 220px;
+    background-color: #d8e6fe;
+    border-radius: 1rem;
+}
+
+:host .dt-manager-table-container{
+
+}
