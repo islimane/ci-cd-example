@@ -13,14 +13,15 @@
                     <c-rate-manager-header  record-id={recordId}></c-rate-manager-header>
                 </div>
 
-            <!-- Periods Section -->
-            <div class="slds-p-horizontal_medium slds-p-vertical_medium">
-                <lightning-accordion allow-multiple-sections-open>
-                    <lightning-accordion-section name="periods" label={labels.periods}>
-                        <div class="accordion-container slds-p-around_medium">
-                            <c-rate-manager-period-list parent={ratePlannerRecord}></c-rate-manager-period-list>
-                        </div>
-                    </lightning-accordion-section>
+                
+                <div class="slds-p-horizontal_medium slds-p-vertical_medium">
+                    <lightning-accordion allow-multiple-sections-open>
+                        <!-- Periods Section -->
+                        <lightning-accordion-section name="periods" label={labels.periods}>
+                            <div class="accordion-container slds-p-around_medium">
+                                <c-rate-manager-period-list parent={ratePlannerRecord}></c-rate-manager-period-list>
+                            </div>
+                        </lightning-accordion-section>
 
                         <!-- Events Section -->
                         <lightning-accordion-section name="events" label={labels.events}>
