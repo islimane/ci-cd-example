@@ -1,7 +1,1 @@
 RateManagementExecutor_Test
-TriggerHandler_Test
-GlobalConstants_Test
-TriggerUtils_Test
-TP_TestExecutorTest
-TP_TemplateClassTest
-RatePlannerTrigger_Test

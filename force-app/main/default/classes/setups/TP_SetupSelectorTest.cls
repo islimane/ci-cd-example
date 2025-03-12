@@ -14,7 +14,6 @@ public with sharing class TP_SetupSelectorTest {
     /*********************************/
 
     public static final String DEF_PREFIX = 'Default_';
-    public static final String UNIQUE_CODE = 'Unique';
 
     /*********************************/
     /*   RECORD RETRIEVAL METHODS    */
@@ -96,7 +95,7 @@ public with sharing class TP_SetupSelectorTest {
      * @return A Group record.
      */
     public static Group getGroup (String batteryCode){
-        return [SELECT Id, Name, DeveloperName  FROM Group WHERE Name =:(DEF_PREFIX+batteryCode+UNIQUE_CODE) LIMIT 1];
+        return [SELECT Id, Name, DeveloperName  FROM Group WHERE Name =:(DEF_PREFIX+batteryCode) LIMIT 1];
     }
 
     /**

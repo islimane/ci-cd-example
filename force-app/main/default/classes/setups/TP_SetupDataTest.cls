@@ -34,9 +34,14 @@ public class TP_SetupDataTest {
     public static Map<String, sObject> mOpportunity = new Map<String, sObject>();
     public static Map<String, sObject> mOpportunityHotel = new Map<String, sObject>();
     public static Map<String, sObject> mUserAuthorization = new Map<String, sObject>();
-    public static Map<String, sObject> mGroup = new Map<String, sObject>();
-    public static Map<String, sObject> mGroupMember = new Map<String, sObject>();
     public static Map<String, sObject> mOpportunityShare = new Map<String, sObject>();
+
+	/*********************************/
+    /*      OBJECTS DEFINITIONS      */
+    /*********************************/
+
+	public static Group groupTest;
+	public static GroupMember groupMember;
 
     /*********************************/
     /*       BATTERY DEFINITIONS     */
@@ -57,7 +62,7 @@ public class TP_SetupDataTest {
      */
     public static void generateAllTestData(){
         insert setByPassTriggers();
-		batteryName = '_' + BATTERY_CODE + 'Unique';
+		batteryName = '_' + BATTERY_CODE;
 		generateUniqueData();
         for(Integer i = 0; i < BATTERY_NUM; i++){
             batteryName = '_' + BATTERY_CODE + (i+1);
@@ -68,8 +73,10 @@ public class TP_SetupDataTest {
     }
 
 	private static void generateUniqueData() {
-		Group groupTest = generateGroup();
-		GroupMember groupMember = generateGroupMember(null);
+		groupTest = generateGroup();
+		insert groupTest;
+		groupMember = generateGroupMember(groupTest);
+		insertFutureRecord(JSON.serialize(groupMember));
 	}
 
     /**
@@ -93,7 +100,7 @@ public class TP_SetupDataTest {
         Opportunity opportunity = generateOpportunity(null);
 		Opportunity_Hotel__c opportunityHotel = generateOpportunityHotel(null, null);
 		User_authorization__c userAuthorization = generateUserAuthorization(null);
-		OpportunityShare opportunityShare = generateOpportunityShare(null, null);
+		OpportunityShare opportunityShare = generateOpportunityShare(null, groupTest);
     }
 
 
@@ -330,7 +337,6 @@ public class TP_SetupDataTest {
 			Name = 'Default'+batteryName,
 			DeveloperName = GlobalConstants.HOTEL_TERRITORY_RT_AREA_NAME+'_'+GlobalConstants.HOTEL_TERRITORY_RT_CONTINENT_NAME+'_'+GlobalConstants.HOTEL_TERRITORY_RT_ZONE_NAME+'_'+GlobalConstants.HOTEL_TERRITORY_RT_SUBZONE_NAME+'_'+GlobalConstants.HOTEL_TERRITORY_RT_HOTEL_NAME
         );
-        mGroup = TP_SetupDataUtilsTest.setMapByName(mGroup, new List<sObject>{groupTest});
         return groupTest;
     }
 
@@ -340,9 +346,9 @@ public class TP_SetupDataTest {
      */
     public static GroupMember generateGroupMember(Group groupRelated) {
         GroupMember groupMember = new GroupMember(
-            GroupId = groupRelated?.Id
+            GroupId = groupRelated?.Id,
+			UserOrGroupId = UserInfo.getUserId()
         );
-        mGroupMember = TP_SetupDataUtilsTest.setMapByName(mGroupMember, new List<sObject>{groupMember});
         return groupMember;
     }
 
@@ -381,8 +387,6 @@ public class TP_SetupDataTest {
     public static List<Season__c> lSeasonToInsert = new List<Season__c>();
     public static List<HotelTerritory__c> lHotelTerritoryToInsert = new List<HotelTerritory__c>();
     public static List<User_authorization__c> lUserAuthorizationToInsert = new List<User_authorization__c>();
-    public static List<Group> lGroupToInsert = new List<Group>();
-    public static List<GroupMember> lGroupMemberToInsert = new List<GroupMember>();
 
     /**
     * Calls individual methods to insert all records and set up necessary parent-child relationships.
@@ -399,8 +403,6 @@ public class TP_SetupDataTest {
 		insertOpportunity();
 		insertOpportunityHotel();
 		insertUserAuthorization();
-		insertGroup();
-		insertGroupMember();
 		insertOpportunityShare();
     }
 
@@ -512,34 +514,16 @@ public class TP_SetupDataTest {
     * @description 
     * @author Inetum Team <alvaro.marin@inetum.com> | 06-03-2025 
     **/
-    private static void insertGroup(){
-        lGroupToInsert.addAll((List<Group>)mGroup.values());
-        insert lGroupToInsert;
-    }
-
-    /**
-    * @description 
-    * @author Inetum Team <alvaro.marin@inetum.com> | 06-03-2025 
-    **/
-	@future
-    private static void insertGroupMember(){
-        TP_SetupDataUtilsTest.genericParentChildRelationship(mGroup.values(), mGroupMember.values(), 'GroupId');
-		lGroupMemberToInsert.addAll((List<GroupMember>)mGroupMember.values());
-		for (GroupMember currentGroupMember : lGroupMemberToInsert) currentGroupMember.UserOrGroupId = UserInfo.getUserId();
-        insert lGroupMemberToInsert;
-    }
-
-    /**
-    * @description 
-    * @author Inetum Team <alvaro.marin@inetum.com> | 06-03-2025 
-    **/
 	@future
     private static void insertOpportunityShare(){
         TP_SetupDataUtilsTest.genericParentChildRelationship(mOpportunity.values(), mOpportunityShare.values(), 'OpportunityId');
-        TP_SetupDataUtilsTest.genericParentChildRelationship(mGroup.values(), mOpportunityShare.values(), 'UserOrGroupId');
         insert mOpportunityShare.values();
     }
 
-
+	@future
+	private static void insertFutureRecord(String recordJSON) {
+		sObject record = (sObject)JSON.deserialize(recordJSON, sObject.class);
+		insert record; 
+	}
 
 }
