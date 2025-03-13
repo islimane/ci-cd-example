@@ -18,7 +18,17 @@ export default class FixedColumnsTable extends LightningElement {
         this.splitColumns();
     }
 
-    @api tableData = [];
+    @track _tableData = [];
+    @api 
+    set tableData(value) {
+        console.log('tableData --> , value', value);
+        this._tableData = value != null ? JSON.parse(JSON.stringify(value)) : [];
+        this.splitTableData();
+    }
+
+    get tableData() {
+        return this._tableData;
+    }
     @api fixedColumnCount = 0;
 
     @track _columns = [];
@@ -31,7 +41,7 @@ export default class FixedColumnsTable extends LightningElement {
     connectedCallback() {
         this.splitColumns();
         this.setLeftProperty();
-        this.splitTableData();
+        //this.splitTableData();
     }
 
     renderedCallback() {
@@ -70,7 +80,7 @@ export default class FixedColumnsTable extends LightningElement {
     }
 
     splitTableData() {
-        this.fixedTableData = this.tableData;
-        this.scrollableTableData = this.tableData;
+        this.fixedTableData = this._tableData;
+        this.scrollableTableData = this._tableData;
     }
 }

@@ -14,7 +14,7 @@ export default class ExtendedDataTableManager extends LightningElement {
 
     @api filters;
     @track _tableData = [];
-    @track filterData = [];
+    @track filteredData = [];
 
     get sourceField() {
         return this.flag ? 'period1' : 'period1_2';
@@ -47,25 +47,20 @@ export default class ExtendedDataTableManager extends LightningElement {
 
     @api
     set tableData(value) {
-        console.log('SARA_value: '+ JSON.stringify(value));
-        const lolo = [];
+        const data = [];
         if (value) {
-
             value.forEach(record => {
                 let row = {};
                 this.columns.forEach(column => {
                     row[column.fieldName] = record[column.fieldName] || null;
                 });
-                lolo.push(row);
+                data.push(row);
             });
-            this._tableData = lolo;
-            console.log('SARA_lolo: '+ JSON.stringify(lolo));
-
+            this._tableData = data;
         }
-        this._tableData  = JSON.parse(JSON.stringify(lolo));
-        console.log('SARA__tableData: '+ JSON.stringify(this._tableData));
-
-
+        this._tableData  = JSON.parse(JSON.stringify(data)) || data;
+        this.filteredData = [...this._tableData];
+        console.log('_tableData --> ' , this._tableData);
     }
 
     get tableData() {
@@ -83,43 +78,22 @@ export default class ExtendedDataTableManager extends LightningElement {
      */
     handleOnChangeFilters(event) {
         try {
-            this.filterData = [];
-            // Crear un nuevo objeto con el filtro y su valor
-            let newFilterWithValue = Object.assign({}, event.detail.filter);
-            newFilterWithValue.value = event.detail.value;
-            console.log('SARA_newFilterWithValue: ' + JSON.stringify(newFilterWithValue));
-
-            // Verifica si el valor recibido es nulo o no
-            const isValueEmpty = newFilterWithValue.value === null ? true : false;
-            console.log('SARA_isValueEmpty: ' + isValueEmpty);
-
-            this.tableData.forEach(record => {
-                console.log('SARA_record[newFilterWithValue.fieldApiName]: '+ record[newFilterWithValue.fieldApiName]);
-                console.log('SARA_newFilterWithValue.value: '+ newFilterWithValue.value);
-                if (isValueEmpty) {
-                    // Si el valor es nulo, filtra los datos para eliminar los registros donde el campo coincida con el valor
-                    this.filterData = this.tableData.filter(record => {
-                        return record[newFilterWithValue.fieldApiName] !== newFilterWithValue.value;
-                    });
-                } else {
-                    // Si el valor no es nulo, filtra los datos para dejar solo los registros donde el campo coincida con el valor
-                    this.filterData = this.tableData.filter(record => {
-
-                        return record[newFilterWithValue.fieldApiName] === newFilterWithValue.value;
-                    });
-                }
+            const activeFilters = event.detail;
+            if (activeFilters.length === 0) {
+                this.filteredData = [...this._tableData]
+                return
+            }
+            // Start with all data
+            this.filteredData = this._tableData.filter((record) => {
+                // Record must pass ALL filters to be included
+                return activeFilters.every((filter) => {
+                    return record[filter.fieldApiName] === filter.value
+                })
             });
-            this.tableData = JSON.parse(JSON.stringify(this.filterData))
-            /*this.filterData = [...this.filterData];
 
-            this.filterData = JSON.parse(JSON.stringify(this.filterData));*/
-
-
-            // Log para revisar el resultado después del filtro
-            console.log('SARA_this._tableData: ' + JSON.stringify(this.tableData));
-
+            console.log('filteredData -- ' , this.filteredData);
         } catch (e) {
-            console.error(e);
+            console.error(e.message);
         }
     }
 
