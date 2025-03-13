@@ -17,11 +17,17 @@
         </div>
 
     </div>
-    <div class="dt-manager-table-container slds-p-around_small">
+    <div class="dt-manager-table-container slds-p-horizontal_small slds-p-bottom_xx-small slds-p-top_small">
         <c-extended-data-table
             columns={columns}
             table-data={tableData}
             fixed-column-count={fixedColumnCount}
         ></c-extended-data-table>
+    </div>
+    <div class="dt-manager-action-container slds-p-horizontal_small slds-p-vertical_xx-small">
+        <lightning-button-group>
+            <lightning-button label={labels.addRoom} title={labels.addRoom} onclick={handleAdd} variant="neutral"></lightning-button>
+            <lightning-button label={labels.removeSelection} title={labels.removeSelection} onclick={handleDelete} variant="neutral"></lightning-button>
+        </lightning-button-group>
     </div>
 </template>

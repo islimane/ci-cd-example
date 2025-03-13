@@ -3,16 +3,18 @@
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
  * @last modified on  : 13-03-2025
- * @last modified by  : Inetum Team <sara.gerico@inetum.com>
+ * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 import { LightningElement,api,track } from 'lwc';
+import LABELS from './labels';
 
 export default class ExtendedDataTableManager extends LightningElement {
+
+    labels = LABELS;
 
     @api filters;
     @track _tableData = [];
     @track filterData = [];
-
 
     get sourceField() {
         return this.flag ? 'period1' : 'period1_2';
