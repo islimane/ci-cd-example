@@ -1,40 +1,12 @@
 <!--
-  @description       : 
+  @description       :
   @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
-  @group             : 
-  @last modified on  : 11-03-2025
-  @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+  @group             :
+  @last modified on  : 12-03-2025
+  @last modified by  : Inetum Team <sara.gerico@inetum.com>
 -->
 <template>
-    <div class="slds-p-horizontal_medium slds-p-vertical_medium">
-        <lightning-accordion allow-multiple-sections-open>
-
-            <lightning-accordion-section name="periods" label={labels.periods}>
-                <div class="accordion-container slds-p-around_medium">
-                    
-                </div>
-            </lightning-accordion-section>
-
-
-            <lightning-accordion-section name="events" label={labels.events}>
-                <div class="accordion-container slds-p-around_medium">
-                    
-                </div>
-            </lightning-accordion-section>
-
-
-            <lightning-accordion-section name="blackouts" label={labels.blackouts}>
-                <div class="accordion-container slds-p-around_medium">
-                    
-                </div>
-            </lightning-accordion-section>
-
-
-            <lightning-accordion-section name="rates" label={labels.rateGroups}>
-                <div class="accordion-container slds-p-around_medium">
-                    
-                </div>
-            </lightning-accordion-section>
-        </lightning-accordion>
+    <div>
+        <c-extended-data-table-manager filters={filters} table-data={data}></c-extended-data-table-manager>
     </div>
 </template>

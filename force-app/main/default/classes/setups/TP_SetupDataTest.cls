@@ -2,8 +2,8 @@
  * @description       : Unit Test Class for Setup Data Methods
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 05-03-2025
- * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+ * @last modified on  : 13-03-2025
+ * @last modified by  : Inetum Team <sara.gerico@inetum.com>
 **/
 @isTest
 public class TP_SetupDataTest {
@@ -189,7 +189,7 @@ public class TP_SetupDataTest {
     public static Rate__c generateRate() {
         Rate__c rate = new Rate__c(
             Rate_Name__c = GlobalConstants.RATE_RATE_NAME_PICKLIST_BEST,
-            RateType__c = 'BAR',
+            RateType__c = GlobalConstants.RATE_RATE_NAME_PICKLIST_BEST,
             TaxAmount__c = 10
         );
         mRate = TP_SetupDataUtilsTest.setMapByName(mRate, new List<sObject>{rate});
@@ -452,8 +452,8 @@ public class TP_SetupDataTest {
     }
 
     /**
-    * @description 
-    * @author Inetum Team <alberto.martinez-lopez@inetum.com> | 05-03-2025 
+    * @description
+    * @author Inetum Team <alberto.martinez-lopez@inetum.com> | 05-03-2025
     **/
     private static void insertRateData(){
         TP_SetupDataUtilsTest.genericParentChildRelationship(mRatePlanner.values(), mRate.values(), 'RatePlanner__c');
@@ -461,8 +461,8 @@ public class TP_SetupDataTest {
     }
 
     /**
-    * @description 
-    * @author Inetum Team <alvaro.marin@inetum.com> | 06-03-2025 
+    * @description
+    * @author Inetum Team <alvaro.marin@inetum.com> | 06-03-2025
     **/
     private static void insertHotelTerritory(){
 		insert mHotelTerritoryArea.values();
@@ -477,8 +477,8 @@ public class TP_SetupDataTest {
     }
 
     /**
-    * @description 
-    * @author Inetum Team <alvaro.marin@inetum.com> | 06-03-2025 
+    * @description
+    * @author Inetum Team <alvaro.marin@inetum.com> | 06-03-2025
     **/
     private static void insertOpportunity(){
         TP_SetupDataUtilsTest.genericParentChildRelationship(mAccount.values(), mOpportunity.values(), 'AccountId');
@@ -486,8 +486,8 @@ public class TP_SetupDataTest {
     }
 
     /**
-    * @description 
-    * @author Inetum Team <alvaro.marin@inetum.com> | 06-03-2025 
+    * @description
+    * @author Inetum Team <alvaro.marin@inetum.com> | 06-03-2025
     **/
     private static void insertOpportunityHotel(){
         TP_SetupDataUtilsTest.genericParentChildRelationship(mOpportunity.values(), mOpportunityHotel.values(), 'Opportunity__c');
@@ -496,8 +496,8 @@ public class TP_SetupDataTest {
     }
 
     /**
-    * @description 
-    * @author Inetum Team <alvaro.marin@inetum.com> | 06-03-2025 
+    * @description
+    * @author Inetum Team <alvaro.marin@inetum.com> | 06-03-2025
     **/
     private static void insertUserAuthorization(){
         TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryArea.values(), mUserAuthorization.values(), 'Area__c');
@@ -511,8 +511,8 @@ public class TP_SetupDataTest {
     }
 
     /**
-    * @description 
-    * @author Inetum Team <alvaro.marin@inetum.com> | 06-03-2025 
+    * @description
+    * @author Inetum Team <alvaro.marin@inetum.com> | 06-03-2025
     **/
 	@future
     private static void insertOpportunityShare(){
@@ -523,7 +523,7 @@ public class TP_SetupDataTest {
 	@future
 	private static void insertFutureRecord(String recordJSON) {
 		sObject record = (sObject)JSON.deserialize(recordJSON, sObject.class);
-		insert record; 
+		insert record;
 	}
 
 }
