@@ -1,13 +1,21 @@
 <!--
-  @description       : 
+  @description       :
   @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
-  @group             : 
-  @last modified on  : 11-03-2025
-  @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+  @group             :
+  @last modified on  : 13-03-2025
+  @last modified by  : Inetum Team <sara.gerico@inetum.com>
 -->
 <template>
-    <div class="dt-manager-filter-container slds-p-around_small">
-        
+    <div class="sdt-manager-filter-container slds-grid slds-wrap slds-gutters slds-p-around_small">
+
+        <div class="dt-manager-filter-container slds-col slds-size_1-of-1 slds-medium-size_2-of-3 slds-p-around_x-small">
+            <c-rate-manager-rate-config-filters filters={filters} onfilterchange={handleOnChangeFilters}></c-rate-manager-rate-config-filters>
+        </div>
+
+        <div class="dt-manager-filter-container slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-p-around_x-small">
+            <!-- Acciones Masivas -->
+        </div>
+
     </div>
     <div class="dt-manager-table-container slds-p-around_small">
         <c-extended-data-table
