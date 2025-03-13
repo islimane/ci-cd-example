@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
-        <members>TP_SetupDataTest</members>
-        <name>ApexClass</name>
-    </types>
-    <types>
         <members>extendedDataTableManager</members>
-        <members>rateManagerRateConfig</members>
-        <members>rateManagerRateConfigFilters</members>
-        <members>rateManagerRateConfigFiltersItem</members>
-        <members>rateManagerRoomsConfig</members>
         <name>LightningComponentBundle</name>
     </types>
     <version>55.0</version>
