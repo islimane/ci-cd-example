@@ -2,15 +2,17 @@
   @description       :
   @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
   @group             :
-  @last modified on  : 13-03-2025
+  @last modified on  : 14-03-2025
   @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 -->
 
 
     <template>
-        <template for:each={filters} for:item="filter">
-            <div key={filter.fieldApiName} class="slds-col slds-size_1-of-1 slds-p-horizontal_small slds-p-vertical_xx-small">
-                <c-rate-manager-rate-config-filters-item filter={filter} onfilterchange={handleOnFilterChange}></c-rate-manager-rate-config-filters-item>
-            </div>
-        </template>
+        <div class="slds-grid slds-wrap">
+            <template for:each={filters} for:item="filter">
+                <div key={filter.fieldApiName} class="slds-size_1-of-2 slds-p-horizontal_small slds-p-vertical_xx-small">
+                    <c-rate-manager-rate-config-filters-item filter={filter} onfilterchange={handleOnFilterChange}></c-rate-manager-rate-config-filters-item>
+                </div>
+            </template>
+        </div>
     </template>
