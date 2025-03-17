@@ -12,7 +12,7 @@ import RateManagerPeriodUtils from 'c/rateManagerPeriodUtils';
 import { RateManagerMixin } from 'c/rateManagerMixin';
 import PERIOD_OBJECT from "@salesforce/schema/Period__c"
 
-export default class RateManagerModalEventHandler extends RateManagerMixin(LightningModal) {
+export default class RateManagerModalBlackoutHandler extends RateManagerMixin(LightningModal) {
 
 	labels = LABELS;
 	// _dateIntervals = [];
@@ -22,7 +22,7 @@ export default class RateManagerModalEventHandler extends RateManagerMixin(Light
 
 	connectedCallback(){
 		super._sObjectApiName = PERIOD_OBJECT;
-		super._sObjectRTName = 'Event';
+		super._sObjectRTName = 'Blackout';
 	}
 
 	@api headerLabel;

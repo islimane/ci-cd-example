@@ -8,11 +8,11 @@
 import { api } from 'lwc';
 import { RateManagerMixin } from 'c/rateManagerMixin';
 import LwcDCExtension from 'c/lwcDCExtension';
-import rateManagerModalEventHandler from 'c/rateManagerModalEventHandler';
+import rateManagerModalBlackoutHandler from 'c/rateManagerModalBlackoutHandler';
 import LightningConfirm from 'lightning/confirm';
 import LABELS from './labels.js';
 
-export default class RateManagerPeriodListItem extends RateManagerMixin(LwcDCExtension) {
+export default class RateManagerBlackoutListItem extends RateManagerMixin(LwcDCExtension) {
 
 	labels = LABELS;
 
@@ -28,7 +28,7 @@ export default class RateManagerPeriodListItem extends RateManagerMixin(LwcDCExt
 	async handleDelete(){
 
 		const result = await LightningConfirm.open({
-			message: this.labels.removEventMsg,
+			message: this.labels.removBlackoutMsg,
 			variant: 'headerless',
 			label: 'this is the aria-label value',
 			// setting theme would have no effect
@@ -42,17 +42,17 @@ export default class RateManagerPeriodListItem extends RateManagerMixin(LwcDCExt
 	}
 
 	async handleEdit(){
-		const result = await rateManagerModalEventHandler.open({
+		const result = await rateManagerModalBlackoutHandler.open({
 			// it is set on lightning-modal-header instead
 			recordId: this.recordId,
 			parentId: this.parentId,
 			//dateIntervals: this._restOfIntervals,
 			size: 'large',
-			headerLabel: this.labels.editEvent,
+			headerLabel: this.labels.editBlackout,
 			onconfirm: (e) => {
 				// stop further propagation of the event
 				e.stopPropagation();
-				this.handleEditEvent(e);
+				this.handleEditBlackout(e);
 			}
 		});
 		// if modal closed with X button, promise returns result = 'undefined'
@@ -64,7 +64,7 @@ export default class RateManagerPeriodListItem extends RateManagerMixin(LwcDCExt
 		console.log(event.detail);
 	}
 
-	handleEditEvent(e){
+	handleEditBlackout(e){
 		this.fireEvent('refresh');
 	}
 }

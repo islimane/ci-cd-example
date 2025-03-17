@@ -10,9 +10,9 @@ import LwcDCExtension from 'c/lwcDCExtension';
 import { track, api } from 'lwc';
 import { RateManagerMixin } from 'c/rateManagerMixin';
 import LABELS from './labels.js';
-import rateManagerModalPeriodHandler from 'c/rateManagerModalPeriodHandler';
+import rateManagerModalEventHandler from 'c/rateManagerModalEventHandler';
 
-export default class RateManagerPeriodList extends RateManagerMixin(LwcDCExtension) {
+export default class RateManagerEventList extends RateManagerMixin(LwcDCExtension) {
 	labels = LABELS;
 
 	connectedCallback(){
@@ -28,14 +28,13 @@ export default class RateManagerPeriodList extends RateManagerMixin(LwcDCExtensi
 
 
 	get eventList(){
-		// let eventList = this._eventList.map((Id, index) => {
-		// 	return {
-		// 		...Id,
-		// 		index
-		// 	}
-		// })
-		// return eventList;
-		return [];
+		let eventList = this._eventList.map((Id, index) => {
+			return {
+				...Id,
+				index
+			}
+		})
+		return eventList;
 	}
 
 	/**
@@ -53,7 +52,7 @@ export default class RateManagerPeriodList extends RateManagerMixin(LwcDCExtensi
 
 	async handleAddEventModal() {
 
-		const result = await rateManagerModalPeriodHandler.open({
+		const result = await rateManagerModalEventHandler.open({
 			// it is set on lightning-modal-header instead
 			dateIntervals: this._eventList,
 			parentId: this.parentId,
@@ -80,8 +79,8 @@ export default class RateManagerPeriodList extends RateManagerMixin(LwcDCExtensi
 	async handleDeleteEvent(event){
 		try{
 			const result = await this.remoteAction({
-				controller: 'RateManagerPeriodListController',
-				action: 'deletePeriod',
+				controller: 'RateManagerEventListController',
+				action: 'deleteEvent',
 				recordIds: [event.detail.recordId],
 			});
 			this.refreshFetch();

@@ -9,7 +9,7 @@
 <template>
     <div class="main-container slds-p-around_small">
         <template for:each={eventList} for:item="event">
-            <!-- <c-rate-manager-event-list-item key={event.index} record-id={event.Id} parent-id={parentId} date-intervals={eventList} onrefresh={handleRefreshEvent} ondelete={handleDeleteEvent}></c-rate-manager-event-list-item> -->
+            <c-rate-manager-event-list-item key={event.index} record-id={event.Id} parent-id={parentId} date-intervals={eventList} onrefresh={handleRefreshEvent} ondelete={handleDeleteEvent}></c-rate-manager-event-list-item>
         </template>
         <div class="slds-grid slds-grid_align-end slds-p-around_small">
             <div class="slds-col">

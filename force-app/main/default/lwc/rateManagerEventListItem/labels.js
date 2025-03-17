@@ -1,5 +1,7 @@
-import ADD_EVENT from '@salesforce/label/c.Add_Event';
+import EDIT_EVENT from '@salesforce/label/c.Edit_Event';
+import REMOVE_EVENT_MSG from '@salesforce/label/c.Remove_Event_Confirmation_Message';
 
 export default {
-    addEvent: ADD_EVENT,
+    editEvent: EDIT_EVENT,
+    removEventMsg: REMOVE_EVENT_MSG
 };
