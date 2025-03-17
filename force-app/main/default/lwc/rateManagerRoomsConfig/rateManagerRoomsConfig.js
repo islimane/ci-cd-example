@@ -1,11 +1,19 @@
-import { LightningElement,api, track } from 'lwc';
+/**
+ * @description       : 
+ * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
+ * @group             : 
+ * @last modified on  : 17-03-2025
+ * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+**/
+import { api, track } from 'lwc';
 import LwcDCExtension from 'c/lwcDCExtension';
+import { RateManagerMixin } from 'c/rateManagerMixin';
 
-export default class RateManagerRoomsConfig extends LwcDCExtension {
+
+export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtension) {
 
     @track filters = [];
     @track data = [];
-    @api recordId;
 
     /*** Connected callback.*/
     connectedCallback(){
@@ -16,7 +24,7 @@ export default class RateManagerRoomsConfig extends LwcDCExtension {
      * @description: Sets the wire parameters for the component.
      **/
     setWireParams() {
-        this._wireParams = {recordId: this.recordId, controller: 'RateManagerRoomsConfigController' };
+        this._wireParams = {rpId: this.parentId, controller: 'RateManagerRoomsConfigController' };
     }
 
     /**

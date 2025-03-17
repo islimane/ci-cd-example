@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             :
- * @last modified on  : 14-03-2025
+ * @last modified on  : 17-03-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 public with sharing class RateManagerRoomsConfigController extends DC_DynamicController {
@@ -23,12 +23,9 @@ public with sharing class RateManagerRoomsConfigController extends DC_DynamicCon
     * @return DC_ResponseWr
     **/
     private static DC_ResponseWr getFiltersOptionsData(Map<String, Object> params){
-        List<Product2> data = [SELECT Id,Name,Room__c,Characteristic__c, Regimen_Type__c, Applicable__c
-        FROM Product2 
-        WHERE Room__c != null
-        AND Characteristic__c != null
-        AND Regimen_Type__c != null];
-
+        Id ratePlannerId = (Id)params.get('rpId');
+        Set<Id> sHotelJoin = HotelSelector.getHotelJoinByRatePlanner(new Set<Id>{ratePlannerId}).get(ratePlannerId).keySet();
+        List<Product2> data = Product2Selector.getProductsByHotelId(sHotelJoin);
         List<Option> roomOptions = new List<Option>{new Option('All', null)};
         List<Option> characteristicOptions = new List<Option>{new Option('All', null)};
         List<Option> typeOptions = new List<Option>{new Option('All', null)};
