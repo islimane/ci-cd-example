@@ -2,8 +2,8 @@
  * @description       : Unit Test Class for Setup Data Methods
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 13-03-2025
- * @last modified by  : Inetum Team <sara.gerico@inetum.com>
+ * @last modified on  : 18-03-2025
+ * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 @isTest
 public class TP_SetupDataTest {
@@ -35,6 +35,7 @@ public class TP_SetupDataTest {
     public static Map<String, sObject> mOpportunityHotel = new Map<String, sObject>();
     public static Map<String, sObject> mUserAuthorization = new Map<String, sObject>();
     public static Map<String, sObject> mOpportunityShare = new Map<String, sObject>();
+    public static Map<String, sObject> mProduct2 = new Map<String, sObject>();
 
 	/*********************************/
     /*      OBJECTS DEFINITIONS      */
@@ -101,6 +102,7 @@ public class TP_SetupDataTest {
 		Opportunity_Hotel__c opportunityHotel = generateOpportunityHotel(null, null);
 		User_authorization__c userAuthorization = generateUserAuthorization(null);
 		OpportunityShare opportunityShare = generateOpportunityShare(null, groupTest);
+        Product2 product2 = generateProduct2();
     }
 
 
@@ -203,7 +205,8 @@ public class TP_SetupDataTest {
     public static Hotel__c generateHotel(Account account) {
         Hotel__c hotel = new Hotel__c(
             Name = 'Default'+batteryName,
-            Account__c = account?.Id
+            Account__c = account?.Id,
+            RecordTypeId = GlobalConstants.HOTEL_RT_HOTEL_ID
         );
         mHotel = TP_SetupDataUtilsTest.setMapByName(mHotel, new List<sObject>{hotel});
         return hotel;
@@ -366,6 +369,22 @@ public class TP_SetupDataTest {
         return opportunityShare;
     }
 
+    /**
+    * @description 
+    * @author Inetum Team <alberto.martinez-lopez@inetum.com> | 18-03-2025 
+    * @return Product2 
+    **/
+    private static Product2 generateProduct2(){
+        Product2 product2 = new Product2(
+            Name = 'Default'+batteryName,
+            Room__c = 'Double',
+            Characteristic__c = 'FRONTAL',
+            Regimen_Type__c = 'AD'
+        );
+        mProduct2 = TP_SetupDataUtilsTest.setMapByName(mProduct2, new List<sObject>{product2});
+        return product2;
+    }
+
     /************************************************/
     /*    			BUILD AUX METHODS     			*/
     /************************************************/
@@ -404,6 +423,7 @@ public class TP_SetupDataTest {
 		insertOpportunityHotel();
 		insertUserAuthorization();
 		insertOpportunityShare();
+        insertProduct2();
     }
 
     /**
@@ -508,6 +528,15 @@ public class TP_SetupDataTest {
         lUserAuthorizationToInsert.addAll((List<User_authorization__c>)mUserAuthorization.values());
 		for (User_authorization__c currentAuthorization : lUserAuthorizationToInsert) currentAuthorization.User__c = UserInfo.getUserId();
         insert lUserAuthorizationToInsert;
+    }
+
+    /**
+    * @description 
+    * @author Inetum Team <alberto.martinez-lopez@inetum.com> | 18-03-2025 
+    **/
+    private static void insertProduct2(){
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mHotel.values(), mProduct2.values(), 'Hotel__c');
+        insert mProduct2.values();
     }
 
     /**

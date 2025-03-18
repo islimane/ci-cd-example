@@ -2,17 +2,17 @@
  * @description       : 
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             : 
- * @last modified on  : 05-03-2025
+ * @last modified on  : 18-03-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 @isTest
-public class RateManagerRatesListController_Test {
-    
+public class RateManagerRoomsConfigController_Test {
+
     @TestSetup
     public static void setupData(){
         TP_SetupDataTest.generateAllTestData();
     }
-
+    
     @isTest
     public static void testAll(){
         Test.startTest();
@@ -27,10 +27,11 @@ public class RateManagerRatesListController_Test {
         Test.stopTest();
     }
 
-
-    public static void initMethod() {
-        List<RatePlanner__c> lRatePlanner = [SELECT Id FROM RatePlanner__c LIMIT 1];
-        new RateManagerRatesListController().init(new Map<String, Object>{'recordId' => lRatePlanner[0].Id});
+    private static void initMethod(){
+        Map<String, Object> params = new Map<String, Object>{
+            'controller' => 'RateManagerRoomsConfigController',
+            'parentId' => TP_SetupSelectorTest.getRatePlanner(1, 'TEST').Id
+        };
+        new RateManagerRoomsConfigController().init(params);
     }
-
 }

@@ -2,7 +2,7 @@
  * @description       : Global constants class for the entire system.
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 17-03-2025
+ * @last modified on  : 18-03-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 @SuppressWarnings('PMD')
@@ -77,7 +77,8 @@ public without sharing class GlobalConstants {
         }set;
     }
     public static final String HOTEL_RT_RESORT_NAME { get { return 'Resort'; } }
+    public static final String HOTEL_RT_HOTEL_NAME { get { return 'Hotel_Record_Type'; } }
     public static final Id HOTEL_RT_RESORT_ID { get { return HOTEL_RT_BY_DEV_NAME.get(HOTEL_RT_RESORT_NAME).getRecordTypeId();}}
-
+    public static final Id HOTEL_RT_HOTEL_ID { get { return HOTEL_RT_BY_DEV_NAME.get(HOTEL_RT_HOTEL_NAME).getRecordTypeId();}}
 
 }

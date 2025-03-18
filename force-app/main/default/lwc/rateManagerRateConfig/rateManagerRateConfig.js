@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             : 
- * @last modified on  : 17-03-2025
+ * @last modified on  : 18-03-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 import LwcDCExtension from 'c/lwcDCExtension';
@@ -21,21 +21,22 @@ export default class RateManagerRateConfig extends RateManagerMixin(LwcDCExtensi
     labels = LABELS;
 
     _rateRecord;
+    _ratePlannerRecord;
 
     get ratePlannerName(){
-        return this._rateRecord?.RatePlanner__r?.Name;
+        return this._ratePlannerRecord?.Name;
     }
 
     get rateSeasonName(){
-        return this._rateRecord?.RatePlanner__r?.Season__r?.Name;
+        return this._ratePlannerRecord?.Season__r?.Name;
     }
 
     get ratePlannerConfigMode(){
-        return this._rateRecord?.RatePlanner__r?.ConfigurationMode__c;
+        return this._ratePlannerRecord?.ConfigurationMode__c;
     }
 
     get ratePlannerId(){
-        return this._rateRecord?.RatePlanner__c;
+        return this._ratePlannerRecord?.Id;
     }
 
     connectedCallback(){
@@ -44,5 +45,6 @@ export default class RateManagerRateConfig extends RateManagerMixin(LwcDCExtensi
     
     fetch = (response) => {
         this._rateRecord = response.data;
+        this._ratePlannerRecord = response.data.RatePlanner__r;
     }
 }
