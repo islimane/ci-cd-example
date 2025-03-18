@@ -1,8 +1,8 @@
 /**
- * @description       : 
+ * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
- * @group             : 
- * @last modified on  : 07-03-2025
+ * @group             :
+ * @last modified on  : 18-03-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 import { api} from 'lwc';
@@ -28,7 +28,7 @@ export default class RateManagerModalPeriodHandler extends RateManagerMixin(Ligh
 
     @api headerLabel;
 
-    @api 
+    @api
     set intervalsData(value){
         try{
             this._IntervalUtils = new RateManagerPeriodUtils(value.dateIntervals, { StartDate__c: value.parent.StartDate__c, EndDate__c: value.parent.EndDate__c });

@@ -1,7 +1,5 @@
-// labels.js
-
-import RATE_CONFIGURATION_TITLE from '@salesforce/label/c.Rate_Configuration_Title';
+import ADD_EVENT from '@salesforce/label/c.Add_Event';
 
 export default {
-
+    addEvent: ADD_EVENT,
 };
