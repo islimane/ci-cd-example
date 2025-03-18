@@ -1,3 +1,24 @@
+<!--
+  @description  : 
+  @author       : Inetum Team
+  @version      : 1.0.0
+  @date         : 05-03-2025
+  @group        : 
+  @see          : 
+-->
 <template>
-    
+    <div class="main-container slds-p-around_small">
+        <template for:each={eventList} for:item="event">
+            <c-rate-manager-event-list-item key={event.index} record-id={event.Id} parent-id={parentId} date-intervals={eventList} onrefresh={handleRefreshEvent} ondelete={handleDeleteEvent}></c-rate-manager-event-list-item>
+        </template>
+        <div class="slds-grid slds-grid_align-end slds-p-around_small">
+            <div class="slds-col">
+                <lightning-button 
+                    label={labels.addEvent} 
+                    variant="neutral"
+                    onclick={handleAddEventModal}>
+                </lightning-button>
+            </div>
+        </div>
+    </div>
 </template>
