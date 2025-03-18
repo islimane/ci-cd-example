@@ -21,7 +21,6 @@ export default class FixedColumnsTable extends LightningElement {
     @track _tableData = [];
     @api 
     set tableData(value) {
-        console.log('tableData --> , value', value);
         this._tableData = value != null ? JSON.parse(JSON.stringify(value)) : [];
         this.splitTableData();
     }
