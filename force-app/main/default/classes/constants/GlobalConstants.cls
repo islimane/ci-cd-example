@@ -81,4 +81,9 @@ public without sharing class GlobalConstants {
     public static final Id HOTEL_RT_RESORT_ID { get { return HOTEL_RT_BY_DEV_NAME.get(HOTEL_RT_RESORT_NAME).getRecordTypeId();}}
     public static final Id HOTEL_RT_HOTEL_ID { get { return HOTEL_RT_BY_DEV_NAME.get(HOTEL_RT_HOTEL_NAME).getRecordTypeId();}}
 
+
+    /** Product2 */
+    public static final String PRODUCT2_FAMILY_ROOM { get { return 'Room'; } }
+    public static final String PRODUCT2_FAMILY_SUPPLEMENT { get { return 'Supplement'; } }
+
 }

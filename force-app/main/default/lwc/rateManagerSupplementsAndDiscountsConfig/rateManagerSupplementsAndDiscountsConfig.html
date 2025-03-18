@@ -7,6 +7,11 @@
 -->
 <template>
     <div>
-        <c-extended-data-table-manager filters={filters} table-data={data}></c-extended-data-table-manager>
+        <c-extended-data-table-manager 
+            columns={columns} 
+            fixed-column-count={fixedColumnCount} 
+            filters={filters} 
+            table-data={data}>
+        </c-extended-data-table-manager>
     </div>
 </template>

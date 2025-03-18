@@ -24,7 +24,7 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
      * @description: Sets the wire parameters for the component.
      **/
     setWireParams() {
-        this._wireParams = {parentId: this.parentId, controller: 'RateManagerRoomsConfigController' };
+        this._wireParams = {parentId: this.parentId, controller: 'RateManagerSmntsAndDntsController' };
     }
 
     /**
@@ -40,5 +40,29 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
             console.warn('No records available in response');
         }
     }
+
+    // Define the column data with fixed and scrollable columns
+    get columns() {
+        return [
+            { label: 'ACCIONES', fieldName: 'action', type: 'checkbox', fixed: true, fixedWidth: 109 },
+            { label: 'NOMBRE DEL SUPLEMENTO', fieldName: 'Name', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
+            { label: 'TIPO', fieldName: 'Family', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
+            //{ label: 'TIPO DE APLICACÓN´', fieldName: 'Applicable__c', type: 'text', fixed: true, fixedWidth: 114 },
+            { label: 'APLICABLE', fieldName: 'Applicable__c', type: 'text', fixed: true, fixedWidth: 101 },
+            { label: 'OBSERVACIONES', fieldName: 'Description', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
+            { label: '23/12/23 - 03/01/24', fieldName: this.sourceField, type: this.sourceFieldType, fixedWidth: 200 },
+            { label: '04/01/24 - 31/01/24', fieldName: 'period2', type: 'currency', fixedWidth: 200 },
+            { label: '01/03/25 - 30/04/25', fieldName: 'period3', type: 'currency', fixedWidth: 200 },
+            { label: '01/05/25 - 25/06/25', fieldName: 'period4', type: 'currency', fixedWidth: 200 },
+            { label: '26/06/25 - 15/07/25', fieldName: 'period5', type: 'currency', fixedWidth: 200 },
+            { label: '26/06/25 - 15/07/25', fieldName: 'period6', type: 'currency', fixedWidth: 200 }
+        ];
+    }
+
+    get fixedColumnCount(){
+        return 5;
+    }
+
+
 
 }

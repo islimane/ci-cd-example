@@ -75,13 +75,17 @@ public with sharing class RateManagementExecutor_Test {
         RateManagerRateConfigController_Test.testAll();
 	}
 
+    @isTest
+    public static void RateManagerSmntsAndDntsControllerTest(){
+        RateManagerSmntsAndDntsController_Test.testAll();
+    }
+
 	@IsTest
     static void GlobalConstants_Test(){
         GlobalConstants_Test.testAll();
     }
 
     @IsTest
-
     static void GroupSelector_Test(){
         GroupSelector_Test.testAll();
     }

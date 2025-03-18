@@ -13,6 +13,8 @@ export default class ExtendedDataTableManager extends LightningElement {
     labels = LABELS;
 
     @api filters;
+    @api columns;
+    @api fixedColumnCount;
     @track _tableData = [];
     @track filteredData = [];
 
@@ -24,25 +26,7 @@ export default class ExtendedDataTableManager extends LightningElement {
         return this.flag ? 'currency' : 'number';
     }
 
-    // Define the column data with fixed and scrollable columns
-    get columns() {
-        return [
-            { label: 'ACCIONES', fieldName: 'action', type: 'checkbox', fixed: true, fixedWidth: 109 },
-            { label: 'HABITACIÓN', fieldName: 'Room__c', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
-            { label: 'CARACTERÍSTICA', fieldName: 'Characteristic__c', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
-            { label: 'APLICABLE', fieldName: 'Applicable__c', type: 'text', fixed: true, fixedWidth: 114 },
-            { label: 'RÉGIMEN', fieldName: 'Regimen_Type__c', type: 'text', fixed: true, fixedWidth: 101 },
-            { label: 'AVG', fieldName: 'avg', type: 'currency', fixed: true, fixedWidth: 68 },
-            { label: '23/12/23 - 03/01/24', fieldName: this.sourceField, type: this.sourceFieldType, fixedWidth: 200 },
-            { label: '04/01/24 - 31/01/24', fieldName: 'period2', type: 'currency', fixedWidth: 200 },
-            { label: '01/03/25 - 30/04/25', fieldName: 'period3', type: 'currency', fixedWidth: 200 },
-            { label: '01/05/25 - 25/06/25', fieldName: 'period4', type: 'currency', fixedWidth: 200 },
-            { label: '26/06/25 - 15/07/25', fieldName: 'period5', type: 'currency', fixedWidth: 200 },
-            { label: '26/06/25 - 15/07/25', fieldName: 'period6', type: 'currency', fixedWidth: 200 },
-            { label: '26/06/25 - 15/07/25', fieldName: 'period7', type: 'currency', fixedWidth: 200 },
-            { label: '26/06/25 - 15/07/25', fieldName: 'period8', type: 'currency', fixedWidth: 200 }
-        ];
-    }
+
 
 
     @api
@@ -65,11 +49,6 @@ export default class ExtendedDataTableManager extends LightningElement {
     get tableData() {
         return this._tableData;
     }
-
-
-
-    // Set the number of fixed columns dynamically
-    fixedColumnCount = 6;
 
     /**
      * Handles the change of a filter value     *

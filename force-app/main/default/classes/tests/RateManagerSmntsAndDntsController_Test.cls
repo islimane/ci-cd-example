@@ -6,7 +6,7 @@
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 @isTest
-public class RateManagerRoomsConfigController_Test implements TP_ExecutableInterface {
+public class RateManagerSmntsAndDntsController_Test implements TP_ExecutableInterface  {
 
     @TestSetup
     public static void setupData(){
@@ -29,9 +29,9 @@ public class RateManagerRoomsConfigController_Test implements TP_ExecutableInter
 
     private static void initMethod(){
         Map<String, Object> params = new Map<String, Object>{
-            'controller' => 'RateManagerRoomsConfigController',
+            'controller' => 'RateManagerSmntsAndDntsController',
             'parentId' => TP_SetupSelectorTest.getRatePlanner(1, 'TEST').Id
         };
-        new RateManagerRoomsConfigController().init(params);
+        new RateManagerSmntsAndDntsController().init(params);
     }
 }

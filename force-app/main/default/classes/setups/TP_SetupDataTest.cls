@@ -35,7 +35,8 @@ public class TP_SetupDataTest {
     public static Map<String, sObject> mOpportunityHotel = new Map<String, sObject>();
     public static Map<String, sObject> mUserAuthorization = new Map<String, sObject>();
     public static Map<String, sObject> mOpportunityShare = new Map<String, sObject>();
-    public static Map<String, sObject> mProduct2 = new Map<String, sObject>();
+    public static Map<String, sObject> mProduct2Room = new Map<String, sObject>();
+    public static Map<String, sObject> mProduct2Supplement = new Map<String, sObject>();
 
 	/*********************************/
     /*      OBJECTS DEFINITIONS      */
@@ -102,7 +103,7 @@ public class TP_SetupDataTest {
 		Opportunity_Hotel__c opportunityHotel = generateOpportunityHotel(null, null);
 		User_authorization__c userAuthorization = generateUserAuthorization(null);
 		OpportunityShare opportunityShare = generateOpportunityShare(null, groupTest);
-        Product2 product2 = generateProduct2();
+        generateProduct2();
     }
 
 
@@ -374,15 +375,24 @@ public class TP_SetupDataTest {
     * @author Inetum Team <alberto.martinez-lopez@inetum.com> | 18-03-2025 
     * @return Product2 
     **/
-    private static Product2 generateProduct2(){
-        Product2 product2 = new Product2(
+    private static void generateProduct2(){
+        Product2 product2_Room = new Product2(
             Name = 'Default'+batteryName,
             Room__c = 'Double',
             Characteristic__c = 'FRONTAL',
-            Regimen_Type__c = 'AD'
+            Regimen_Type__c = 'AD',
+            Family = GlobalConstants.PRODUCT2_FAMILY_ROOM,
+            isActive = true
         );
-        mProduct2 = TP_SetupDataUtilsTest.setMapByName(mProduct2, new List<sObject>{product2});
-        return product2;
+        Product2 product2_Supplement = new Product2(
+            Name = 'Default'+batteryName,
+            Applicable__c = 'PPD',
+            Regimen_Type__c = 'AD',
+            Family = GlobalConstants.PRODUCT2_FAMILY_SUPPLEMENT,
+            isActive = true
+        );
+        TP_SetupDataUtilsTest.setMapByName(mProduct2Room, new List<sObject>{product2_Room});
+        TP_SetupDataUtilsTest.setMapByName(mProduct2Supplement, new List<sObject>{product2_Supplement});
     }
 
     /************************************************/
@@ -406,6 +416,7 @@ public class TP_SetupDataTest {
     public static List<Season__c> lSeasonToInsert = new List<Season__c>();
     public static List<HotelTerritory__c> lHotelTerritoryToInsert = new List<HotelTerritory__c>();
     public static List<User_authorization__c> lUserAuthorizationToInsert = new List<User_authorization__c>();
+    public static List<Product2> product2toInsert = new List<Product2>();
 
     /**
     * Calls individual methods to insert all records and set up necessary parent-child relationships.
@@ -535,8 +546,11 @@ public class TP_SetupDataTest {
     * @author Inetum Team <alberto.martinez-lopez@inetum.com> | 18-03-2025 
     **/
     private static void insertProduct2(){
-        TP_SetupDataUtilsTest.genericParentChildRelationship(mHotel.values(), mProduct2.values(), 'Hotel__c');
-        insert mProduct2.values();
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mHotel.values(), mProduct2Room.values(), 'Hotel__c');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mHotel.values(), mProduct2Supplement.values(), 'Hotel__c');
+        product2toInsert.addAll((List<Product2>)mProduct2Room.values());
+        product2toInsert.addAll((List<Product2>)mProduct2Supplement.values());
+        insert product2toInsert;
     }
 
     /**
