@@ -30,6 +30,10 @@ export default class RateManagerRateConfig extends RateManagerMixin(LwcDCExtensi
         return this._rateRecord?.RatePlanner__r?.Season__r?.Name;
     }
 
+    get ratePlannerConfigMode(){
+        return this._rateRecord?.RatePlanner__r?.ConfigurationMode__c;
+    }
+
     get ratePlannerId(){
         return this._rateRecord?.RatePlanner__c;
     }

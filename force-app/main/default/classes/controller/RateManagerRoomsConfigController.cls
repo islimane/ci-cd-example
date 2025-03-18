@@ -23,7 +23,7 @@ public with sharing class RateManagerRoomsConfigController extends DC_DynamicCon
     * @return DC_ResponseWr
     **/
     private static DC_ResponseWr getFiltersOptionsData(Map<String, Object> params){
-        Id ratePlannerId = (Id)params.get('rpId');
+        Id ratePlannerId = (Id)params.get('parentId');
         Set<Id> sHotelJoin = HotelSelector.getHotelJoinByRatePlanner(new Set<Id>{ratePlannerId}).get(ratePlannerId).keySet();
         List<Product2> data = Product2Selector.getProductsByHotelId(sHotelJoin);
         List<Option> roomOptions = new List<Option>{new Option('All', null)};

@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             : 
- * @last modified on  : 17-03-2025
+ * @last modified on  : 18-03-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 import { api, track } from 'lwc';
@@ -10,7 +10,7 @@ import LwcDCExtension from 'c/lwcDCExtension';
 import { RateManagerMixin } from 'c/rateManagerMixin';
 
 
-export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtension) {
+export default class RateManagerSupplementsAndDiscountsConfig extends RateManagerMixin(LwcDCExtension) {
 
     @track filters = [];
     @track data = [];

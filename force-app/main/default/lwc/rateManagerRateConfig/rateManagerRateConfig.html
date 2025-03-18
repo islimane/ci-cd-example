@@ -2,7 +2,7 @@
   @description       :
   @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
   @group             :
-  @last modified on  : 17-03-2025
+  @last modified on  : 18-03-2025
   @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 -->
 <template>
@@ -58,8 +58,8 @@
                             </div>
                         </lightning-accordion-section>
                         <lightning-accordion-section name="supplementsAndReductions" label={labels.supplementsAndReductions}>
-                            <div class="accordion-container slds-p-around_medium">
-                                <c-extended-data-table-manager></c-extended-data-table-manager>
+                            <div if:true={ratePlannerId} class="accordion-container slds-p-around_medium">
+                                <c-rate-manager-supplements-and-discounts-config parent-id={ratePlannerId}></c-rate-manager-supplements-and-discounts-config>
                             </div>
                         </lightning-accordion-section>
                     </lightning-accordion>

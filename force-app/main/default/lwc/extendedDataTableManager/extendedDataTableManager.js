@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 13-03-2025
+ * @last modified on  : 18-03-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 import { LightningElement,api,track } from 'lwc';
@@ -60,7 +60,6 @@ export default class ExtendedDataTableManager extends LightningElement {
         }
         this._tableData  = JSON.parse(JSON.stringify(data)) || data;
         this.filteredData = [...this._tableData];
-        console.log('_tableData --> ' , this._tableData);
     }
 
     get tableData() {
@@ -90,8 +89,6 @@ export default class ExtendedDataTableManager extends LightningElement {
                     return record[filter.fieldApiName] === filter.value
                 })
             });
-
-            console.log('filteredData -- ' , this.filteredData);
         } catch (e) {
             console.error(e.message);
         }
