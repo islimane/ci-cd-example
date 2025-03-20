@@ -1,0 +1,25 @@
+<!--
+  @description       :
+  @author            : Inetum Team <sara.gerico@inetum.com>
+  @group             :
+  @last modified on  : 19-03-2025
+  @last modified by  : Inetum Team <sara.gerico@inetum.com>
+-->
+<template>
+    <lightning-modal-header label={headerLabel}></lightning-modal-header>
+    <lightning-record-edit-form object-api-name="Product2" record-type-id={_recordTypeId} record-id={recordId} onsubmit={handleSave} onsuccess={handleSuccess} onload={handleLoad} onerror={handleError} density="Comfy">
+        <lightning-modal-body>
+            <div>
+                <c-rate-manager-add-rooms parent-id={parentId}></c-rate-manager-add-rooms>
+            </div>
+        </lightning-modal-body>
+        <lightning-modal-footer>
+            <lightning-button
+                class="slds-m-top_small"
+                type="submit"
+                label={labels.save}
+            ></lightning-button>
+        </lightning-modal-footer>
+    </lightning-record-edit-form>
+
+</template>

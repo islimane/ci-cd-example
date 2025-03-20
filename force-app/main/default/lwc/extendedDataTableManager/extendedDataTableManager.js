@@ -2,13 +2,16 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 18-03-2025
- * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+ * @last modified on  : 19-03-2025
+ * @last modified by  : Inetum Team <sara.gerico@inetum.com>
 **/
 import { LightningElement,api,track } from 'lwc';
 import LABELS from './labels';
+import rateManagerModalRoomHandler from 'c/rateManagerModalRoomHandler';
+import LwcDCExtension from 'c/lwcDCExtension';
+import { RateManagerMixin } from 'c/rateManagerMixin';
 
-export default class ExtendedDataTableManager extends LightningElement {
+export default class ExtendedDataTableManager extends RateManagerMixin(LwcDCExtension) {
 
     labels = LABELS;
 
@@ -17,6 +20,7 @@ export default class ExtendedDataTableManager extends LightningElement {
     @api fixedColumnCount;
     @track _tableData = [];
     @track filteredData = [];
+    @api parentId;
 
     get sourceField() {
         return this.flag ? 'period1' : 'period1_2';
@@ -72,6 +76,25 @@ export default class ExtendedDataTableManager extends LightningElement {
             console.error(e.message);
         }
     }
+
+    //SARA//
+
+    async handleAddRoomModal() {
+        const result = await rateManagerModalRoomHandler.open({
+            parentId: this.parentId,
+            size: 'large',
+            headerLabel: "Add Rooms",
+            onconfirm: (e) => {
+                e.stopPropagation();
+                this.handleAddRoom(e);
+            }
+        });
+    }
+
+    handleAddRoom(event){
+        this.refreshFetch();
+    }
+
 
 
 }
