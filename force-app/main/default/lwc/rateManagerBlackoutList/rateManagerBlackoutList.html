@@ -1,20 +1,20 @@
 <!--
-  @description  : 
+  @description  :
   @author       : Inetum Team
   @version      : 1.0.0
   @date         : 05-03-2025
-  @group        : 
-  @see          : 
+  @group        :
+  @see          :
 -->
 <template>
     <div class="main-container slds-p-around_small">
         <template for:each={blackoutList} for:item="blackout">
-            <c-rate-manager-blackout-list-item key={blackout.index} record-id={blackout.Id} parent-id={parentId} date-intervals={blackoutList} onrefresh={handleRefreshBlackout} ondelete={handleDeleteBlackout}></c-rate-manager-blackout-list-item>
+            <c-rate-manager-blackout-list-item key={blackout.index} record-id={blackout.Id} parent-id={parentId} interval-manager={intervalManager} date-intervals={blackoutList} onrefresh={handleRefreshBlackout} ondelete={handleDeleteBlackout}></c-rate-manager-blackout-list-item>
         </template>
-        <div class="slds-grid slds-grid_align-end slds-p-around_small">
+        <div if:true={canAddBlackout} class="slds-grid slds-grid_align-end slds-p-around_small">
             <div class="slds-col">
-                <lightning-button 
-                    label={labels.addBlackout} 
+                <lightning-button
+                    label={labels.addBlackout}
                     variant="neutral"
                     onclick={handleAddBlackoutModal}>
                 </lightning-button>

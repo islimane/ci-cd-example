@@ -1,9 +1,9 @@
 <!--
-  @description       : 
+  @description       :
   @author            : Inetum Team <alvaro.marin@inetum.com>
-  @group             : 
-  @last modified on  : 05-03-2025
-  @last modified by  : Inetum Team <alvaro.marin@inetum.com>
+  @group             :
+  @last modified on  : 21-03-2025
+  @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 -->
 <template>
     <lightning-modal-header label={headerLabel}></lightning-modal-header>
@@ -11,16 +11,16 @@
         <lightning-modal-body>
             <lightning-layout multiple-rows>
                 <lightning-layout-item size="4" padding="around-small">
-					<lightning-input-field field-name="StartDate__c" required></lightning-input-field>
+					<lightning-input-field field-name="StartDate__c" value={proposedInterval.StartDate__c} required></lightning-input-field>
                 </lightning-layout-item>
 				<lightning-layout-item size="8" padding="around-small">
-					<lightning-input-field field-name="Name__c"></lightning-input-field>
+					<lightning-input-field field-name="Name__c" required></lightning-input-field>
 				</lightning-layout-item>
                 <lightning-layout-item size="4" padding="around-small">
-					<lightning-input-field field-name="EndDate__c" required></lightning-input-field>
+					<lightning-input-field field-name="EndDate__c" value={proposedInterval.EndDate__c} required></lightning-input-field>
                 </lightning-layout-item>
                 <lightning-layout-item size="8" padding="around-small">
-                    <lightning-input-field field-name="Description__c"></lightning-input-field>
+                    <lightning-input-field field-name="Description__c" required></lightning-input-field>
                 </lightning-layout-item>
             </lightning-layout>
         </lightning-modal-body>

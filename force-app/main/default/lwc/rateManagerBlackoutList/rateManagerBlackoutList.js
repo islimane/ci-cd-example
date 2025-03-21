@@ -1,26 +1,30 @@
 /**
- * @description  : 
+ * @description  :
  * @author       : Inetum Team
  * @version      : 1.0.0
  * @date         : 24-02-2025
- * @group        : 
- * @see          : 
+ * @group        :
+ * @see          :
 **/
 import LwcDCExtension from 'c/lwcDCExtension';
 import { track, api } from 'lwc';
 import { RateManagerMixin } from 'c/rateManagerMixin';
+import RateManagerPeriodUtils from 'c/rateManagerPeriodUtils';
 import LABELS from './labels.js';
 import rateManagerModalBlackoutHandler from 'c/rateManagerModalBlackoutHandler';
 
 export default class RateManagerBlackoutList extends RateManagerMixin(LwcDCExtension) {
 	labels = LABELS;
 
+    intervalManager;
+
 	connectedCallback(){
 		this._wireParams = {recordId: this.parentId, controller: 'RateManagerBlackoutListController'};
-	}   
+	}
 
 	fetch = (response) => {
 		this._blackoutList = JSON.parse(JSON.stringify(response?.data)) || response.data;
+        this.intervalManager = new RateManagerPeriodUtils(this._blackoutList, { StartDate__c: this.parent.StartDate__c, EndDate__c: this.parent.EndDate__c });
 	}
 
 	@track
@@ -36,6 +40,10 @@ export default class RateManagerBlackoutList extends RateManagerMixin(LwcDCExten
 		})
 		return blackoutList;
 	}
+
+    get canAddBlackout() {
+        return this.intervalManager ? this.intervalManager.hasAvailableSlots() : true;
+    }
 
 	/**
 	 * @description Saves the period list by invoking the save method.
@@ -54,7 +62,7 @@ export default class RateManagerBlackoutList extends RateManagerMixin(LwcDCExten
 
 		const result = await rateManagerModalBlackoutHandler.open({
 			// it is set on lightning-modal-header instead
-			dateIntervals: this._blackoutList,
+            intervalsData: this.intervalManager,
 			parentId: this.parentId,
 			size: 'large',
 			headerLabel: this.labels.addBlackout,
@@ -87,6 +95,6 @@ export default class RateManagerBlackoutList extends RateManagerMixin(LwcDCExten
 		}catch(e){
 			console.error(e.message);
 		}
-		
+
 	}
 }

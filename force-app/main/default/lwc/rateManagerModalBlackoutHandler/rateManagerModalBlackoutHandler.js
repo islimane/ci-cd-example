@@ -1,23 +1,22 @@
 /**
- * @description       : 
+ * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
- * @group             : 
- * @last modified on  : 05-03-2025
- * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
+ * @group             :
+ * @last modified on  : 21-03-2025
+ * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 import { api} from 'lwc';
 import LightningModal from 'lightning/modal';
 import LABELS from './labels';
-import RateManagerPeriodUtils from 'c/rateManagerPeriodUtils';
 import { RateManagerMixin } from 'c/rateManagerMixin';
 import PERIOD_OBJECT from "@salesforce/schema/Period__c"
 
 export default class RateManagerModalBlackoutHandler extends RateManagerMixin(LightningModal) {
 
 	labels = LABELS;
-	// _dateIntervals = [];
-	// _proposedInterval = {};
-	// _IntervalUtils;
+	_dateIntervals = [];
+	_proposedInterval = {};
+	_IntervalUtils;
 	_onLoadFormData = {};
 
 	connectedCallback(){
@@ -27,28 +26,32 @@ export default class RateManagerModalBlackoutHandler extends RateManagerMixin(Li
 
 	@api headerLabel;
 
-	// @api 
-	// set dateIntervals(value){
-	// 	try{
-	// 		// this._IntervalUtils = new RateManagerPeriodUtils(value);
-	// 		// this._proposedInterval = this._IntervalUtils.findFirstAvailableInterval();
-	// 	}catch(e){
-	// 		console.error(e.message);
-	// 		this.showToast('Error', e.message, 'error');
-	// 	}
-	// }
+	@api
+    set intervalsData(value){
+        try{
+            this._IntervalUtils = value;
+            this._proposedInterval = this._IntervalUtils.findFirstAvailableIntervalDays(1);
+        }catch(e){
+            console.error(e.message);
+            this.showToast('Error', e.message, 'error');
+        }
+    }
 
-	// get proposedInterval(){
-	// 	if(this._recordId && this._onLoadFormData){
-	// 		return { StartDate__c : this._onLoadFormData?.StartDate__c?.value, EndDate__c : this._onLoadFormData?.EndDate__c?.value };
-	// 	}else{
-	// 		return this._proposedInterval;
-	// 	}
-	// }
+    get intervalsData(){
+        return { dateIntervals: this._dateIntervals, parent: this.parent };
+    }
 
-	// get dateIntervals(){
-	// 	return this._dateIntervals;
-	// }
+    get proposedInterval(){
+        if(this._recordId && this._onLoadFormData){
+            return { StartDate__c : this._onLoadFormData?.StartDate__c?.value, EndDate__c : this._onLoadFormData?.EndDate__c?.value };
+        }else{
+            return this._proposedInterval;
+        }
+    }
+
+    get dateIntervals(){
+        return this._dateIntervals;
+    }
 
 	handleLoad(event) {
 		if(this._recordId){
@@ -82,10 +85,10 @@ export default class RateManagerModalBlackoutHandler extends RateManagerMixin(Li
 		}
 	}
 
-	// checkSlots(formData) {
-	// 	if (this._IntervalUtils.checkSlots(formData));
-	// 	this._dateIntervals.push(formData);
-	// }
+	checkSlots(formData) {
+	 	if (this._IntervalUtils.checkSlots(formData));
+	 	this._dateIntervals.push(formData);
+	}
 
 	dispatchConfirmEvent(dateInverval) {
 		// e.target might represent an input with an id and value
