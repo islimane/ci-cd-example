@@ -2,8 +2,8 @@
  * @description       : RateManagerModalRoomHandlerController
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Controllers
- * @last modified on  : 20-03-2025
- * @last modified by  : Inetum Team <sara.gerico@inetum.com>
+ * @last modified on  : 21-03-2025
+ * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 public with sharing class RateManagerAddRoomController extends DC_DynamicController {
     /**
@@ -13,7 +13,7 @@ public with sharing class RateManagerAddRoomController extends DC_DynamicControl
     * @return DC_ResponseWr
     **/
     public override DC_ResponseWr init(Map<String, Object> params){
-        return getFiltersOptionsData2(params);
+        return getFiltersOptionsData(params);
     }
 
     /**
@@ -22,10 +22,11 @@ public with sharing class RateManagerAddRoomController extends DC_DynamicControl
     * @param params
     * @return DC_ResponseWr
     **/
-    private static DC_ResponseWr getFiltersOptionsData2(Map<String, Object> params){
+    private static DC_ResponseWr getFiltersOptionsData(Map<String, Object> params){
         Id ratePlannerId = (Id)params.get('parentId');
         Set<Id> sHotelJoin = HotelSelector.getHotelJoinByRatePlanner(new Set<Id>{ratePlannerId}).get(ratePlannerId).keySet();
         List<Product2> data = Product2Selector.getProductsByHotelIdAndFamily(sHotelJoin, GlobalConstants.PRODUCT2_FAMILY_ROOM);
+        //HAcer Query a RateLine__c donde su RatePlanner = ratePlannerId. Con lo que nos devuelva obtenemos los product2. Y esos product 2 obtenidos los quitamos de data.
 
         Map<String, Option> mRoomOptions = new Map<String, Option>{'All' => new Option('All', null)};
         Map<String, Option> mCharacteristicOptions = new Map<String, Option>{'All' => new Option('All', null)};
@@ -44,11 +45,6 @@ public with sharing class RateManagerAddRoomController extends DC_DynamicControl
         filterWp.add(new FilterWp('Characteristic__c', 'Characteristic', null, null, 'combobox', mCharacteristicOptions.values(), null, null));
 
 
-        Map<String, String> mTypeOptions = new Map<String, String>{
-            'In Person' => 'In_Person',
-            'Online' => 'Online',
-            'Hybrid' => 'Hybrid'
-        };
         return new DC_ResponseWr(true, new InitDataWp(filterWp, data));
     }
 
