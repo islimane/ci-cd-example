@@ -13,7 +13,7 @@
                     <c-rate-manager-header  record-id={recordId}></c-rate-manager-header>
                 </div>
 
-                
+
                 <div class="slds-p-horizontal_medium slds-p-vertical_medium">
                     <lightning-accordion allow-multiple-sections-open>
                         <!-- Periods Section -->
@@ -26,14 +26,14 @@
                         <!-- Events Section -->
                         <lightning-accordion-section name="events" label={labels.events}>
                             <div class="accordion-container slds-p-around_medium">
-                                <c-rate-manager-event-list parent-id={recordId}></c-rate-manager-event-list>
+                                <c-rate-manager-event-list parent={ratePlannerRecord}></c-rate-manager-event-list>
                             </div>
                         </lightning-accordion-section>
 
                         <!-- Blackouts Section -->
                         <lightning-accordion-section name="blackouts" label={labels.blackouts}>
                             <div class="accordion-container slds-p-around_medium">
-                                <c-rate-manager-blackout-list parent-id={recordId}></c-rate-manager-blackout-list>
+                                <c-rate-manager-blackout-list parent={ratePlannerRecord}></c-rate-manager-blackout-list>
                             </div>
                         </lightning-accordion-section>
 
@@ -55,7 +55,7 @@
             <div class="slds-grid slds-grid_align-end">
                 <template if:false={isStep1}>
                     <div class="slds-col slds-p-around_medium">
-                        <lightning-button 
+                        <lightning-button
                             label="Back"
                             variant="neutral"
                             onclick={handleBack}>
@@ -63,7 +63,7 @@
                     </div>
                 </template>
                 <div class="slds-col slds-p-around_medium">
-                    <lightning-button 
+                    <lightning-button
                         label={labels.close}
                         variant="neutral"
                         onclick={handleClose}>

@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 21-03-2025
+ * @last modified on  : 24-03-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 import { api } from 'lwc';
@@ -16,8 +16,6 @@ export default class RateManagerBlackoutListItem extends RateManagerMixin(LwcDCE
 
 	labels = LABELS;
 
-    @api
-    intervalManager;
 	_restOfIntervals = [];
 
 	@api
@@ -49,7 +47,7 @@ export default class RateManagerBlackoutListItem extends RateManagerMixin(LwcDCE
 			// it is set on lightning-modal-header instead
 			recordId: this.recordId,
 			parentId: this.parentId,
-            intervalsData: this.intervalManager,
+            intervalsData: { dateIntervals: this._restOfIntervals, parent: this.parent },
 			size: 'large',
 			headerLabel: this.labels.editBlackout,
 			onconfirm: (e) => {

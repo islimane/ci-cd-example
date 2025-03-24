@@ -1,8 +1,8 @@
 /**
- * @description       : 
+ * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
- * @group             : 
- * @last modified on  : 05-03-2025
+ * @group             :
+ * @last modified on  : 24-03-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 import { api } from 'lwc';
@@ -23,7 +23,7 @@ export default class RateManagerPeriodListItem extends RateManagerMixin(LwcDCExt
 	}
 	get dateIntervals() {
 		return this._restOfIntervals;
-	} 
+	}
 
 	async handleDelete(){
 
@@ -46,7 +46,7 @@ export default class RateManagerPeriodListItem extends RateManagerMixin(LwcDCExt
 			// it is set on lightning-modal-header instead
 			recordId: this.recordId,
 			parentId: this.parentId,
-			//dateIntervals: this._restOfIntervals,
+            intervalsData: { dateIntervals: this._restOfIntervals, parent: this.parent },
 			size: 'large',
 			headerLabel: this.labels.editEvent,
 			onconfirm: (e) => {
@@ -57,7 +57,7 @@ export default class RateManagerPeriodListItem extends RateManagerMixin(LwcDCExt
 		});
 		// if modal closed with X button, promise returns result = 'undefined'
 		// if modal closed with OK button, promise returns result = 'okay'
-		console.log(result);  
+		console.log(result);
 	}
 
 	handleError(event){

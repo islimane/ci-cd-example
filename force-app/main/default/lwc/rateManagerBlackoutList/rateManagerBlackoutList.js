@@ -20,12 +20,22 @@ export default class RateManagerBlackoutList extends RateManagerMixin(LwcDCExten
 
 	connectedCallback(){
 		this._wireParams = {recordId: this.parentId, controller: 'RateManagerBlackoutListController'};
+        this.listenRateManagerEvents(data => {
+            this.handlerMessageChannel(data);
+        });
 	}
 
 	fetch = (response) => {
 		this._blackoutList = JSON.parse(JSON.stringify(response?.data)) || response.data;
         this.intervalManager = new RateManagerPeriodUtils(this._blackoutList, { StartDate__c: this.parent.StartDate__c, EndDate__c: this.parent.EndDate__c });
 	}
+
+    handlerMessageChannel(data){
+        switch(data.action){
+            case 'checkSlots':  this.handleCheckSlots(data.slotToCompare); break;
+            default: break;
+        }
+    }
 
 	@track
 	_blackoutList = [];
@@ -41,8 +51,8 @@ export default class RateManagerBlackoutList extends RateManagerMixin(LwcDCExten
 		return blackoutList;
 	}
 
-    get canAddBlackout() {
-        return this.intervalManager ? this.intervalManager.hasAvailableSlots() : true;
+    get disableAddBlackout() {
+        return this.intervalManager ? !this.intervalManager.hasAvailableSlots() : false;
     }
 
 	/**
@@ -62,7 +72,7 @@ export default class RateManagerBlackoutList extends RateManagerMixin(LwcDCExten
 
 		const result = await rateManagerModalBlackoutHandler.open({
 			// it is set on lightning-modal-header instead
-            intervalsData: this.intervalManager,
+            intervalsData: { dateIntervals: this._blackoutList, parent: this.parent },
 			parentId: this.parentId,
 			size: 'large',
 			headerLabel: this.labels.addBlackout,
@@ -97,4 +107,16 @@ export default class RateManagerBlackoutList extends RateManagerMixin(LwcDCExten
 		}
 
 	}
+
+    handleCheckSlots(slotToCompare) {
+        let isSuccess = true;
+        try {
+            this.intervalManager.checkSlots(slotToCompare);
+            this.publishMessage({ action: 'slotsValidated', targetCmpName: 'lightning-modal', slot: slotToCompare});
+        } catch(e) {
+			console.error(e.message);
+            isSuccess = false;
+			this.showToast('Error', e.message, 'error');
+		}
+    }
 }
