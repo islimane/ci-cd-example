@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             : 
- * @last modified on  : 18-03-2025
+ * @last modified on  : 24-03-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 import { api, track } from 'lwc';
@@ -48,7 +48,7 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
             { label: 'NOMBRE DEL SUPLEMENTO', fieldName: 'Name', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
             { label: 'TIPO', fieldName: 'Family', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
             //{ label: 'TIPO DE APLICACÓN´', fieldName: 'Applicable__c', type: 'text', fixed: true, fixedWidth: 114 },
-            { label: 'APLICABLE', fieldName: 'Applicable__c', type: 'text', fixed: true, fixedWidth: 101 },
+            { label: 'APLICABLE', fieldName: 'Applicable', type: 'text', fixed: true, fixedWidth: 101 },
             { label: 'OBSERVACIONES', fieldName: 'Description', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
             { label: '23/12/23 - 03/01/24', fieldName: this.sourceField, type: this.sourceFieldType, fixedWidth: 200 },
             { label: '04/01/24 - 31/01/24', fieldName: 'period2', type: 'currency', fixedWidth: 200 },

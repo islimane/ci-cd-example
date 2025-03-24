@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             :
- * @last modified on  : 18-03-2025
+ * @last modified on  : 24-03-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 public with sharing class RateManagerSmntsAndDntsController extends DC_DynamicController {
@@ -25,83 +25,30 @@ public with sharing class RateManagerSmntsAndDntsController extends DC_DynamicCo
     private static DC_ResponseWr getFiltersOptionsData(Map<String, Object> params){
         Id ratePlannerId = (Id)params.get('parentId');
         Set<Id> sHotelJoin = HotelSelector.getHotelJoinByRatePlanner(new Set<Id>{ratePlannerId}).get(ratePlannerId).keySet();
-        List<Product2> data = Product2Selector.getProductsByHotelIdAndFamily(sHotelJoin, GlobalConstants.PRODUCT2_FAMILY_SUPPLEMENT);
+        List<RateLine__c> data = RateLineSelector.getRateLinesByHotelIdAndProductFamily(sHotelJoin, GlobalConstants.PRODUCT2_FAMILY_SUPPLEMENT);
+        List<RateManagerModel.RateLine> wrappedData = new List<RateManagerModel.RateLine>();
 
-        Map<String, Option> mApplicableOptions = new Map<String, Option>{'All' => new Option('All', null)};
-        Map<String, Option> mTypeOptions = new Map<String, Option>{'All' => new Option('All', null)};
+        Map<String, RateManagerModel.Option> mApplicableOptions = new Map<String, RateManagerModel.Option>{'All' => new RateManagerModel.Option('All', null)};
+        Map<String, RateManagerModel.Option> mTypeOptions = new Map<String, RateManagerModel.Option>{'All' => new RateManagerModel.Option('All', null)};
 
-        for (Product2 product : data) {
-            if (!mTypeOptions.containsKey(product.Regimen_Type__c)) {
-                mTypeOptions.put(product.Regimen_Type__c, new Option(product.Regimen_Type__c, product.Regimen_Type__c));
+        for (RateLine__c rateLine : data) {
+            Product2 product = rateLine.getSObject('Product__r') != null ? (Product2)rateLine.getSObject('Product__r') : new Product2();
+            if (!String.isEmpty(product.Regimen_Type__c) && !mTypeOptions.containsKey(product.Regimen_Type__c)) {
+                mTypeOptions.put(product.Regimen_Type__c, new RateManagerModel.Option(product.Regimen_Type__c, product.Regimen_Type__c));
             }
-            if (!mApplicableOptions.containsKey(product.Applicable__c)) {
-                mApplicableOptions.put(product.Applicable__c, new Option(product.Applicable__c, product.Applicable__c));
+            if (!String.isEmpty(product.Applicable__c) && !mApplicableOptions.containsKey(product.Applicable__c)) {
+                mApplicableOptions.put(product.Applicable__c, new RateManagerModel.Option(product.Applicable__c, product.Applicable__c));
             }
+            wrappedData.add(new RateManagerModel.RateLine(rateLine));
         }
 
+        List<RateManagerModel.FilterWp> filterWp = new List<RateManagerModel.FilterWp>();
+        filterWp.add(new RateManagerModel.FilterWp('Start_Date__c', 'Start Date', null, null, 'date', null, null, null));
+        filterWp.add(new RateManagerModel.FilterWp('End_Date__c', 'End Date', null, null, 'date', null, null, null));
+        filterWp.add(new RateManagerModel.FilterWp('RegimenType', 'Type', null, null, 'combobox', mTypeOptions.values(), null, null));
+        filterWp.add(new RateManagerModel.FilterWp('Applicable', 'Applicable', null, null, 'combobox', mApplicableOptions.values(), null, null));
 
-        List<FilterWp> filterWp = new List<FilterWp>();
-        filterWp.add(new FilterWp('Start_Date__c', 'Start Date', null, null, 'date', null, null, null));
-        filterWp.add(new FilterWp('End_Date__c', 'End Date', null, null, 'date', null, null, null));
-        filterWp.add(new FilterWp('Regimen_Type__c', 'Type', null, null, 'combobox', mTypeOptions.values(), null, null));
-        filterWp.add(new FilterWp('Applicable__c', 'Applicable', null, null, 'combobox', mApplicableOptions.values(), null,null));
-
-        return new DC_ResponseWr(true, new InitDataWp(filterWp,data));
-    }
-
-    private class ControllerExampleException extends Exception {}
-
-    /***************************************
-	 *               Wrapper               *
-	 ***************************************/
-
-    public class Option{
-        public String label;
-        public String value;
-
-        public Option(String label, String value){
-            this.label = label;
-            this.value = value;
-        }
-    }
-
-     /**
-     * Wrapper class to hold the initial data.
-     */
-    public class InitDataWp {
-        public List<FilterWp> filters = new List<FilterWp>();
-        public List<Product2> data;
-
-        public InitDataWp(List<FilterWp> filters, List<Product2> data) {
-            this.filters = filters;
-            this.data = data;
-        }
-    }
-
-    /**
-     * @description  : This class is used to wrap a filter provided by the user.
-     * @author       : development@nubika.com
-     **/
-    public class FilterWp{
-        String fieldApiName;
-        String label;
-        Object defaultValue;
-        Object value;
-        String type; //Date, text, checkbox, select
-        List<Option> options;
-        Date min;
-        Date max;
-
-        public FilterWp(String fieldApiName, String label, Object defaultValue,  Object value,  String type, List<Option> options, Date min, Date max) {
-            this.fieldApiName = fieldApiName;
-            this.label = label;
-            this.defaultValue = defaultValue;
-            this.value = value;
-            this.type = type;
-            this.options = options;
-            this.min = min;
-            this.max = max;
-        }
+        return new DC_ResponseWr(true, new RateManagerModel.InitDataWp(filterWp, wrappedData));
     }
 
 }
