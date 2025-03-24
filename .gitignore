@@ -39,3 +39,6 @@ $RECYCLE.BIN/
 # Local environment variables
 .env
 .vscode/settings.json
+
+.husky/pre-commit
+package.json
