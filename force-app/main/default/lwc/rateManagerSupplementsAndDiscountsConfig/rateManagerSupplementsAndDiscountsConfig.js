@@ -44,12 +44,12 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
     // Define the column data with fixed and scrollable columns
     get columns() {
         return [
-            { label: 'ACCIONES', fieldName: 'action', type: 'checkbox', fixed: true, fixedWidth: 109 },
-            { label: 'NOMBRE DEL SUPLEMENTO', fieldName: 'Name', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
-            { label: 'TIPO', fieldName: 'Family', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
-            //{ label: 'TIPO DE APLICACÓN´', fieldName: 'Applicable__c', type: 'text', fixed: true, fixedWidth: 114 },
-            { label: 'APLICABLE', fieldName: 'Applicable', type: 'text', fixed: true, fixedWidth: 101 },
-            { label: 'OBSERVACIONES', fieldName: 'Description', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
+            { label: 'ACTIONS', fieldName: 'action', type: 'checkbox', fixed: true, fixedWidth: 109 },
+            { label: 'SUPPLEMENT NAME', fieldName: 'Name', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
+            { label: 'Type', fieldName: 'RegimenType', type: 'text', fixed: true, fixedWidth: 80, wrapText: true },
+            { label: 'APPLICATION TYPE', fieldName: 'ApplicationType', type: 'text', fixed: true, fixedWidth: 200 },
+            { label: 'APPLICABLE', fieldName: 'Applicable', type: 'text', fixed: true, fixedWidth: 101 },
+            { label: 'OBSERVATIONS', fieldName: 'Description', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
             { label: '23/12/23 - 03/01/24', fieldName: this.sourceField, type: this.sourceFieldType, fixedWidth: 200 },
             { label: '04/01/24 - 31/01/24', fieldName: 'period2', type: 'currency', fixedWidth: 200 },
             { label: '01/03/25 - 30/04/25', fieldName: 'period3', type: 'currency', fixedWidth: 200 },

@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             : 
- * @last modified on  : 19-03-2025
+ * @last modified on  : 24-03-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 public class RateLineSelector {
@@ -14,7 +14,7 @@ public class RateLineSelector {
     * @return List<RateLine__c> 
     **/
     public static List<RateLine__c> getRateLinesByHotelIdAndProductFamily(Set<Id> hotelIds, String productFamily) {
-        return [SELECT Id, Hotel__c, RatePlanner__c, Product__r.Name, Product__r.Family, Product__r.Description, Product__r.Room__c, Product__r.Characteristic__c, Product__r.Regimen_Type__c, Product__r.Applicable__c
+        return [SELECT Id, Hotel__c, RatePlanner__c, Product__r.Name, Product__r.Family, Product__r.Description, Product__r.Room__c, Product__r.Characteristic__c, Product__r.Regimen_Type__c, Product__r.Applicable__c, Product__r.ApplicationType__c
             FROM RateLine__c 
             WHERE Product__r.isActive=true
                 AND ( 
