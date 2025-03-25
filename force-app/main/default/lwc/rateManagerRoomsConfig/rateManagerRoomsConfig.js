@@ -2,29 +2,31 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 19-03-2025
- * @last modified by  : Inetum Team <sara.gerico@inetum.com>
-**/
+ * @last modified on  : 25-03-2025
+ * @last modified by  : Inetum Team <$username>
+ **/
 import { api, track } from 'lwc';
 import LwcDCExtension from 'c/lwcDCExtension';
 import { RateManagerMixin } from 'c/rateManagerMixin';
 
-
 export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtension) {
-
+    @api parentId;
     @track filters = [];
     @track data = [];
 
     /*** Connected callback.*/
-    connectedCallback(){
+    connectedCallback() {
         this.setWireParams();
+        this.listenRateManagerEvents((data) => {
+            this.handlerMessageChannel(data);
+        });
     }
 
     /**
      * @description: Sets the wire parameters for the component.
      **/
     setWireParams() {
-        this._wireParams = {parentId: this.parentId, controller: 'RateManagerRoomsConfigController' };
+        this._wireParams = { parentId: this.parentId, controller: 'RateManagerRoomsConfigController' };
     }
 
     /**
@@ -45,6 +47,7 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
     get columns() {
         return [
             { label: 'ACCIONES', fieldName: 'action', type: 'checkbox', fixed: true, fixedWidth: 109 },
+            { label: 'NOMBRE', fieldName: 'Name', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
             { label: 'HABITACIÓN', fieldName: 'Room__c', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
             { label: 'CARACTERÍSTICA', fieldName: 'Characteristic__c', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
             { label: 'APLICABLE', fieldName: 'Applicable__c', type: 'text', fixed: true, fixedWidth: 114 },
@@ -61,8 +64,17 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
         ];
     }
 
-    get fixedColumnCount(){
-        return 6;
+    get fixedColumnCount() {
+        return this.columns.filter((column) => column.fixed).length;
     }
 
+    handlerMessageChannel(data) {
+        switch (data.action) {
+            case 'refreshProductList':
+                this.fetch(data.response);
+                break;
+            default:
+                break;
+        }
+    }
 }
