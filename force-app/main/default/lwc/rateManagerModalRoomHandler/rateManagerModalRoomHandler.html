@@ -2,7 +2,7 @@
   @description       :
   @author            : Inetum Team <sara.gerico@inetum.com>
   @group             :
-  @last modified on  : 20-03-2025
+  @last modified on  : 24-03-2025
   @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 -->
 <template>
@@ -16,8 +16,10 @@
         <lightning-button
             class="slds-m-top_small"
             type="submit"
-            label={labels.save}
+            icon-name="utility:add"
+            label={labels.add}
             onclick={handleSave}
+            disable={disableSaveButton}
         ></lightning-button>
     </lightning-modal-footer>
 </template>
