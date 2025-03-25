@@ -1,8 +1,8 @@
 /* @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 24-03-2025
- * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+ * @last modified on  : 25-03-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 import { api } from 'lwc';
 import LightningModal from 'lightning/modal';
@@ -47,6 +47,8 @@ export default class RateManagerModalRoomHandler extends RateManagerMixin(Lightn
             await selectedRows.forEach((product) => {
                 this.createRateLine(product);
             });
+            this.showToast('Created', 'Rooms attached to rate');
+            await this.dispatchEvent(new CustomEvent('refreshtable'));
             this.close('modal-closed');
         } catch (e) {
             this.showToast('Error', e.message, 'error');
@@ -64,12 +66,7 @@ export default class RateManagerModalRoomHandler extends RateManagerMixin(Lightn
         const recordInput = { apiName: 'RateLine__c', fields };
         createRecord(recordInput)
             .then((result) => {
-                console.log('Success', result);
-                this.showToast('Created', 'Rooms attached to rate');
-                this.publishMessage({
-                    action: 'refreshProductList',
-                    targetCmpName: 'c-rate-manager-rooms-config'
-                });
+                console.log('Rate Line created: ', result);
             })
             .catch((error) => {
                 console.error('Error', error);
