@@ -1,11 +1,10 @@
 /**
- * @description  : 
- * @author       : Inetum Team 
- * @version      : 1.0.0
- * @date         : 19-02-2025
- * @group        : 
- * @see          : 
-**/
+ * @description       : Shows a table with fixed columns attached to a scrollable table
+ * @author            : Inetum Team
+ * @group             :
+ * @last modified on  : 25-03-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
+ **/
 import { LightningElement, api, track } from 'lwc';
 
 export default class FixedColumnsTable extends LightningElement {
@@ -14,12 +13,12 @@ export default class FixedColumnsTable extends LightningElement {
         return this._columns;
     }
     set columns(value) {
-        this._columns = !!value ? value : [];
+        this._columns = value || [];
         this.splitColumns();
     }
 
     @track _tableData = [];
-    @api 
+    @api
     set tableData(value) {
         this._tableData = value != null ? JSON.parse(JSON.stringify(value)) : [];
         this.splitTableData();
@@ -35,7 +34,7 @@ export default class FixedColumnsTable extends LightningElement {
     @track scrollableColumns = [];
     @track fixedTableData = [];
     @track scrollableTableData = [];
-    @track leftCSSProperty = 0; 
+    @track leftCSSProperty = 0;
 
     connectedCallback() {
         this.splitColumns();
@@ -62,8 +61,8 @@ export default class FixedColumnsTable extends LightningElement {
 
     splitFixedColumns() {
         let _fixedColumns = this._columns.slice(0, this.fixedColumnCount);
-        _fixedColumns.forEach(column => {
-            if(column.wrapText){
+        _fixedColumns.forEach((column) => {
+            if (column.wrapText) {
                 this.scrollableColumns.unshift(column);
             }
         });
@@ -71,8 +70,8 @@ export default class FixedColumnsTable extends LightningElement {
     }
 
     setLeftProperty() {
-        this.fixedColumns.forEach(column => {
-            if(column.wrapText){
+        this.fixedColumns.forEach((column) => {
+            if (column.wrapText) {
                 this.leftCSSProperty -= column.fixedWidth;
             }
         });
@@ -81,5 +80,11 @@ export default class FixedColumnsTable extends LightningElement {
     splitTableData() {
         this.fixedTableData = this._tableData;
         this.scrollableTableData = this._tableData;
+    }
+
+    @api
+    getSelectedRows() {
+        let selectedRows = this.template.querySelectorAll('lightning-datatable')[0]?.getSelectedRows();
+        return selectedRows;
     }
 }
