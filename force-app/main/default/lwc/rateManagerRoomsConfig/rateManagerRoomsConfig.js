@@ -1,8 +1,13 @@
 /**
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
+<<<<<<< HEAD
  * @group             :
  * @last modified on  : 25-03-2025
+=======
+ * @group             : 
+ * @last modified on  : 25-03-2025
+>>>>>>> feature/BCRMB2B-18-tarifario---configuración-de-tarifas-tablas
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
  **/
 import { api, track } from 'lwc';
@@ -39,6 +44,7 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
             this.filters = response.data.filters;
             this.data = response.data.data;
             console.log('this.data --> ', this.data);
+            console.log('filters --> ', this.filters);
         } else {
             console.warn('No records available in response');
         }
@@ -47,12 +53,12 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
     // Define the column data with fixed and scrollable columns
     get columns() {
         return [
-            { label: 'ACCIONES', fieldName: 'action', type: 'checkbox', fixed: true, fixedWidth: 109 },
-            { label: 'NOMBRE', fieldName: 'Name', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
-            { label: 'HABITACIÓN', fieldName: 'Room__c', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
-            { label: 'CARACTERÍSTICA', fieldName: 'Characteristic__c', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
-            { label: 'APLICABLE', fieldName: 'Applicable__c', type: 'text', fixed: true, fixedWidth: 114 },
-            { label: 'RÉGIMEN', fieldName: 'Regimen_Type__c', type: 'text', fixed: true, fixedWidth: 101 },
+            { label: 'ACTIONS', fieldName: 'action', type: 'checkbox', fixed: true, fixedWidth: 109 },
+            { label: 'NAME', fieldName: 'Name', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
+            { label: 'ROOM', fieldName: 'Room', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
+            { label: 'CHARACTERSITIC', fieldName: 'Characteristic', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
+            { label: 'APPLICABLE', fieldName: 'Applicable', type: 'text', fixed: true, fixedWidth: 114 },
+            { label: 'REGIMEN', fieldName: 'RegimenType', type: 'text', fixed: true, fixedWidth: 101 },
             { label: 'AVG', fieldName: 'avg', type: 'currency', fixed: true, fixedWidth: 68 },
             { label: '23/12/23 - 03/01/24', fieldName: this.sourceField, type: this.sourceFieldType, fixedWidth: 200 },
             { label: '04/01/24 - 31/01/24', fieldName: 'period2', type: 'currency', fixedWidth: 200 },

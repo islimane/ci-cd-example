@@ -40,6 +40,7 @@ public with sharing class RateManagerModel {
         public String Room;
         public String RegimenType;
         public String Applicable;
+        public String ApplicationType;
         public Id RateLineId;
         public Id HotelId;
         public Id RatePlannerId;
@@ -49,6 +50,7 @@ public with sharing class RateManagerModel {
             this.Name = rateLine.Product__r.Name;
             this.RegimenType = rateLine.Product__r.Regimen_Type__c;
             this.Applicable = rateLine.Product__r.Applicable__c;
+            this.ApplicationType = rateLine.Product__r.ApplicationType__c;
             this.HotelId = rateLine.Hotel__c;
             this.RatePlannerId = rateLine.RatePlanner__c;
             

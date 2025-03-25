@@ -40,5 +40,7 @@ $RECYCLE.BIN/
 .env
 .vscode/settings.json
 
-# Local package manager configuration
+.husky/pre-commit
+package.json
+
 package-lock.json

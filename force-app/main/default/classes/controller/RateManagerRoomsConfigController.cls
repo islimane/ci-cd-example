@@ -28,9 +28,9 @@ public with sharing class RateManagerRoomsConfigController extends DC_DynamicCon
         List<RateLine__c> data = RateLineSelector.getRateLinesByHotelIdAndProductFamily(sHotelJoin, GlobalConstants.PRODUCT2_FAMILY_ROOM);
         List<RateManagerModel.RateLine> wrappedData = new List<RateManagerModel.RateLine>();
 
-        Map<String, RateManagerModel.Option> mTypeOptions = new Map<String, RateManagerModel.Option>{'All' => new RateManagerModel.Option('All', null)};
-        Map<String, RateManagerModel.Option> mRoomOptions = new Map<String, RateManagerModel.Option>{'All' => new RateManagerModel.Option('All', null)};
-        Map<String, RateManagerModel.Option> mCharacteristicOptions = new Map<String, RateManagerModel.Option>{'All' => new RateManagerModel.Option('All', null)};
+        Map<String, RateManagerModel.Option> mTypeOptions = new Map<String, RateManagerModel.Option>{'All' => new RateManagerModel.Option('All', '')};
+        Map<String, RateManagerModel.Option> mRoomOptions = new Map<String, RateManagerModel.Option>{'All' => new RateManagerModel.Option('All', '')};
+        Map<String, RateManagerModel.Option> mCharacteristicOptions = new Map<String, RateManagerModel.Option>{'All' => new RateManagerModel.Option('All', '')};
 
         for (RateLine__c rateLine : data) {
             Product2 product = rateLine.getSObject('Product__r') != null ? (Product2)rateLine.getSObject('Product__r') : new Product2();

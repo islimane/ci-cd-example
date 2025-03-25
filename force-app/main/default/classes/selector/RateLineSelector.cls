@@ -1,7 +1,7 @@
 /**
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
- * @group             :
+ * @group             : 
  * @last modified on  : 25-03-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
@@ -15,7 +15,7 @@ public class RateLineSelector {
     **/
     public static List<RateLine__c> getRateLinesByHotelIdAndProductFamily(Set<Id> hotelIds, String productFamily) {
         return [SELECT Id, Hotel__c, RatePlanner__c, Product__r.Name, Product__r.Family, Product__r.Description, Product__r.Room__c, Product__r.Characteristic__c, Product__r.Regimen_Type__c, Product__r.Applicable__c, Product__r.ApplicationType__c
-            FROM RateLine__c
+            FROM RateLine__c 
             WHERE Product__r.isActive=true
                 AND (
                     ( Product__r.Family = :GlobalConstants.PRODUCT2_FAMILY_ROOM AND Product__r.Room__c != null )
