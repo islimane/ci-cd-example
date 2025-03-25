@@ -1,30 +1,32 @@
 /**
- * @description       : 
+ * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
- * @group             : 
- * @last modified on  : 19-03-2025
+ * @group             :
+ * @last modified on  : 25-03-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
-**/
+ **/
 import { api, track } from 'lwc';
 import LwcDCExtension from 'c/lwcDCExtension';
 import { RateManagerMixin } from 'c/rateManagerMixin';
 
-
 export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtension) {
-
+    @api parentId;
     @track filters = [];
     @track data = [];
 
     /*** Connected callback.*/
-    connectedCallback(){
+    connectedCallback() {
         this.setWireParams();
+        this.listenRateManagerEvents((data) => {
+            this.handlerMessageChannel(data);
+        });
     }
 
     /**
      * @description: Sets the wire parameters for the component.
      **/
     setWireParams() {
-        this._wireParams = {parentId: this.parentId, controller: 'RateManagerRoomsConfigController' };
+        this._wireParams = { parentId: this.parentId, controller: 'RateManagerRoomsConfigController' };
     }
 
     /**
@@ -46,10 +48,11 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
     get columns() {
         return [
             { label: 'ACCIONES', fieldName: 'action', type: 'checkbox', fixed: true, fixedWidth: 109 },
-            { label: 'HABITACIÓN', fieldName: 'Room', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
-            { label: 'CARACTERÍSTICA', fieldName: 'Characteristic', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
-            { label: 'APLICABLE', fieldName: 'Applicable', type: 'text', fixed: true, fixedWidth: 114 },
-            { label: 'RÉGIMEN', fieldName: 'RegimenType', type: 'text', fixed: true, fixedWidth: 101 },
+            { label: 'NOMBRE', fieldName: 'Name', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
+            { label: 'HABITACIÓN', fieldName: 'Room__c', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
+            { label: 'CARACTERÍSTICA', fieldName: 'Characteristic__c', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
+            { label: 'APLICABLE', fieldName: 'Applicable__c', type: 'text', fixed: true, fixedWidth: 114 },
+            { label: 'RÉGIMEN', fieldName: 'Regimen_Type__c', type: 'text', fixed: true, fixedWidth: 101 },
             { label: 'AVG', fieldName: 'avg', type: 'currency', fixed: true, fixedWidth: 68 },
             { label: '23/12/23 - 03/01/24', fieldName: this.sourceField, type: this.sourceFieldType, fixedWidth: 200 },
             { label: '04/01/24 - 31/01/24', fieldName: 'period2', type: 'currency', fixedWidth: 200 },
@@ -62,8 +65,17 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
         ];
     }
 
-    get fixedColumnCount(){
-        return 6;
+    get fixedColumnCount() {
+        return this.columns.filter((column) => column.fixed).length;
     }
 
+    handlerMessageChannel(data) {
+        switch (data.action) {
+            case 'refreshProductList':
+                this.fetch(data.response);
+                break;
+            default:
+                break;
+        }
+    }
 }

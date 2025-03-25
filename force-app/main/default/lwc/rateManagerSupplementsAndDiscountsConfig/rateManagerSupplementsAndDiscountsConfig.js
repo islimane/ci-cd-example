@@ -1,8 +1,8 @@
 /**
- * @description       : 
+ * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
- * @group             : 
- * @last modified on  : 24-03-2025
+ * @group             :
+ * @last modified on  : 25-03-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 import { api, track } from 'lwc';
@@ -60,7 +60,7 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
     }
 
     get fixedColumnCount(){
-        return 5;
+        return this.columns.filter(column => column.fixed).length;
     }
 
 
