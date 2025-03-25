@@ -1,13 +1,8 @@
 /**
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
-<<<<<<< HEAD
- * @group             :
- * @last modified on  : 25-03-2025
-=======
  * @group             : 
  * @last modified on  : 25-03-2025
->>>>>>> feature/BCRMB2B-18-tarifario---configuración-de-tarifas-tablas
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
  **/
 import { api, track } from 'lwc';
