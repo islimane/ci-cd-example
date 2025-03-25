@@ -1,9 +1,9 @@
 /**
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
- * @group             : 
+ * @group             :
  * @last modified on  : 25-03-2025
- * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 import { api, track } from 'lwc';
 import LwcDCExtension from 'c/lwcDCExtension';
@@ -17,9 +17,6 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
     /*** Connected callback.*/
     connectedCallback() {
         this.setWireParams();
-        this.listenRateManagerEvents((data) => {
-            this.handlerMessageChannel(data);
-        });
     }
 
     /**
@@ -43,7 +40,7 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
         } else {
             console.warn('No records available in response');
         }
-    }
+    };
 
     // Define the column data with fixed and scrollable columns
     get columns() {
@@ -70,13 +67,8 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
         return this.columns.filter((column) => column.fixed).length;
     }
 
-    handlerMessageChannel(data) {
-        switch (data.action) {
-            case 'refreshProductList':
-                this.fetch(data.response);
-                break;
-            default:
-                break;
-        }
+    refreshTable() {
+        console.log(`Refresh recibido en ${this.constructor.name}`);
+        this.refreshFetch();
     }
 }
