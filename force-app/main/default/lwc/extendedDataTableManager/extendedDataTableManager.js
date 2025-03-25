@@ -10,6 +10,7 @@ import LABELS from './labels';
 import rateManagerModalRoomHandler from 'c/rateManagerModalRoomHandler';
 import LwcDCExtension from 'c/lwcDCExtension';
 import { RateManagerMixin } from 'c/rateManagerMixin';
+import LightningConfirm from 'lightning/confirm';
 
 export default class ExtendedDataTableManager extends RateManagerMixin(LwcDCExtension) {
     labels = LABELS;
@@ -83,6 +84,19 @@ export default class ExtendedDataTableManager extends RateManagerMixin(LwcDCExte
                 this.notifyParent(e);
             }
         });
+    }
+
+    async handleDelete(){
+        let selectedRows = this.template.querySelector('c-extended-data-table').getSelectedRows();
+        console.log('Selected rows --> ' + selectedRows);
+        const result = await LightningConfirm.open({
+            message: this.labels.removeConfirmationMessage,
+            variant: 'headerless',
+            label: 'this is the aria-label value',
+        });
+        if(result){
+            this.fireEvent('delete', {recordId: this.recordId});
+        }
     }
 
     notifyParent() {
