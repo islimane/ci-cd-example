@@ -2,8 +2,8 @@
  * @description       :
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             :
- * @last modified on  : 24-03-2025
- * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+ * @last modified on  : 26-03-2025
+ * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 public with sharing class RateManagerSmntsAndDntsController extends DC_DynamicController {
     /**
@@ -23,9 +23,10 @@ public with sharing class RateManagerSmntsAndDntsController extends DC_DynamicCo
     * @return DC_ResponseWr
     **/
     private static DC_ResponseWr getFiltersOptionsData(Map<String, Object> params){
-        Id ratePlannerId = (Id)params.get('parentId');
+        Id ratePlannerId = (Id)params.get('ratePlannerId');
+        Id rateId = (Id)params.get('rateId');
         Set<Id> sHotelJoin = HotelSelector.getHotelJoinByRatePlanner(new Set<Id>{ratePlannerId}).get(ratePlannerId).keySet();
-        List<RateLine__c> data = RateLineSelector.getRateLinesByHotelIdAndProductFamily(sHotelJoin, GlobalConstants.PRODUCT2_FAMILY_SUPPLEMENT);
+        List<RateLine__c> data = RateLineSelector.getRateLinesByRateIdsAndHotelIdAndProductFamily(new Set<Id>{rateId}, sHotelJoin, GlobalConstants.PRODUCT2_FAMILY_SUPPLEMENT);
         List<RateManagerModel.RateLine> wrappedData = new List<RateManagerModel.RateLine>();
 
         Map<String, RateManagerModel.Option> mApplicableOptions = new Map<String, RateManagerModel.Option>{'All' => new RateManagerModel.Option('All', '')};

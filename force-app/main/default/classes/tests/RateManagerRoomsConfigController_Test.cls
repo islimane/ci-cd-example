@@ -2,8 +2,8 @@
  * @description       : 
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             : 
- * @last modified on  : 18-03-2025
- * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+ * @last modified on  : 26-03-2025
+ * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 @isTest
 public class RateManagerRoomsConfigController_Test implements TP_ExecutableInterface {
@@ -30,7 +30,8 @@ public class RateManagerRoomsConfigController_Test implements TP_ExecutableInter
     private static void initMethod(){
         Map<String, Object> params = new Map<String, Object>{
             'controller' => 'RateManagerRoomsConfigController',
-            'parentId' => TP_SetupSelectorTest.getRatePlanner(1, 'TEST').Id
+            'ratePlannerId' => TP_SetupSelectorTest.getRatePlanner(1, 'TEST').Id
+            //'rateId' => TP_SetupSelectorTest.getRate(1, 'TEST').Id
         };
         new RateManagerRoomsConfigController().init(params);
     }

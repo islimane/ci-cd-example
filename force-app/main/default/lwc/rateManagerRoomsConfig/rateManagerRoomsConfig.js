@@ -10,7 +10,7 @@ import LwcDCExtension from 'c/lwcDCExtension';
 import { RateManagerMixin } from 'c/rateManagerMixin';
 
 export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtension) {
-    @api parentId;
+    @api rateId;
     @track filters = [];
     @track data = [];
 
@@ -41,7 +41,7 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
      * @description: Sets the wire parameters for the component.
      **/
     setWireParams() {
-        this._wireParams = { parentId: this.parentId, controller: 'RateManagerRoomsConfigController' };
+        this._wireParams = { ratePlannerId: this.parentId, rateId: this.rateId, controller: 'RateManagerRoomsConfigController' };
     }
 
     /**
@@ -62,7 +62,7 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
     buildTable(){
         this._columns = [{ label: 'ACTIONS', fieldName: 'action', type: 'checkbox', fixed: true, fixedWidth: 109 },
             { label: 'NAME', fieldName: 'Name', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
-            { label: 'ROOM', fieldName: 'Room', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
+            { label: 'ROOM', fieldName: 'Room', type: 'text', fixed: true, fixedWidth: 100, wrapText: true },
             { label: 'CHARACTERSITIC', fieldName: 'Characteristic', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
             { label: 'APPLICABLE', fieldName: 'Applicable', type: 'text', fixed: true, fixedWidth: 114 },
             { label: 'REGIMEN', fieldName: 'RegimenType', type: 'text', fixed: true, fixedWidth: 101 },

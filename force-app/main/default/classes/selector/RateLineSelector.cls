@@ -13,7 +13,7 @@ public class RateLineSelector {
     * @param productFamily
     * @return List<RateLine__c>
     **/
-    public static List<RateLine__c> getRateLinesByHotelIdAndProductFamily(Set<Id> hotelIds, String productFamily) {
+    public static List<RateLine__c> getRateLinesByRateIdsAndHotelIdAndProductFamily(Set<Id> rateIds, Set<Id> hotelIds, String productFamily) {
         return [SELECT 
                     Id, 
                     Hotel__c, 
@@ -37,6 +37,7 @@ public class RateLineSelector {
                     RateLine__c 
                 WHERE 
                     Product__r.isActive = true
+                    AND Rate__c IN :rateIds 
                     AND (
                         (Product__r.Family = :GlobalConstants.PRODUCT2_FAMILY_ROOM AND Product__r.Room__c != null)
                         OR (Product__r.Family = :GlobalConstants.PRODUCT2_FAMILY_SUPPLEMENT AND Product__r.Applicable__c != null)

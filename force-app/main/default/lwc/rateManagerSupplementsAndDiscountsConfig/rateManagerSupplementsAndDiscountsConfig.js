@@ -12,6 +12,7 @@ import { RateManagerMixin } from 'c/rateManagerMixin';
 
 export default class RateManagerSupplementsAndDiscountsConfig extends RateManagerMixin(LwcDCExtension) {
 
+    @api rateId;
     @track filters = [];
     @track data = [];
     
@@ -39,7 +40,7 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
      * @description: Sets the wire parameters for the component.
      **/
     setWireParams() {
-        this._wireParams = {parentId: this.parentId, controller: 'RateManagerSmntsAndDntsController' };
+        this._wireParams = {ratePlannerId: this.parentId, rateId: this.rateId, controller: 'RateManagerSmntsAndDntsController' };
     }
 
     /**
