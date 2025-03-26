@@ -29,6 +29,20 @@
         <value>Add period</value>
     </labels>
     <labels>
+        <fullName>Edit_Event</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Editar Evento</shortDescription>
+        <value>Editar evento</value>
+    </labels>
+    <labels>
+        <fullName>Edit_Blackout</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Editar Blackout</shortDescription>
+        <value>Editar blackout</value>
+    </labels>
+    <labels>
         <fullName>Blackouts</fullName>
         <language>en_US</language>
         <protected>false</protected>
@@ -182,5 +196,21 @@
         <protected>false</protected>
         <shortDescription>Save</shortDescription>
         <value>Save</value>
+    </labels>
+    <labels>
+        <fullName>Remove_Event_Confirmation_Message</fullName>
+        <categories>PeriodManagement</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Atención. Los cambios eliminarán todos los datos asociados a este event</shortDescription>
+        <value>Atención. Los cambios eliminarán todos los datos asociados a este evento</value>
+    </labels>
+    <labels>
+        <fullName>Remove_Blackout_Confirmation_Message</fullName>
+        <categories>PeriodManagement</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Atención. Los cambios eliminarán todos los datos asociados a este blackout</shortDescription>
+        <value>Atención. Los cambios eliminarán todos los datos asociados a este blackout</value>
     </labels>
 </CustomLabels>
