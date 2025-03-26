@@ -99,7 +99,7 @@ export default class ExtendedDataTableManager extends RateManagerMixin(LwcDCExte
                 new ShowToastEvent({
                     title: 'Error',
                     variant: 'Error',
-                    message: this.labels.noRoomsSelected
+                    message: this.labels.noRecordsSelected
                 })
             );
             return;
@@ -114,25 +114,25 @@ export default class ExtendedDataTableManager extends RateManagerMixin(LwcDCExte
             const promises = selectedRows.map((row) => deleteRecord(row.RateLineId));
             Promise.all(promises)
                 .then(() => {
-                    this.dispatchEvent(
-                        new ShowToastEvent({
-                            title: this.labels.success,
-                            message: this.labels.removeSuccess,
-                            variant: 'success'
-                        })
-                    );
-                    this.notifyParent();
+                    this.showToast(this.labels.success, this.labels.removeSuccess, 'success');
                 })
                 .catch((error) => {
-                    this.dispatchEvent(
-                        new ShowToastEvent({
-                            title: 'Error',
-                            message: error.body.message,
-                            variant: 'error'
-                        })
-                    );
+                    this.showToast('Error', error.body.message, 'error');
+                })
+                .finally(() => {
+                    this.notifyParent();
                 });
         }
+    }
+
+    showToast(title, message, variant) {
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title: title,
+                variant: variant,
+                message: message
+            })
+        );
     }
 
     notifyParent() {

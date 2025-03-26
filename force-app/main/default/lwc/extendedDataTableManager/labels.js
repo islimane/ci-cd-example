@@ -3,7 +3,7 @@ import removeConfirmation from '@salesforce/label/c.Remove_confirmation';
 import removeSelected from '@salesforce/label/c.Remove_selected';
 import removeSuccess from '@salesforce/label/c.Remove_success';
 import success from '@salesforce/label/c.Success';
-import noRoomsSelected from '@salesforce/label/c.No_rooms_selected';
+import noRecordsSelected from '@salesforce/label/c.No_records_selected';
 
 export default {
     addRooms,
@@ -11,5 +11,5 @@ export default {
     removeSelected,
     removeSuccess,
     success,
-    noRoomsSelected
+    noRecordsSelected
 }
