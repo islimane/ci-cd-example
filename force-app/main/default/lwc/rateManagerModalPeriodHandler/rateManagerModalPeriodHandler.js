@@ -7,7 +7,7 @@
 **/
 import { api} from 'lwc';
 import LightningModal from 'lightning/modal';
-import LABELS from './labels.js';
+import LABELS from './labels';
 import RateManagerPeriodUtils from 'c/rateManagerPeriodUtils';
 import { RateManagerMixin } from 'c/rateManagerMixin';
 import PERIOD_OBJECT from "@salesforce/schema/Period__c";
@@ -32,9 +32,8 @@ export default class RateManagerModalPeriodHandler extends RateManagerMixin(Ligh
     set intervalsData(value){
         try{
             this._IntervalUtils = new RateManagerPeriodUtils(value.dateIntervals, { StartDate__c: value.parent.StartDate__c, EndDate__c: value.parent.EndDate__c });
-            this._proposedInterval = this._IntervalUtils.findFirstAvailableInterval();
+            this._proposedInterval = this._IntervalUtils.findFirstAvailableInterval() || {StartDate__c : '', EndDate__c: ''};
         }catch(e){
-            console.error(e.message);
             this.showToast('Error', e.message, 'error');
         }
     }
@@ -47,7 +46,7 @@ export default class RateManagerModalPeriodHandler extends RateManagerMixin(Ligh
         if(this._recordId && this._onLoadFormData){
             return { StartDate__c : this._onLoadFormData?.StartDate__c?.value, EndDate__c : this._onLoadFormData?.EndDate__c?.value };
         }
-        return { StartDate__c : '', EndDate__c : '' };
+        return this._proposedInterval;
     }
 
     get dateIntervals(){
