@@ -2,12 +2,12 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 18-03-2025
- * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+ * @last modified on  : 26-03-2025
+ * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 import { api} from 'lwc';
 import LightningModal from 'lightning/modal';
-import LABELS from './labels';
+import LABELS from './labels.js';
 import RateManagerPeriodUtils from 'c/rateManagerPeriodUtils';
 import { RateManagerMixin } from 'c/rateManagerMixin';
 import PERIOD_OBJECT from "@salesforce/schema/Period__c";
@@ -34,6 +34,7 @@ export default class RateManagerModalPeriodHandler extends RateManagerMixin(Ligh
             this._IntervalUtils = new RateManagerPeriodUtils(value.dateIntervals, { StartDate__c: value.parent.StartDate__c, EndDate__c: value.parent.EndDate__c });
             this._proposedInterval = this._IntervalUtils.findFirstAvailableInterval();
         }catch(e){
+            console.error(e.message);
             this.showToast('Error', e.message, 'error');
         }
     }
@@ -45,9 +46,8 @@ export default class RateManagerModalPeriodHandler extends RateManagerMixin(Ligh
     get proposedInterval(){
         if(this._recordId && this._onLoadFormData){
             return { StartDate__c : this._onLoadFormData?.StartDate__c?.value, EndDate__c : this._onLoadFormData?.EndDate__c?.value };
-        }else{
-            return this._proposedInterval;
         }
+        return { StartDate__c : '', EndDate__c : '' };
     }
 
     get dateIntervals(){
