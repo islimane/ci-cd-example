@@ -2,8 +2,8 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             : 
- * @last modified on  : 25-03-2025
- * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+ * @last modified on  : 26-03-2025
+ * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 public class RateLineSelector {
     /**
@@ -13,17 +13,38 @@ public class RateLineSelector {
     * @param productFamily
     * @return List<RateLine__c>
     **/
-    public static List<RateLine__c> getRateLinesByHotelIdAndProductFamily(Set<Id> hotelIds, String productFamily) {
-        return [SELECT Id, Hotel__c, RatePlanner__c, Product__r.Name, Product__r.Family, Product__r.Description, Product__r.Room__c, Product__r.Characteristic__c, Product__r.Regimen_Type__c, Product__r.Applicable__c, Product__r.ApplicationType__c
-            FROM RateLine__c 
-            WHERE Product__r.isActive=true
-                AND (
-                    ( Product__r.Family = :GlobalConstants.PRODUCT2_FAMILY_ROOM AND Product__r.Room__c != null )
-                        OR ( Product__r.Family = :GlobalConstants.PRODUCT2_FAMILY_SUPPLEMENT AND Product__r.Applicable__c != null )
+    public static List<RateLine__c> getRateLinesByRateIdsAndHotelIdAndProductFamily(Set<Id> rateIds, Set<Id> hotelIds, String productFamily) {
+        return [SELECT 
+                    Id, 
+                    Hotel__c, 
+                    RatePlanner__c,
+                    Product__r.Name, 
+                    Product__r.Family,
+                    Product__r.Description, 
+                    Product__r.Room__c, 
+                    Product__r.Characteristic__c, 
+                    Product__r.Regimen_Type__c, 
+                    Product__r.Applicable__c, 
+                    Product__r.ApplicationType__c,
+                    (SELECT 
+                        Id, 
+                        Period__r.StartDate__c, 
+                        Period__r.EndDate__c, 
+                        Period__r.Type__c,
+                        TotalPrice__c 
+                    FROM Rates__r)
+                FROM 
+                    RateLine__c 
+                WHERE 
+                    Product__r.isActive = true
+                    AND Rate__c IN :rateIds 
+                    AND (
+                        (Product__r.Family = :GlobalConstants.PRODUCT2_FAMILY_ROOM AND Product__r.Room__c != null)
+                        OR (Product__r.Family = :GlobalConstants.PRODUCT2_FAMILY_SUPPLEMENT AND Product__r.Applicable__c != null)
                     )
-                AND Hotel__c IN :hotelIds
-                AND Product__r.Family = :productFamily
-       ];
+                    AND Hotel__c IN :hotelIds
+                    AND Product__r.Family = :productFamily
+            ];
     }
 
      /**
