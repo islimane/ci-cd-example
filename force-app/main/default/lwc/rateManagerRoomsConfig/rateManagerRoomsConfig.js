@@ -2,8 +2,8 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             : 
- * @last modified on  : 25-03-2025
- * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+ * @last modified on  : 26-03-2025
+ * @last modified by  : alberto.martinez-lopez@inetum.com
  **/
 import { api, track } from 'lwc';
 import LwcDCExtension from 'c/lwcDCExtension';
@@ -13,6 +13,21 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
     @api parentId;
     @track filters = [];
     @track data = [];
+
+    _columns = [];
+
+    get columns() {
+        return this._columns;
+    }
+
+    get columnsIsNotEmpty() {
+        return this._columns.length > 0;
+    }
+
+
+    get fixedColumnCount() {
+        return this._columns.filter((column) => column.fixed).length;
+    }
 
     /*** Connected callback.*/
     connectedCallback() {
@@ -38,42 +53,51 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
         if (fetchedRecords) {
             this.filters = response.data.filters;
             this.data = response.data.data;
-            console.log('this.data --> ', this.data);
-            console.log('filters --> ', this.filters);
+            this.buildTable();
         } else {
             console.warn('No records available in response');
         }
     }
 
-    // Define the column data with fixed and scrollable columns
-    get columns() {
-        return [
-            { label: 'ACTIONS', fieldName: 'action', type: 'checkbox', fixed: true, fixedWidth: 109 },
+    buildTable(){
+        this._columns = [{ label: 'ACTIONS', fieldName: 'action', type: 'checkbox', fixed: true, fixedWidth: 109 },
             { label: 'NAME', fieldName: 'Name', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
             { label: 'ROOM', fieldName: 'Room', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
             { label: 'CHARACTERSITIC', fieldName: 'Characteristic', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
             { label: 'APPLICABLE', fieldName: 'Applicable', type: 'text', fixed: true, fixedWidth: 114 },
             { label: 'REGIMEN', fieldName: 'RegimenType', type: 'text', fixed: true, fixedWidth: 101 },
-            { label: 'AVG', fieldName: 'avg', type: 'currency', fixed: true, fixedWidth: 68 },
-            { label: '23/12/23 - 03/01/24', fieldName: this.sourceField, type: this.sourceFieldType, fixedWidth: 200 },
-            { label: '04/01/24 - 31/01/24', fieldName: 'period2', type: 'currency', fixedWidth: 200 },
-            { label: '01/03/25 - 30/04/25', fieldName: 'period3', type: 'currency', fixedWidth: 200 },
-            { label: '01/05/25 - 25/06/25', fieldName: 'period4', type: 'currency', fixedWidth: 200 },
-            { label: '26/06/25 - 15/07/25', fieldName: 'period5', type: 'currency', fixedWidth: 200 },
-            { label: '26/06/25 - 15/07/25', fieldName: 'period6', type: 'currency', fixedWidth: 200 },
-            { label: '26/06/25 - 15/07/25', fieldName: 'period7', type: 'currency', fixedWidth: 200 },
-            { label: '26/06/25 - 15/07/25', fieldName: 'period8', type: 'currency', fixedWidth: 200 }
-        ];
+            { label: 'AVG', fieldName: 'avg', type: 'currency', fixed: true, fixedWidth: 68 }];
+
+        const periods = new Set();
+        this.data.forEach(item => {
+            item.ratesPrices.forEach(rate => {
+                if (rate.StartDate && rate.EndDate) {
+                    const periodLabel = `${rate.StartDate} - ${rate.EndDate}`;
+                    periods.add(periodLabel);
+                }
+            });
+        });
+
+        periods.forEach(period => {
+            this._columns.push({ label: period, fieldName: period, type: 'currency', fixedWidth: 200 });
+        });
+
+        // Añadir columnas dinámicas basadas en los periodos
+        this.data = this.data.map(item => {
+            const newItem = { ...item };
+            periods.forEach(period => {
+                const rate = item.ratesPrices.find(element => `${element.StartDate} - ${element.EndDate}` === period);
+                newItem[period] = rate ? rate.TotalPrice : null;
+            });
+            return newItem;
+        });
     }
 
-    get fixedColumnCount() {
-        return this.columns.filter((column) => column.fixed).length;
-    }
 
     handlerMessageChannel(data) {
         switch (data.action) {
             case 'refreshProductList':
-                this.fetch(data.response);
+                this.refreshFetch();
                 break;
             default:
                 break;

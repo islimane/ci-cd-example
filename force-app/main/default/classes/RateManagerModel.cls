@@ -2,8 +2,8 @@
  * @description       : Unified model class for Rate Manager controllers
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             :
- * @last modified on  : 24-03-2025
- * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+ * @last modified on  : 26-03-2025
+ * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 public with sharing class RateManagerModel {
     
@@ -28,6 +28,7 @@ public with sharing class RateManagerModel {
         public List<FilterWp> filters = new List<FilterWp>();
         public List<RateLine> data;
 
+
         public InitDataWp(List<FilterWp> filters, List<RateLine> data) {
             this.filters = filters;
             this.data = data;
@@ -44,6 +45,7 @@ public with sharing class RateManagerModel {
         public Id RateLineId;
         public Id HotelId;
         public Id RatePlannerId;
+        List<RatePrice> ratesPrices = new List<RatePrice>();
 
         public RateLine(RateLine__c rateLine) {
             this.RateLineId = rateLine.Id;
@@ -57,6 +59,24 @@ public with sharing class RateManagerModel {
             // These fields might be null for some RateLine records (e.g., supplements)
             this.Characteristic = rateLine.Product__r.Characteristic__c;
             this.Room = rateLine.Product__r.Room__c;
+
+            for (RatePrice__c rateP : rateLine.Rates__r) {
+                this.ratesPrices.add(new RatePrice(rateP));
+            }
+        }
+    }
+
+    public class RatePrice {
+        public Id RatePriceId;
+        public Date StartDate;
+        public Date EndDate;
+        public Decimal TotalPrice;
+
+        public RatePrice(RatePrice__c rateP) {
+            this.RatePriceId = rateP.Id;
+            this.StartDate = rateP.Period__r.StartDate__c;
+            this.EndDate = rateP.Period__r.EndDate__c;
+            this.TotalPrice = rateP.TotalPrice__c;
         }
     }
 
