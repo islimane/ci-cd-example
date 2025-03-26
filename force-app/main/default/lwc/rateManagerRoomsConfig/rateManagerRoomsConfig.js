@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 25-03-2025
+ * @last modified on  : 26-03-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 import { api, track } from 'lwc';
@@ -35,8 +35,8 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
         if (fetchedRecords) {
             this.filters = response.data.filters;
             this.data = response.data.data;
-            console.log('this.data --> ', this.data);
-            console.log('filters --> ', this.filters);
+            console.log('this.data --> ', JSON.parse(JSON.stringify(this.data)));
+            console.log('filters --> ', JSON.parse(JSON.stringify(this.filters)));
         } else {
             console.warn('No records available in response');
         }

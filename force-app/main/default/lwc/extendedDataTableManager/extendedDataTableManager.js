@@ -2,7 +2,7 @@
  * @description       : Shows a table with fixed columns and scrollable columns. Includes also a filter component and action buttons
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 25-03-2025
+ * @last modified on  : 26-03-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 import { LightningElement, api, track } from 'lwc';
@@ -10,6 +10,8 @@ import LABELS from './labels';
 import rateManagerModalRoomHandler from 'c/rateManagerModalRoomHandler';
 import LwcDCExtension from 'c/lwcDCExtension';
 import { RateManagerMixin } from 'c/rateManagerMixin';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { deleteRecord } from 'lightning/uiRecordApi';
 import LightningConfirm from 'lightning/confirm';
 
 export default class ExtendedDataTableManager extends RateManagerMixin(LwcDCExtension) {
@@ -36,6 +38,9 @@ export default class ExtendedDataTableManager extends RateManagerMixin(LwcDCExte
         if (value) {
             value.forEach((record) => {
                 let row = {};
+                Object.keys(record).forEach((key) => {
+                    row[key] = record[key];
+                });
                 this.columns.forEach((column) => {
                     row[column.fieldName] = record[column.fieldName] || null;
                 });
@@ -81,25 +86,57 @@ export default class ExtendedDataTableManager extends RateManagerMixin(LwcDCExte
             headerLabel: 'Add Rooms',
             onrefreshtable: (e) => {
                 e.stopPropagation();
-                this.notifyParent(e);
+                this.notifyParent();
             }
         });
     }
 
-    async handleDelete(){
+    async handleDelete() {
         let selectedRows = this.template.querySelector('c-extended-data-table').getSelectedRows();
         console.log('Selected rows --> ' + selectedRows);
+        if (!selectedRows || selectedRows.length === 0) {
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Error',
+                    variant: 'Error',
+                    message: this.labels.noRoomsSelected
+                })
+            );
+            return;
+        }
         const result = await LightningConfirm.open({
-            message: this.labels.removeConfirmationMessage,
+            message: this.labels.removeConfirmation,
             variant: 'headerless',
-            label: 'this is the aria-label value',
+            label: 'this is the aria-label value'
         });
-        if(result){
-            this.fireEvent('delete', {recordId: this.recordId});
+
+        if (result) {
+            const promises = selectedRows.map((row) => deleteRecord(row.RateLineId));
+            Promise.all(promises)
+                .then(() => {
+                    this.dispatchEvent(
+                        new ShowToastEvent({
+                            title: this.labels.success,
+                            message: this.labels.removeSuccess,
+                            variant: 'success'
+                        })
+                    );
+                    this.notifyParent();
+                })
+                .catch((error) => {
+                    this.dispatchEvent(
+                        new ShowToastEvent({
+                            title: 'Error',
+                            message: error.body.message,
+                            variant: 'error'
+                        })
+                    );
+                });
         }
     }
 
     notifyParent() {
+        // Propagate the refresh event to the parent component
         console.log(`Refresh recibido en ${this.constructor.name}`);
         this.dispatchEvent(new CustomEvent('refreshtable'));
     }
