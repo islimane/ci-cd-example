@@ -1,3 +1,10 @@
+<!--
+  @description       : 
+  @author            : alberto.martinez-lopez@inetum.com
+  @group             : 
+  @last modified on  : 27-03-2025
+  @last modified by  : alberto.martinez-lopez@inetum.com
+-->
 <template>
     <div class="table-container">
         <!-- Fixed Columns Table -->
@@ -15,6 +22,7 @@
         <div class="scrollable-table">
             <lightning-datatable
                 key-field="id"
+                onsave={handleSave}
                 data={scrollableTableData}
                 columns={scrollableColumns}
                 hide-checkbox-column

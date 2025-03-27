@@ -2,8 +2,8 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 19-03-2025
- * @last modified by  : Inetum Team <sara.gerico@inetum.com>
+ * @last modified on  : 27-03-2025
+ * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 import { LightningElement,api,track } from 'lwc';
 import LABELS from './labels';
@@ -41,6 +41,7 @@ export default class ExtendedDataTableManager extends RateManagerMixin(LwcDCExte
                 let row = {};
                 this.columns.forEach(column => {
                     row[column.fieldName] = record[column.fieldName] || null;
+                    row.id = record.Id;
                 });
                 data.push(row);
             });

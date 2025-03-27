@@ -68,12 +68,13 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
             { label: 'REGIMEN', fieldName: 'RegimenType', type: 'text', fixed: true, fixedWidth: 101 },
             { label: 'AVG', fieldName: 'avg', type: 'currency', fixed: true, fixedWidth: 68 }];
 
+        console.log('this.data --> ', this.data);
+
         const periods = new Set();
         this.data.forEach(item => {
             item.ratesPrices.forEach(rate => {
                 if (rate.StartDate && rate.EndDate) {
-                    const periodLabel = `${rate.StartDate} - ${rate.EndDate}`;
-                    periods.add(periodLabel);
+                    periods.add(rate.periodKey);
                 }
             });
         });
@@ -85,7 +86,7 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
         this.data = this.data.map(item => {
             const newItem = { ...item };
             periods.forEach(period => {
-                const rate = item.ratesPrices.find(element => `${element.StartDate} - ${element.EndDate}` === period);
+                const rate = item.ratesPrices.find(element => element.periodKey === period);
                 newItem[period] = rate ? rate.TotalPrice : null;
             });
             return newItem;
@@ -100,6 +101,39 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
                 break;
             default:
                 break;
+        }
+    }
+
+    async handleSave(event){
+
+        const draftValues = event.detail.draftValues;
+        const mappedData = [];
+        draftValues.forEach(item => {
+            // Find all date range keys (keys that contain a hyphen with dates)
+            const dateRangeKeys = Object.keys(item).filter(key => 
+                key.includes('-') && /\d+\/\d+\/\d+/.test(key)
+            );
+            
+            // Create a new object for each date range
+            dateRangeKeys.forEach(dateKey => {
+                mappedData.push({
+                    periodKey: dateKey,
+                    TotalPrice: parseFloat(item[dateKey]),
+                    ParentRateLineId: item.id
+                });
+            });
+        });
+
+        try{
+            const result = await this.remoteAction({
+                controller: 'RateManagerRoomsConfigController',
+                action: 'saveRatePrices',
+                ratePlannerId: this.parentId,
+                ratePrices: JSON.stringify(mappedData),
+            });
+            this.refreshFetch();
+        }catch(e){
+            console.error(e);
         }
     }
 }

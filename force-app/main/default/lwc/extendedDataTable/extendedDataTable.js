@@ -82,4 +82,10 @@ export default class FixedColumnsTable extends LightningElement {
         this.fixedTableData = this._tableData;
         this.scrollableTableData = this._tableData;
     }
+
+    handleSave(event){
+        this.dispatchEvent(
+            new CustomEvent('inlinesave', {detail: event.detail, bubbles:true, composed:true })
+        );
+    }
 }

@@ -42,18 +42,21 @@ public with sharing class RateManagerModel {
         public String RegimenType;
         public String Applicable;
         public String ApplicationType;
-        public Id RateLineId;
+        public Id Id;
+        public Id RateId;
         public Id HotelId;
         public Id RatePlannerId;
+        Map<String, Period__c> mPeriodsByPeriodKey = new Map<String, Period__c>();
         List<RatePrice> ratesPrices = new List<RatePrice>();
-        Map<Id, RatePrice> ratePricesByPeriod = new Map<Id, RatePrice>();
+        Map<String, RatePrice> ratePricesByPeriodString = new Map<String, RatePrice>();
 
         public RateLine(RateLine__c rateLine, List<Period__c> lPeriods) {
-            this.RateLineId = rateLine.Id;
+            this.Id = rateLine.Id;
             this.Name = rateLine.Product__r.Name;
             this.RegimenType = rateLine.Product__r.Regimen_Type__c;
             this.Applicable = rateLine.Product__r.Applicable__c;
             this.ApplicationType = rateLine.Product__r.ApplicationType__c;
+            this.RateId = rateLine.Rate__c;
             this.HotelId = rateLine.Hotel__c;
             this.RatePlannerId = rateLine.RatePlanner__c;
             
@@ -62,20 +65,44 @@ public with sharing class RateManagerModel {
             this.Room = rateLine.Product__r.Room__c;
 
             for (RatePrice__c rateP : rateLine.Rates__r) {
-                this.ratePricesByPeriod.put(rateP.Period__c, new RatePrice(rateP));
+                String periodKey = this.getPeriodKey((Period__c)rateP.getSObject('Period__r'));
+                this.ratePricesByPeriodString.put(periodKey, new RatePrice(periodKey,rateP));
             }
             for(Period__c period : lPeriods) {
-                if(ratePricesByPeriod.containsKey(period.Id)) {
-                    this.ratesPrices.add(ratePricesByPeriod.get(period.Id));
+                String periodKey = this.getPeriodKey(period);
+                this.mPeriodsByPeriodKey.put(periodKey, period);
+                if(ratePricesByPeriodString.containsKey(periodKey)) {
+                    this.ratesPrices.add(ratePricesByPeriodString.get(periodKey));
                 }else{
-                    this.ratesPrices.add(new RatePrice(this.RatePlannerId, period));
+                    this.ratesPrices.add(new RatePrice(periodKey, this.Id, period));
+                }
+
+                if(!this.ratePricesByPeriodString.containsKey(periodKey)){
+                    this.ratePricesByPeriodString.put(periodKey, new RatePrice(periodKey, this.Id, period));
                 }
             }
+        }
+
+        public List<RatePrice> getRatesPrices() {
+            return this.ratesPrices;
+        }
+
+        public Map<String, Period__c> getPeriods() {
+            return this.mPeriodsByPeriodKey;
+        }
+
+        public RatePrice getRatePriceByPeriodString(String periodKey){
+            return this.ratePricesByPeriodString.get(periodKey);
+        }
+
+        private String getPeriodKey(Period__c period) {
+            return period.StartDate__c.format() + ' - ' + period.EndDate__c.format();
         }
     }
 
     public class RatePrice {
-        public Id RatePriceId;
+        public String periodKey;
+        public Id Id;
         public Id ParentPeriodId;
         public Id ParentRateLineId;
         public Date StartDate;
@@ -83,8 +110,9 @@ public with sharing class RateManagerModel {
         public Decimal TotalPrice;
 
         //FROM EXISTING RATE PRICES
-        public RatePrice(RatePrice__c rateP) {
-            this.RatePriceId = rateP.Id;
+        public RatePrice(String periodKey, RatePrice__c rateP) {
+            this.periodKey = periodKey;
+            this.Id = rateP.Id;
             this.ParentPeriodId = rateP.Period__c;
             this.ParentRateLineId = rateP.RateLine__c;
             this.StartDate = rateP.Period__r.StartDate__c;
@@ -93,12 +121,22 @@ public with sharing class RateManagerModel {
         }
 
         //FOR NEW EMPTY RATE PRICES
-        public RatePrice(Id RateLineId, Period__c period) {
+        public RatePrice(String periodKey, Id RateLineId, Period__c period) {
+            this.periodKey = periodKey;
             this.StartDate = period.StartDate__c;
             this.EndDate = period.EndDate__c;
             this.TotalPrice = null;
             this.ParentPeriodId = period.Id;
             this.ParentRateLineId = RateLineId;
+        }
+
+        public RatePrice__c getRatePrice() {
+            return new RatePrice__c(
+                Id = this.Id,
+                Period__c = this.ParentPeriodId,
+                RateLine__c = this.ParentRateLineId,
+                TotalPrice__c = this.TotalPrice
+            );
         }
     }
 
