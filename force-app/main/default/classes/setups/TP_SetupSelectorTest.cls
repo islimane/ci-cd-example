@@ -2,8 +2,8 @@
  * @description       : Provides utility methods to retrieve test records based on dynamic naming conventions.
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 11-03-2025
- * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+ * @last modified on  : 26-03-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 
 @isTest
@@ -117,5 +117,13 @@ public with sharing class TP_SetupSelectorTest {
     public static User_authorization__c getUserAuthorization (Integer batteryNum, String batteryCode){
 		String areaName = DEF_PREFIX+'HTArea_'+batteryCode+batteryNum;
         return [SELECT Id, Name, User__c, Area__c, Continent__c, Zone__c, Subzone__c, Hotel__c FROM User_authorization__c WHERE Area__r.Name =:areaName LIMIT 1];
+    }
+
+    /**
+     * Retrieves a list of RateLine__c records based on the DB.
+     * @return List<RateLine__c>.
+     */
+    public static List<RateLine__c> getRateLines(){
+        return [SELECT Id, Name, Rate__c, Hotel__c, Product__r.Family FROM RateLine__c LIMIT 5];
     }
 }

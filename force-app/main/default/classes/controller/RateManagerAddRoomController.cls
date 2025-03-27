@@ -2,7 +2,7 @@
  * @description       : RateManagerModalRoomHandlerController
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Controllers
- * @last modified on  : 25-03-2025
+ * @last modified on  : 27-03-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 public with sharing class RateManagerAddRoomController extends DC_DynamicController {
