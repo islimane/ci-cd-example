@@ -79,7 +79,7 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
         });
 
         periods.forEach(period => {
-            this._columns.push({ label: period, fieldName: period, type: 'currency', fixedWidth: 200 });
+            this._columns.push({ label: period, fieldName: period, type: 'currency', editable: true, fixedWidth: 200 });
         });
 
         this.data = this.data.map(item => {

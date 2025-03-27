@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 26-03-2025
+ * @last modified on  : 27-03-2025
  * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 import { api, track } from 'lwc';
@@ -80,7 +80,7 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
         });
 
         periods.forEach(period => {
-            this._columns.push({ label: period, fieldName: period, type: 'currency', fixedWidth: 200 });
+            this._columns.push({ label: period, fieldName: period, editable: true, type: 'currency', fixedWidth: 200 });
         });
 
         // Añadir columnas dinámicas basadas en los periodos
