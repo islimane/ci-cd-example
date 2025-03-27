@@ -1,8 +1,8 @@
-/* @description       :
+/* @description       : Shows a modal to attach rooms to a rate
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 24-03-2025
- * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+ * @last modified on  : 26-03-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 import { api } from 'lwc';
 import LightningModal from 'lightning/modal';
@@ -44,16 +44,20 @@ export default class RateManagerModalRoomHandler extends RateManagerMixin(Lightn
         }
         try {
             // For each row selected, insert new RateLine attached to the Hotel and RatePlanner
-            await selectedRows.forEach((product) => {
-                this.createRateLine(product);
+            const createRateLinePromises = selectedRows.map((product) => this.createRateLine(product));
+            Promise.all(createRateLinePromises).then(() => {
+                console.log('-- All Rate Lines created --');
+                this.showToast('Created', 'Rooms attached to rate');
+                // tell the parent component that created this modal to refresh the table
+                this.notifyParent();
+                this.close('modal-closed');
             });
-            this.close('modal-closed');
         } catch (e) {
             this.showToast('Error', e.message, 'error');
         }
     }
 
-    createRateLine(product) {
+    async createRateLine(product) {
         const fields = {
             RatePlanner__c: this.parentId,
             Hotel__c: product.Hotel__c,
@@ -62,14 +66,9 @@ export default class RateManagerModalRoomHandler extends RateManagerMixin(Lightn
             // Rate__c: product.Rate__c  PENDIENTE DE CONFIRMAR
         };
         const recordInput = { apiName: 'RateLine__c', fields };
-        createRecord(recordInput)
+        await createRecord(recordInput)
             .then((result) => {
-                console.log('Success', result);
-                this.showToast('Created', 'Rooms attached to rate');
-                this.publishMessage({
-                    action: 'refreshProductList',
-                    targetCmpName: 'c-rate-manager-rooms-config'
-                });
+                console.log('Rate Line created: ', result);
             })
             .catch((error) => {
                 console.error('Error', error);
@@ -77,7 +76,6 @@ export default class RateManagerModalRoomHandler extends RateManagerMixin(Lightn
     }
 
     dispatchConfirmEvent(dateInverval) {
-        // e.target might represent an input with an id and value
         const confirmEvent = new CustomEvent('confirm', {
             detail: dateInverval
         });
@@ -92,5 +90,9 @@ export default class RateManagerModalRoomHandler extends RateManagerMixin(Lightn
                 message: message
             })
         );
+    }
+
+    async notifyParent() {
+        await this.dispatchEvent(new CustomEvent('refreshtable'));
     }
 }
