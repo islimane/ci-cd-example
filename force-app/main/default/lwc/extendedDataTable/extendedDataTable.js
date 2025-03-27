@@ -34,6 +34,7 @@ export default class FixedColumnsTable extends LightningElement {
     @track fixedColumns = [];
     @track scrollableColumns = [];
     @track fixedTableData = [];
+    @track draftValues = [];
     @track scrollableTableData = [];
     @track leftCSSProperty = 0; 
 
@@ -87,5 +88,6 @@ export default class FixedColumnsTable extends LightningElement {
         this.dispatchEvent(
             new CustomEvent('inlinesave', {detail: event.detail, bubbles:true, composed:true })
         );
+        this.draftValues = [];
     }
 }

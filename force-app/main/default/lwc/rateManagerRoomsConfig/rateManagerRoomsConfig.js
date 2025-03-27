@@ -52,7 +52,7 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
         const fetchedRecords = response?.data?.filters && response?.data?.data;
         if (fetchedRecords) {
             this.filters = response.data.filters;
-            this.data = response.data.data;
+            this.data = JSON.parse(JSON.stringify(response.data.data)); //response.data.data;
             this.buildTable();
         } else {
             console.warn('No records available in response');
@@ -67,8 +67,6 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
             { label: 'APPLICABLE', fieldName: 'Applicable', type: 'text', fixed: true, fixedWidth: 114 },
             { label: 'REGIMEN', fieldName: 'RegimenType', type: 'text', fixed: true, fixedWidth: 101 },
             { label: 'AVG', fieldName: 'avg', type: 'currency', fixed: true, fixedWidth: 68 }];
-
-        console.log('this.data --> ', this.data);
 
         const periods = new Set();
         this.data.forEach(item => {
@@ -131,7 +129,7 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
                 ratePlannerId: this.parentId,
                 ratePrices: JSON.stringify(mappedData),
             });
-            this.refreshFetch();
+            if(result)this.refreshFetch();
         }catch(e){
             console.error(e);
         }
