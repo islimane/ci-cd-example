@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             :
- * @last modified on  : 26-03-2025
+ * @last modified on  : 27-03-2025
  * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 public with sharing class RateManagerRoomsConfigController extends DC_DynamicController {
@@ -27,6 +27,7 @@ public with sharing class RateManagerRoomsConfigController extends DC_DynamicCon
         Id rateId = (Id)params.get('rateId');
         Set<Id> sHotelJoin = HotelSelector.getHotelJoinByRatePlanner(new Set<Id>{ratePlannerId}).get(ratePlannerId).keySet();
         List<RateLine__c> data = RateLineSelector.getRateLinesByRateIdsAndHotelIdAndProductFamily(new Set<Id>{rateId}, sHotelJoin, GlobalConstants.PRODUCT2_FAMILY_ROOM);
+        List<Period__c> lPeriods = PeriodSelector.getPeriodsByRatePlannerId(new Set<Id>{ratePlannerId});
         List<RateManagerModel.RateLine> wrappedData = new List<RateManagerModel.RateLine>();
 
         Map<String, RateManagerModel.Option> mTypeOptions = new Map<String, RateManagerModel.Option>{'All' => new RateManagerModel.Option('All', '')};
@@ -44,7 +45,7 @@ public with sharing class RateManagerRoomsConfigController extends DC_DynamicCon
             if (!String.isEmpty(product.Characteristic__c) && !mCharacteristicOptions.containsKey(product.Characteristic__c)) {
                 mCharacteristicOptions.put(product.Characteristic__c, new RateManagerModel.Option(product.Characteristic__c, product.Characteristic__c));
             }
-            wrappedData.add(new RateManagerModel.RateLine(rateLine));
+            wrappedData.add(new RateManagerModel.RateLine(rateLine, lPeriods));
         }
 
         List<RateManagerModel.FilterWp> filterWp = new List<RateManagerModel.FilterWp>();

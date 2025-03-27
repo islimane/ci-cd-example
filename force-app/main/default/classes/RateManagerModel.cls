@@ -2,7 +2,7 @@
  * @description       : Unified model class for Rate Manager controllers
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             :
- * @last modified on  : 26-03-2025
+ * @last modified on  : 27-03-2025
  * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 public with sharing class RateManagerModel {
@@ -46,8 +46,9 @@ public with sharing class RateManagerModel {
         public Id HotelId;
         public Id RatePlannerId;
         List<RatePrice> ratesPrices = new List<RatePrice>();
+        Map<Id, RatePrice> ratePricesByPeriod = new Map<Id, RatePrice>();
 
-        public RateLine(RateLine__c rateLine) {
+        public RateLine(RateLine__c rateLine, List<Period__c> lPeriods) {
             this.RateLineId = rateLine.Id;
             this.Name = rateLine.Product__r.Name;
             this.RegimenType = rateLine.Product__r.Regimen_Type__c;
@@ -61,22 +62,43 @@ public with sharing class RateManagerModel {
             this.Room = rateLine.Product__r.Room__c;
 
             for (RatePrice__c rateP : rateLine.Rates__r) {
-                this.ratesPrices.add(new RatePrice(rateP));
+                this.ratePricesByPeriod.put(rateP.Period__c, new RatePrice(rateP));
+            }
+            for(Period__c period : lPeriods) {
+                if(ratePricesByPeriod.containsKey(period.Id)) {
+                    this.ratesPrices.add(ratePricesByPeriod.get(period.Id));
+                }else{
+                    this.ratesPrices.add(new RatePrice(this.RatePlannerId, period));
+                }
             }
         }
     }
 
     public class RatePrice {
         public Id RatePriceId;
+        public Id ParentPeriodId;
+        public Id ParentRateLineId;
         public Date StartDate;
         public Date EndDate;
         public Decimal TotalPrice;
 
+        //FROM EXISTING RATE PRICES
         public RatePrice(RatePrice__c rateP) {
             this.RatePriceId = rateP.Id;
+            this.ParentPeriodId = rateP.Period__c;
+            this.ParentRateLineId = rateP.RateLine__c;
             this.StartDate = rateP.Period__r.StartDate__c;
             this.EndDate = rateP.Period__r.EndDate__c;
             this.TotalPrice = rateP.TotalPrice__c;
+        }
+
+        //FOR NEW EMPTY RATE PRICES
+        public RatePrice(Id RateLineId, Period__c period) {
+            this.StartDate = period.StartDate__c;
+            this.EndDate = period.EndDate__c;
+            this.TotalPrice = null;
+            this.ParentPeriodId = period.Id;
+            this.ParentRateLineId = RateLineId;
         }
     }
 
