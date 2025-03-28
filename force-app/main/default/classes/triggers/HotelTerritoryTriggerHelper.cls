@@ -3,7 +3,7 @@
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
  * @last modified on  : 28-03-2025
- * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+ * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 public with sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
 
@@ -43,7 +43,7 @@ public with sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
         Set<String> sAllTerritoryCodes = HotelTerritorySelector.getAllHotelTerritoryCodes();
 		for (HotelTerritory__c currentTerritory : lHotelTerritory) {
             currentTerritory.Code__c = buildTerritoryCode(currentTerritory, sAllTerritoryCodes);
-            System.debug('### HotelTerritoryTriggerHelper.buildTerritoryCode() - currentTerritory [Name (Code__c)]: ' + currentTerritory.Name + '[' + currentTerritory.Code__c + ']');
+            System.debug('### HotelTerritoryTriggerHelper.generateHotelTerritoryCodes() - currentTerritory [Name (Code__c)]: ' + currentTerritory.Name + '[' + currentTerritory.Code__c + ']');
         }
     }
 
@@ -55,9 +55,10 @@ public with sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
         // validar por tipo que todos los territorios tienen todos los padres necesarios
         List<HotelTerritory__c> lHotelTerritoryValidated = validateTerritories(lHotelTerritory);
         // generar grupos publicos con public group code
-        List<Group> lGeneratedGroups = generateTerritoryGroups(lHotelTerritoryValidated);
+        Map<String, Group> mGeneratedGroups = generateTerritoryGroups(lHotelTerritoryValidated);
+        System.debug('### HotelTerritoryTriggerHelper.generatePublicGroups() - mGeneratedGroups: ' + mGeneratedGroups);
         // asignar como groupmember a todos los grupos de todos los territorios padre (hotel>subzona>zona>continente>area)
-        List<GroupMember> lGroupMembers = generateGroupMembers(lHotelTerritoryValidated, lGeneratedGroups);
+        generateGroupMembers(lHotelTerritoryValidated, mGeneratedGroups);
     }
 
     // PRIVATE METHODS
@@ -151,21 +152,23 @@ public with sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
         List<HotelTerritory__c> lValidatedTerritories = new List<HotelTerritory__c>();
         for (HotelTerritory__c currentTerritory : lHotelTerritories) {
             Boolean validated = true;
-            List<Schema.sObjectField> lParentsToValidate = PARENTS_TO_VALIDATE_BY_TYPE.get(currentTerritory.RecordTypeId);
-            for (Schema.sObjectField currentField : lParentsToValidate) {
-                if (currentTerritory.get(currentField) == null) {
-                    currentTerritory.addError('Missing ' + currentField.getDescribe().getLabel() + ' relationship');
-                    validated = false;
+            if (PARENTS_TO_VALIDATE_BY_TYPE.containsKey(currentTerritory.RecordTypeId)) {
+                List<Schema.sObjectField> lParentsToValidate = PARENTS_TO_VALIDATE_BY_TYPE.get(currentTerritory.RecordTypeId);
+                for (Schema.sObjectField currentField : lParentsToValidate) {
+                    if (currentTerritory.get(currentField) == null) {
+                        currentTerritory.addError('Missing ' + currentField.getDescribe().getLabel() + ' relationship');
+                        validated = false;
+                    }
                 }
+                // All fields are validated
             }
-            // All fields are validated
             if (validated) lValidatedTerritories.add(currentTerritory);
         }
         return lValidatedTerritories;
     }
 
-    private static List<Group> generateTerritoryGroups(List<HotelTerritory__c> lHotelTerritories) {
-        List<Group> lGroupsToInsert = new List<Group>();
+    private static Map<String, Group> generateTerritoryGroups(List<HotelTerritory__c> lHotelTerritories) {
+        Map<String, Group> mGroupsToInsertByCode = new Map<String, Group>();
         Set<String> sGroupNames = new Set<String>();
         for (HotelTerritory__c currentTerritory : lHotelTerritories) sGroupNames.add(currentTerritory.Public_Group_Code__c);
 
@@ -175,20 +178,96 @@ public with sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
             if (!sGroupDevNamesAlreadyAdded.contains(currentTerritory.Public_Group_Code__c)
                 && !mGroupIdByGroupName.containsKey(currentTerritory.Public_Group_Code__c)) {
                 sGroupDevNamesAlreadyAdded.add(currentTerritory.Public_Group_Code__c);
-                lGroupsToInsert.add(new Group(
+                mGroupsToInsertByCode.put(currentTerritory.Public_Group_Code__c, new Group(
                     Name = currentTerritory.Public_Group_Code__c,
                     DeveloperName = currentTerritory.Public_Group_Code__c,
                     Type = 'Regular',
                     DoesIncludeBosses = true,
                     DoesSendEmailToMembers = false
                 ));
+            } else if (mGroupIdByGroupName.containsKey(currentTerritory.Public_Group_Code__c)) {
+                mGroupsToInsertByCode.put(currentTerritory.Public_Group_Code__c, new Group(
+                    Id = mGroupIdByGroupName.get(currentTerritory.Public_Group_Code__c)
+                ));
             }
         }
-        insert lGroupsToInsert;
-        return lGroupsToInsert;
+        upsert mGroupsToInsertByCode.values();
+        return mGroupsToInsertByCode;
     }
 
-    private static void generateGroupMembers(List<HotelTerritory__c> lHotelTerritory, List<Group> lGeneratedGroups) {
+    private static void generateGroupMembers(List<HotelTerritory__c> lHotelTerritory, Map<String, Group> mGeneratedGroups) {
+        Map<String, List<Id>> mParentGroupIdByTerritoryPublicGroupName = getParentGroupListIdsByChildGroupName(lHotelTerritory);
+        createGroupMembers(JSON.serialize(mGeneratedGroups), JSON.serialize(mParentGroupIdByTerritoryPublicGroupName));
+    }
 
+    private static Map<String, List<Id>> getParentGroupListIdsByChildGroupName(List<HotelTerritory__c> lHotelTerritory) {
+        Map<String, List<Id>> mParentGroupIdByTerritoryPublicGroupName = new Map<String, List<Id>>();
+
+        Set<Id> sAllParentsTerritories = new Set<Id>();
+        for (HotelTerritory__c currentTerritory : lHotelTerritory) {
+            if (String.isNotBlank(currentTerritory.Area__c)) sAllParentsTerritories.add(currentTerritory.Area__c);
+            if (String.isNotBlank(currentTerritory.Continent__c)) sAllParentsTerritories.add(currentTerritory.Continent__c);
+            if (String.isNotBlank(currentTerritory.Zone__c)) sAllParentsTerritories.add(currentTerritory.Zone__c);
+            if (String.isNotBlank(currentTerritory.Subzone__c)) sAllParentsTerritories.add(currentTerritory.Subzone__c);
+        }
+
+        Map<Id, String> mParentGroupNamesByParentId = HotelTerritorySelector.getGroupNameRelatedByIdAndCode(sAllParentsTerritories);
+        Set<String> sAllParentsGroupNames = new Set<String>();
+        for (HotelTerritory__c currentTerritory : lHotelTerritory) {
+            if (mParentGroupNamesByParentId.containsKey(currentTerritory.Area__c)) sAllParentsGroupNames.add(mParentGroupNamesByParentId.get(currentTerritory.Area__c));
+            if (mParentGroupNamesByParentId.containsKey(currentTerritory.Continent__c)) sAllParentsGroupNames.add(mParentGroupNamesByParentId.get(currentTerritory.Continent__c));
+            if (mParentGroupNamesByParentId.containsKey(currentTerritory.Zone__c)) sAllParentsGroupNames.add(mParentGroupNamesByParentId.get(currentTerritory.Zone__c));
+            if (mParentGroupNamesByParentId.containsKey(currentTerritory.Subzone__c)) sAllParentsGroupNames.add(mParentGroupNamesByParentId.get(currentTerritory.Subzone__c));
+        }
+
+        Map<String, Id> mParentGroupByCode = GroupSelector.getGroupIdsByCode(sAllParentsGroupNames);
+        for (HotelTerritory__c currentTerritory : lHotelTerritory) {
+            if (mParentGroupByCode.containsKey(mParentGroupNamesByParentId.get(currentTerritory.Area__c))) {
+                List<Id> lCurrentParentGroupIds = mParentGroupIdByTerritoryPublicGroupName.get(currentTerritory.Public_Group_Code__c);
+                if (lCurrentParentGroupIds == null) lCurrentParentGroupIds = new List<Id>();
+                lCurrentParentGroupIds.add(mParentGroupByCode.get(mParentGroupNamesByParentId.get(currentTerritory.Area__c)));
+                mParentGroupIdByTerritoryPublicGroupName.put(currentTerritory.Public_Group_Code__c, lCurrentParentGroupIds);
+            }
+            if (mParentGroupByCode.containsKey(mParentGroupNamesByParentId.get(currentTerritory.Continent__c))) {
+                List<Id> lCurrentParentGroupIds = mParentGroupIdByTerritoryPublicGroupName.get(currentTerritory.Public_Group_Code__c);
+                if (lCurrentParentGroupIds == null) lCurrentParentGroupIds = new List<Id>();
+                lCurrentParentGroupIds.add(mParentGroupByCode.get(mParentGroupNamesByParentId.get(currentTerritory.Continent__c)));
+                mParentGroupIdByTerritoryPublicGroupName.put(currentTerritory.Public_Group_Code__c, lCurrentParentGroupIds);
+            }
+            if (mParentGroupByCode.containsKey(mParentGroupNamesByParentId.get(currentTerritory.Zone__c))) {
+                List<Id> lCurrentParentGroupIds = mParentGroupIdByTerritoryPublicGroupName.get(currentTerritory.Public_Group_Code__c);
+                if (lCurrentParentGroupIds == null) lCurrentParentGroupIds = new List<Id>();
+                lCurrentParentGroupIds.add(mParentGroupByCode.get(mParentGroupNamesByParentId.get(currentTerritory.Zone__c)));
+                mParentGroupIdByTerritoryPublicGroupName.put(currentTerritory.Public_Group_Code__c, lCurrentParentGroupIds);
+            }
+            if (mParentGroupByCode.containsKey(mParentGroupNamesByParentId.get(currentTerritory.Subzone__c))) {
+                List<Id> lCurrentParentGroupIds = mParentGroupIdByTerritoryPublicGroupName.get(currentTerritory.Public_Group_Code__c);
+                if (lCurrentParentGroupIds == null) lCurrentParentGroupIds = new List<Id>();
+                lCurrentParentGroupIds.add(mParentGroupByCode.get(mParentGroupNamesByParentId.get(currentTerritory.Subzone__c)));
+                mParentGroupIdByTerritoryPublicGroupName.put(currentTerritory.Public_Group_Code__c, lCurrentParentGroupIds);
+            }
+        }
+
+        return mParentGroupIdByTerritoryPublicGroupName;
+    }
+
+    @future
+    private static void createGroupMembers(String serializedGeneratedGroups, String serializedParentGroupIdByTerritory) {
+        // Deserialize parameters
+        Map<String, Group> mGeneratedGroups = (Map<String, Group>) JSON.deserialize(serializedGeneratedGroups, Map<String, Group>.class);
+        Map<String, List<Id>> mParentGroupIdByTerritoryPublicGroupName = (Map<String, List<Id>>) JSON.deserialize(serializedParentGroupIdByTerritory, Map<String, List<Id>>.class);
+
+        System.debug('### HotelTerritoryTriggerHelper.createGroupMembers() - mParentGroupIdByTerritoryPublicGroupName: ' + mParentGroupIdByTerritoryPublicGroupName);
+        List<GroupMember> lGroupMembers = new List<GroupMember>();
+        for (String currentGroupName : mParentGroupIdByTerritoryPublicGroupName.keySet()) {
+            for (Id currentGroupId : mParentGroupIdByTerritoryPublicGroupName.get(currentGroupName)) {
+                lGroupMembers.add(new GroupMember(
+                    GroupId = mGeneratedGroups.get(currentGroupName).Id,
+                    UserOrGroupId = currentGroupId
+                ));
+            }
+        }
+        System.debug('### HotelTerritoryTriggerHelper.createGroupMembers() - lGroupMembers: ' + lGroupMembers);
+        Database.insert(lGroupMembers, false);
     }
 }
