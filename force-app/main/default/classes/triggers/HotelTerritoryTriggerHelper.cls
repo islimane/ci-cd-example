@@ -3,7 +3,7 @@
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
  * @last modified on  : 28-03-2025
- * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+ * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 public with sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
 
@@ -14,7 +14,7 @@ public with sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
         'U'
     };
 
-    private static final Map<Id, List<Schema.sObjectField>> PARENTS_TO_VALIDATE_BY_TYPE = new Map<Id, List<Schema.sObjectField>>{
+    private static final Map<Id, List<Schema.sObjectField>> RELEVANT_FIELDS_BY_TYPE = new Map<Id, List<Schema.sObjectField>>{
         GlobalConstants.HOTEL_TERRITORY_RT_CONTINENT_ID => new List<Schema.sObjectField>{
             Schema.HotelTerritory__c.Area__c
         },
@@ -149,9 +149,8 @@ public with sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
         List<HotelTerritory__c> lValidatedTerritories = new List<HotelTerritory__c>();
         for (HotelTerritory__c currentTerritory : lHotelTerritories) {
             Boolean validated = true;
-            if (PARENTS_TO_VALIDATE_BY_TYPE.containsKey(currentTerritory.RecordTypeId)) {
-                List<Schema.sObjectField> lParentsToValidate = PARENTS_TO_VALIDATE_BY_TYPE.get(currentTerritory.RecordTypeId);
-                for (Schema.sObjectField currentField : lParentsToValidate) {
+            if (RELEVANT_FIELDS_BY_TYPE.containsKey(currentTerritory.RecordTypeId)) {
+                for (Schema.sObjectField currentField : RELEVANT_FIELDS_BY_TYPE.get(currentTerritory.RecordTypeId)) {
                     if (currentTerritory.get(currentField) == null) {
                         currentTerritory.addError('Missing ' + currentField.getDescribe().getLabel() + ' relationship');
                         validated = false;
@@ -202,48 +201,47 @@ public with sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
 
         Set<Id> sAllParentsTerritories = new Set<Id>();
         for (HotelTerritory__c currentTerritory : lHotelTerritory) {
-            if (String.isNotBlank(currentTerritory.Area__c)) sAllParentsTerritories.add(currentTerritory.Area__c);
-            if (String.isNotBlank(currentTerritory.Continent__c)) sAllParentsTerritories.add(currentTerritory.Continent__c);
-            if (String.isNotBlank(currentTerritory.Zone__c)) sAllParentsTerritories.add(currentTerritory.Zone__c);
-            if (String.isNotBlank(currentTerritory.Subzone__c)) sAllParentsTerritories.add(currentTerritory.Subzone__c);
+            if (RELEVANT_FIELDS_BY_TYPE.containsKey(currentTerritory.RecordTypeId)) {
+                for (Schema.sObjectField currentField : RELEVANT_FIELDS_BY_TYPE.get(currentTerritory.RecordTypeId)) {
+                    system.debug('test> currentField: ' + currentField.getDescribe().getLabel());
+                    system.debug('test> currentField: ' + currentTerritory.get(currentField));
+                    if (currentTerritory.get(currentField) != null) sAllParentsTerritories.add((Id)currentTerritory.get(currentField));
+                }
+            }
         }
+        system.debug('test> sAllParentsTerritories: ' + sAllParentsTerritories);
 
         Map<Id, String> mParentGroupNamesByParentId = HotelTerritorySelector.getGroupNameRelatedByIdAndCode(sAllParentsTerritories);
         Set<String> sAllParentsGroupNames = new Set<String>();
         for (HotelTerritory__c currentTerritory : lHotelTerritory) {
-            if (mParentGroupNamesByParentId.containsKey(currentTerritory.Area__c)) sAllParentsGroupNames.add(mParentGroupNamesByParentId.get(currentTerritory.Area__c));
-            if (mParentGroupNamesByParentId.containsKey(currentTerritory.Continent__c)) sAllParentsGroupNames.add(mParentGroupNamesByParentId.get(currentTerritory.Continent__c));
-            if (mParentGroupNamesByParentId.containsKey(currentTerritory.Zone__c)) sAllParentsGroupNames.add(mParentGroupNamesByParentId.get(currentTerritory.Zone__c));
-            if (mParentGroupNamesByParentId.containsKey(currentTerritory.Subzone__c)) sAllParentsGroupNames.add(mParentGroupNamesByParentId.get(currentTerritory.Subzone__c));
+            if (RELEVANT_FIELDS_BY_TYPE.containsKey(currentTerritory.RecordTypeId)) {
+                for (Schema.sObjectField currentField : RELEVANT_FIELDS_BY_TYPE.get(currentTerritory.RecordTypeId)) {
+                    system.debug('test> currentField2: ' + currentField.getDescribe().getLabel());
+                    system.debug('test> currentField2: ' + currentTerritory.get(currentField));
+                    String currentFieldValue = (String)currentTerritory.get(currentField);
+                    if (mParentGroupNamesByParentId.containsKey(currentFieldValue)) sAllParentsGroupNames.add(mParentGroupNamesByParentId.get(currentFieldValue));
+                }
+            }
         }
+        system.debug('test> sAllParentsGroupNames: ' + sAllParentsGroupNames);
 
         Map<String, Id> mParentGroupByCode = GroupSelector.getGroupIdsByCode(sAllParentsGroupNames);
         for (HotelTerritory__c currentTerritory : lHotelTerritory) {
-            if (mParentGroupByCode.containsKey(mParentGroupNamesByParentId.get(currentTerritory.Area__c))) {
-                List<Id> lCurrentParentGroupIds = mParentGroupIdByTerritoryPublicGroupName.get(currentTerritory.Public_Group_Code__c);
-                if (lCurrentParentGroupIds == null) lCurrentParentGroupIds = new List<Id>();
-                lCurrentParentGroupIds.add(mParentGroupByCode.get(mParentGroupNamesByParentId.get(currentTerritory.Area__c)));
-                mParentGroupIdByTerritoryPublicGroupName.put(currentTerritory.Public_Group_Code__c, lCurrentParentGroupIds);
-            }
-            if (mParentGroupByCode.containsKey(mParentGroupNamesByParentId.get(currentTerritory.Continent__c))) {
-                List<Id> lCurrentParentGroupIds = mParentGroupIdByTerritoryPublicGroupName.get(currentTerritory.Public_Group_Code__c);
-                if (lCurrentParentGroupIds == null) lCurrentParentGroupIds = new List<Id>();
-                lCurrentParentGroupIds.add(mParentGroupByCode.get(mParentGroupNamesByParentId.get(currentTerritory.Continent__c)));
-                mParentGroupIdByTerritoryPublicGroupName.put(currentTerritory.Public_Group_Code__c, lCurrentParentGroupIds);
-            }
-            if (mParentGroupByCode.containsKey(mParentGroupNamesByParentId.get(currentTerritory.Zone__c))) {
-                List<Id> lCurrentParentGroupIds = mParentGroupIdByTerritoryPublicGroupName.get(currentTerritory.Public_Group_Code__c);
-                if (lCurrentParentGroupIds == null) lCurrentParentGroupIds = new List<Id>();
-                lCurrentParentGroupIds.add(mParentGroupByCode.get(mParentGroupNamesByParentId.get(currentTerritory.Zone__c)));
-                mParentGroupIdByTerritoryPublicGroupName.put(currentTerritory.Public_Group_Code__c, lCurrentParentGroupIds);
-            }
-            if (mParentGroupByCode.containsKey(mParentGroupNamesByParentId.get(currentTerritory.Subzone__c))) {
-                List<Id> lCurrentParentGroupIds = mParentGroupIdByTerritoryPublicGroupName.get(currentTerritory.Public_Group_Code__c);
-                if (lCurrentParentGroupIds == null) lCurrentParentGroupIds = new List<Id>();
-                lCurrentParentGroupIds.add(mParentGroupByCode.get(mParentGroupNamesByParentId.get(currentTerritory.Subzone__c)));
-                mParentGroupIdByTerritoryPublicGroupName.put(currentTerritory.Public_Group_Code__c, lCurrentParentGroupIds);
+            if (RELEVANT_FIELDS_BY_TYPE.containsKey(currentTerritory.RecordTypeId)) {
+                for (Schema.sObjectField currentField : RELEVANT_FIELDS_BY_TYPE.get(currentTerritory.RecordTypeId)) {
+                    system.debug('test> currentField3: ' + currentField.getDescribe().getLabel());
+                    system.debug('test> currentField3: ' + currentTerritory.get(currentField));
+                    String currentFieldValue = (String)currentTerritory.get(currentField);
+                    if (mParentGroupByCode.containsKey(mParentGroupNamesByParentId.get(currentFieldValue))) {
+                        List<Id> lCurrentParentGroupIds = mParentGroupIdByTerritoryPublicGroupName.get(currentTerritory.Public_Group_Code__c);
+                        if (lCurrentParentGroupIds == null) lCurrentParentGroupIds = new List<Id>();
+                        lCurrentParentGroupIds.add(mParentGroupByCode.get(mParentGroupNamesByParentId.get(currentFieldValue)));
+                        mParentGroupIdByTerritoryPublicGroupName.put(currentTerritory.Public_Group_Code__c, lCurrentParentGroupIds);
+                    }
+                }
             }
         }
+        system.debug('test> sAllParentsGroupNames: ' + sAllParentsGroupNames);
 
         return mParentGroupIdByTerritoryPublicGroupName;
     }
