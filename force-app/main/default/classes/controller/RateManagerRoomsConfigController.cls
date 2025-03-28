@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             :
- * @last modified on  : 27-03-2025
+ * @last modified on  : 28-03-2025
  * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 public with sharing class RateManagerRoomsConfigController extends DC_DynamicController {
@@ -84,67 +84,14 @@ public with sharing class RateManagerRoomsConfigController extends DC_DynamicCon
     * @return DC_ResponseWr
     **/ 
     private DC_ResponseWr saveRatePrices(Map<String, Object> params){
-        Map<Id, List<RatePriceColumn>> mPeriodKeyByRateLineId = new Map<Id, List<RatePriceColumn>>();
-        Map<Id, Map<String, RateManagerModel.RatePrice>> mRatePricesEdited = new Map<Id, Map<String, RateManagerModel.RatePrice>>();
-        List<RateManagerModel.RateLine> lRateLineWrapperFromSF = new List<RateManagerModel.RateLine>();
         
         List<RateManagerModel.RatePrice> lWrappedData = (List<RateManagerModel.RatePrice>)JSON.deserialize((String)params.get('ratePrices'), List<RateManagerModel.RatePrice>.class);
         Id ratePlannerId = (Id)params.get('ratePlannerId');
 
-        for(RateManagerModel.RatePrice item : lWrappedData){
-            if(mRatePricesEdited.containsKey(item.ParentRateLineId)){
-                mRatePricesEdited.get(item.ParentRateLineId).put(item.PeriodKey, item);
-            }else{
-                mRatePricesEdited.put(item.ParentRateLineId, new Map<String, RateManagerModel.RatePrice>{item.PeriodKey => item});
-            }   
-        }
-
-        List<RateLine__c> lRateLines = RateLineSelector.getRatesLinesById(mRatePricesEdited.keySet());
-        List<Period__c> lPeriods = PeriodSelector.getPeriodsByRatePlannerId(new Set<Id>{ratePlannerId});
-
-        List<RatePrice__c> lratePricesToUpsert = new List<RatePrice__c>();
-        for (RateLine__c item : lRateLines) {
-            lRateLineWrapperFromSF.add(new RateManagerModel.RateLine(item, lPeriods));
-        }
-
-        //Logger.info('mRatePricesEdited: ' + mRatePricesEdited);
-        //Logger.info('lRateLineWrapperFromSF: ' + lRateLineWrapperFromSF);
-
-        for(RateManagerModel.RateLine rateLine : lRateLineWrapperFromSF){
-            Map<String, Period__c> mPeriodsByPeriodKey = rateLine.getPeriods();
-            Map<String, RateManagerModel.RatePrice> ratePricesEdited = mRatePricesEdited.get(rateLine.Id);
-            for(RateManagerModel.RatePrice ratePrice : rateLine.getRatesPrices()){
-                if(ratePricesEdited.containsKey(ratePrice.periodKey)){
-                    RatePrice__c ratePriceToUpsert = ratePrice.getRatePrice();
-                    ratePriceToUpsert.TotalPrice__c = ratePricesEdited.get(ratePrice.periodKey).TotalPrice;
-                    lratePricesToUpsert.add(ratePriceToUpsert);
-                }
-            }
-        }
-
-        Logger.info('before ratePricesToUpsert: ' + lratePricesToUpsert);
-
-        upsert lratePricesToUpsert;
-
-
-        Logger.info('ratePricesToUpsert: ' + lratePricesToUpsert);
-        Logger.saveLog();
+        RatePriceManager.upsertRatePricesEditedFromRatePlanner(ratePlannerId, lWrappedData);
 
         return new DC_ResponseWr(true, 'OK');
     }
 
-    public class RatePriceColumn{
-        Id rateLineId;
-        String periodKey;
-        Decimal price;
-
-        public RatePriceColumn(Id rateLineId, String periodKey, Decimal price){
-            this.rateLineId = rateLineId;
-            this.periodKey = periodKey;
-            this.price = price;
-        }
-    }
-        
-
-
+    
 }

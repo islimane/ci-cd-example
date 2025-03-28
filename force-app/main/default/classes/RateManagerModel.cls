@@ -2,7 +2,7 @@
  * @description       : Unified model class for Rate Manager controllers
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             :
- * @last modified on  : 27-03-2025
+ * @last modified on  : 28-03-2025
  * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 public with sharing class RateManagerModel {
@@ -83,7 +83,7 @@ public with sharing class RateManagerModel {
             }
         }
 
-        public List<RatePrice> getRatesPrices() {
+        public List<RatePrice> getRatePricesWp() {
             return this.ratesPrices;
         }
 
