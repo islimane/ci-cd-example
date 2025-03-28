@@ -152,7 +152,7 @@ public with sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
             if (RELEVANT_FIELDS_BY_TYPE.containsKey(currentTerritory.RecordTypeId)) {
                 for (Schema.sObjectField currentField : RELEVANT_FIELDS_BY_TYPE.get(currentTerritory.RecordTypeId)) {
                     if (currentTerritory.get(currentField) == null) {
-                        currentTerritory.addError('Missing ' + currentField.getDescribe().getLabel() + ' relationship');
+                        currentTerritory.addError('Missing ' + currentField.getDescribe().getLabel() + ' field');
                         validated = false;
                     }
                 }
@@ -177,7 +177,7 @@ public with sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
                 mGroupsToInsertByCode.put(currentTerritory.Public_Group_Code__c, new Group(
                     Name = currentTerritory.Public_Group_Code__c,
                     DeveloperName = currentTerritory.Public_Group_Code__c,
-                    Type = 'Regular',
+                    Type = GlobalConstants.GROUP_TYPE_REGULAR,
                     DoesIncludeBosses = true,
                     DoesSendEmailToMembers = false
                 ));
@@ -203,34 +203,26 @@ public with sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
         for (HotelTerritory__c currentTerritory : lHotelTerritory) {
             if (RELEVANT_FIELDS_BY_TYPE.containsKey(currentTerritory.RecordTypeId)) {
                 for (Schema.sObjectField currentField : RELEVANT_FIELDS_BY_TYPE.get(currentTerritory.RecordTypeId)) {
-                    system.debug('test> currentField: ' + currentField.getDescribe().getLabel());
-                    system.debug('test> currentField: ' + currentTerritory.get(currentField));
                     if (currentTerritory.get(currentField) != null) sAllParentsTerritories.add((Id)currentTerritory.get(currentField));
                 }
             }
         }
-        system.debug('test> sAllParentsTerritories: ' + sAllParentsTerritories);
 
         Map<Id, String> mParentGroupNamesByParentId = HotelTerritorySelector.getGroupNameRelatedByIdAndCode(sAllParentsTerritories);
         Set<String> sAllParentsGroupNames = new Set<String>();
         for (HotelTerritory__c currentTerritory : lHotelTerritory) {
             if (RELEVANT_FIELDS_BY_TYPE.containsKey(currentTerritory.RecordTypeId)) {
                 for (Schema.sObjectField currentField : RELEVANT_FIELDS_BY_TYPE.get(currentTerritory.RecordTypeId)) {
-                    system.debug('test> currentField2: ' + currentField.getDescribe().getLabel());
-                    system.debug('test> currentField2: ' + currentTerritory.get(currentField));
                     String currentFieldValue = (String)currentTerritory.get(currentField);
                     if (mParentGroupNamesByParentId.containsKey(currentFieldValue)) sAllParentsGroupNames.add(mParentGroupNamesByParentId.get(currentFieldValue));
                 }
             }
         }
-        system.debug('test> sAllParentsGroupNames: ' + sAllParentsGroupNames);
 
         Map<String, Id> mParentGroupByCode = GroupSelector.getGroupIdsByCode(sAllParentsGroupNames);
         for (HotelTerritory__c currentTerritory : lHotelTerritory) {
             if (RELEVANT_FIELDS_BY_TYPE.containsKey(currentTerritory.RecordTypeId)) {
                 for (Schema.sObjectField currentField : RELEVANT_FIELDS_BY_TYPE.get(currentTerritory.RecordTypeId)) {
-                    system.debug('test> currentField3: ' + currentField.getDescribe().getLabel());
-                    system.debug('test> currentField3: ' + currentTerritory.get(currentField));
                     String currentFieldValue = (String)currentTerritory.get(currentField);
                     if (mParentGroupByCode.containsKey(mParentGroupNamesByParentId.get(currentFieldValue))) {
                         List<Id> lCurrentParentGroupIds = mParentGroupIdByTerritoryPublicGroupName.get(currentTerritory.Public_Group_Code__c);
@@ -241,7 +233,6 @@ public with sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
                 }
             }
         }
-        system.debug('test> sAllParentsGroupNames: ' + sAllParentsGroupNames);
 
         return mParentGroupIdByTerritoryPublicGroupName;
     }
