@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
     <labels>
+        <fullName>Add</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Add</shortDescription>
+        <value>Add</value>
+    </labels>
+    <labels>
         <fullName>Add_Blackout</fullName>
         <language>en_US</language>
         <protected>false</protected>
@@ -20,6 +27,27 @@
         <protected>false</protected>
         <shortDescription>Add Period</shortDescription>
         <value>Add period</value>
+    </labels>
+    <labels>
+        <fullName>Add_rooms</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Add rooms</shortDescription>
+        <value>Add rooms</value>
+    </labels>
+    <labels>
+        <fullName>Edit_Event</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Editar Evento</shortDescription>
+        <value>Editar evento</value>
+    </labels>
+    <labels>
+        <fullName>Edit_Blackout</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Editar Blackout</shortDescription>
+        <value>Editar blackout</value>
     </labels>
     <labels>
         <fullName>Blackouts</fullName>
@@ -163,10 +191,68 @@
         <value>Periods</value>
     </labels>
     <labels>
+        <fullName>No_rooms_selected</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>No rooms selected</shortDescription>
+        <value>No rooms selected. Select at least one room</value>
+    </labels>
+    <labels>
+        <fullName>No_records_selected</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>No records selected</shortDescription>
+        <value>No records selected. Select at least one record</value>
+    </labels>
+    <labels>
+        <fullName>Remove_confirmation</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Remove confirmation</shortDescription>
+        <value>Are you sure you want to delete this item? This action cannot be undone.</value>
+    </labels>
+    <labels>
+        <fullName>Remove_selected</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Remove selected</shortDescription>
+        <value>Remove selected</value>
+    </labels>
+    <labels>
+        <fullName>Remove_success</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Remove success</shortDescription>
+        <value>Records successfully removed</value>
+    </labels>
+    <labels>
         <fullName>Save</fullName>
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Save</shortDescription>
         <value>Save</value>
+    </labels>
+    <labels>
+        <fullName>Success</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Success</shortDescription>
+        <value>Success</value>
+    </labels>
+    <labels>
+        <fullName>Remove_Event_Confirmation_Message</fullName>
+        <categories>PeriodManagement</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Atención. Los cambios eliminarán todos los datos asociados a este event</shortDescription>
+        <value>Atención. Los cambios eliminarán todos los datos asociados a este evento</value>
+    </labels>
+    <labels>
+        <fullName>Remove_Blackout_Confirmation_Message</fullName>
+        <categories>PeriodManagement</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Atención. Los cambios eliminarán todos los datos asociados a este blackout</shortDescription>
+        <value>Atención. Los cambios eliminarán todos los datos asociados a este blackout</value>
     </labels>
 </CustomLabels>

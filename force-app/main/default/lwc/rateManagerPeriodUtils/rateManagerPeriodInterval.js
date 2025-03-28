@@ -3,7 +3,7 @@ class RateManagerPeriodInterval {
         Object.assign(this, data);
         this.StartDate__c = new Date(data.StartDate__c);
         this.EndDate__c = new Date(data.EndDate__c);
-        
+
         if (this.StartDate__c > this.EndDate__c) {
             throw new Error("Start date must be before end date");
         }
@@ -16,7 +16,7 @@ class RateManagerPeriodInterval {
     }
 
     overlapsWith(otherInterval) {
-        return this.StartDate__c < otherInterval.EndDate__c && this.EndDate__c > otherInterval.StartDate__c;
+        return this.StartDate__c <= otherInterval.EndDate__c && this.EndDate__c >= otherInterval.StartDate__c;
     }
 
     contains(date) {

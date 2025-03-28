@@ -2,8 +2,8 @@
   @description       :
   @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
   @group             :
-  @last modified on  : 12-03-2025
-  @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+  @last modified on  : 26-03-2025
+  @last modified by  : alberto.martinez-lopez@inetum.com
 -->
 <template>
     <div class="slds-p-around_medium">
@@ -53,13 +53,13 @@
                 <div class="slds-p-horizontal_medium slds-p-vertical_medium">
                     <lightning-accordion allow-multiple-sections-open>
                         <lightning-accordion-section name="roomsAndSupplements" label={labels.roomsAndSupplements}>
-                            <div class="accordion-container slds-p-around_medium">
-                                <c-rate-manager-rooms-config></c-rate-manager-rooms-config>
+                            <div if:true={ratePlannerId} class="accordion-container slds-p-around_medium">
+                                <c-rate-manager-rooms-config parent-id={ratePlannerId} rate-id={rateRecord.Id}></c-rate-manager-rooms-config>
                             </div>
                         </lightning-accordion-section>
                         <lightning-accordion-section name="supplementsAndReductions" label={labels.supplementsAndReductions}>
-                            <div class="accordion-container slds-p-around_medium">
-                                <c-extended-data-table-manager></c-extended-data-table-manager>
+                            <div if:true={ratePlannerId} class="accordion-container slds-p-around_medium">
+                                <c-rate-manager-supplements-and-discounts-config parent-id={ratePlannerId} rate-id={rateRecord.Id}></c-rate-manager-supplements-and-discounts-config>
                             </div>
                         </lightning-accordion-section>
                     </lightning-accordion>

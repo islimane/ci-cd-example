@@ -52,18 +52,23 @@ export default class RateManagerPeriodList extends RateManagerMixin(LwcDCExtensi
 
     async handleAddPeriodModal() {
 
-        const result = await rateManagerModalPeriodHandler.open({
-            // it is set on lightning-modal-header instead
-            intervalsData: { dateIntervals: this._periodList, parent: this.parent },
-            parentId: this.parentId,
-            size: 'large',
-            headerLabel: this.labels.addPeriod,
-            onconfirm: (e) => {
-                // stop further propagation of the event
-                e.stopPropagation();
-                this.handleAddPeriod(e);
-            }
-        });
+        try{
+            const result = await rateManagerModalPeriodHandler.open({
+                // it is set on lightning-modal-header instead
+                intervalsData: { dateIntervals: this._periodList, parent: this.parent },
+                parentId: this.parentId,
+                size: 'large',
+                headerLabel: this.labels.addPeriod,
+                onconfirm: (e) => {
+                    // stop further propagation of the event
+                    e.stopPropagation();
+                    this.handleAddPeriod(e);
+                }
+            });
+
+        }catch(e){
+            console.error(e.message)
+        }
     }
 
     handleAddPeriod(event){

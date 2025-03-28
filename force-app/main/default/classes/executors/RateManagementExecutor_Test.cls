@@ -2,117 +2,134 @@
  * @description       : Orchestrates test execution for rate management functionality..
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Test Executor
- * @last modified on  : 12-03-2025
- * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
-**/
+ * @last modified on  : 27-03-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
+ **/
 @isTest
 public with sharing class RateManagementExecutor_Test {
-
     /***************************************
      *      Test Setup and Execution       *
-    ***************************************/
+     ***************************************/
 
     @TestSetup
-    public static void setupData(){
+    public static void setupData() {
         TP_SetupDataTest.generateAllTestData();
     }
 
-    public static void testAll(){
-
+    public static void testAll() {
     }
 
     /***************************************
      *         Executor Methods            *
-    ***************************************/
+     ***************************************/
 
-	@IsTest
-    static void RatePlannerTrigger_Test(){
+    @IsTest
+    static void RatePlannerTrigger_Test() {
         RatePlannerTrigger_Test.testAll();
     }
 
     @IsTest
-    static void RatePlannerValidationService_Test(){
+    static void RatePlannerValidationService_Test() {
         RatePlannerValidationService_Test.testAll();
     }
 
     @IsTest
-    static void RatePlannerSelector_Test(){
+    static void RatePlannerSelector_Test() {
         RatePlannerSelector_Test.testAll();
     }
 
     @IsTest
-    static void RateManagerController_Test(){
+    static void RateManagerController_Test() {
         RateManagerController_Test.testAll();
     }
-	
+
     @isTest
-    public static void RateManagerPeriodListControllerTest(){
+    public static void RateManagerPeriodListControllerTest() {
         RateManagerPeriodListController_Test.testAll();
     }
 
     @IsTest
-    static void RateManagerBlackoutListController_Test(){
+    static void RateManagerBlackoutListController_Test() {
         RateManagerBlackoutListController_Test.testAll();
     }
 
     @IsTest
-    static void RateManagerEventListController_Test(){
+    static void RateManagerEventListController_Test() {
         RateManagerEventListController_Test.testAll();
     }
 
     @IsTest
-    static void RateManagerRatesListController_Test(){
+    static void RateManagerRatesListController_Test() {
         RateManagerRatesListController_Test.testAll();
     }
 
     @isTest
-    public static void RateManagerRateConfigControllerTest(){
-        RateManagerRateConfigController_Test.testAll();
-	}
+    public static void RateManagerRoomsConfigControllerTest() {
+        RateManagerRoomsConfigController_Test.testAll();
+    }
 
-	@IsTest
-    static void GlobalConstants_Test(){
+    @isTest
+    public static void RateManagerRateConfigControllerTest() {
+        RateManagerRateConfigController_Test.testAll();
+    }
+
+    @isTest
+    public static void RateManagerSmntsAndDntsControllerTest() {
+        RateManagerSmntsAndDntsController_Test.testAll();
+    }
+
+    @isTest
+    public static void RateManagerAddRoomController_Test() {
+        RateManagerAddRoomController_Test.testAll();
+    }
+
+    @IsTest
+    static void GlobalConstants_Test() {
         GlobalConstants_Test.testAll();
     }
 
     @IsTest
-
-    static void GroupSelector_Test(){
+    static void GroupSelector_Test() {
         GroupSelector_Test.testAll();
     }
 
     @IsTest
-    static void GroupMemberSelector_Test(){
+    static void GroupMemberSelector_Test() {
         GroupMemberSelector_Test.testAll();
     }
 
     @IsTest
-    static void HotelSelector_Test(){
+    static void HotelSelector_Test() {
         HotelSelector_Test.testAll();
     }
 
     @IsTest
-    static void HotelTerritorySelector_Test(){
+    static void HotelTerritorySelector_Test() {
         HotelTerritorySelector_Test.testAll();
     }
 
     @IsTest
-    static void OpportunityShareSelector_Test(){
+    static void RateLineSelector_Test() {
+        RateLineSelector_Test.testAll();
+    }
+
+    @IsTest
+    static void OpportunityShareSelector_Test() {
         OpportunityShareSelector_Test.testAll();
     }
 
     @IsTest
-    static void UserAuthorizationTrigger_Test(){
+    static void UserAuthorizationTrigger_Test() {
         UserAuthorizationTrigger_Test.testAll();
     }
 
     @IsTest
-    static void UserAuthorizationService_Test(){
+    static void UserAuthorizationService_Test() {
         UserAuthorizationService_Test.testAll();
     }
 
     @IsTest
-    static void OpportunityHotelTrigger_Test(){
+    static void OpportunityHotelTrigger_Test() {
         OpportunityHotelTrigger_Test.testAll();
     }
 }

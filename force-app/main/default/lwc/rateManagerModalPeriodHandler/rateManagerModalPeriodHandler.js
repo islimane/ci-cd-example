@@ -1,9 +1,9 @@
 /**
- * @description       : 
+ * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
- * @group             : 
- * @last modified on  : 07-03-2025
- * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+ * @group             :
+ * @last modified on  : 26-03-2025
+ * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 import { api} from 'lwc';
 import LightningModal from 'lightning/modal';
@@ -28,11 +28,11 @@ export default class RateManagerModalPeriodHandler extends RateManagerMixin(Ligh
 
     @api headerLabel;
 
-    @api 
+    @api
     set intervalsData(value){
         try{
             this._IntervalUtils = new RateManagerPeriodUtils(value.dateIntervals, { StartDate__c: value.parent.StartDate__c, EndDate__c: value.parent.EndDate__c });
-            this._proposedInterval = this._IntervalUtils.findFirstAvailableInterval();
+            this._proposedInterval = this._IntervalUtils.findFirstAvailableInterval() || {StartDate__c : '', EndDate__c: ''};
         }catch(e){
             this.showToast('Error', e.message, 'error');
         }
@@ -45,9 +45,8 @@ export default class RateManagerModalPeriodHandler extends RateManagerMixin(Ligh
     get proposedInterval(){
         if(this._recordId && this._onLoadFormData){
             return { StartDate__c : this._onLoadFormData?.StartDate__c?.value, EndDate__c : this._onLoadFormData?.EndDate__c?.value };
-        }else{
-            return this._proposedInterval;
         }
+        return this._proposedInterval;
     }
 
     get dateIntervals(){

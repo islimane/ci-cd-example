@@ -1,0 +1,38 @@
+/**
+ * @description       : 
+ * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
+ * @group             : 
+ * @last modified on  : 26-03-2025
+ * @last modified by  : alberto.martinez-lopez@inetum.com
+**/
+@isTest
+public class RateManagerSmntsAndDntsController_Test implements TP_ExecutableInterface  {
+
+    @TestSetup
+    public static void setupData(){
+        TP_SetupDataTest.generateAllTestData();
+    }
+    
+    @isTest
+    public static void testAll(){
+        Test.startTest();
+        initMethod();
+        Test.stopTest();
+    }
+
+    @isTest
+    public static void testInitMethod(){
+        Test.startTest();
+        initMethod();
+        Test.stopTest();
+    }
+
+    private static void initMethod(){
+        Map<String, Object> params = new Map<String, Object>{
+            'controller' => 'RateManagerSmntsAndDntsController',
+            'ratePlannerId' => TP_SetupSelectorTest.getRatePlanner(1, 'TEST').Id
+            //'rateId' => TP_SetupSelectorTest.getRate(1, 'TEST').Id
+        };
+        new RateManagerSmntsAndDntsController().init(params);
+    }
+}

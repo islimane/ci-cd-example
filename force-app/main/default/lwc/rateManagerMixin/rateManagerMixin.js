@@ -9,7 +9,7 @@ import { getObjectInfo } from "lightning/uiObjectInfoApi"
 
 /**
  * A mixin that provides common functionality for rateManagers.
- * 
+ *
  * @param {Class} BaseClass The base class to be extended.
  * @returns {Class} The extended class.
  */
@@ -47,7 +47,7 @@ export const RateManagerMixin = (BaseClass) => class extends BaseClass {
     @api
     editMode = false;
 
-    
+
     save(callback) {
         if(this.validateInputs('lightning-input, lightning-combobox, lightning-textarea')){
             callback();
@@ -70,12 +70,12 @@ export const RateManagerMixin = (BaseClass) => class extends BaseClass {
      */
     listenRateManagerEvents(handler) {
         this.rateManagerCmpName = this.template.host.localName;
-        subscribe(this.messageContext, RATE_MANAGER_CHANNEL, data => this.rateManagertListEventHandler(handler, data));
+        subscribe(this.messageContext, RATE_MANAGER_CHANNEL, data => this.rateManagerListEventHandler(handler, data));
     }
 
     /**
      * Publishes a message to the rate manager channel.
-     * 
+     *
      * @param {Object} data The data to be published.
      * @param {MessageChannel} [mc=RATE_MANAGER_CHANNEL] The message channel to publish to.
      */
@@ -86,15 +86,15 @@ export const RateManagerMixin = (BaseClass) => class extends BaseClass {
     /**
      * Filters the rate manager by comparing the component name with the rateManagerCmpName.
      * If they match, the provided handler function is called with the data.
-     * 
+     *
      * @param {Function} handler The handler function to invoke if the component names match.
      * @param {Object} data The data containing the rateManagerCmpName to be compared.
      */
-    rateManagertListEventHandler(handler, data) {
+    rateManagerListEventHandler(handler, data) {
         try {
-            console.log('rateManagertListEventHandler, ', this.rateManagerCmpName, data.targetCmpName);
+            console.log('rateManagerListEventHandler, ', this.rateManagerCmpName, data.targetCmpName);
             if (data.targetCmpName === this.rateManagerCmpName) {
-                console.log('rateManagertListEventHandler handler');
+                console.log('rateManagerListEventHandler handler');
                 handler(data);
             }
         } catch (e) {
@@ -105,7 +105,7 @@ export const RateManagerMixin = (BaseClass) => class extends BaseClass {
     _sObjectApiName;
     _sObjectRTName;
     _recordTypeId;
-    @wire(getObjectInfo, { objectApiName: '$_sObjectApiName' })    
+    @wire(getObjectInfo, { objectApiName: '$_sObjectApiName' })
     handleObjectInfo(response) {
         const { data } = response;
         if (data) {
@@ -116,8 +116,8 @@ export const RateManagerMixin = (BaseClass) => class extends BaseClass {
             if (rtInfo) {
                 this._recordTypeId = rtInfo.recordTypeId
             }
-            
+
         }
     }
-    sObjectInfo = (response) => {} 
+    sObjectInfo = (response) => {}
 }
