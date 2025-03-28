@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             :
- * @last modified on  : 27-03-2025
+ * @last modified on  : 28-03-2025
  * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 public with sharing class RateManagerSmntsAndDntsController extends DC_DynamicController {
@@ -54,7 +54,7 @@ public with sharing class RateManagerSmntsAndDntsController extends DC_DynamicCo
         filterWp.add(new RateManagerModel.FilterWp('RegimenType', 'Type', null, null, 'combobox', mTypeOptions.values(), null, null));
         filterWp.add(new RateManagerModel.FilterWp('Applicable', 'Applicable', null, null, 'combobox', mApplicableOptions.values(), null, null));
         filterWp.add(new RateManagerModel.FilterWp('ApplicationType', 'Application Type', null, null, 'combobox', mApplicationTypeOptions.values(), null, null));
-        return new DC_ResponseWr(true, new RateManagerModel.InitDataWp(filterWp, wrappedData));
+        return new DC_ResponseWr(true, new RateManagerModel.RateLineDataTableWp(filterWp, wrappedData));
     }
 
 }

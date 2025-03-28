@@ -73,7 +73,7 @@ public with sharing class RateManagerRoomsConfigController extends DC_DynamicCon
         filterWp.add(new RateManagerModel.FilterWp('Room', 'Room', null, null, 'combobox', mRoomOptions.values(), null, null));
         filterWp.add(new RateManagerModel.FilterWp('Characteristic', 'Characteristic', null, null, 'combobox', mCharacteristicOptions.values(), null, null));
 
-        return new DC_ResponseWr(true, new RateManagerModel.InitDataWp(filterWp, wrappedData)); 
+        return new DC_ResponseWr(true, new RateManagerModel.RateLineDataTableWp(filterWp, wrappedData)); 
     }
 
 

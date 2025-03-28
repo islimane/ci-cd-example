@@ -24,12 +24,12 @@ public with sharing class RateManagerModel {
     /**
      * Wrapper class to hold the initial data.
      */
-    public class InitDataWp {
+    public class RateLineDataTableWp {
         public List<FilterWp> filters = new List<FilterWp>();
         public List<RateLine> data;
 
 
-        public InitDataWp(List<FilterWp> filters, List<RateLine> data) {
+        public RateLineDataTableWp(List<FilterWp> filters, List<RateLine> data) {
             this.filters = filters;
             this.data = data;
         }
