@@ -2,10 +2,11 @@
  * @description       : RateManagerModalRoomHandlerController
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Controllers
- * @last modified on  : 24-03-2025
- * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+ * @last modified on  : 27-03-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 public with sharing class RateManagerAddRoomController extends DC_DynamicController {
+
     /**
      * @description
      * @author Inetum Team <alberto.martinez-lopez@inetum.com> | 28-02-2025
@@ -44,8 +45,8 @@ public with sharing class RateManagerAddRoomController extends DC_DynamicControl
         }
         System.debug('data pos' + data);
 
-        Map<String, Option> mRoomOptions = new Map<String, Option>{ 'All' => new Option('All', null) };
-        Map<String, Option> mCharacteristicOptions = new Map<String, Option>{ 'All' => new Option('All', null) };
+        Map<String, Option> mRoomOptions = new Map<String, Option>{ 'All' => new Option('All', '') };
+        Map<String, Option> mCharacteristicOptions = new Map<String, Option>{ 'All' => new Option('All', '') };
 
         for (Product2 product : data) {
             if (!String.isEmpty(product.Room__c) && !mRoomOptions.containsKey(product.Room__c)) {

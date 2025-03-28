@@ -1,8 +1,8 @@
 /**
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
- * @group             : 
- * @last modified on  : 27-03-2025
+ * @group             :
+ * @last modified on  : 28-03-2025
  * @last modified by  : alberto.martinez-lopez@inetum.com
  **/
 import { api, track } from 'lwc';
@@ -24,7 +24,6 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
         return this._columns.length > 0;
     }
 
-
     get fixedColumnCount() {
         return this._columns.filter((column) => column.fixed).length;
     }
@@ -32,9 +31,6 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
     /*** Connected callback.*/
     connectedCallback() {
         this.setWireParams();
-        this.listenRateManagerEvents((data) => {
-            this.handlerMessageChannel(data);
-        });
     }
 
     /**
@@ -91,15 +87,8 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
         });
     }
 
-
-    handlerMessageChannel(data) {
-        switch (data.action) {
-            case 'refreshProductList':
-                this.refreshFetch();
-                break;
-            default:
-                break;
-        }
+    refreshTable() {
+        this.refreshFetch();
     }
 
     async handleSave(event){
@@ -107,12 +96,9 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
         const draftValues = event.detail.draftValues;
         const mappedData = [];
         draftValues.forEach(item => {
-            // Find all date range keys (keys that contain a hyphen with dates)
             const dateRangeKeys = Object.keys(item).filter(key => 
                 key.includes('-') && /\d+\/\d+\/\d+/.test(key)
             );
-            
-            // Create a new object for each date range
             dateRangeKeys.forEach(dateKey => {
                 mappedData.push({
                     periodKey: dateKey,

@@ -1,18 +1,20 @@
 /**
- * @description       :
+ * @description       : Shows a table with fixed columns and scrollable columns. Includes also a filter component and action buttons
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 27-03-2025
+ * @last modified on  : 28-03-2025
  * @last modified by  : alberto.martinez-lopez@inetum.com
-**/
-import { LightningElement,api,track } from 'lwc';
+ **/
+import { api, track } from 'lwc';
 import LABELS from './labels';
 import rateManagerModalRoomHandler from 'c/rateManagerModalRoomHandler';
 import LwcDCExtension from 'c/lwcDCExtension';
 import { RateManagerMixin } from 'c/rateManagerMixin';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { deleteRecord } from 'lightning/uiRecordApi';
+import LightningConfirm from 'lightning/confirm';
 
 export default class ExtendedDataTableManager extends RateManagerMixin(LwcDCExtension) {
-
     labels = LABELS;
 
     @api filters;
@@ -30,16 +32,16 @@ export default class ExtendedDataTableManager extends RateManagerMixin(LwcDCExte
         return this.flag ? 'currency' : 'number';
     }
 
-
-
-
     @api
     set tableData(value) {
         const data = [];
         if (value) {
-            value.forEach(record => {
+            value.forEach((record) => {
                 let row = {};
-                this.columns.forEach(column => {
+                Object.keys(record).forEach((key) => {
+                    row[key] = record[key];
+                });
+                this.columns.forEach((column) => {
                     row[column.fieldName] = record[column.fieldName] || null;
                     row.id = record.Id;
                 });
@@ -47,7 +49,7 @@ export default class ExtendedDataTableManager extends RateManagerMixin(LwcDCExte
             });
             this._tableData = data;
         }
-        this._tableData  = JSON.parse(JSON.stringify(data)) || data;
+        this._tableData = JSON.parse(JSON.stringify(data)) || data;
         this.filteredData = [...this._tableData];
     }
 
@@ -63,39 +65,81 @@ export default class ExtendedDataTableManager extends RateManagerMixin(LwcDCExte
         try {
             const activeFilters = event.detail;
             if (activeFilters.length === 0) {
-                this.filteredData = [...this._tableData]
-                return
+                this.filteredData = [...this._tableData];
+                return;
             }
             // Start with all data
             this.filteredData = this._tableData.filter((record) => {
                 // Record must pass ALL filters to be included
                 return activeFilters.every((filter) => {
-                    return record[filter.fieldApiName] === filter.value
-                })
+                    return record[filter.fieldApiName] === filter.value;
+                });
             });
         } catch (e) {
             console.error(e.message);
         }
     }
 
-    //SARA//
-
     async handleAddRoomModal() {
-        const result = await rateManagerModalRoomHandler.open({
+        await rateManagerModalRoomHandler.open({
             parentId: this.parentId,
             size: 'large',
-            headerLabel: "Add Rooms",
-            onconfirm: (e) => {
+            headerLabel: 'Add Rooms',
+            onrefreshtable: (e) => {
                 e.stopPropagation();
-                this.handleAddRoom(e);
+                this.notifyParent();
             }
         });
     }
 
-    handleAddRoom(event){
-        this.refreshFetch();
+    async handleDelete() {
+        // retrieve selected rows
+        let selectedRows = this.template.querySelector('c-extended-data-table')?.getSelectedRows();
+        console.log('Selected rows --> ' + selectedRows);
+        if (!selectedRows || selectedRows.length === 0) {
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Error',
+                    variant: 'Error',
+                    message: this.labels.noRecordsSelected
+                })
+            );
+            return;
+        }
+        const result = await LightningConfirm.open({
+            message: this.labels.removeConfirmation,
+            variant: 'headerless',
+            label: 'this is the aria-label value'
+        });
+
+        if (result) {
+            const promises = selectedRows.map((row) => deleteRecord(row.RateLineId));
+            Promise.all(promises)
+                .then(() => {
+                    this.showToast(this.labels.success, this.labels.removeSuccess, 'success');
+                })
+                .catch((error) => {
+                    this.showToast('Error', error.body.message, 'error');
+                })
+                .finally(() => {
+                    this.notifyParent();
+                });
+        }
     }
 
+    showToast(title, message, variant) {
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title: title,
+                variant: variant,
+                message: message
+            })
+        );
+    }
 
-
+    notifyParent() {
+        // Propagate the refresh event to the parent component
+        console.log(`Refresh recibido en ${this.constructor.name}`);
+        this.dispatchEvent(new CustomEvent('refreshtable'));
+    }
 }

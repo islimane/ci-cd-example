@@ -2,8 +2,8 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 24-03-2025
- * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+ * @last modified on  : 25-03-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 import { LightningElement, track, api } from 'lwc';
 import LwcDCExtension from 'c/lwcDCExtension';
@@ -65,8 +65,8 @@ export default class RateManagerAddRooms extends LwcDCExtension {
         if (fetchedRecords) {
             this.filters = response.data.filters;
             this.tableData = response.data.data;
-            console.log('SARA_filters: ' + JSON.stringify(this.filters));
-            console.log('SARA_tableData: ' + JSON.stringify(this.tableData));
+            console.log('filters --> ' + JSON.stringify(this.filters));
+            console.log('tableData --> ' + JSON.stringify(this.tableData));
         } else {
             console.warn('No records available in response');
         }

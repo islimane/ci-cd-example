@@ -2,8 +2,8 @@
  * @description       : Unit Test Class for Setup Data Methods
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 18-03-2025
- * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+ * @last modified on  : 26-03-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 @isTest
 public class TP_SetupDataTest {
@@ -37,6 +37,7 @@ public class TP_SetupDataTest {
     public static Map<String, sObject> mOpportunityShare = new Map<String, sObject>();
     public static Map<String, sObject> mProduct2Room = new Map<String, sObject>();
     public static Map<String, sObject> mProduct2Supplement = new Map<String, sObject>();
+    public static Map<String, sObject> mRateLine = new Map<String, sObject>();
 
 	/*********************************/
     /*      OBJECTS DEFINITIONS      */
@@ -103,6 +104,7 @@ public class TP_SetupDataTest {
 		Opportunity_Hotel__c opportunityHotel = generateOpportunityHotel(null, null);
 		User_authorization__c userAuthorization = generateUserAuthorization(null);
 		OpportunityShare opportunityShare = generateOpportunityShare(null, groupTest);
+        RateLine__c rateLine = generateRateLine(null, null);
         generateProduct2();
     }
 
@@ -371,9 +373,9 @@ public class TP_SetupDataTest {
     }
 
     /**
-    * @description 
-    * @author Inetum Team <alberto.martinez-lopez@inetum.com> | 18-03-2025 
-    * @return Product2 
+    * @description
+    * @author Inetum Team <alberto.martinez-lopez@inetum.com> | 18-03-2025
+    * @return Product2
     **/
     private static void generateProduct2(){
         Product2 product2_Room = new Product2(
@@ -393,6 +395,16 @@ public class TP_SetupDataTest {
         );
         TP_SetupDataUtilsTest.setMapByName(mProduct2Room, new List<sObject>{product2_Room});
         TP_SetupDataUtilsTest.setMapByName(mProduct2Supplement, new List<sObject>{product2_Supplement});
+    }
+
+    /**
+     * Generates a RateLine__c object with dummy values for testing purposes.
+     * @return A new RateLine__c object with dummy values for a test environment.
+     */
+    public static RateLine__c generateRateLine(Rate__c rate, RatePlanner__c ratePlanner ) { // no va aquí porque no se hace insert de los records relacionados
+        RateLine__c rateLine = new RateLine__c();
+        mRateLine = TP_SetupDataUtilsTest.setMapByName(mRateLine, new List<sObject>{rateLine});
+        return rateLine;
     }
 
     /************************************************/
@@ -417,6 +429,7 @@ public class TP_SetupDataTest {
     public static List<HotelTerritory__c> lHotelTerritoryToInsert = new List<HotelTerritory__c>();
     public static List<User_authorization__c> lUserAuthorizationToInsert = new List<User_authorization__c>();
     public static List<Product2> product2toInsert = new List<Product2>();
+    public static List<RateLine__c> lRateLineToInsert = new List<RateLine__c>();
 
     /**
     * Calls individual methods to insert all records and set up necessary parent-child relationships.
@@ -435,6 +448,7 @@ public class TP_SetupDataTest {
 		insertUserAuthorization();
 		insertOpportunityShare();
         insertProduct2();
+        insertRateLineData();
     }
 
     /**
@@ -542,8 +556,8 @@ public class TP_SetupDataTest {
     }
 
     /**
-    * @description 
-    * @author Inetum Team <alberto.martinez-lopez@inetum.com> | 18-03-2025 
+    * @description
+    * @author Inetum Team <alberto.martinez-lopez@inetum.com> | 18-03-2025
     **/
     private static void insertProduct2(){
         TP_SetupDataUtilsTest.genericParentChildRelationship(mHotel.values(), mProduct2Room.values(), 'Hotel__c');
@@ -561,6 +575,19 @@ public class TP_SetupDataTest {
     private static void insertOpportunityShare(){
         TP_SetupDataUtilsTest.genericParentChildRelationship(mOpportunity.values(), mOpportunityShare.values(), 'OpportunityId');
         insert mOpportunityShare.values();
+    }
+
+    /**
+     * @description Inserts all insertRateLineData records and sets relationships.
+     * @author Inetum Team <ruben.sanchez-gonzalez@inetum.com> | 26-03-2025
+     */
+    private static void insertRateLineData() {
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mRate.values(), mRateLine.values(), 'Rate__c');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mRatePlanner.values(), mRateLine.values(), 'RatePlanner__c');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mProduct2Room.values(), mRateLine.values(), 'Product__c');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mHotel.values(), mRateLine.values(), 'Hotel__c');
+        lRateLineToInsert.addAll((List<RateLine__c>) mRateLine.values());
+        insert lRateLineToInsert;
     }
 
 	@future

@@ -29,6 +29,13 @@
         <value>Add period</value>
     </labels>
     <labels>
+        <fullName>Add_rooms</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Add rooms</shortDescription>
+        <value>Add rooms</value>
+    </labels>
+    <labels>
         <fullName>Edit_Event</fullName>
         <language>en_US</language>
         <protected>false</protected>
@@ -191,11 +198,46 @@
         <value>No rooms selected. Select at least one room</value>
     </labels>
     <labels>
+        <fullName>No_records_selected</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>No records selected</shortDescription>
+        <value>No records selected. Select at least one record</value>
+    </labels>
+    <labels>
+        <fullName>Remove_confirmation</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Remove confirmation</shortDescription>
+        <value>Are you sure you want to delete this item? This action cannot be undone.</value>
+    </labels>
+    <labels>
+        <fullName>Remove_selected</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Remove selected</shortDescription>
+        <value>Remove selected</value>
+    </labels>
+    <labels>
+        <fullName>Remove_success</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Remove success</shortDescription>
+        <value>Records successfully removed</value>
+    </labels>
+    <labels>
         <fullName>Save</fullName>
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Save</shortDescription>
         <value>Save</value>
+    </labels>
+    <labels>
+        <fullName>Success</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Success</shortDescription>
+        <value>Success</value>
     </labels>
     <labels>
         <fullName>Remove_Event_Confirmation_Message</fullName>

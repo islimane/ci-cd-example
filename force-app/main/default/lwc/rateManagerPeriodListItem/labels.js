@@ -2,10 +2,10 @@
 
 import formSubtmitBtn from '@salesforce/label/c.Save';
 import editPeriod from '@salesforce/label/c.Edit_Period';
-import removePeriodConfirmationMessage from '@salesforce/label/c.Remove_Confirmation_Message';
+import removeConfirmationMessage from '@salesforce/label/c.Remove_confirmation';
 
 export default {
     formSubtmitBtn,
     editPeriod,
-    removePeriodConfirmationMessage
+    removeConfirmationMessage
 };
