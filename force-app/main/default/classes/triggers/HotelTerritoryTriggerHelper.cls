@@ -3,7 +3,7 @@
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
  * @last modified on  : 28-03-2025
- * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
+ * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 public with sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
 
@@ -52,12 +52,9 @@ public with sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
 	 * @param lHotelTerritory New list of hotel territory to work
 	 */
 	public static void generatePublicGroups(List<HotelTerritory__c> lHotelTerritory) {
-        // validar por tipo que todos los territorios tienen todos los padres necesarios
         List<HotelTerritory__c> lHotelTerritoryValidated = validateTerritories(lHotelTerritory);
-        // generar grupos publicos con public group code
         Map<String, Group> mGeneratedGroups = generateTerritoryGroups(lHotelTerritoryValidated);
         System.debug('### HotelTerritoryTriggerHelper.generatePublicGroups() - mGeneratedGroups: ' + mGeneratedGroups);
-        // asignar como groupmember a todos los grupos de todos los territorios padre (hotel>subzona>zona>continente>area)
         generateGroupMembers(lHotelTerritoryValidated, mGeneratedGroups);
     }
 
