@@ -3,7 +3,7 @@
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
  * @last modified on  : 28-03-2025
- * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
+ * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 @SuppressWarnings('PMD')
 public without sharing class GlobalConstants {
@@ -68,7 +68,7 @@ public without sharing class GlobalConstants {
     /** Rate */
     public static final String RATE_RATE_NAME_PICKLIST_BEST { get { return 'BEST'; } }
 
-    /** Rate */
+    /** Group */
     public static final String GROUP_TYPE_REGULAR { get { return 'Regular'; } }
 
 }
