@@ -15,7 +15,8 @@ import LABELS from './labels';
 import rateManagerModalRoomHandler from 'c/rateManagerModalRoomHandler';
 
 export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtension) {
-    @api rateId;
+    @api parentId;  // PlannerRateId
+    @api rateId;    // RateId
     @track filters = [];
     @track data = [];
 
@@ -133,6 +134,7 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
     async handleAddRoomModal() {
         await rateManagerModalRoomHandler.open({
             parentId: this.parentId,
+            rateId: this.rateId,
             size: 'large',
             headerLabel: 'Add Rooms',
             onrefreshtable: (e) => {
@@ -163,7 +165,7 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
         });
 
         if (result) {
-            const promises = selectedRows.map((row) => deleteRecord(row.RateLineId));
+            const promises = selectedRows.map((row) => deleteRecord(row.Id));
             Promise.all(promises)
                 .then(() => {
                     this.showToast(this.labels.success, this.labels.removeSuccess, 'success');

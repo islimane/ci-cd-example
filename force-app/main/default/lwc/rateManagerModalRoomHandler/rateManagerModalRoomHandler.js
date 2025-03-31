@@ -1,7 +1,7 @@
 /* @description       : Shows a modal to attach rooms to a rate
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 26-03-2025
+ * @last modified on  : 31-03-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 import { api } from 'lwc';
@@ -16,6 +16,7 @@ export default class RateManagerModalRoomHandler extends RateManagerMixin(Lightn
     disableSaveButton = false;
 
     @api parentId;
+    @api rateId;
     @api headerLabel;
 
     handleLoad(event) {
@@ -62,8 +63,8 @@ export default class RateManagerModalRoomHandler extends RateManagerMixin(Lightn
             RatePlanner__c: this.parentId,
             Hotel__c: product.Hotel__c,
             Product__c: product.Id,
-            Room__c: product.Room__c
-            // Rate__c: product.Rate__c  PENDIENTE DE CONFIRMAR
+            Room__c: product.Room__c,
+            Rate__c: this.rateId
         };
         const recordInput = { apiName: 'RateLine__c', fields };
         await createRecord(recordInput)
