@@ -2,8 +2,8 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 27-03-2025
- * @last modified by  : alberto.martinez-lopez@inetum.com
+ * @last modified on  : 31-03-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 import { api, track } from 'lwc';
 import LwcDCExtension from 'c/lwcDCExtension';
@@ -15,7 +15,7 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
     @api rateId;
     @track filters = [];
     @track data = [];
-    
+
     _columns = [];
 
     get columns() {
@@ -73,25 +73,58 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
         this.data.forEach(item => {
             item.ratesPrices.forEach(rate => {
                 if (rate.StartDate && rate.EndDate) {
-                    const periodLabel = `${rate.StartDate} - ${rate.EndDate}`;
-                    periods.add(periodLabel);
+                    periods.add(rate.periodKey);
                 }
             });
         });
 
         periods.forEach(period => {
-            this._columns.push({ label: period, fieldName: period, editable: true, type: 'currency', fixedWidth: 200 });
+            this._columns.push({ label: period, fieldName: period, type: 'currency', editable: true, fixedWidth: 200 });
         });
 
-        // Añadir columnas dinámicas basadas en los periodos
         this.data = this.data.map(item => {
             const newItem = { ...item };
             periods.forEach(period => {
-                const rate = item.ratesPrices.find(element => `${element.StartDate} - ${element.EndDate}` === period);
+                const rate = item.ratesPrices.find(element => element.periodKey === period);
                 newItem[period] = rate ? rate.TotalPrice : null;
             });
             return newItem;
         });
+
+    }
+
+    refreshTable() {
+        this.refreshFetch();
+    }
+
+    async handleSave(event){
+
+        const draftValues = event.detail.draftValues;
+        const mappedData = [];
+        draftValues.forEach(item => {
+            const dateRangeKeys = Object.keys(item).filter(key =>
+                key.includes('-') && /\d+\/\d+\/\d+/.test(key)
+            );
+            dateRangeKeys.forEach(dateKey => {
+                mappedData.push({
+                    periodKey: dateKey,
+                    TotalPrice: parseFloat(item[dateKey]),
+                    ParentRateLineId: item.id
+                });
+            });
+        });
+
+        try{
+            const result = await this.remoteAction({
+                controller: 'RateManagerSmntsAndDntsController',
+                action: 'saveRatePrices',
+                ratePlannerId: this.parentId,
+                ratePrices: JSON.stringify(mappedData),
+            });
+            if(result)this.refreshFetch();
+        }catch(e){
+            console.error(e);
+        }
     }
 
 

@@ -1,17 +1,22 @@
 <!--
-  @description       : 
+  @description       :
   @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
-  @group             : 
-  @last modified on  : 26-03-2025
-  @last modified by  : alberto.martinez-lopez@inetum.com
+  @group             :
+  @last modified on  : 31-03-2025
+  @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 -->
 <template>
     <div if:true={columnsIsNotEmpty}>
-        <c-extended-data-table-manager 
-            columns={columns} 
-            fixed-column-count={fixedColumnCount} 
-            filters={filters} 
-            table-data={data}>
+        <c-extended-data-table-manager
+            oninlinesave={handleSave}
+            columns={columns}
+            fixed-column-count={fixedColumnCount}
+            filters={filters}
+            table-data={data}
+        >
+            <div slot="datatable-action-buttons">
+                SLOT FOR ACTION BUTTONS  ---  BCRMB2B-22
+            </div>
         </c-extended-data-table-manager>
     </div>
 </template>
