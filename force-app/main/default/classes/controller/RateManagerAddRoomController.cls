@@ -2,7 +2,7 @@
  * @description       : RateManagerModalRoomHandlerController
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Controllers
- * @last modified on  : 27-03-2025
+ * @last modified on  : 31-03-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 public with sharing class RateManagerAddRoomController extends DC_DynamicController {
@@ -45,12 +45,12 @@ public with sharing class RateManagerAddRoomController extends DC_DynamicControl
         }
         System.debug('data pos' + data);
 
-        Map<String, Option> mRoomOptions = new Map<String, Option>{ 'All' => new Option('All', '') };
-        Map<String, Option> mCharacteristicOptions = new Map<String, Option>{ 'All' => new Option('All', '') };
+        Map<String, RateManagerModel.Option> mRoomOptions = new Map<String, RateManagerModel.Option>{ 'All' => new RateManagerModel.Option('All', '') };
+        Map<String, RateManagerModel.Option> mCharacteristicOptions = new Map<String, RateManagerModel.Option>{ 'All' => new RateManagerModel.Option('All', '') };
 
         for (Product2 product : data) {
             if (!String.isEmpty(product.Room__c) && !mRoomOptions.containsKey(product.Room__c)) {
-                mRoomOptions.put(product.Room__c, new Option(product.Room__c, product.Room__c));
+                mRoomOptions.put(product.Room__c, new RateManagerModel.Option(product.Room__c, product.Room__c));
             }
             if (
                 !String.isEmpty(product.Characteristic__c) &&
@@ -58,15 +58,15 @@ public with sharing class RateManagerAddRoomController extends DC_DynamicControl
             ) {
                 mCharacteristicOptions.put(
                     product.Characteristic__c,
-                    new Option(product.Characteristic__c, product.Characteristic__c)
+                    new RateManagerModel.Option(product.Characteristic__c, product.Characteristic__c)
                 );
             }
         }
 
-        List<FilterWp> filterWp = new List<FilterWp>();
-        filterWp.add(new FilterWp('Room__c', 'Room', null, null, 'combobox', mRoomOptions.values(), null, null));
+        List<RateManagerModel.FilterWp> filterWp = new List<RateManagerModel.FilterWp>();
+        filterWp.add(new RateManagerModel.FilterWp('Room__c', 'Room', null, null, 'combobox', mRoomOptions.values(), null, null));
         filterWp.add(
-            new FilterWp(
+            new RateManagerModel.FilterWp(
                 'Characteristic__c',
                 'Characteristic',
                 null,
@@ -78,71 +78,9 @@ public with sharing class RateManagerAddRoomController extends DC_DynamicControl
             )
         );
 
-        return new DC_ResponseWr(true, new InitDataWp(filterWp, data));
+        return new DC_ResponseWr(true, new RateManagerModel.Product2DataTableWp(filterWp, data));
     }
 
     private class ControllerExampleException extends Exception {
-    }
-
-    /***************************************
-     *               Wrapper               *
-     ***************************************/
-
-    public class Option {
-        public String label;
-        public String value;
-
-        public Option(String label, String value) {
-            this.label = label;
-            this.value = value;
-        }
-    }
-
-    /**
-     * Wrapper class to hold the initial data.
-     */
-    public class InitDataWp {
-        public List<FilterWp> filters = new List<FilterWp>();
-        public List<Product2> data;
-
-        public InitDataWp(List<FilterWp> filters, List<Product2> data) {
-            this.filters = filters;
-            this.data = data;
-        }
-    }
-
-    /**
-     * @description  : This class is used to wrap a filter provided by the user.
-     * @author       : development@nubika.com
-     **/
-    public class FilterWp {
-        String fieldApiName;
-        String label;
-        Object defaultValue;
-        Object value;
-        String type; //Date, text, checkbox, select
-        List<Option> options;
-        Date min;
-        Date max;
-
-        public FilterWp(
-            String fieldApiName,
-            String label,
-            Object defaultValue,
-            Object value,
-            String type,
-            List<Option> options,
-            Date min,
-            Date max
-        ) {
-            this.fieldApiName = fieldApiName;
-            this.label = label;
-            this.defaultValue = defaultValue;
-            this.value = value;
-            this.type = type;
-            this.options = options;
-            this.min = min;
-            this.max = max;
-        }
     }
 }

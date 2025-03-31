@@ -2,11 +2,11 @@
  * @description       : Unified model class for Rate Manager controllers
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             :
- * @last modified on  : 28-03-2025
- * @last modified by  : alberto.martinez-lopez@inetum.com
+ * @last modified on  : 31-03-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 public with sharing class RateManagerModel {
-    
+
     /***************************************
      *               Wrappers              *
      ***************************************/
@@ -18,6 +18,20 @@ public with sharing class RateManagerModel {
         public Option(String label, String value) {
             this.label = label;
             this.value = value;
+        }
+    }
+
+    /**
+     * Wrapper class to hold the initial data.
+     */
+    public class Product2DataTableWp {
+        public List<FilterWp> filters = new List<FilterWp>();
+        public List<Product2> data;
+
+
+        public Product2DataTableWp(List<FilterWp> filters, List<Product2> data) {
+            this.filters = filters;
+            this.data = data;
         }
     }
 
@@ -59,7 +73,7 @@ public with sharing class RateManagerModel {
             this.RateId = rateLine.Rate__c;
             this.HotelId = rateLine.Hotel__c;
             this.RatePlannerId = rateLine.RatePlanner__c;
-            
+
             // These fields might be null for some RateLine records (e.g., supplements)
             this.Characteristic = rateLine.Product__r.Characteristic__c;
             this.Room = rateLine.Product__r.Room__c;
