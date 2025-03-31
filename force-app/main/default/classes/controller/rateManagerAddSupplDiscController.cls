@@ -1,8 +1,8 @@
 /**
  * @description       : Controller for rateManagerAddSupplementsAndDiscounts component.
- * @author            : Inetum Team <sara.gerico@inetum.com>
+ * @author            : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  * @group             : Controllers
- * @last modified on  : 27-03-2025
+ * @last modified on  : 31-03-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 public with sharing class rateManagerAddSupplDiscController extends DC_DynamicController {
@@ -29,7 +29,7 @@ public with sharing class rateManagerAddSupplDiscController extends DC_DynamicCo
             ?.keySet();
         List<Product2> data = Product2Selector.getProductsByHotelIdAndFamily(
             sHotelJoin,
-            GlobalConstants.PRODUCT2_FAMILY_ROOM
+            GlobalConstants.PRODUCT2_FAMILY_SUPPLEMENT
         );
         System.debug('data pre' + data);
         //Do not include Products with RatePlanner = ratePlannerId. These are already added.
@@ -78,7 +78,7 @@ public with sharing class rateManagerAddSupplDiscController extends DC_DynamicCo
             )
         );
 
-        return new DC_ResponseWr(true, new RateManagerModel.InitDataWp(filterWp, null)); // será data cuando esté en RateManagerModel polimorfismo
+        return new DC_ResponseWr(true, new RateManagerModel.Product2DataTableWp(filterWp, data)); // será data cuando esté en RateManagerModel polimorfismo
     }
 
     private class ControllerExampleException extends Exception {
