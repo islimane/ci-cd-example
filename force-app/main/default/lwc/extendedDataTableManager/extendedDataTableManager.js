@@ -2,8 +2,8 @@
  * @description       : Shows a table with fixed columns and scrollable columns. Includes also a filter component and action buttons
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 03-28-2025
- * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @last modified on  : 31-03-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 import { api, track } from 'lwc';
 import LwcDCExtension from 'c/lwcDCExtension';
@@ -74,6 +74,7 @@ export default class ExtendedDataTableManager extends RateManagerMixin(LwcDCExte
         }
     }
 
+    @api
     getSelectedRows() {
         return this.template.querySelector('c-extended-data-table')?.getSelectedRows();
     }
