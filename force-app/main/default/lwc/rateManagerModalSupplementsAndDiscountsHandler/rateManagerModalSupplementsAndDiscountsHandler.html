@@ -1,0 +1,27 @@
+<!--
+  @description       : Shows a modal to attach supplements and discounts to a rate
+  @author            : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
+  @group             :
+  @last modified on  : 31-03-2025
+  @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
+-->
+<template>
+    <lightning-modal-header label={headerLabel}></lightning-modal-header>
+    <lightning-modal-body>
+        <div>
+            <c-rate-manager-add-supplements-and-discounts
+                parent-id={parentId}
+            ></c-rate-manager-add-supplements-and-discounts>
+        </div>
+    </lightning-modal-body>
+    <lightning-modal-footer>
+        <lightning-button
+            class="slds-m-top_small"
+            type="submit"
+            icon-name="utility:add"
+            label={labels.add}
+            onclick={handleSave}
+            disable={disableSaveButton}
+        ></lightning-button>
+    </lightning-modal-footer>
+</template>
