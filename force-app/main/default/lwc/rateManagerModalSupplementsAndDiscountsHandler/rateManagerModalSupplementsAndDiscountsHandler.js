@@ -16,6 +16,7 @@ export default class RateManagerModalSupplementsAndDiscountsHandler extends Rate
     disableSaveButton = false;
 
     @api parentId;
+    @api rateId;
     @api headerLabel;
 
     handleLoad(event) {
@@ -59,11 +60,11 @@ export default class RateManagerModalSupplementsAndDiscountsHandler extends Rate
 
     async createRateLine(product) {
         const fields = {
+            Rate__c: this.rateId,
             RatePlanner__c: this.parentId,
             Hotel__c: product.Hotel__c,
             Product__c: product.Id,
             Room__c: product.Room__c
-            // Rate__c: product.Rate__c  PENDIENTE DE CONFIRMAR
         };
         const recordInput = { apiName: 'RateLine__c', fields };
         await createRecord(recordInput)

@@ -15,7 +15,22 @@
             table-data={data}
         >
             <div slot="datatable-action-buttons">
-                SLOT FOR ACTION BUTTONS  ---  BCRMB2B-22
+                <lightning-button-group>
+                    <lightning-button
+                        label={labels.addSupplementsReductions}
+                        title={labels.addSupplementsReductions}
+                        icon-name="utility:add"
+                        onclick={handleAddRoomModal}
+                        variant="neutral"
+                    ></lightning-button>
+                    <lightning-button
+                        label={labels.removeSelected}
+                        title={labels.removeSelected}
+                        icon-name="utility:delete"
+                        onclick={handleDelete}
+                        variant="neutral"
+                    ></lightning-button>
+                </lightning-button-group>
             </div>
         </c-extended-data-table-manager>
     </div>

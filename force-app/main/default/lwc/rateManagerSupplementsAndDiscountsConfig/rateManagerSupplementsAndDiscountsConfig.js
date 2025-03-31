@@ -4,14 +4,18 @@
  * @group             :
  * @last modified on  : 31-03-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
-**/
+ **/
 import { api, track } from 'lwc';
 import LwcDCExtension from 'c/lwcDCExtension';
 import { RateManagerMixin } from 'c/rateManagerMixin';
-
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { deleteRecord } from 'lightning/uiRecordApi';
+import LightningConfirm from 'lightning/confirm';
+import LABELS from './labels';
+import modalSupplementsAndDiscounts from 'c/rateManagerModalSupplementsAndDiscountsHandler';
 
 export default class RateManagerSupplementsAndDiscountsConfig extends RateManagerMixin(LwcDCExtension) {
-
+    @api parentId;
     @api rateId;
     @track filters = [];
     @track data = [];
@@ -26,13 +30,14 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
         return this._columns.length > 0;
     }
 
-
     get fixedColumnCount() {
         return this._columns.filter((column) => column.fixed).length;
     }
 
+    labels = LABELS;
+
     /*** Connected callback.*/
-    connectedCallback(){
+    connectedCallback() {
         this.setWireParams();
     }
 
@@ -40,7 +45,11 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
      * @description: Sets the wire parameters for the component.
      **/
     setWireParams() {
-        this._wireParams = {ratePlannerId: this.parentId, rateId: this.rateId, controller: 'RateManagerSmntsAndDntsController' };
+        this._wireParams = {
+            ratePlannerId: this.parentId,
+            rateId: this.rateId,
+            controller: 'RateManagerSmntsAndDntsController'
+        };
     }
 
     /**
@@ -56,12 +65,11 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
         } else {
             console.warn('No records available in response');
         }
-    }
+    };
 
-
-
-    buildTable(){
-        this._columns = [{ label: 'ACTIONS', fieldName: 'action', type: 'checkbox', fixed: true, fixedWidth: 109 },
+    buildTable() {
+        this._columns = [
+            { label: 'ACTIONS', fieldName: 'action', type: 'checkbox', fixed: true, fixedWidth: 109 },
             { label: 'SUPPLEMENT NAME', fieldName: 'Name', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
             { label: 'TYPE', fieldName: 'RegimenType', type: 'text', fixed: true, fixedWidth: 80, wrapText: true },
             { label: 'APPLICATION TYPE', fieldName: 'ApplicationType', type: 'text', fixed: true, fixedWidth: 200 },
@@ -70,42 +78,38 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
         ];
 
         const periods = new Set();
-        this.data.forEach(item => {
-            item.ratesPrices.forEach(rate => {
+        this.data.forEach((item) => {
+            item.ratesPrices.forEach((rate) => {
                 if (rate.StartDate && rate.EndDate) {
                     periods.add(rate.periodKey);
                 }
             });
         });
 
-        periods.forEach(period => {
+        periods.forEach((period) => {
             this._columns.push({ label: period, fieldName: period, type: 'currency', editable: true, fixedWidth: 200 });
         });
 
-        this.data = this.data.map(item => {
+        this.data = this.data.map((item) => {
             const newItem = { ...item };
-            periods.forEach(period => {
-                const rate = item.ratesPrices.find(element => element.periodKey === period);
+            periods.forEach((period) => {
+                const rate = item.ratesPrices.find((element) => element.periodKey === period);
                 newItem[period] = rate ? rate.TotalPrice : null;
             });
             return newItem;
         });
-
     }
 
     refreshTable() {
         this.refreshFetch();
     }
 
-    async handleSave(event){
-
+    async handleSave(event) {
         const draftValues = event.detail.draftValues;
         const mappedData = [];
-        draftValues.forEach(item => {
-            const dateRangeKeys = Object.keys(item).filter(key =>
-                key.includes('-') && /\d+\/\d+\/\d+/.test(key)
-            );
-            dateRangeKeys.forEach(dateKey => {
+        draftValues.forEach((item) => {
+            const dateRangeKeys = Object.keys(item).filter((key) => key.includes('-') && /\d+\/\d+\/\d+/.test(key));
+            dateRangeKeys.forEach((dateKey) => {
                 mappedData.push({
                     periodKey: dateKey,
                     TotalPrice: parseFloat(item[dateKey]),
@@ -114,19 +118,74 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
             });
         });
 
-        try{
+        try {
             const result = await this.remoteAction({
                 controller: 'RateManagerSmntsAndDntsController',
                 action: 'saveRatePrices',
                 ratePlannerId: this.parentId,
-                ratePrices: JSON.stringify(mappedData),
+                ratePrices: JSON.stringify(mappedData)
             });
-            if(result)this.refreshFetch();
-        }catch(e){
+            if (result) this.refreshFetch();
+        } catch (e) {
             console.error(e);
         }
     }
 
+    async handleAddRoomModal() {
+        await modalSupplementsAndDiscounts.open({
+            parentId: this.parentId,
+            rateId: this.rateId,
+            size: 'large',
+            headerLabel: 'Add Supplements and Reductions',
+            onrefreshtable: (e) => {
+                e.stopPropagation();
+                this.refreshTable();
+            }
+        });
+    }
 
+    async handleDelete() {
+        // retrieve selected rows
+        let selectedRows = this.template.querySelector('c-extended-data-table-manager')?.getSelectedRows();
+        console.log('Selected rows --> ' + selectedRows);
+        if (!selectedRows || selectedRows.length === 0) {
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Error',
+                    variant: 'Error',
+                    message: this.labels.noRecordsSelected
+                })
+            );
+            return;
+        }
+        const result = await LightningConfirm.open({
+            message: this.labels.removeConfirmation,
+            variant: 'headerless',
+            label: 'this is the aria-label value'
+        });
 
+        if (result) {
+            const promises = selectedRows.map((row) => deleteRecord(row.Id));
+            Promise.all(promises)
+                .then(() => {
+                    this.showToast(this.labels.success, this.labels.removeSuccess, 'success');
+                })
+                .catch((error) => {
+                    this.showToast('Error', error.body.message, 'error');
+                })
+                .finally(() => {
+                    this.refreshTable();
+                });
+        }
+    }
+
+    showToast(title, message, variant) {
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title: title,
+                variant: variant,
+                message: message
+            })
+        );
+    }
 }
