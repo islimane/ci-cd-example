@@ -2,8 +2,8 @@
  * @description       : 
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             : 
- * @last modified on  : 10-03-2025
- * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+ * @last modified on  : 28-03-2025
+ * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 public class RateManagerRateConfigController extends DC_DynamicController{
     
