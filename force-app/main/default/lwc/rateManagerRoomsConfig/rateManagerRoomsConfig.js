@@ -59,7 +59,7 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
         this._columns = [{ label: 'ACTIONS', fieldName: 'action', 
             type: "actions",
             typeAttributes: {
-              recordId: { fieldName: "id" }
+                recordId: { fieldName: "id" }
             },
             fixed: true, fixedWidth: 109 },
             { label: 'NAME', fieldName: 'Name', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },

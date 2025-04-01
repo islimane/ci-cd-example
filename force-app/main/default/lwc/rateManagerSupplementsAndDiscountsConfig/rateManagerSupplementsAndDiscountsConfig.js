@@ -64,7 +64,7 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
         this._columns = [{ label: 'ACTIONS', fieldName: 'action', 
                 type: "actions",
                 typeAttributes: {
-                recordId: { fieldName: "id" }
+                    recordId: { fieldName: "id" }
                 },
                 fixed: true, fixedWidth: 109
             },
