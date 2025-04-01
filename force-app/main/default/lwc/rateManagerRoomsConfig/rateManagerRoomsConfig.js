@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 28-03-2025
+ * @last modified on  : 01-04-2025
  * @last modified by  : alberto.martinez-lopez@inetum.com
  **/
 import { api, track } from 'lwc';
@@ -56,7 +56,12 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
     }
 
     buildTable(){
-        this._columns = [{ label: 'ACTIONS', fieldName: 'action', type: 'checkbox', fixed: true, fixedWidth: 109 },
+        this._columns = [{ label: 'ACTIONS', fieldName: 'action', 
+            type: "actions",
+            typeAttributes: {
+              recordId: { fieldName: "id" }
+            },
+            fixed: true, fixedWidth: 109 },
             { label: 'NAME', fieldName: 'Name', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
             { label: 'ROOM', fieldName: 'Room', type: 'text', fixed: true, fixedWidth: 100, wrapText: true },
             { label: 'CHARACTERSITIC', fieldName: 'Characteristic', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
@@ -89,6 +94,11 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
 
     refreshTable() {
         this.refreshFetch();
+    }
+
+    handleRowAction(event) {
+        console.log('handleRowAction rateManagerRoomsConfig' , event.detail);
+        
     }
 
     async handleSave(event){

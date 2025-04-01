@@ -2,7 +2,7 @@
   @description       : 
   @author            : alberto.martinez-lopez@inetum.com
   @group             : 
-  @last modified on  : 31-03-2025
+  @last modified on  : 01-04-2025
   @last modified by  : alberto.martinez-lopez@inetum.com
 -->
 <template>
@@ -10,13 +10,14 @@
         <!-- Fixed Columns Table -->
         <div class="fixed-table">
             <template if:false={fixedColumnsIsEmpty}>
-                <lightning-datatable
+                <c-data-table-with-custom-types
                     key-field="id"
                     data={fixedTableData}
                     columns={fixedColumns}
                     resize-column-disabled="true"
                     lwc:ref="fixedTable"
-                ></lightning-datatable>
+                    oninnerrowaction={handleRowAction}
+                ></c-data-table-with-custom-types>
             </template>
         </div>
 

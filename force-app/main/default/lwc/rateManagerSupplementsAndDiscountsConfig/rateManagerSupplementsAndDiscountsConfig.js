@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 31-03-2025
+ * @last modified on  : 01-04-2025
  * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 import { api, track } from 'lwc';
@@ -61,7 +61,13 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
 
 
     buildTable(){
-        this._columns = [{ label: 'ACTIONS', fieldName: 'action', type: 'checkbox', fixed: true, fixedWidth: 109 },
+        this._columns = [{ label: 'ACTIONS', fieldName: 'action', 
+                type: "actions",
+                typeAttributes: {
+                recordId: { fieldName: "id" }
+                },
+                fixed: true, fixedWidth: 109
+            },
             { label: 'SUPPLEMENT NAME', fieldName: 'Name', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
             { label: 'TYPE', fieldName: 'RegimenType', type: 'text', fixed: true, fixedWidth: 80, wrapText: true },
             { label: 'APPLICATION TYPE', fieldName: 'ApplicationType', type: 'text', fixed: true, fixedWidth: 200 },
@@ -95,6 +101,11 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
 
     refreshTable() {
         this.refreshFetch();
+    }
+
+    handleRowAction(event) {
+        console.log('handleRowAction rateManagerSupplementsAndDiscountsConfig' , event.detail);
+        
     }
 
     async handleSave(event){
