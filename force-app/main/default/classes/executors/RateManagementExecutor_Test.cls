@@ -2,7 +2,7 @@
  * @description       : Orchestrates test execution for rate management functionality..
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Test Executor
- * @last modified on  : 12-03-2025
+ * @last modified on  : 01-04-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 @isTest
@@ -44,7 +44,7 @@ public with sharing class RateManagementExecutor_Test {
     static void RateManagerController_Test(){
         RateManagerController_Test.testAll();
     }
-	
+
     @isTest
     public static void RateManagerPeriodListControllerTest(){
         RateManagerPeriodListController_Test.testAll();
@@ -114,5 +114,10 @@ public with sharing class RateManagementExecutor_Test {
     @IsTest
     static void OpportunityHotelTrigger_Test(){
         OpportunityHotelTrigger_Test.testAll();
+    }
+
+    @IsTest
+    static void HotelTerritoryTrigger_Test(){
+        HotelTerritoryTrigger_Test.testAll();
     }
 }

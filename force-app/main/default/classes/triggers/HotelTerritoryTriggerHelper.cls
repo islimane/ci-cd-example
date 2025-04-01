@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 28-03-2025
+ * @last modified on  : 01-04-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 public with sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
@@ -61,22 +61,21 @@ public with sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
     // PRIVATE METHODS
 
     private static String buildTerritoryCode(HotelTerritory__c hotelTerritory, Set<String> sAllTerritoryCodes) {
+        System.debug('### HotelTerritoryTriggerHelper.buildTerritoryCode() - hotelTerritory.Name: ' + hotelTerritory.Name);
         List<String> lTerritoryNameChunks = hotelTerritory.Name?.split(' ');
-        if (!lTerritoryNameChunks.isEmpty()) {
-            System.debug('### HotelTerritoryTriggerHelper.buildTerritoryCode() - hotelTerritory.Name: ' + hotelTerritory.Name);
-            String territoryCode = '';
-            if (lTerritoryNameChunks.size() == 1) {
-                territoryCode = lTerritoryNameChunks[0].left(2).toUpperCase();
-            } else {
-                for (String currentNameChunk : lTerritoryNameChunks) {
-                    if (isValidChunk(currentNameChunk)) territoryCode += currentNameChunk.left(1).toUpperCase();
-                }
+
+        String territoryCode = '';
+        if (lTerritoryNameChunks.size() == 1) {
+            territoryCode = lTerritoryNameChunks[0].left(2).toUpperCase();
+        } else {
+            for (String currentNameChunk : lTerritoryNameChunks) {
+                if (isValidChunk(currentNameChunk)) territoryCode += currentNameChunk.left(1).toUpperCase();
             }
-            if (!sAllTerritoryCodes.contains(territoryCode)) {
-                sAllTerritoryCodes.add(territoryCode);
-                return territoryCode;
-            } else return buildDuplicateTerritoryCode(lTerritoryNameChunks, sAllTerritoryCodes);
-        } else return null;
+        }
+        if (!sAllTerritoryCodes.contains(territoryCode)) {
+            sAllTerritoryCodes.add(territoryCode);
+            return territoryCode;
+        } else return buildDuplicateTerritoryCode(lTerritoryNameChunks, sAllTerritoryCodes);
     }
 
     private static Boolean isValidChunk(String chunk) {
@@ -87,11 +86,12 @@ public with sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
     }
 
     private static String buildDuplicateTerritoryCode(List<String> lTerritoryNameChunks, Set<String> sAllTerritoryCodes) {
+        String finalCode = null;
         if (lTerritoryNameChunks.size() == 1) {
-            return findValidChunkAndConcat(null, lTerritoryNameChunks[0], 3, null, sAllTerritoryCodes);
+            finalCode = findValidChunkAndConcat(null, lTerritoryNameChunks[0], 3, null, sAllTerritoryCodes);
         } else {
             String prefixCode = '';
-            for (Integer index = 0; index < lTerritoryNameChunks.size(); index++) {
+            for (Integer index = 0; index < lTerritoryNameChunks.size() && finalCode == null; index++) {
                 String currentNameChunk = lTerritoryNameChunks[index];
                 if (isValidChunk(currentNameChunk)) {
                     List<String> lOtherChunks = new List<String>();
@@ -102,13 +102,13 @@ public with sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
                         }
                     }
                     String validChunkCode = findValidChunkAndConcat(prefixCode, currentNameChunk, 2, lOtherChunks, sAllTerritoryCodes);
-                    if (String.isNotBlank(validChunkCode)) return validChunkCode;
+                    if (String.isNotBlank(validChunkCode)) finalCode = validChunkCode;
                     else prefixCode += currentNameChunk.toUpperCase();
                 }
             }
         }
 
-        return null;
+        return finalCode;
     }
 
     private static String findValidChunkAndConcat(String prefix, String chunk, Integer startLeftCounter, List<String> otherChunksToConcat, Set<String> sAllTerritoryCodes) {
@@ -187,7 +187,7 @@ public with sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
                 ));
             }
         }
-        upsert mGroupsToInsertByCode.values();
+        if (!mGroupsToInsertByCode.isEmpty()) upsert mGroupsToInsertByCode.values();
         return mGroupsToInsertByCode;
     }
 
@@ -209,15 +209,7 @@ public with sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
         }
 
         Map<Id, String> mParentGroupNamesByParentId = HotelTerritorySelector.getGroupNameRelatedByIdAndCode(sAllParentsTerritories);
-        Set<String> sAllParentsGroupNames = new Set<String>();
-        for (HotelTerritory__c currentTerritory : lHotelTerritory) {
-            if (RELEVANT_FIELDS_BY_TYPE.containsKey(currentTerritory.RecordTypeId)) {
-                for (Schema.sObjectField currentField : RELEVANT_FIELDS_BY_TYPE.get(currentTerritory.RecordTypeId)) {
-                    String currentFieldValue = (String)currentTerritory.get(currentField);
-                    if (mParentGroupNamesByParentId.containsKey(currentFieldValue)) sAllParentsGroupNames.add(mParentGroupNamesByParentId.get(currentFieldValue));
-                }
-            }
-        }
+        Set<String> sAllParentsGroupNames = new Set<String>(mParentGroupNamesByParentId.values());
 
         Map<String, Id> mParentGroupByCode = GroupSelector.getGroupIdsByCode(sAllParentsGroupNames);
         for (HotelTerritory__c currentTerritory : lHotelTerritory) {
@@ -253,7 +245,13 @@ public with sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
                 ));
             }
         }
-        System.debug('### HotelTerritoryTriggerHelper.createGroupMembers() - lGroupMembers: ' + lGroupMembers);
-        Database.insert(lGroupMembers, false);
+
+        try {
+            System.debug('### HotelTerritoryTriggerHelper.createGroupMembers() - lGroupMembers: ' + lGroupMembers);
+            if (!lGroupMembers.isEmpty()) Database.insert(lGroupMembers, false);
+        } catch (Exception e) {
+            Logger.error('Unexpected error in HotelTerritoryTriggerHelper.createGroupMembers()', e.getMessage() + ' - Stack trace: ' + e.getStackTraceString());
+            Logger.saveLog();
+        }
     }
 }
