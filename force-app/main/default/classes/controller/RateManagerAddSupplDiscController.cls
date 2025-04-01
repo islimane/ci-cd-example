@@ -2,10 +2,10 @@
  * @description       : Controller for rateManagerAddSupplementsAndDiscounts component.
  * @author            : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  * @group             : Controllers
- * @last modified on  : 31-03-2025
+ * @last modified on  : 01-04-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
-public with sharing class rateManagerAddSupplDiscController extends DC_DynamicController {
+public with sharing class RateManagerAddSupplDiscController extends DC_DynamicController {
     /**
      * @description
      * @author Inetum Team <alberto.martinez-lopez@inetum.com> | 28-02-2025

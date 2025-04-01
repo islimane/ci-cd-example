@@ -2,7 +2,7 @@
  * @description       : Enables adding Supplements and Discounts to a Rate Planner.
  * @author            : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  * @group             :
- * @last modified on  : 27-03-2025
+ * @last modified on  : 01-04-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 import { track, api } from 'lwc';
@@ -54,7 +54,7 @@ export default class rateManagerAddSupplementsAndDiscounts extends LwcDCExtensio
      * @description: Sets the wire parameters for the component.
      **/
     setWireParams() {
-        this._wireParams = { parentId: this.parentId, controller: 'rateManagerAddSupplDiscController' };
+        this._wireParams = { parentId: this.parentId, controller: 'RateManagerAddSupplDiscController' };
     }
 
     /**
