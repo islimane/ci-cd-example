@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
-        <members>RateManagementExecutor_Test</members>
-        <members>RateManagerAddRoomController</members>
-        <members>RateManagerAddRoomController_Test</members>
-        <members>RateManagerAddSupplDiscController</members>
-        <members>RateManagerAddSupplDiscController_Test</members>
-        <members>RateManagerModel</members>
-        <name>ApexClass</name>
+        <members>Delete</members>
+        <name>CustomLabel</name>
     </types>
     <types>
-        <members>extendedDataTableManager</members>
-        <members>rateManagerAddRooms</members>
-        <members>rateManagerAddSupplementsAndDiscounts</members>
-        <members>rateManagerModalRoomHandler</members>
-        <members>rateManagerModalSupplementsAndDiscountsHandler</members>
+        <members>dataTableActions</members>
+        <members>dataTableWithCustomTypes</members>
+        <members>extendedDataTable</members>
         <members>rateManagerRoomsConfig</members>
         <members>rateManagerSupplementsAndDiscountsConfig</members>
         <name>LightningComponentBundle</name>
