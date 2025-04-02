@@ -65,9 +65,7 @@ pipelines:
                 sfdx sgd:source:delta --to $BITBUCKET_COMMIT --from $LAST_SUCCESSFUL_COMMIT --output .
                 MANIFEST_PATH="package/package.xml"
               fi
-            - echo $MANIFEST_PATH
-            - tests=$(cat ci-config/specified_tests.txt | tr '\n' ' ' | sed 's/ $//')
-            - '[[ -z "$tests" ]] && sf project deploy start --manifest $MANIFEST_PATH --test-level NoTestRun || sf project deploy start --manifest $MANIFEST_PATH --test-level RunSpecifiedTests --tests $tests'
+            - sf project deploy start --manifest $MANIFEST_PATH --test-level NoTestRun 
             - echo $BITBUCKET_COMMIT > ci-config/last_successful_commit.txt
             - cat "$MANIFEST_PATH" > ci-config/last_package.xml
             - git add ci-config/last_successful_commit.txt
