@@ -68,15 +68,18 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
     };
 
     buildTable(){
-        this._columns = [{ label: 'ACTIONS', fieldName: 'action',
-            type: "actions",
-            typeAttributes: {
-                recordId: { fieldName: "id" },
-                actions: [
-                    {iconName: 'action:remove', label: 'Delete', action: 'delete'}, {iconName: 'action:clone', label: 'Clone', action: 'clone'}
-                ]
+        this._columns = [{ 
+                label: 'ACTIONS', 
+                fieldName: 'action',
+                type: "actions",
+                typeAttributes: {
+                    recordId: { fieldName: "id" },
+                    actions: [
+                        {iconName: 'action:remove', label: 'Delete', action: 'delete'}, {iconName: 'action:clone', label: 'Clone', action: 'clone'}
+                    ]
+                },
+                fixed: true, fixedWidth: 109 
             },
-            fixed: true, fixedWidth: 109 },
             { label: 'NAME', fieldName: 'Name', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
             { label: 'ROOM', fieldName: 'Room', type: 'text', fixed: true, fixedWidth: 100, wrapText: true },
             { label: 'CHARACTERSITIC', fieldName: 'Characteristic', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
