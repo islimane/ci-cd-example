@@ -15,7 +15,6 @@ import LABELS from './labels';
 import modalSupplementsAndDiscounts from 'c/rateManagerModalSupplementsAndDiscountsHandler';
 
 export default class RateManagerSupplementsAndDiscountsConfig extends RateManagerMixin(LwcDCExtension) {
-    @api parentId;
     @api rateId;
     @track filters = [];
     @track data = [];
@@ -68,6 +67,7 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
     };
 
     buildTable(){
+        console.log('this.parentId ', this.parentId);
         this._columns = [{ 
                 label: 'ACTIONS', 
                 fieldName: 'action',

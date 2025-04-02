@@ -15,7 +15,6 @@ import LABELS from './labels';
 import rateManagerModalRoomHandler from 'c/rateManagerModalRoomHandler';
 
 export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtension) {
-    @api parentId;  // PlannerRateId
     @api rateId;    // RateId
     @track filters = [];
     @track data = [];
@@ -32,6 +31,10 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
 
     get fixedColumnCount() {
         return this._columns.filter((column) => column.fixed).length;
+    }
+
+    get configurationBaseSupplements() {
+        return this.parent.ConfigurationMode__c === 'Base + room supplements';
     }
 
     labels = LABELS;

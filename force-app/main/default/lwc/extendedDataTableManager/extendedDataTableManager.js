@@ -17,7 +17,6 @@ export default class ExtendedDataTableManager extends RateManagerMixin(LwcDCExte
     @api fixedColumnCount;
     @track _tableData = [];
     @track filteredData = [];
-    @api parentId;
 
     get sourceField() {
         return this.flag ? 'period1' : 'period1_2';
