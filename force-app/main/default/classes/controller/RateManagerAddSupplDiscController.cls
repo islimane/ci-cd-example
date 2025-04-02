@@ -2,7 +2,7 @@
  * @description       : Controller for rateManagerAddSupplementsAndDiscounts component.
  * @author            : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  * @group             : Controllers
- * @last modified on  : 01-04-2025
+ * @last modified on  : 02-04-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 public with sharing class RateManagerAddSupplDiscController extends DC_DynamicController {
@@ -44,8 +44,8 @@ public with sharing class RateManagerAddSupplDiscController extends DC_DynamicCo
         }
         System.debug('data pos' + data);
 
-        Map<String, RateManagerModel.Option> mRoomOptions = new Map<String, RateManagerModel.Option>{ 'All' => new RateManagerModel.Option('All', null) };
-        Map<String, RateManagerModel.Option> mCharacteristicOptions = new Map<String, RateManagerModel.Option>{ 'All' => new RateManagerModel.Option('All', null) };
+        Map<String, RateManagerModel.Option> mRoomOptions = new Map<String, RateManagerModel.Option>{ 'All' => new RateManagerModel.Option('All', '') };
+        Map<String, RateManagerModel.Option> mCharacteristicOptions = new Map<String, RateManagerModel.Option>{ 'All' => new RateManagerModel.Option('All', '') };
 
         for (Product2 product : data) {
             if (!String.isEmpty(product.Room__c) && !mRoomOptions.containsKey(product.Room__c)) {
