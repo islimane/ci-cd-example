@@ -2,8 +2,8 @@
   @description       :
   @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
   @group             :
-  @last modified on  : 26-03-2025
-  @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
+  @last modified on  : 03-28-2025
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
 -->
 <template>
     <div class="sdt-manager-filter-container slds-grid slds-p-horizontal_small slds-p-bottom_xx-small slds-p-top_small">
@@ -25,9 +25,6 @@
         ></c-extended-data-table>
     </div>
     <div class="dt-manager-action-container slds-p-horizontal_small slds-p-vertical_xx-small">
-        <lightning-button-group>
-            <lightning-button label={labels.addRooms} title={labels.addRooms} icon-name="utility:add" onclick={handleAddRoomModal} variant="neutral"></lightning-button>
-            <lightning-button label={labels.removeSelected} title={labels.removeSelected} icon-name="utility:delete" onclick={handleDelete} variant="neutral"></lightning-button>
-        </lightning-button-group>
+        <slot name="datatable-action-buttons"></slot>
     </div>
 </template>

@@ -1,5 +1,5 @@
-/* @description       : Shows a modal to attach rooms to a rate
- * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
+/* @description       : Shows a modal to attach supplements and discounts to a rate
+ * @author            : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  * @group             :
  * @last modified on  : 31-03-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
@@ -11,7 +11,7 @@ import { RateManagerMixin } from 'c/rateManagerMixin';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { createRecord } from 'lightning/uiRecordApi';
 
-export default class RateManagerModalRoomHandler extends RateManagerMixin(LightningModal) {
+export default class RateManagerModalSupplementsAndDiscountsHandler extends RateManagerMixin(LightningModal) {
     labels = LABELS;
     disableSaveButton = false;
 
@@ -38,9 +38,9 @@ export default class RateManagerModalRoomHandler extends RateManagerMixin(Lightn
 
     async handleSave(event) {
         event.preventDefault(); // stop the form from submitting
-        let selectedRows = this.template.querySelector('c-rate-manager-add-rooms')?.getSelectedRows();
+        let selectedRows = this.template.querySelector('c-rate-manager-add-supplements-and-discounts')?.getSelectedRows();
         if (!selectedRows || selectedRows.length === 0) {
-            this.showToast('Error', this.labels.noRoomsSelected, 'error');
+            this.showToast('Error', this.labels.noRecordsSelected, 'error');
             return;
         }
         try {
@@ -60,11 +60,11 @@ export default class RateManagerModalRoomHandler extends RateManagerMixin(Lightn
 
     async createRateLine(product) {
         const fields = {
+            Rate__c: this.rateId,
             RatePlanner__c: this.parentId,
             Hotel__c: product.Hotel__c,
             Product__c: product.Id,
-            Room__c: product.Room__c,
-            Rate__c: this.rateId
+            Room__c: product.Room__c
         };
         const recordInput = { apiName: 'RateLine__c', fields };
         await createRecord(recordInput)

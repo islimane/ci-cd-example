@@ -2,20 +2,24 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 01-04-2025
- * @last modified by  : alberto.martinez-lopez@inetum.com
+ * @last modified on  : 02-04-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 import { api, track } from 'lwc';
 import LwcDCExtension from 'c/lwcDCExtension';
 import { RateManagerMixin } from 'c/rateManagerMixin';
-
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { deleteRecord } from 'lightning/uiRecordApi';
+import LightningConfirm from 'lightning/confirm';
+import LABELS from './labels';
+import modalSupplementsAndDiscounts from 'c/rateManagerModalSupplementsAndDiscountsHandler';
 
 export default class RateManagerSupplementsAndDiscountsConfig extends RateManagerMixin(LwcDCExtension) {
-
+    @api parentId;
     @api rateId;
     @track filters = [];
     @track data = [];
-    
+
     _columns = [];
 
     get columns() {
@@ -26,13 +30,14 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
         return this._columns.length > 0;
     }
 
-
     get fixedColumnCount() {
         return this._columns.filter((column) => column.fixed).length;
     }
 
+    labels = LABELS;
+
     /*** Connected callback.*/
-    connectedCallback(){
+    connectedCallback() {
         this.setWireParams();
     }
 
@@ -40,7 +45,11 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
      * @description: Sets the wire parameters for the component.
      **/
     setWireParams() {
-        this._wireParams = {ratePlannerId: this.parentId, rateId: this.rateId, controller: 'RateManagerSmntsAndDntsController' };
+        this._wireParams = {
+            ratePlannerId: this.parentId,
+            rateId: this.rateId,
+            controller: 'RateManagerSmntsAndDntsController'
+        };
     }
 
     /**
@@ -56,12 +65,10 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
         } else {
             console.warn('No records available in response');
         }
-    }
-
-
+    };
 
     buildTable(){
-        this._columns = [{ label: 'ACTIONS', fieldName: 'action', 
+        this._columns = [{ label: 'ACTIONS', fieldName: 'action',
                 type: "actions",
                 typeAttributes: {
                     recordId: { fieldName: "id" }
@@ -76,8 +83,8 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
         ];
 
         const periods = new Set();
-        this.data.forEach(item => {
-            item.ratesPrices.forEach(rate => {
+        this.data.forEach((item) => {
+            item.ratesPrices.forEach((rate) => {
                 if (rate.StartDate && rate.EndDate) {
                     periods.add(rate.periodKey);
                 }
@@ -105,7 +112,7 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
 
     handleRowAction(event) {
         console.log('handleRowAction rateManagerSupplementsAndDiscountsConfig' , event.detail);
-        
+
     }
 
     async handleSave(event){
@@ -113,7 +120,7 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
         const draftValues = event.detail.draftValues;
         const mappedData = [];
         draftValues.forEach(item => {
-            const dateRangeKeys = Object.keys(item).filter(key => 
+            const dateRangeKeys = Object.keys(item).filter(key =>
                 key.includes('-') && /\d+\/\d+\/\d+/.test(key)
             );
             dateRangeKeys.forEach(dateKey => {
@@ -138,6 +145,62 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
         }
     }
 
+    async handleAddRoomModal() {
+        await modalSupplementsAndDiscounts.open({
+            parentId: this.parentId,
+            rateId: this.rateId,
+            size: 'large',
+            headerLabel: 'Add Supplements and Reductions',
+            onrefreshtable: (e) => {
+                e.stopPropagation();
+                this.refreshTable();
+            }
+        });
+    }
 
+    async handleDelete() {
+        // retrieve selected rows
+        let selectedRows = this.template.querySelector('c-extended-data-table-manager')?.getSelectedRows();
+        console.log('Selected rows --> ' + selectedRows);
+        if (!selectedRows || selectedRows.length === 0) {
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Error',
+                    variant: 'Error',
+                    message: this.labels.noRecordsSelected
+                })
+            );
+            return;
+        }
+        const result = await LightningConfirm.open({
+            message: this.labels.removeConfirmation,
+            variant: 'headerless',
+            label: 'this is the aria-label value'
+        });
+
+        if (result) {
+            const promises = selectedRows.map((row) => deleteRecord(row.Id));
+            Promise.all(promises)
+                .then(() => {
+                    this.showToast(this.labels.success, this.labels.removeSuccess, 'success');
+                })
+                .catch((error) => {
+                    this.showToast('Error', error.body.message, 'error');
+                })
+                .finally(() => {
+                    this.refreshTable();
+                });
+        }
+    }
+
+    showToast(title, message, variant) {
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title: title,
+                variant: variant,
+                message: message
+            })
+        );
+    }
 
 }

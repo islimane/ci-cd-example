@@ -1,12 +1,11 @@
 /**
- * @description       : RateManagerModalRoomHandlerController
- * @author            : Inetum Team <sara.gerico@inetum.com>
+ * @description       : Controller for rateManagerAddSupplementsAndDiscounts component.
+ * @author            : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  * @group             : Controllers
- * @last modified on  : 31-03-2025
+ * @last modified on  : 01-04-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
-public with sharing class RateManagerAddRoomController extends DC_DynamicController {
-
+public with sharing class RateManagerAddSupplDiscController extends DC_DynamicController {
     /**
      * @description
      * @author Inetum Team <alberto.martinez-lopez@inetum.com> | 28-02-2025
@@ -30,7 +29,7 @@ public with sharing class RateManagerAddRoomController extends DC_DynamicControl
             ?.keySet();
         List<Product2> data = Product2Selector.getProductsByHotelIdAndFamily(
             sHotelJoin,
-            GlobalConstants.PRODUCT2_FAMILY_ROOM
+            GlobalConstants.PRODUCT2_FAMILY_SUPPLEMENT
         );
         System.debug('data pre' + data);
         //Do not include Products with RatePlanner = ratePlannerId. These are already added.
@@ -45,8 +44,8 @@ public with sharing class RateManagerAddRoomController extends DC_DynamicControl
         }
         System.debug('data pos' + data);
 
-        Map<String, RateManagerModel.Option> mRoomOptions = new Map<String, RateManagerModel.Option>{ 'All' => new RateManagerModel.Option('All', '') };
-        Map<String, RateManagerModel.Option> mCharacteristicOptions = new Map<String, RateManagerModel.Option>{ 'All' => new RateManagerModel.Option('All', '') };
+        Map<String, RateManagerModel.Option> mRoomOptions = new Map<String, RateManagerModel.Option>{ 'All' => new RateManagerModel.Option('All', null) };
+        Map<String, RateManagerModel.Option> mCharacteristicOptions = new Map<String, RateManagerModel.Option>{ 'All' => new RateManagerModel.Option('All', null) };
 
         for (Product2 product : data) {
             if (!String.isEmpty(product.Room__c) && !mRoomOptions.containsKey(product.Room__c)) {
@@ -63,8 +62,9 @@ public with sharing class RateManagerAddRoomController extends DC_DynamicControl
             }
         }
 
+        // filters for component: Tipo, Tipo variación, Subtipo, Nombre
         List<RateManagerModel.FilterWp> filterWp = new List<RateManagerModel.FilterWp>();
-        filterWp.add(new RateManagerModel.FilterWp('Room__c', 'Room', null, null, 'combobox', mRoomOptions.values(), null, null));
+        filterWp.add(new RateManagerModel.FilterWp('Family', 'Family', null, null, 'combobox', mRoomOptions.values(), null, null)); // cambiar options
         filterWp.add(
             new RateManagerModel.FilterWp(
                 'Characteristic__c',
@@ -78,7 +78,7 @@ public with sharing class RateManagerAddRoomController extends DC_DynamicControl
             )
         );
 
-        return new DC_ResponseWr(true, new RateManagerModel.Product2DataTableWp(filterWp, data));
+        return new DC_ResponseWr(true, new RateManagerModel.Product2DataTableWp(filterWp, data)); // será data cuando esté en RateManagerModel polimorfismo
     }
 
     private class ControllerExampleException extends Exception {
