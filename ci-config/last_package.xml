@@ -1,69 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
-        <members>GlobalConstants</members>
-        <members>HotelSelector</members>
-        <members>PeriodSelector</members>
-        <members>Product2Selector</members>
-        <members>RateLineSelector</members>
-        <members>RateLineSelector_Test</members>
-        <members>RateManagementExecutor_Test</members>
-        <members>RateManagerAddRoomController</members>
-        <members>RateManagerAddRoomController_Test</members>
-        <members>RateManagerBlackoutListController</members>
-        <members>RateManagerEventListController</members>
-        <members>RateManagerModel</members>
-        <members>RateManagerPeriodListController_Test</members>
-        <members>RateManagerRateConfigController_Test</members>
-        <members>RateManagerRatesListController_Test</members>
-        <members>RateManagerRoomsConfigController</members>
-        <members>RateManagerRoomsConfigController_Test</members>
+        <members>RateManagerRateConfigController</members>
         <members>RateManagerSmntsAndDntsController</members>
-        <members>RateManagerSmntsAndDntsController_Test</members>
-        <members>RatePriceManager</members>
-        <members>RateSelector</members>
-        <members>TP_SetupDataTest</members>
-        <members>TP_SetupSelectorTest</members>
         <name>ApexClass</name>
     </types>
     <types>
-        <members>Add</members>
-        <members>Add_rooms</members>
-        <members>Edit_Blackout</members>
-        <members>Edit_Event</members>
-        <members>No_records_selected</members>
-        <members>No_rooms_selected</members>
-        <members>Remove_Blackout_Confirmation_Message</members>
-        <members>Remove_confirmation</members>
-        <members>Remove_Event_Confirmation_Message</members>
-        <members>Remove_selected</members>
-        <members>Remove_success</members>
-        <members>Success</members>
-        <name>CustomLabel</name>
-    </types>
-    <types>
+        <members>dataTableActions</members>
+        <members>dataTableWithCustomTypes</members>
         <members>extendedDataTable</members>
-        <members>extendedDataTableManager</members>
-        <members>rateManager</members>
-        <members>rateManagerAddRooms</members>
-        <members>rateManagerBlackoutList</members>
-        <members>rateManagerBlackoutListItem</members>
-        <members>rateManagerEventList</members>
-        <members>rateManagerEventListItem</members>
-        <members>rateManagerMixin</members>
-        <members>rateManagerModalBlackoutHandler</members>
-        <members>rateManagerModalEventHandler</members>
-        <members>rateManagerModalFilters</members>
-        <members>rateManagerModalFiltersItem</members>
-        <members>rateManagerModalPeriodHandler</members>
-        <members>rateManagerModalRoomHandler</members>
-        <members>rateManagerPeriodList</members>
-        <members>rateManagerPeriodListItem</members>
-        <members>rateManagerPeriodUtils</members>
-        <members>rateManagerRateBulkActions</members>
-        <members>rateManagerRateConfig</members>
-        <members>rateManagerRateConfigFilters</members>
-        <members>rateManagerRateConfigFiltersItem</members>
         <members>rateManagerRoomsConfig</members>
         <members>rateManagerSupplementsAndDiscountsConfig</members>
         <name>LightningComponentBundle</name>
