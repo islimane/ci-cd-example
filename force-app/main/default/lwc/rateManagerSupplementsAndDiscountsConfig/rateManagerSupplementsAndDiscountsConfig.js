@@ -3,12 +3,11 @@
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
  * @last modified on  : 02-04-2025
- * @last modified by  : alberto.martinez-lopez@inetum.com
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 import { api, track } from 'lwc';
 import LwcDCExtension from 'c/lwcDCExtension';
 import { RateManagerMixin } from 'c/rateManagerMixin';
-import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { deleteRecord } from 'lightning/uiRecordApi';
 import LightningConfirm from 'lightning/confirm';
 import LABELS from './labels';
@@ -169,11 +168,7 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
         console.log('Selected rows --> ' + selectedRows);
         if (!selectedRows || selectedRows.length === 0) {
             this.dispatchEvent(
-                new ShowToastEvent({
-                    title: 'Error',
-                    variant: 'Error',
-                    message: this.labels.noRecordsSelected
-                })
+                this.showToast('Error', this.labels.noRecordsSelected, 'error')
             );
             return;
         }
@@ -196,16 +191,6 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
                     this.refreshTable();
                 });
         }
-    }
-
-    showToast(title, message, variant) {
-        this.dispatchEvent(
-            new ShowToastEvent({
-                title: title,
-                variant: variant,
-                message: message
-            })
-        );
     }
 
 }
