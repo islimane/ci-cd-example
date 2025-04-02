@@ -1,10 +1,9 @@
 /**
- * @description  : 
- * @author       : development@nubika.com 
-**/
+ * @description  :
+ * @author       : development@nubika.com
+ **/
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 export const LWCEventMixin = (BaseClass) =>
-
     class extends BaseClass {
         /**
          * Fires a custom event with the specified name, data, and event properties.
@@ -51,12 +50,12 @@ export const LWCEventMixin = (BaseClass) =>
          * @param {string} message - The body of the toast message.
          * @param {string} variant - The visual variant of the toast (e.g., 'success', 'warning', 'error').
          */
-        showToast(title, message, variant) {
+        showToast(title, message, variant, mode = 'pester') {
             const event = new ShowToastEvent({
-                'title': title,
-                'message': message,
-                'variant': variant,
-                'mode': 'pester'
+                title: title,
+                message: message,
+                variant: variant,
+                mode: mode
             });
             this.dispatchEvent(event);
         }
@@ -69,5 +68,4 @@ export const LWCEventMixin = (BaseClass) =>
             let redirectTo = event.detail.eventData;
             this.fireEvent('navigate', redirectTo);
         }
-
-    }
+    };
