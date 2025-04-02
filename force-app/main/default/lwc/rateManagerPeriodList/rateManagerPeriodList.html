@@ -1,0 +1,24 @@
+<!--
+  @description  : 
+  @author       : Inetum Team
+  @version      : 1.0.0
+  @date         : 24-02-2025
+  @group        : 
+  @see          : 
+-->
+<template>
+    <div class="main-container slds-p-around_small">
+        <template for:each={periodList} for:item="period">
+            <c-rate-manager-period-list-item key={period.index} record-id={period.Id} parent={parent} date-intervals={periodList} onrefresh={handleRefreshPeriod} ondelete={handleDeletePeriod}></c-rate-manager-period-list-item>
+        </template>
+        <div class="slds-grid slds-grid_align-end slds-p-around_small">
+            <div class="slds-col">
+                <lightning-button 
+                    label={labels.addPeriod} 
+                    variant="neutral"
+                    onclick={handleAddPeriodModal}>
+                </lightning-button>
+            </div>
+        </div>
+    </div>
+</template>

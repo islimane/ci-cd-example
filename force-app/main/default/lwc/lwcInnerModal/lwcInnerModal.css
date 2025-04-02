@@ -1,0 +1,72 @@
+/**
+ * Created by albertomartinez on 07/09/2020.
+ */
+
+:host .custom-modal-body {
+    border-radius: 0 !important;
+}
+
+:host .slds-modal__header{
+    padding: 1rem 2rem;
+    background-color: #824efc;
+    min-height: 50px;
+    font-size:1.4em;
+    text-align: left;
+    border:none;
+}
+
+:host .no-header{
+    height: 20px;
+    background-color: #fff;
+    position: relative;
+    padding: 2px;
+}
+
+:host .slds-modal__content{
+    overflow: unset;
+    overflow-y: unset;
+}
+
+:host .help-text{
+    display:block;
+}
+
+
+:host .slds-modal__header .slds-modal__close{
+    top: 10px;
+    right: 10px;
+}
+
+:host .slds-backdrop_open, :host .slds-backdrop--open{
+    visibility: hidden;
+}
+
+:host .slds-modal__footer{
+    border-top:none;
+}
+
+:host .main-container{
+    position: fixed;
+    width: 80vw;
+    left: 10%;
+    right: 10%;
+    margin: 0 auto;
+    z-index: 9;
+    -webkit-box-shadow: 100vh 100vh 100vh 400vw rgba(126, 140, 153, 0.8);
+    -moz-box-shadow: 100vh 100vh 100vh 400vw rgba(126, 140, 153, 0.8);
+    box-shadow: 100vh 100vh 100vh 400vw rgba(126, 140, 153, 0.8);
+}
+
+@media (max-width: 480px){
+    :host .slds-modal__container{
+        transform: scale(0.8);
+        margin: -2rem;
+    }
+}
+
+@media (min-width: 48em){
+    :host .slds-modal__container{
+        width: 75%;
+        max-width: 500px;
+    }
+}

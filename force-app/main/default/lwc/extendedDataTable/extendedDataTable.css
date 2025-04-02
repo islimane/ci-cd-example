@@ -13,6 +13,7 @@
 
 .scrollable-table {
     flex-grow: 1; /* Allow scrollable table to take remaining width */
-    overflow-x: auto;
+    overflow-x: clip;
     position: relative;
 }
+

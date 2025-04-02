@@ -1,0 +1,28 @@
+<!--
+  @description  :
+  @author       : Inetum Team
+  @version      : 1.0.0
+  @date         : 05-03-2025
+  @group        :
+  @see          :
+-->
+<template>
+    <div class="main-container slds-p-around_small">
+        <template for:each={eventList} for:item="event">
+            <c-rate-manager-event-list-item key={event.index} record-id={event.Id} parent={parent} date-intervals={eventList} onrefresh={handleRefreshEvent} ondelete={handleDeleteEvent}></c-rate-manager-event-list-item>
+        </template>
+        <div class="slds-grid slds-grid_align-end slds-p-around_small">
+            <div class="slds-col">
+                <span if:true={disableAddEvent} class="slds-p-vertical_small slds-p-right_small full-of-periods-msg">
+                    No puedes añadir mas blackouts a este tarifario
+                </span>
+                <lightning-button
+                    label={labels.addEvent}
+                    variant="neutral"
+                    disabled={disableAddEvent}
+                    onclick={handleAddEventModal}>
+                </lightning-button>
+            </div>
+        </div>
+    </div>
+</template>
