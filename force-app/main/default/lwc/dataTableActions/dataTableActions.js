@@ -2,16 +2,19 @@
  * @description       : 
  * @author            : alberto.martinez-lopez@inetum.com
  * @group             : 
- * @last modified on  : 01-04-2025
+ * @last modified on  : 02-04-2025
  * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 import { api, LightningElement } from 'lwc';
+import LABELS from './labels';
 
 
 export default class DataTableActions extends LightningElement {
 
     @api
     recordId;
+
+    labels = LABELS;
 
 
 

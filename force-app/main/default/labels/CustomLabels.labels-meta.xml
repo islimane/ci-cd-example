@@ -255,4 +255,12 @@
         <shortDescription>Atención. Los cambios eliminarán todos los datos asociados a este blackout</shortDescription>
         <value>Atención. Los cambios eliminarán todos los datos asociados a este blackout</value>
     </labels>
+    <labels>
+        <fullName>Delete</fullName>
+        <categories>RateManager</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Delete</shortDescription>
+        <value>Delete</value>
+    </labels>
 </CustomLabels>
