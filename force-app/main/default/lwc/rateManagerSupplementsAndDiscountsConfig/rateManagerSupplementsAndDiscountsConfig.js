@@ -3,7 +3,7 @@
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
  * @last modified on  : 02-04-2025
- * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
+ * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 import { api, track } from 'lwc';
 import LwcDCExtension from 'c/lwcDCExtension';
@@ -71,7 +71,10 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
         this._columns = [{ label: 'ACTIONS', fieldName: 'action',
                 type: "actions",
                 typeAttributes: {
-                    recordId: { fieldName: "id" }
+                    recordId: { fieldName: "id" },
+                    actions: [
+                        {iconName: 'action:remove', label: 'Delete', action: 'delete'}, {iconName: 'action:clone', label: 'Clone', action: 'clone'}
+                    ]
                 },
                 fixed: true, fixedWidth: 109
             },
