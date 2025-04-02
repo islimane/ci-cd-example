@@ -15,7 +15,6 @@ import LABELS from './labels';
 import modalSupplementsAndDiscounts from 'c/rateManagerModalSupplementsAndDiscountsHandler';
 
 export default class RateManagerSupplementsAndDiscountsConfig extends RateManagerMixin(LwcDCExtension) {
-    @api parentId;
     @api rateId;
     @track filters = [];
     @track data = [];
@@ -68,7 +67,10 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
     };
 
     buildTable(){
-        this._columns = [{ label: 'ACTIONS', fieldName: 'action',
+        console.log('this.parentId ', this.parentId);
+        this._columns = [{ 
+                label: 'ACTIONS', 
+                fieldName: 'action',
                 type: "actions",
                 typeAttributes: {
                     recordId: { fieldName: "id" },
@@ -76,7 +78,7 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
                         {iconName: 'action:remove', label: 'Delete', action: 'delete'}, {iconName: 'action:clone', label: 'Clone', action: 'clone'}
                     ]
                 },
-                fixed: true, fixedWidth: 109
+                fixed: true, fixedWidth: 109 
             },
             { label: 'SUPPLEMENT NAME', fieldName: 'Name', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
             { label: 'TYPE', fieldName: 'RegimenType', type: 'text', fixed: true, fixedWidth: 80, wrapText: true },

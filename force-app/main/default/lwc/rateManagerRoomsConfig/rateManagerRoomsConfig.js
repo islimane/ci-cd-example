@@ -15,7 +15,6 @@ import LABELS from './labels';
 import rateManagerModalRoomHandler from 'c/rateManagerModalRoomHandler';
 
 export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtension) {
-    @api parentId;  // PlannerRateId
     @api rateId;    // RateId
     @track filters = [];
     @track data = [];
@@ -32,6 +31,10 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
 
     get fixedColumnCount() {
         return this._columns.filter((column) => column.fixed).length;
+    }
+
+    get configurationBaseSupplements() {
+        return this.parent.ConfigurationMode__c === 'Base + room supplements';
     }
 
     labels = LABELS;
@@ -68,15 +71,18 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
     };
 
     buildTable(){
-        this._columns = [{ label: 'ACTIONS', fieldName: 'action',
-            type: "actions",
-            typeAttributes: {
-                recordId: { fieldName: "id" },
-                actions: [
-                    {iconName: 'action:remove', label: 'Delete', action: 'delete'}, {iconName: 'action:clone', label: 'Clone', action: 'clone'}
-                ]
+        this._columns = [{ 
+                label: 'ACTIONS', 
+                fieldName: 'action',
+                type: "actions",
+                typeAttributes: {
+                    recordId: { fieldName: "id" },
+                    actions: [
+                        {iconName: 'action:remove', label: 'Delete', action: 'delete'}, {iconName: 'action:clone', label: 'Clone', action: 'clone'}
+                    ]
+                },
+                fixed: true, fixedWidth: 109 
             },
-            fixed: true, fixedWidth: 109 },
             { label: 'NAME', fieldName: 'Name', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
             { label: 'ROOM', fieldName: 'Room', type: 'text', fixed: true, fixedWidth: 100, wrapText: true },
             { label: 'CHARACTERSITIC', fieldName: 'Characteristic', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },

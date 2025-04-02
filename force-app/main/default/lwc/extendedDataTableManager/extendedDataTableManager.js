@@ -2,8 +2,8 @@
  * @description       : Shows a table with fixed columns and scrollable columns. Includes also a filter component and action buttons
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 31-03-2025
- * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
+ * @last modified on  : 02-04-2025
+ * @last modified by  : alberto.martinez-lopez@inetum.com
  **/
 import { api, track } from 'lwc';
 import LwcDCExtension from 'c/lwcDCExtension';
@@ -11,12 +11,12 @@ import { RateManagerMixin } from 'c/rateManagerMixin';
 
 export default class ExtendedDataTableManager extends RateManagerMixin(LwcDCExtension) {
 
+    @api hideFilters = false;
     @api filters;
     @api columns;
     @api fixedColumnCount;
     @track _tableData = [];
     @track filteredData = [];
-    @api parentId;
 
     get sourceField() {
         return this.flag ? 'period1' : 'period1_2';

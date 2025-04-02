@@ -3,9 +3,30 @@
   @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
   @group             :
   @last modified on  : 02-04-2025
-  @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
+  @last modified by  : alberto.martinez-lopez@inetum.com
 -->
 <template>
+    <template if:true={configurationBaseSupplements}>
+        <div if:true={columnsIsNotEmpty}>
+            <c-extended-data-table-manager
+                hide-filters
+                onrowaction={handleRowAction}
+                oninlinesave={handleSave}
+                columns={columns}
+                fixed-column-count={fixedColumnCount}
+                table-data={data}
+                parent-id={parentId}
+                onrefreshtable={refreshTable}
+            >
+                <div slot="datatable-action-buttons">
+                    <lightning-button-group>
+                        <lightning-button label={labels.addRooms} title={labels.addRooms} icon-name="utility:add" onclick={handleAddRoomModal} variant="neutral"></lightning-button>
+                        <lightning-button label={labels.removeSelected} title={labels.removeSelected} icon-name="utility:delete" onclick={handleDelete} variant="neutral"></lightning-button>
+                    </lightning-button-group>
+                </div>
+            </c-extended-data-table-manager>
+        </div>
+    </template>
     <div if:true={columnsIsNotEmpty}>
         <c-extended-data-table-manager
             onrowaction={handleRowAction}
