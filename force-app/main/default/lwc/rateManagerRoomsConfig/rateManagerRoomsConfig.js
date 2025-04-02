@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 01-04-2025
+ * @last modified on  : 02-04-2025
  * @last modified by  : alberto.martinez-lopez@inetum.com
  **/
 import { api, track } from 'lwc';
@@ -59,7 +59,10 @@ export default class RateManagerRoomsConfig extends RateManagerMixin(LwcDCExtens
         this._columns = [{ label: 'ACTIONS', fieldName: 'action', 
             type: "actions",
             typeAttributes: {
-                recordId: { fieldName: "id" }
+                recordId: { fieldName: "id" },
+                actions: [
+                    {iconName: 'action:remove', label: 'Delete', action: 'delete'}, {iconName: 'action:clone', label: 'Clone', action: 'clone'}
+                ]
             },
             fixed: true, fixedWidth: 109 },
             { label: 'NAME', fieldName: 'Name', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },

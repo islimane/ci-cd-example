@@ -6,7 +6,6 @@
  * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 import { api, LightningElement } from 'lwc';
-import LABELS from './labels';
 
 
 export default class DataTableActions extends LightningElement {
@@ -14,9 +13,16 @@ export default class DataTableActions extends LightningElement {
     @api
     recordId;
 
-    labels = LABELS;
+    
+    _actions = [];
 
-
+    @api
+    set actions(value) {
+        this._actions = value;
+    }
+    get actions() {
+        return this._actions;
+    }
 
     handleClick(event) {
         const action = event.target.dataset.action;

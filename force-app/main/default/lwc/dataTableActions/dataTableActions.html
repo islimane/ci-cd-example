@@ -6,17 +6,20 @@
   @last modified by  : alberto.martinez-lopez@inetum.com
 -->
 <template>
-    <div class="slds-grid slds-grid_align-center">
+    <div class="slds-grid">
         <div class="slds-col">
-            <lightning-button-icon
-                icon-name="utility:delete"
-                alternative-text={labels.deleteBtnLabel}
-                title={labels.deleteBtnLabel}
-                size="x-small"
-                data-action="delete"
-                onclick={handleClick}
-                class="slds-m-left_x-small"
-            ></lightning-button-icon>
+            <template for:each={actions} for:item="action">
+                <lightning-button-icon
+                    key={action.label}
+                    icon-name={action.iconName}
+                    alternative-text={action.label}
+                    title={action.label}
+                    size="x-small"
+                    data-action={action.action}
+                    onclick={handleClick}
+                    class="slds-m-horizontal_xx-small"
+                ></lightning-button-icon>
+            </template>
         </div>
     </div>
 </template>
