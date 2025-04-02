@@ -2,7 +2,7 @@
  * @description       : Shows a table with fixed columns attached to a scrollable table
  * @author            : Inetum Team
  * @group             :
- * @last modified on  : 28-03-2025
+ * @last modified on  : 01-04-2025
  * @last modified by  : alberto.martinez-lopez@inetum.com
  **/
 import { LightningElement, api, track } from 'lwc';
@@ -27,7 +27,17 @@ export default class FixedColumnsTable extends LightningElement {
     get tableData() {
         return this._tableData;
     }
+
     @api fixedColumnCount = 0;
+
+
+    get fixedColumnsIsEmpty(){
+        return this.fixedColumns.length === 0;
+    }
+
+    get scrollableColumnsIsEmpty(){
+        return this.scrollableColumns.length === 0;
+    }
 
     @track _columns = [];
     @track fixedColumns = [];
@@ -35,30 +45,24 @@ export default class FixedColumnsTable extends LightningElement {
     @track fixedTableData = [];
     @track draftValues = [];
     @track scrollableTableData = [];
-    @track leftCSSProperty = 0;
 
     connectedCallback() {
         this.splitColumns();
-        this.setLeftProperty();
-        //this.splitTableData();
     }
 
     renderedCallback() {
-        let scrollableTable = this.template.querySelector('.scrollable-table lightning-datatable');
-        if (scrollableTable) {
-            scrollableTable.style.left = `${this.leftCSSProperty}px`;
-            scrollableTable.style.position = `absolute`;
-        }
+        this.appendCustomCss();
     }
 
     splitColumns() {
-        this.splitScrollableColumns();
         this.splitFixedColumns();
+        this.setScrollableColumns();
     }
 
-    splitScrollableColumns() {
-        this.scrollableColumns = JSON.parse(JSON.stringify(this._columns.slice(this.fixedColumnCount)));
+    setScrollableColumns() {
+        this.scrollableColumns = this._columns.slice(this.fixedColumnCount);
     }
+
 
     splitFixedColumns() {
         let _fixedColumns = this._columns.slice(0, this.fixedColumnCount);
@@ -68,14 +72,6 @@ export default class FixedColumnsTable extends LightningElement {
             }
         });
         this.fixedColumns = JSON.parse(JSON.stringify(_fixedColumns));
-    }
-
-    setLeftProperty() {
-        this.fixedColumns.forEach((column) => {
-            if (column.wrapText) {
-                this.leftCSSProperty -= column.fixedWidth;
-            }
-        });
     }
 
     splitTableData() {
@@ -90,9 +86,51 @@ export default class FixedColumnsTable extends LightningElement {
         this.draftValues = [];
     }
 
+    handleRowAction(event) {
+        this.dispatchEvent(
+            new CustomEvent('rowaction', {detail: event.detail, bubbles:true, composed:true })
+        );
+    }
+
     @api
     getSelectedRows() {
         let selectedRows = this.template.querySelectorAll('lightning-datatable')[0]?.getSelectedRows();
         return selectedRows;
+    }
+
+
+    appendCustomCss(){
+        const style = document.createElement('style');
+        style.innerText = `
+            lightning-datatable[data-id='scrollableTable']{
+                position: absolute;
+                width: 100%;
+            }
+                
+            .hide-row-number-column table th:first-child, .hide-row-number-column table td:first-child{
+                display: none !important;
+            }
+
+            lightning-datatable[data-id='scrollableTable'] .slds-docked-form-footer{
+                width: 200px;
+                border: solid 1px #dcdcdc;
+                border-radius: 1rem;
+                animation: fadeIn .5s ease-in-out;
+            }
+
+            lightning-datatable[data-id='scrollableTable'] .slds-table_header-fixed_container{
+                background-color: transparent;
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+        `;
+        this.template.querySelector('.hide-row-number-column-container').appendChild(style);
     }
 }

@@ -22,6 +22,24 @@ public with sharing class RateManagerSmntsAndDntsController extends DC_DynamicCo
     * @param params
     * @return DC_ResponseWr
     **/
+    public override DC_ResponseWr execute(Map<String, Object> params){
+        String action = (String)params.get('action');
+        switch on action {
+            when 'saveRatePrices' {
+                return saveRatePrices(params);
+            }
+            when else {
+                return new DC_ResponseWr(false, 'Action not found');
+            }
+        }
+    }
+
+    /**
+    * @description
+    * @author Inetum Team <alberto.martinez-lopez@inetum.com> | 28-02-2025
+    * @param params
+    * @return DC_ResponseWr
+    **/
     private static DC_ResponseWr getFiltersOptionsData(Map<String, Object> params){
         Id ratePlannerId = (Id)params.get('ratePlannerId');
         Id rateId = (Id)params.get('rateId');
@@ -55,6 +73,22 @@ public with sharing class RateManagerSmntsAndDntsController extends DC_DynamicCo
         filterWp.add(new RateManagerModel.FilterWp('Applicable', 'Applicable', null, null, 'combobox', mApplicableOptions.values(), null, null));
         filterWp.add(new RateManagerModel.FilterWp('ApplicationType', 'Application Type', null, null, 'combobox', mApplicationTypeOptions.values(), null, null));
         return new DC_ResponseWr(true, new RateManagerModel.RateLineDataTableWp(filterWp, wrappedData));
+    }
+
+    /** 
+    * @description
+    * @author Inetum Team <alberto.martinez-lopez@inetum.com> | 28-02-2025
+    * @param params
+    * @return DC_ResponseWr
+    **/ 
+    private DC_ResponseWr saveRatePrices(Map<String, Object> params){
+        
+        List<RateManagerModel.RatePrice> lWrappedData = (List<RateManagerModel.RatePrice>)JSON.deserialize((String)params.get('ratePrices'), List<RateManagerModel.RatePrice>.class);
+        Id ratePlannerId = (Id)params.get('ratePlannerId');
+
+        RatePriceManager.upsertRatePricesEditedFromRatePlanner(ratePlannerId, lWrappedData);
+
+        return new DC_ResponseWr(true, 'OK');
     }
 
 }
