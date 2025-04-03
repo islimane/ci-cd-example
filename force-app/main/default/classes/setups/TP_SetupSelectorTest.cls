@@ -131,7 +131,7 @@ public with sharing class TP_SetupSelectorTest {
      * Retrieves a list of Rate__c records based on the DB.
      * @return List<Rate__c>.
      */
-    public static Rate__c getRate(Integer batteryNum, String batteryCode){
-        return [SELECT Id, Name FROM Rate__c WHERE Name =:(DEF_PREFIX+batteryCode+batteryNum) LIMIT 1];
+    public static Rate__c getBESTRate(){
+        return [SELECT Id, Name, Rate_Name__c, RateType__c FROM Rate__c WHERE Rate_Name__c=:GlobalConstants.RATE_RATE_NAME_PICKLIST_BEST LIMIT 1];
     }
 }
