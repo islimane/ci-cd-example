@@ -38,28 +38,39 @@ public class RateManagerRoomsConfigController_Test implements TP_ExecutableInter
         Map<String, Object> params = new Map<String, Object>{
             'controller' => 'RateManagerRoomsConfigController',
             'ratePlannerId' => TP_SetupSelectorTest.getRatePlanner(1, 'TEST').Id,
-            'rateId' => TP_SetupSelectorTest.getRate(1, 'TEST').Id
+            'rateId' => TP_SetupSelectorTest.getBESTRate().Id
         };
         new RateManagerRoomsConfigController().init(params);
     }
 
     private static void executeMethod(){
 
-        Map<String, Object> params = new Map<String, Object>{
+        //END2END Executon from init to execute
+
+        Map<String, Object> paramsInit = new Map<String, Object>{
             'controller' => 'RateManagerRoomsConfigController',
             'ratePlannerId' => TP_SetupSelectorTest.getRatePlanner(1, 'TEST').Id,
-            'rateId' => TP_SetupSelectorTest.getRate(1, 'TEST').Id
+            'rateId' => TP_SetupSelectorTest.getBESTRate().Id
         };
-        DC_ResponseWr response = new RateManagerRoomsConfigController().init(params);
-        Map<String, Object> data = (Map<String,Object>)response.getData();
-        System.debug('data -->  ' + data);
+        DC_ResponseWr response = new RateManagerRoomsConfigController().init(paramsInit);
 
-        Map<String, Object> params2 = new Map<String, Object>{
+        RateManagerModel.RateLineDataTableWp filterWp = (RateManagerModel.RateLineDataTableWp)JSON.deserialize((String)JSON.serialize(response.getData()), RateManagerModel.RateLineDataTableWp.class);
+
+        List<RateManagerModel.RatePrice> ratePrices = new List<RateManagerModel.RatePrice>();
+        List<RateManagerModel.RateLine> rateLines = filterWp.data;
+        for(RateManagerModel.RateLine rateLine : rateLines){
+            for(String periodKey : rateLine.mPeriodsByPeriodKey.keySet()){
+                Period__c period = rateLine.mPeriodsByPeriodKey.get(periodKey);
+                ratePrices.add(new RateManagerModel.RatePrice(periodKey, rateLine.Id, period));
+            }
+        }
+
+        Map<String, Object> paramsExecute = new Map<String, Object>{
             'controller' => 'RateManagerRoomsConfigController',
             'action' => 'saveRatePrices',
-            'ratePlannerId' => TP_SetupSelectorTest.getRatePlanner(1, 'TEST').Id
-            //'ratePrices' => JSON.serialize(new List<RateManagerModel.RatePrice>{new RateManagerModel.RatePrice(periodKey, RateLineId, period)})
+            'ratePlannerId' => TP_SetupSelectorTest.getRatePlanner(1, 'TEST').Id,
+            'ratePrices' => JSON.serialize(ratePrices)
         };
-        new RateManagerRoomsConfigController().execute(params);
+        new RateManagerRoomsConfigController().execute(paramsExecute);
     }
 }

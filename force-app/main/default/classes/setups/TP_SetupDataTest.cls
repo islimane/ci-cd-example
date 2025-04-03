@@ -38,7 +38,8 @@ public class TP_SetupDataTest {
     public static Map<String, sObject> mOpportunityShare = new Map<String, sObject>();
     public static Map<String, sObject> mProduct2Room = new Map<String, sObject>();
     public static Map<String, sObject> mProduct2Supplement = new Map<String, sObject>();
-    public static Map<String, sObject> mRateLine = new Map<String, sObject>();
+    public static Map<String, sObject> mRateLineRoom = new Map<String, sObject>();
+    public static Map<String, sObject> mRateLineSupplement = new Map<String, sObject>();
     public static Map<String, sObject> mPricebookEntryRoom = new Map<String, sObject>();
     public static Map<String, sObject> mPricebookEntrySupplement = new Map<String, sObject>();
     public static Pricebook2 pricebookSingleton{get{
@@ -116,10 +117,10 @@ public class TP_SetupDataTest {
 		Opportunity_Hotel__c opportunityHotel = generateOpportunityHotel(null, null);
 		User_authorization__c userAuthorization = generateUserAuthorization(null);
 		OpportunityShare opportunityShare = generateOpportunityShare(null, groupTest);
-        RateLine__c rateLine = generateRateLine(null, null);
+        generateRateLine();
         generatePricebook();
         generateProduct2();
-        generatePricebookEntry();
+        //generatePricebookEntry();
     }
 
 
@@ -439,10 +440,11 @@ public class TP_SetupDataTest {
      * Generates a RateLine__c object with dummy values for testing purposes.
      * @return A new RateLine__c object with dummy values for a test environment.
      */
-    public static RateLine__c generateRateLine(Rate__c rate, RatePlanner__c ratePlanner ) { // no va aquí porque no se hace insert de los records relacionados
-        RateLine__c rateLine = new RateLine__c();
-        mRateLine = TP_SetupDataUtilsTest.setMapByName(mRateLine, new List<sObject>{rateLine});
-        return rateLine;
+    public static void generateRateLine() { // no va aquí porque no se hace insert de los records relacionados
+        RateLine__c rateLineRoom = new RateLine__c(Room__c = 'Individual');
+        RateLine__c rateLineSupplement = new RateLine__c(Description__c = 'Children');
+        mRateLineRoom = TP_SetupDataUtilsTest.setMapByName(mRateLineRoom, new List<sObject>{rateLineRoom});
+        mRateLineSupplement = TP_SetupDataUtilsTest.setMapByName(mRateLineSupplement, new List<sObject>{rateLineSupplement});
     }
 
     /************************************************/
@@ -634,11 +636,16 @@ public class TP_SetupDataTest {
      * @author Inetum Team <ruben.sanchez-gonzalez@inetum.com> | 26-03-2025
      */
     private static void insertRateLineData() {
-        TP_SetupDataUtilsTest.genericParentChildRelationship(mRate.values(), mRateLine.values(), 'Rate__c');
-        TP_SetupDataUtilsTest.genericParentChildRelationship(mRatePlanner.values(), mRateLine.values(), 'RatePlanner__c');
-        TP_SetupDataUtilsTest.genericParentChildRelationship(mProduct2Room.values(), mRateLine.values(), 'Product__c');
-        TP_SetupDataUtilsTest.genericParentChildRelationship(mHotel.values(), mRateLine.values(), 'Hotel__c');
-        lRateLineToInsert.addAll((List<RateLine__c>) mRateLine.values());
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mRate.values(), mRateLineRoom.values(), 'Rate__c');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mRatePlanner.values(), mRateLineRoom.values(), 'RatePlanner__c');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mProduct2Room.values(), mRateLineRoom.values(), 'Product__c');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mHotel.values(), mRateLineRoom.values(), 'Hotel__c');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mRate.values(), mRateLineSupplement.values(), 'Rate__c');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mRatePlanner.values(), mRateLineSupplement.values(), 'RatePlanner__c');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mProduct2Supplement.values(), mRateLineSupplement.values(), 'Product__c');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mHotel.values(), mRateLineSupplement.values(), 'Hotel__c');
+        lRateLineToInsert.addAll((List<RateLine__c>) mRateLineRoom.values());
+        lRateLineToInsert.addAll((List<RateLine__c>) mRateLineSupplement.values());
         insert lRateLineToInsert;
     }
 
