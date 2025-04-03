@@ -2,13 +2,14 @@
  * @description       : Unit Test Class for Setup Data Methods
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 26-03-2025
- * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
+ * @last modified on  : 03-04-2025
+ * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 @isTest
 public class TP_SetupDataTest {
 
     static final Integer STANDARD_SIZE_TEST_LIST = 5;
+    static final String PRICEBOOK_NAME_TEST = 'TestPricebook';
 
     /*********************************/
     /*     CONSTANTS DEFINITIONS     */
@@ -38,6 +39,17 @@ public class TP_SetupDataTest {
     public static Map<String, sObject> mProduct2Room = new Map<String, sObject>();
     public static Map<String, sObject> mProduct2Supplement = new Map<String, sObject>();
     public static Map<String, sObject> mRateLine = new Map<String, sObject>();
+    public static Map<String, sObject> mPricebookEntryRoom = new Map<String, sObject>();
+    public static Map<String, sObject> mPricebookEntrySupplement = new Map<String, sObject>();
+    public static Pricebook2 pricebookSingleton{get{
+        if(pricebookSingleton == null){
+            pricebookSingleton = [SELECT Id, Name FROM Pricebook2 WHERE isActive = true AND Name = :PRICEBOOK_NAME_TEST LIMIT 1];
+        }
+        return pricebookSingleton;
+    }set{
+        if(pricebookSingleton == null) insert value;
+    }}
+
 
 	/*********************************/
     /*      OBJECTS DEFINITIONS      */
@@ -105,7 +117,9 @@ public class TP_SetupDataTest {
 		User_authorization__c userAuthorization = generateUserAuthorization(null);
 		OpportunityShare opportunityShare = generateOpportunityShare(null, groupTest);
         RateLine__c rateLine = generateRateLine(null, null);
+        generatePricebook();
         generateProduct2();
+        generatePricebookEntry();
     }
 
 
@@ -372,6 +386,14 @@ public class TP_SetupDataTest {
         return opportunityShare;
     }
 
+    private static void generatePricebook(){
+        Pricebook2 pricebook = new Pricebook2(
+            Name = PRICEBOOK_NAME_TEST,
+            IsActive = true
+        );
+        pricebookSingleton = pricebook;
+    }
+
     /**
     * @description
     * @author Inetum Team <alberto.martinez-lopez@inetum.com> | 18-03-2025
@@ -395,6 +417,22 @@ public class TP_SetupDataTest {
         );
         TP_SetupDataUtilsTest.setMapByName(mProduct2Room, new List<sObject>{product2_Room});
         TP_SetupDataUtilsTest.setMapByName(mProduct2Supplement, new List<sObject>{product2_Supplement});
+    }
+
+
+    private static void generatePricebookEntry(){
+        PricebookEntry pricebookEntryRoom = new PricebookEntry(
+            Pricebook2Id = pricebookSingleton?.Id,
+            UnitPrice = 100,
+            IsActive = true
+        );
+        PricebookEntry pricebookEntrySupplement = new PricebookEntry(
+            Pricebook2Id = pricebookSingleton?.Id,
+            UnitPrice = 100,
+            IsActive = true
+        );
+        TP_SetupDataUtilsTest.setMapByName(mPricebookEntryRoom, new List<sObject>{pricebookEntryRoom});
+        TP_SetupDataUtilsTest.setMapByName(mPricebookEntrySupplement, new List<sObject>{pricebookEntrySupplement});
     }
 
     /**
@@ -429,6 +467,7 @@ public class TP_SetupDataTest {
     public static List<HotelTerritory__c> lHotelTerritoryToInsert = new List<HotelTerritory__c>();
     public static List<User_authorization__c> lUserAuthorizationToInsert = new List<User_authorization__c>();
     public static List<Product2> product2toInsert = new List<Product2>();
+    public static List<PricebookEntry> lPricebookEntryToInsert = new List<PricebookEntry>();
     public static List<RateLine__c> lRateLineToInsert = new List<RateLine__c>();
 
     /**
@@ -448,6 +487,7 @@ public class TP_SetupDataTest {
 		insertUserAuthorization();
 		insertOpportunityShare();
         insertProduct2();
+        insertPricebookEntry();
         insertRateLineData();
     }
 
@@ -565,6 +605,18 @@ public class TP_SetupDataTest {
         product2toInsert.addAll((List<Product2>)mProduct2Room.values());
         product2toInsert.addAll((List<Product2>)mProduct2Supplement.values());
         insert product2toInsert;
+    }
+
+    /**
+    * @description
+    * @author Inetum Team <alberto.martinez-lopez@inetum.com> | 18-03-2025
+    **/
+    private static void insertPricebookEntry(){
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mProduct2Room.values(), mPricebookEntryRoom.values(), 'Product2Id');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mProduct2Room.values(), mPricebookEntrySupplement.values(), 'Product2Id');
+        lPricebookEntryToInsert.addAll((List<PricebookEntry>)mPricebookEntryRoom.values());
+        lPricebookEntryToInsert.addAll((List<PricebookEntry>)mPricebookEntrySupplement.values());
+        insert lPricebookEntryToInsert;
     }
 
     /**
