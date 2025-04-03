@@ -2,8 +2,8 @@
  * @description       : Provides utility methods to retrieve test records based on dynamic naming conventions.
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 26-03-2025
- * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
+ * @last modified on  : 03-04-2025
+ * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 
 @isTest
@@ -125,5 +125,13 @@ public with sharing class TP_SetupSelectorTest {
      */
     public static List<RateLine__c> getRateLines(){
         return [SELECT Id, Name, Rate__c, Hotel__c, Product__r.Family FROM RateLine__c LIMIT 5];
+    }
+
+    /**
+     * Retrieves a list of Rate__c records based on the DB.
+     * @return List<Rate__c>.
+     */
+    public static Rate__c getBESTRate(){
+        return [SELECT Id, Name, Rate_Name__c, RateType__c FROM Rate__c WHERE Rate_Name__c=:GlobalConstants.RATE_RATE_NAME_PICKLIST_BEST LIMIT 1];
     }
 }

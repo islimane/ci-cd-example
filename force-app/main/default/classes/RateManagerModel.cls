@@ -2,8 +2,8 @@
  * @description       : Unified model class for Rate Manager controllers
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             :
- * @last modified on  : 31-03-2025
- * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
+ * @last modified on  : 03-04-2025
+ * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 public with sharing class RateManagerModel {
 
@@ -60,8 +60,12 @@ public with sharing class RateManagerModel {
         public Id RateId;
         public Id HotelId;
         public Id RatePlannerId;
+        
+        @TestVisible
         Map<String, Period__c> mPeriodsByPeriodKey = new Map<String, Period__c>();
+        @TestVisible
         List<RatePrice> ratesPrices = new List<RatePrice>();
+        @TestVisible
         Map<String, RatePrice> ratePricesByPeriodString = new Map<String, RatePrice>();
 
         public RateLine(RateLine__c rateLine, List<Period__c> lPeriods) {

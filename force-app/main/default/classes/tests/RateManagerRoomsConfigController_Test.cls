@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             : 
- * @last modified on  : 26-03-2025
+ * @last modified on  : 03-04-2025
  * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 @isTest
@@ -27,12 +27,50 @@ public class RateManagerRoomsConfigController_Test implements TP_ExecutableInter
         Test.stopTest();
     }
 
+    @isTest
+    public static void testExecuteMethod(){
+        Test.startTest();
+        executeMethod();
+        Test.stopTest();
+    }
+
     private static void initMethod(){
         Map<String, Object> params = new Map<String, Object>{
             'controller' => 'RateManagerRoomsConfigController',
-            'ratePlannerId' => TP_SetupSelectorTest.getRatePlanner(1, 'TEST').Id
-            //'rateId' => TP_SetupSelectorTest.getRate(1, 'TEST').Id
+            'ratePlannerId' => TP_SetupSelectorTest.getRatePlanner(1, 'TEST').Id,
+            'rateId' => TP_SetupSelectorTest.getBESTRate().Id
         };
         new RateManagerRoomsConfigController().init(params);
+    }
+
+    private static void executeMethod(){
+
+        //END2END Executon from init to execute
+
+        Map<String, Object> paramsInit = new Map<String, Object>{
+            'controller' => 'RateManagerRoomsConfigController',
+            'ratePlannerId' => TP_SetupSelectorTest.getRatePlanner(1, 'TEST').Id,
+            'rateId' => TP_SetupSelectorTest.getBESTRate().Id
+        };
+        DC_ResponseWr response = new RateManagerRoomsConfigController().init(paramsInit);
+
+        RateManagerModel.RateLineDataTableWp filterWp = (RateManagerModel.RateLineDataTableWp)JSON.deserialize((String)JSON.serialize(response.getData()), RateManagerModel.RateLineDataTableWp.class);
+
+        List<RateManagerModel.RatePrice> ratePrices = new List<RateManagerModel.RatePrice>();
+        List<RateManagerModel.RateLine> rateLines = filterWp.data;
+        for(RateManagerModel.RateLine rateLine : rateLines){
+            for(String periodKey : rateLine.mPeriodsByPeriodKey.keySet()){
+                Period__c period = rateLine.mPeriodsByPeriodKey.get(periodKey);
+                ratePrices.add(new RateManagerModel.RatePrice(periodKey, rateLine.Id, period));
+            }
+        }
+
+        Map<String, Object> paramsExecute = new Map<String, Object>{
+            'controller' => 'RateManagerRoomsConfigController',
+            'action' => 'saveRatePrices',
+            'ratePlannerId' => TP_SetupSelectorTest.getRatePlanner(1, 'TEST').Id,
+            'ratePrices' => JSON.serialize(ratePrices)
+        };
+        new RateManagerRoomsConfigController().execute(paramsExecute);
     }
 }
