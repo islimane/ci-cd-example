@@ -1,1 +1,3 @@
 RateManagementExecutor_Test
+TriggerUtils_Test
+TriggerHandler_Test

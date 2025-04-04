@@ -279,6 +279,8 @@ public class TriggerUtils_Test {
             
             for(Contact cont : contactList){
                 cont.Phone = '666555444';
+                cont.Email = 'test' + cont.Name + '@test.com';
+                cont.Salutation = 'Mr.';
             }
 
             setMapByName(contactMap, contactList);

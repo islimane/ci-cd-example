@@ -2,8 +2,8 @@
  * @description       : Shows a table with fixed columns attached to a scrollable table
  * @author            : Inetum Team
  * @group             :
- * @last modified on  : 02-04-2025
- * @last modified by  : alberto.martinez-lopez@inetum.com
+ * @last modified on  : 03-04-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 import { LightningElement, api, track } from 'lwc';
 
@@ -94,7 +94,7 @@ export default class FixedColumnsTable extends LightningElement {
 
     @api
     getSelectedRows() {
-        let selectedRows = this.template.querySelectorAll('lightning-datatable')[0]?.getSelectedRows();
+        let selectedRows = this.template.querySelectorAll('c-data-table-with-custom-types')[0]?.getSelectedRows();
         return selectedRows;
     }
 
@@ -110,7 +110,7 @@ export default class FixedColumnsTable extends LightningElement {
                 position: absolute;
                 width: 100%;
             }
-                
+
             .hide-row-number-column table th:first-child, .hide-row-number-column table td:first-child{
                 display: none !important;
             }
