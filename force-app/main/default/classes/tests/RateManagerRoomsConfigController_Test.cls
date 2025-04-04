@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             : 
- * @last modified on  : 03-04-2025
+ * @last modified on  : 04-04-2025
  * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 @isTest
@@ -17,6 +17,7 @@ public class RateManagerRoomsConfigController_Test implements TP_ExecutableInter
     public static void testAll(){
         Test.startTest();
         initMethod();
+        executeMethod();
         Test.stopTest();
     }
 
