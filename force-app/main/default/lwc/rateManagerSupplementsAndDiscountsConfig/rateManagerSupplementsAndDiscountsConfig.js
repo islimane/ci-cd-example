@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 02-04-2025
+ * @last modified on  : 07-04-2025
  * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 import { api, track } from 'lwc';
@@ -67,7 +67,6 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
     };
 
     buildTable(){
-        console.log('this.parentId ', this.parentId);
         this._columns = [{ 
                 label: 'ACTIONS', 
                 fieldName: 'action',
@@ -84,7 +83,7 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
             { label: 'TYPE', fieldName: 'RegimenType', type: 'text', fixed: true, fixedWidth: 80, wrapText: true },
             { label: 'APPLICATION TYPE', fieldName: 'ApplicationType', type: 'text', fixed: true, fixedWidth: 200 },
             { label: 'APPLICABLE', fieldName: 'Applicable', type: 'text', fixed: true, fixedWidth: 101 },
-            { label: 'OBSERVATIONS', fieldName: 'Description', type: 'text', fixed: true, fixedWidth: 200, wrapText: true }
+            { label: 'OBSERVATIONS', fieldName: 'Observations', type: 'text', fixed: true, fixedWidth: 200, wrapText: true, editable: true}
         ];
 
         const periods = new Set();
@@ -122,27 +121,43 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
 
     async handleSave(event){
 
+        console.log('handleSave rateManagerSupplementsAndDiscountsConfig' , event.detail);
+
         const draftValues = event.detail.draftValues;
-        const mappedData = [];
+        const mappedDataRatePrice = [];
+        const mappedDataRateLine = [];
+        let actionName = '';  
         draftValues.forEach(item => {
             const dateRangeKeys = Object.keys(item).filter(key =>
                 key.includes('-') && /\d+\/\d+\/\d+/.test(key)
             );
+            
             dateRangeKeys.forEach(dateKey => {
-                mappedData.push({
+                mappedDataRatePrice.push({
                     periodKey: dateKey,
                     TotalPrice: parseFloat(item[dateKey]),
                     ParentRateLineId: item.id
                 });
             });
+
+            if(dateRangeKeys.length === 0){
+                mappedDataRateLine.push({
+                    Id: item.id,
+                    Observations: item.Observations
+                });
+            }
         });
+
+        if(mappedDataRatePrice.length > 0) actionName = 'saveRatePrices';
+        else if(mappedDataRateLine.length > 0) actionName = 'saveRateLines';
 
         try{
             const result = await this.remoteAction({
                 controller: 'RateManagerSmntsAndDntsController',
-                action: 'saveRatePrices',
+                action: actionName,
                 ratePlannerId: this.parentId,
-                ratePrices: JSON.stringify(mappedData),
+                ratePrices: JSON.stringify(mappedDataRatePrice),
+                rateLines: JSON.stringify(mappedDataRateLine),
             });
             if(result)this.refreshFetch();
         }catch(e){
