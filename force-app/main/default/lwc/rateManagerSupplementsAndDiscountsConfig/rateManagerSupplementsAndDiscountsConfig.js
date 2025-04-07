@@ -5,7 +5,6 @@
  * @last modified on  : 07-04-2025
  * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
-import { api, track } from 'lwc';
 import LwcDCExtension from 'c/lwcDCExtension';
 import { RateManagerMixin } from 'c/rateManagerMixin';
 import { RateManagerExtendedDataTableMixin } from 'c/rateManagerExtendedDataTableMixin';
@@ -34,8 +33,6 @@ const SUPPLEMENT_COLUMNS = [{
 ];
 
 export default class RateManagerSupplementsAndDiscountsConfig extends RateManagerExtendedDataTableMixin(RateManagerMixin(LwcDCExtension)) {
-    @api rateId;
-    @track filters = [];
 
     labels = LABELS;
 
@@ -72,6 +69,9 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
 
     handleRowAction(event) {
         console.log('handleRowAction rateManagerSupplementsAndDiscountsConfig' , event.detail);
+        this.mixinRowAction(event.detail.action, event.detail, () => {
+            this.refreshFetch();
+        });
     }
 
     handleSave(event){
@@ -96,6 +96,7 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
     async handleDelete() {
         // retrieve selected rows
         let selectedRows = this.template.querySelector('c-extended-data-table-manager')?.getSelectedRows();
+        console.log('Selected rows --> ' + selectedRows);
         this.mixinDeleteRecords(selectedRows, () => {
             this.refreshFetch();
         });

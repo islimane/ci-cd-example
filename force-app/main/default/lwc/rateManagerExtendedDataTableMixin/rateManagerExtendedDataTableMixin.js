@@ -2,7 +2,7 @@
  * @description  : A mixin that provides common functionality for rateManagers.
  * @author       : Inetum Team
 **/
-import { track } from 'lwc';
+import { track, api } from 'lwc';
 import { deleteRecord } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import LightningConfirm from 'lightning/confirm';
@@ -19,6 +19,10 @@ export const RateManagerExtendedDataTableMixin = (BaseClass) => class extends Ba
 
     labels = LABELS;
 
+    @api rateId;    // RateId
+
+    @track filters = [];
+
     @track data = [];
 
     _columns = [];
@@ -33,6 +37,15 @@ export const RateManagerExtendedDataTableMixin = (BaseClass) => class extends Ba
 
     get fixedColumnCount() {
         return this._columns.filter((column) => column.fixed).length;
+    }
+
+    mixinRowAction(action, data, callback){
+        console.log('handleRowAction', action, data);
+        switch(action){
+            case 'clone' : break;
+            case 'delete' : this.mixinDeleteRecords([data], callback); break;
+            default : break;
+        }
     }
 
     mixinBuildTable(columns){
@@ -60,7 +73,7 @@ export const RateManagerExtendedDataTableMixin = (BaseClass) => class extends Ba
         });
     }
 
-    mixinSaveRateDataRecords(draftValues, promise) {
+    mixinSaveRateDataRecords(draftValues, callback) {
         const mappedDataRatePrice = [];
         const mappedDataRateLine = [];
         let actionName = '';  
@@ -88,7 +101,7 @@ export const RateManagerExtendedDataTableMixin = (BaseClass) => class extends Ba
         if(mappedDataRatePrice.length > 0) actionName = 'saveRatePrices';
         else if(mappedDataRateLine.length > 0) actionName = 'saveRateLines';
 
-        promise(actionName, mappedDataRatePrice, mappedDataRateLine);
+        callback(actionName, mappedDataRatePrice, mappedDataRateLine);
     }
 
     async mixinDeleteRecords(recordsToDelete, callback) {
