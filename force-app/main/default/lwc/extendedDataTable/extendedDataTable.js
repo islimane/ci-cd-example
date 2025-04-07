@@ -94,7 +94,7 @@ export default class FixedColumnsTable extends LightningElement {
 
     @api
     getSelectedRows() {
-        let selectedRows = this.template.querySelectorAll('lightning-datatable')[0]?.getSelectedRows();
+        let selectedRows = this.template.querySelector('c-data-table-with-custom-types').getSelectedRows();
         return selectedRows;
     }
 

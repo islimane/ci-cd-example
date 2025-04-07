@@ -30,7 +30,7 @@ const ROOMS_COLUMNS = [{
     { label: 'CHARACTERSITIC', fieldName: 'Characteristic', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
     { label: 'APPLICABLE', fieldName: 'Applicable', type: 'text', fixed: true, fixedWidth: 114 },
     { label: 'REGIMEN', fieldName: 'RegimenType', type: 'text', fixed: true, fixedWidth: 101 },
-    { label: 'AVG', fieldName: 'avg', type: 'currency', fixed: true, fixedWidth: 68 }
+    { label: 'AVG', fieldName: 'avg', type: 'currency', fixed: true, fixedWidth: 68, editable: true}
 ];
 
 export default class RateManagerRoomsConfig extends RateManagerExtendedDataTableMixin(RateManagerMixin(LwcDCExtension)) {
@@ -113,7 +113,6 @@ export default class RateManagerRoomsConfig extends RateManagerExtendedDataTable
     async handleDelete() {
         // retrieve selected rows
         let selectedRows = this.template.querySelector('c-extended-data-table-manager')?.getSelectedRows();
-        console.log('Selected rows --> ' + selectedRows);
         this.mixinDeleteRecords(selectedRows, () => {
             this.refreshFetch();
         });

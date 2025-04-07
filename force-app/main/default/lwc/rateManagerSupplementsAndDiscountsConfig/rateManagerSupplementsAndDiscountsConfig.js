@@ -96,7 +96,6 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
     async handleDelete() {
         // retrieve selected rows
         let selectedRows = this.template.querySelector('c-extended-data-table-manager')?.getSelectedRows();
-        console.log('Selected rows --> ' + selectedRows);
         this.mixinDeleteRecords(selectedRows, () => {
             this.refreshFetch();
         });
