@@ -2,35 +2,37 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 02-04-2025
- * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
+ * @last modified on  : 07-04-2025
+ * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
-import { api, track } from 'lwc';
 import LwcDCExtension from 'c/lwcDCExtension';
 import { RateManagerMixin } from 'c/rateManagerMixin';
-import { deleteRecord } from 'lightning/uiRecordApi';
-import LightningConfirm from 'lightning/confirm';
+import { RateManagerExtendedDataTableMixin } from 'c/rateManagerExtendedDataTableMixin';
 import LABELS from './labels';
 import modalSupplementsAndDiscounts from 'c/rateManagerModalSupplementsAndDiscountsHandler';
 
-export default class RateManagerSupplementsAndDiscountsConfig extends RateManagerMixin(LwcDCExtension) {
-    @api rateId;
-    @track filters = [];
-    @track data = [];
+const CONTROLLER_NAME = 'RateManagerSmntsAndDntsController';
 
-    _columns = [];
+const SUPPLEMENT_COLUMNS = [{ 
+        label: 'ACTIONS', 
+        fieldName: 'action',
+        type: "actions",
+        typeAttributes: {
+            recordId: { fieldName: "id" },
+            actions: [
+                {iconName: 'action:remove', label: 'Delete', action: 'delete'}, {iconName: 'action:clone', label: 'Clone', action: 'clone'}
+            ]
+        },
+        fixed: true, fixedWidth: 109 
+    },
+    { label: 'SUPPLEMENT NAME', fieldName: 'Name', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
+    { label: 'TYPE', fieldName: 'RegimenType', type: 'text', fixed: true, fixedWidth: 80, wrapText: true },
+    { label: 'APPLICATION TYPE', fieldName: 'ApplicationType', type: 'text', fixed: true, fixedWidth: 200 },
+    { label: 'APPLICABLE', fieldName: 'Applicable', type: 'text', fixed: true, fixedWidth: 101 },
+    { label: 'OBSERVATIONS', fieldName: 'Observations', type: 'text', fixed: true, fixedWidth: 200, wrapText: true, editable: true}
+];
 
-    get columns() {
-        return this._columns;
-    }
-
-    get columnsIsNotEmpty() {
-        return this._columns.length > 0;
-    }
-
-    get fixedColumnCount() {
-        return this._columns.filter((column) => column.fixed).length;
-    }
+export default class RateManagerSupplementsAndDiscountsConfig extends RateManagerExtendedDataTableMixin(RateManagerMixin(LwcDCExtension)) {
 
     labels = LABELS;
 
@@ -46,7 +48,7 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
         this._wireParams = {
             ratePlannerId: this.parentId,
             rateId: this.rateId,
-            controller: 'RateManagerSmntsAndDntsController'
+            controller: CONTROLLER_NAME
         };
     }
 
@@ -59,97 +61,47 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
         if (fetchedRecords) {
             this.filters = response.data.filters;
             this.data = response.data.data;
-            this.buildTable();
+            this.mixinBuildTable(SUPPLEMENT_COLUMNS);
         } else {
             console.warn('No records available in response');
         }
     };
 
-    buildTable(){
-        console.log('this.parentId ', this.parentId);
-        this._columns = [{ 
-                label: 'ACTIONS', 
-                fieldName: 'action',
-                type: "actions",
-                typeAttributes: {
-                    recordId: { fieldName: "id" },
-                    actions: [
-                        {iconName: 'action:remove', label: 'Delete', action: 'delete'}, {iconName: 'action:clone', label: 'Clone', action: 'clone'}
-                    ]
-                },
-                fixed: true, fixedWidth: 109 
-            },
-            { label: 'SUPPLEMENT NAME', fieldName: 'Name', type: 'text', fixed: true, fixedWidth: 200, wrapText: true },
-            { label: 'TYPE', fieldName: 'RegimenType', type: 'text', fixed: true, fixedWidth: 80, wrapText: true },
-            { label: 'APPLICATION TYPE', fieldName: 'ApplicationType', type: 'text', fixed: true, fixedWidth: 200 },
-            { label: 'APPLICABLE', fieldName: 'Applicable', type: 'text', fixed: true, fixedWidth: 101 },
-            { label: 'OBSERVATIONS', fieldName: 'Description', type: 'text', fixed: true, fixedWidth: 200, wrapText: true }
-        ];
-
-        const periods = new Set();
-        this.data.forEach((item) => {
-            item.ratesPrices.forEach((rate) => {
-                if (rate.StartDate && rate.EndDate) {
-                    periods.add(rate.periodKey);
-                }
-            });
-        });
-
-        periods.forEach(period => {
-            this._columns.push({ label: period, fieldName: period, type: 'currency', editable: true, fixedWidth: 200 });
-        });
-
-        this.data = this.data.map(item => {
-            const newItem = { ...item };
-            periods.forEach(period => {
-                const rate = item.ratesPrices.find(element => element.periodKey === period);
-                newItem[period] = rate ? rate.TotalPrice : null;
-            });
-            return newItem;
-        });
-
-    }
-
-    refreshTable() {
-        this.refreshFetch();
-    }
-
     handleRowAction(event) {
         console.log('handleRowAction rateManagerSupplementsAndDiscountsConfig' , event.detail);
-
-    }
-
-    async handleSave(event){
-
-        const draftValues = event.detail.draftValues;
-        const mappedData = [];
-        draftValues.forEach(item => {
-            const dateRangeKeys = Object.keys(item).filter(key =>
-                key.includes('-') && /\d+\/\d+\/\d+/.test(key)
-            );
-            dateRangeKeys.forEach(dateKey => {
-                mappedData.push({
-                    periodKey: dateKey,
-                    TotalPrice: parseFloat(item[dateKey]),
-                    ParentRateLineId: item.id
-                });
-            });
+        this.mixinRowAction(event.detail.action, event.detail, () => {
+            this.refreshFetch();
         });
-
-        try{
-            const result = await this.remoteAction({
-                controller: 'RateManagerSmntsAndDntsController',
-                action: 'saveRatePrices',
-                ratePlannerId: this.parentId,
-                ratePrices: JSON.stringify(mappedData),
-            });
-            if(result)this.refreshFetch();
-        }catch(e){
-            console.error(e);
-        }
     }
 
-    async handleAddRoomModal() {
+    handleSave(event){
+        console.log('handleSave rateManagerSupplementsAndDiscountsConfig' , event.detail);
+        const draftValues = event.detail.draftValues;
+        this.mixinSaveRateDataRecords(draftValues, async (actionName, mappedDataRatePrice, mappedDataRateLine ) => {
+            try{
+                const result = await this.remoteAction({
+                    controller: CONTROLLER_NAME,
+                    action: actionName,
+                    ratePlannerId: this.parentId,
+                    ratePrices: JSON.stringify(mappedDataRatePrice),
+                    rateLines: JSON.stringify(mappedDataRateLine),
+                });
+                if(result)this.refreshFetch();
+            }catch(e){
+                console.error(e);
+            }        
+        }); 
+    }
+
+    async handleDelete() {
+        // retrieve selected rows
+        let selectedRows = this.template.querySelector('c-extended-data-table-manager')?.getSelectedRows();
+        this.mixinDeleteRecords(selectedRows, () => {
+            this.refreshFetch();
+        });
+    }
+    
+    async handleAddSupplementsModal() {
         await modalSupplementsAndDiscounts.open({
             parentId: this.parentId,
             rateId: this.rateId,
@@ -157,40 +109,8 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
             headerLabel: 'Add Supplements and Reductions',
             onrefreshtable: (e) => {
                 e.stopPropagation();
-                this.refreshTable();
+                this.refreshFetch();
             }
         });
     }
-
-    async handleDelete() {
-        // retrieve selected rows
-        let selectedRows = this.template.querySelector('c-extended-data-table-manager')?.getSelectedRows();
-        console.log('Selected rows --> ' + selectedRows);
-        if (!selectedRows || selectedRows.length === 0) {
-            this.dispatchEvent(
-                this.showToast('Error', this.labels.noRecordsSelected, 'error')
-            );
-            return;
-        }
-        const result = await LightningConfirm.open({
-            message: this.labels.removeConfirmation,
-            variant: 'headerless',
-            label: 'this is the aria-label value'
-        });
-
-        if (result) {
-            const promises = selectedRows.map((row) => deleteRecord(row.Id));
-            Promise.all(promises)
-                .then(() => {
-                    this.showToast(this.labels.success, this.labels.removeSuccess, 'success');
-                })
-                .catch((error) => {
-                    this.showToast('Error', error.body.message, 'error');
-                })
-                .finally(() => {
-                    this.refreshTable();
-                });
-        }
-    }
-
 }
