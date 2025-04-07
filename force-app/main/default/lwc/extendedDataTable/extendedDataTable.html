@@ -2,21 +2,25 @@
   @description       : 
   @author            : alberto.martinez-lopez@inetum.com
   @group             : 
-  @last modified on  : 01-04-2025
+  @last modified on  : 07-04-2025
   @last modified by  : alberto.martinez-lopez@inetum.com
 -->
 <template>
     <div class="table-container">
         <!-- Fixed Columns Table -->
-        <div class="fixed-table">
+        <div class="fixed-table hide-row-number-column-container">
             <template if:false={fixedColumnsIsEmpty}>
                 <c-data-table-with-custom-types
+                    data-id="fixedTable"
+                    class="hide-row-number-column"
                     key-field="id"
+                    onsave={handleSave}
                     data={fixedTableData}
                     columns={fixedColumns}
                     resize-column-disabled="true"
                     lwc:ref="fixedTable"
                     oninnerrowaction={handleRowAction}
+                    draft-values={draftValues}
                 ></c-data-table-with-custom-types>
             </template>
         </div>

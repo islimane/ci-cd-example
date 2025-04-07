@@ -2,8 +2,8 @@
  * @description       : Shows a table with fixed columns attached to a scrollable table
  * @author            : Inetum Team
  * @group             :
- * @last modified on  : 03-04-2025
- * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
+ * @last modified on  : 07-04-2025
+ * @last modified by  : alberto.martinez-lopez@inetum.com
  **/
 import { LightningElement, api, track } from 'lwc';
 
@@ -115,14 +115,14 @@ export default class FixedColumnsTable extends LightningElement {
                 display: none !important;
             }
 
-            lightning-datatable[data-id='scrollableTable'] .slds-docked-form-footer{
+            *[data-id]:is([data-id='scrollableTable'], [data-id='fixedTable']) .slds-docked-form-footer{
                 width: 200px;
                 border: solid 1px #dcdcdc;
                 border-radius: 1rem;
                 animation: fadeIn .5s ease-in-out;
             }
 
-            lightning-datatable[data-id='scrollableTable'] .slds-table_header-fixed_container{
+            *[data-id]:is([data-id='scrollableTable'], [data-id='fixedTable']) .slds-table_header-fixed_container{
                 background-color: transparent;
             }
 
