@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             : 
- * @last modified on  : 02-04-2025
+ * @last modified on  : 07-04-2025
  * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 import LwcDCExtension from 'c/lwcDCExtension';
@@ -37,7 +37,7 @@ export default class RateManagerRateConfig extends RateManagerMixin(LwcDCExtensi
 
     get rateSeasonName(){
         return this._ratePlannerRecord?.Season__r?.Name;
-    }
+    } 
 
     get ratePlannerConfigMode(){
         return this._ratePlannerRecord?.ConfigurationMode__c;
