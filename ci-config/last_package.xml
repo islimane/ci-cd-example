@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
-        <members>RateLineManager</members>
-        <members>RateLineSelector</members>
-        <members>RateManagerModel</members>
+        <members>RateManagerRoomsConfigController</members>
+        <members>RateManagerRoomsConfigController_Test</members>
         <members>RateManagerSmntsAndDntsController</members>
+        <members>RateManagerSmntsAndDntsController_Test</members>
         <name>ApexClass</name>
     </types>
     <types>
-        <members>dataTableActions</members>
-        <members>extendedDataTable</members>
-        <members>rateManagerExtendedDataTableMixin</members>
+        <members>rateManagerDataTableBrowser</members>
         <members>rateManagerRoomsConfig</members>
         <members>rateManagerSupplementsAndDiscountsConfig</members>
         <name>LightningComponentBundle</name>
