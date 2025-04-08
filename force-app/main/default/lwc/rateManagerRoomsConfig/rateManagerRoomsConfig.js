@@ -2,7 +2,7 @@
  * @description       : Enables adding Rooms to a Rate Planner.
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 07-04-2025
+ * @last modified on  : 08-04-2025
  * @last modified by  : alberto.martinez-lopez@inetum.com
  **/
 import LwcDCExtension from 'c/lwcDCExtension';
@@ -112,7 +112,7 @@ export default class RateManagerRoomsConfig extends RateManagerExtendedDataTable
 
     async handleDelete() {
         // retrieve selected rows
-        let selectedRows = this.template.querySelector('c-extended-data-table-manager')?.getSelectedRows();
+        let selectedRows = this.template.querySelector('c-rate-manager-data-table-browser')?.getSelectedRows();
         this.mixinDeleteRecords(selectedRows, () => {
             this.refreshFetch();
         });
