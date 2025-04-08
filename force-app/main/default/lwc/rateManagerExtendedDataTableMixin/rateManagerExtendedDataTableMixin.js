@@ -60,7 +60,7 @@ export const RateManagerExtendedDataTableMixin = (BaseClass) => class extends Ba
         });
 
         periods.forEach((period) => {
-            this._columns.push({ label: period, fieldName: period, type: 'currency', editable: true, fixedWidth: 200 });
+            this._columns.push({ label: period, fieldName: period, type: 'currency', editable: true, fixedWidth: 100, hideDefaultActions: true });
         });
 
         this.data = this.data.map((item) => {

@@ -2,7 +2,7 @@
  * @description       : Shows a table with fixed columns attached to a scrollable table
  * @author            : Inetum Team
  * @group             :
- * @last modified on  : 07-04-2025
+ * @last modified on  : 08-04-2025
  * @last modified by  : alberto.martinez-lopez@inetum.com
  **/
 import { LightningElement, api, track } from 'lwc';
@@ -102,6 +102,15 @@ export default class FixedColumnsTable extends LightningElement {
     appendCustomCss(){
         const style = document.createElement('style');
         style.innerText = `
+            .slds-th__action, .slds-has-button-menu{
+                height:3rem;
+            }
+        
+            .slds-table_header-fixed_container{
+                padding-block-start: 3rem;
+                padding-top: 3rem !important;
+            }
+
             .slds-table tbody tr {
                 height: 2.5rem;
             }
