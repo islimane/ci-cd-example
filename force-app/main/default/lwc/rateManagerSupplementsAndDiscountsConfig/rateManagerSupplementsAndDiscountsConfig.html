@@ -2,13 +2,13 @@
   @description       :
   @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
   @group             :
-  @last modified on  : 07-04-2025
+  @last modified on  : 08-04-2025
   @last modified by  : alberto.martinez-lopez@inetum.com
 -->
 <template>
 
     <div if:true={columnsIsNotEmpty}>
-        <c-extended-data-table-manager
+        <c-rate-manager-data-table-browser
             onrowaction={handleRowAction}
             oninlinesave={handleSave}
             columns={columns}
@@ -34,6 +34,6 @@
                     ></lightning-button>
                 </lightning-button-group>
             </div>
-        </c-extended-data-table-manager>
+        </c-rate-manager-data-table-browser>
     </div>
 </template>
