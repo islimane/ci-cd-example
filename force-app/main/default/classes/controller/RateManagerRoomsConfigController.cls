@@ -93,7 +93,7 @@ public with sharing class RateManagerRoomsConfigController extends DC_DynamicCon
 
         RatePriceManager.upsertRatePricesEditedFromRatePlanner(ratePlannerId, lWrappedData);
 
-        return new DC_ResponseWr(true, null, 'OK');
+        return new DC_ResponseWr(true, new Map<String, Object>(), 'OK');
     }
 
     /** 
@@ -108,7 +108,7 @@ public with sharing class RateManagerRoomsConfigController extends DC_DynamicCon
 
         RateLineManager.updateRateLinesEditedFromRatePlanner(lWrappedData);
 
-        return new DC_ResponseWr(true, null, 'OK');
+        return new DC_ResponseWr(true, new Map<String, Object>(), 'OK');
     }
 
     
