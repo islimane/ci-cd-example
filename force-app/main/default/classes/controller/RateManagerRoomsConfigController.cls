@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             :
- * @last modified on  : 28-03-2025
+ * @last modified on  : 08-04-2025
  * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 public with sharing class RateManagerRoomsConfigController extends DC_DynamicController {
@@ -28,8 +28,11 @@ public with sharing class RateManagerRoomsConfigController extends DC_DynamicCon
             when 'saveRatePrices' {
                 return saveRatePrices(params);
             }
+            when 'saveRateLines' {
+                return saveRateLines(params);
+            }
             when else {
-                return new DC_ResponseWr(false, 'Action not found');
+                return new DC_ResponseWr('Action not found');
             }
         }
     }
@@ -90,7 +93,22 @@ public with sharing class RateManagerRoomsConfigController extends DC_DynamicCon
 
         RatePriceManager.upsertRatePricesEditedFromRatePlanner(ratePlannerId, lWrappedData);
 
-        return new DC_ResponseWr(true, 'OK');
+        return new DC_ResponseWr(true, null, 'OK');
+    }
+
+    /** 
+    * @description
+    * @author Inetum Team <alberto.martinez-lopez@inetum.com> | 28-02-2025
+    * @param params
+    * @return DC_ResponseWr
+    **/ 
+    private DC_ResponseWr saveRateLines(Map<String, Object> params){
+        
+        List<RateManagerModel.RateLine> lWrappedData = (List<RateManagerModel.RateLine>)JSON.deserialize((String)params.get('rateLines'), List<RateManagerModel.RateLine>.class);
+
+        RateLineManager.updateRateLinesEditedFromRatePlanner(lWrappedData);
+
+        return new DC_ResponseWr(true, null, 'OK');
     }
 
     
