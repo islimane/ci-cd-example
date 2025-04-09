@@ -10,7 +10,7 @@ public class TestClass_Test {
 
     @isTest
     public static void testMethodClass() {
-        System.debug('test-4');
+        System.debug('test-6');
     }
     
 }
