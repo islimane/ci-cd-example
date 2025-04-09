@@ -203,8 +203,7 @@ public class TP_SetupDataTest {
     public static Hotel__c generateHotel(Account account) {
         Hotel__c hotel = new Hotel__c(
             Name = 'Default'+batteryName,
-            Account__c = account?.Id,
-            Email__c = 'TEST@INETUM.COM'
+            Account__c = account?.Id
         );
         mHotel = TP_SetupDataUtilsTest.setMapByName(mHotel, new List<sObject>{hotel});
         return hotel;

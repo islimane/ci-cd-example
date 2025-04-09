@@ -2,7 +2,7 @@
  * @description       : Global constants class for the entire system.
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 28-03-2025
+ * @last modified on  : 09-04-2025
  * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
 **/
 @SuppressWarnings('PMD')
@@ -67,6 +67,10 @@ public without sharing class GlobalConstants {
 
     /** Rate */
     public static final String RATE_RATE_NAME_PICKLIST_BEST { get { return 'BEST'; } }
+
+    /** RatePlanner */
+    public static final String RATE_PLANNER_CONFIGURATION_MODE_BASE_SUPPLEMENTS  { get { return 'BaseAndRoomSupplements'; } }
+    public static final String RATE_PLANNER_CONFIGURATION_MODE_INVENTORY  { get { return 'Inventory'; } }
 
 
     /** HOTEL */
