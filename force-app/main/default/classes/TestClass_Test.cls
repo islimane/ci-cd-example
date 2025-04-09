@@ -7,5 +7,9 @@
 **/
 @isTest
 public class TestClass_Test {
+
+    public static void testMethod() {
+        System.debug('test');
+    }
     
 }
