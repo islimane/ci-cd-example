@@ -8,7 +8,8 @@
 @isTest
 public class TestClass_Test {
 
-    public static void testMethod() {
+    @isTest
+    public static void testMethodClass() {
         System.debug('test-4');
     }
     
