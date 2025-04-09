@@ -2,8 +2,8 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 26-03-2025
- * @last modified by  : alberto.martinez-lopez@inetum.com
+ * @last modified on  : 04-09-2025
+ * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 
 import RateManagerPeriodInterval from './rateManagerPeriodInterval';
@@ -20,10 +20,6 @@ class RateManagerPeriodUtils {
         dateIntervals.forEach( interval => {
             this._dateIntervals.push(new RateManagerPeriodInterval(interval));
         });
-    }
-
-    hasAvailableSlots() {
-        return this.findFirstAvailableInterval() != null;
     }
 
     findFirstAvailableIntervalDays(days) {
