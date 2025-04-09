@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             : 
- * @last modified on  : 07-04-2025
+ * @last modified on  : 09-04-2025
  * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 public class RateLineSelector {
@@ -28,6 +28,7 @@ public class RateLineSelector {
                     Product__r.Regimen_Type__c, 
                     Product__r.Applicable__c, 
                     Product__r.ApplicationType__c,
+                    Product__r.Base__c,
                     (SELECT 
                         Id, 
                         RateLine__c,
@@ -70,6 +71,7 @@ public class RateLineSelector {
                 Product__r.Regimen_Type__c, 
                 Product__r.Applicable__c, 
                 Product__r.ApplicationType__c,
+                Product__r.Base__c,
                 Room__c,
                 Hotel__c,
                 Rate__c,
