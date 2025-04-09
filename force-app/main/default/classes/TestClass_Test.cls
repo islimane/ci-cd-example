@@ -9,7 +9,7 @@
 public class TestClass_Test {
 
     public static void testMethod() {
-        System.debug('test-2');
+        System.debug('test-3');
     }
     
 }
