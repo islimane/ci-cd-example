@@ -2,7 +2,7 @@
  * @description       : Unit Test Class for Setup Data Methods
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 04-09-2025
+ * @last modified on  : 04-10-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 @isTest
@@ -136,6 +136,7 @@ public class TP_SetupDataTest {
         ByPassConfig__c byPassRecord = new ByPassConfig__c();
         byPassRecord.DisableTriggers__c = true;
         byPassRecord.DisableValidationRules__c = true;
+        byPassRecord.DisableFlow__c = true;
         byPassRecord.SetupOwnerId = UserInfo.getProfileId();
         return byPassRecord;
     }
@@ -197,7 +198,17 @@ public class TP_SetupDataTest {
             StartDate__c = Date.today(),
             EndDate__c = Date.today().addDays(2)
         );
-        mPeriod = TP_SetupDataUtilsTest.setMapByName(mPeriod, new List<sObject>{period});
+        Period__c periodEvent = new Period__c(
+            RecordTypeId = GlobalConstants.PERIOD_RT_EVENT_ID,
+            StartDate__c = Date.today(),
+            EndDate__c = Date.today().addDays(2)
+        );
+        Period__c periodBlackout = new Period__c(
+            RecordTypeId = GlobalConstants.PERIOD_RT_BLACKOUT_ID,
+            StartDate__c = Date.today(),
+            EndDate__c = Date.today().addDays(2)
+        );
+        mPeriod = TP_SetupDataUtilsTest.setMapByName(mPeriod, new List<sObject>{period, periodEvent, periodBlackout});
         return period;
     }
 

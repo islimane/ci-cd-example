@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
-        <members>GlobalConstants</members>
-        <members>HotelTerritorySelector_Test</members>
-        <members>HotelTerritoryTrigger_Test</members>
-        <members>HotelTerritoryTriggerHelper</members>
-        <members>RateManagementExecutor_Test</members>
+        <members>PeriodSelector</members>
+        <members>PeriodSelector_Test</members>
+        <members>RateManagerBlackoutListController_Test</members>
+        <members>RateManagerEventListController_Test</members>
         <members>TP_SetupDataTest</members>
         <members>TP_SetupSelectorTest</members>
         <name>ApexClass</name>
+    </types>
+    <types>
+        <members>rateManagerBlackoutList</members>
+        <members>rateManagerEventList</members>
+        <members>rateManagerModalBlackoutHandler</members>
+        <members>rateManagerModalEventHandler</members>
+        <members>rateManagerPeriodUtils</members>
+        <name>LightningComponentBundle</name>
     </types>
     <version>55.0</version>
 </Package>
