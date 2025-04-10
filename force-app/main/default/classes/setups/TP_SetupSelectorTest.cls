@@ -2,7 +2,7 @@
  * @description       : Provides utility methods to retrieve test records based on dynamic naming conventions.
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 04-09-2025
+ * @last modified on  : 04-10-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 
@@ -133,5 +133,13 @@ public with sharing class TP_SetupSelectorTest {
      */
     public static Rate__c getBESTRate(){
         return [SELECT Id, Name, Rate_Name__c, RateType__c FROM Rate__c WHERE Rate_Name__c=:GlobalConstants.RATE_RATE_NAME_PICKLIST_BEST LIMIT 1];
+    }
+
+    /**
+     * Retrieves a Period__c based on the RT.
+     * @return Period__c.
+     */
+    public static Period__c getPeriodByType(Id recordTypeId){
+        return [SELECT Id, Name, RatePlanner__c FROM Period__c WHERE RecordTypeId = :recordTypeId LIMIT 1];
     }
 }
