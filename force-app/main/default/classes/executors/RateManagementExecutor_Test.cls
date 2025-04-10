@@ -2,7 +2,7 @@
  * @description       : Orchestrates test execution for rate management functionality..
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Test Executor
- * @last modified on  : 04-09-2025
+ * @last modified on  : 04-10-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
  **/
 @isTest
@@ -116,6 +116,11 @@ public with sharing class RateManagementExecutor_Test {
     @IsTest
     static void RateLineSelector_Test() {
         RateLineSelector_Test.testAll();
+    }
+
+    @IsTest
+    static void PeriodSelector_Test() {
+        PeriodSelector_Test.testAll();
     }
 
     @IsTest
