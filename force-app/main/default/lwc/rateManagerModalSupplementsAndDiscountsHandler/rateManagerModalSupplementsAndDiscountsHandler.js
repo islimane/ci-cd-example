@@ -1,16 +1,19 @@
 /* @description       : Shows a modal to attach supplements and discounts to a rate
  * @author            : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  * @group             :
- * @last modified on  : 02-04-2025
+ * @last modified on  : 10-04-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 import { api } from 'lwc';
 import LABELS from './labels';
-import LwcDCExtension from 'c/lwcDCExtension';
+import LightningModal from 'lightning/modal';
 import { RateManagerMixin } from 'c/rateManagerMixin';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { createRecord } from 'lightning/uiRecordApi';
 
-export default class RateManagerModalSupplementsAndDiscountsHandler extends RateManagerMixin(LwcDCExtension) {
+const LWC_EMBEDDED = 'c-rate-manager-add-supplements-and-discounts';
+
+export default class RateManagerModalSupplementsAndDiscountsHandler extends RateManagerMixin(LightningModal) {
     labels = LABELS;
     disableSaveButton = false;
 
@@ -37,7 +40,7 @@ export default class RateManagerModalSupplementsAndDiscountsHandler extends Rate
 
     async handleSave(event) {
         event.preventDefault(); // stop the form from submitting
-        let selectedRows = this.template.querySelector('c-rate-manager-add-supplements-and-discounts')?.getSelectedRows();
+        let selectedRows = this.template.querySelector(LWC_EMBEDDED)?.getSelectedRows();
         if (!selectedRows || selectedRows.length === 0) {
             this.showToast('Error', this.labels.noRecordsSelected, 'error');
             return;
@@ -47,7 +50,7 @@ export default class RateManagerModalSupplementsAndDiscountsHandler extends Rate
             const createRateLinePromises = selectedRows.map((product) => this.createRateLine(product));
             Promise.all(createRateLinePromises).then(() => {
                 console.log('-- All Rate Lines created --');
-                this.showToast('Created', 'Rooms attached to rate');
+                this.showToast('Created', 'Supplements/Discounts attached to rate');
                 // tell the parent component that created this modal to refresh the table
                 this.notifyParent();
                 this.close('modal-closed');
@@ -80,6 +83,16 @@ export default class RateManagerModalSupplementsAndDiscountsHandler extends Rate
             detail: dateInverval
         });
         this.dispatchEvent(confirmEvent);
+    }
+
+    showToast(title, message, variant = 'success') {
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title: title,
+                variant: variant,
+                message: message
+            })
+        );
     }
 
     async notifyParent() {
