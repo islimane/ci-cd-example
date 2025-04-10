@@ -2,7 +2,7 @@
  * @description       : HotelTerritorySelector Test
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             : Test Class
- * @last modified on  : 04-09-2025
+ * @last modified on  : 04-10-2025
 **/
 @isTest
 public with sharing class PeriodSelector_Test {
@@ -60,22 +60,25 @@ public with sharing class PeriodSelector_Test {
     }
 
     private static void getPeriodsByRatePlannerIdMethod(){
+        Period__c period = TP_SetupSelectorTest.getPeriodByType(GlobalConstants.PERIOD_RT_PERIOD_ID);
 		List<Period__c> lResult = PeriodSelector.getPeriodsByRatePlannerId(
-			new Set<Id>{TP_SetupSelectorTest.getRatePlanner(1, 'TEST').Id}
+			new Set<Id>{period.RatePlanner__c}
 		);
         Assert.areEqual(true, !lResult.isEmpty(), 'getPeriodsByRatePlannerId failed');
     }
 
     private static void getEventsByRatePlannerIdMethod(){
+        Period__c period = TP_SetupSelectorTest.getPeriodByType(GlobalConstants.PERIOD_RT_EVENT_ID);
 		List<Period__c> lResult = PeriodSelector.getEventsByRatePlannerId(
-			new Set<Id>{TP_SetupSelectorTest.getRatePlanner(1, 'TEST').Id}
+			new Set<Id>{period.RatePlanner__c}
 		);
         Assert.areEqual(true, !lResult.isEmpty(), 'getEventsByRatePlannerId failed');
     }
 
     private static void getBlackoutsByRatePlannerIdMethod(){
+        Period__c period = TP_SetupSelectorTest.getPeriodByType(GlobalConstants.PERIOD_RT_BLACKOUT_ID);
 		List<Period__c> lResult = PeriodSelector.getBlackoutsByRatePlannerId(
-			new Set<Id>{TP_SetupSelectorTest.getRatePlanner(1, 'TEST').Id}
+			new Set<Id>{period.RatePlanner__c}
 		);
         Assert.areEqual(true, !lResult.isEmpty(), 'getBlackoutsByRatePlannerId failed');
     }
