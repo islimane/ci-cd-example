@@ -2,8 +2,8 @@
  * @description       : Orchestrates test execution for rate management functionality..
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Test Executor
- * @last modified on  : 01-04-2025
- * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
+ * @last modified on  : 04-09-2025
+ * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
  **/
 @isTest
 public with sharing class RateManagementExecutor_Test {
@@ -136,5 +136,10 @@ public with sharing class RateManagementExecutor_Test {
     @IsTest
     static void OpportunityHotelTrigger_Test() {
         OpportunityHotelTrigger_Test.testAll();
+    }
+
+    @IsTest
+    static void HotelTerritoryTrigger_Test(){
+        HotelTerritoryTrigger_Test.testAll();
     }
 }
