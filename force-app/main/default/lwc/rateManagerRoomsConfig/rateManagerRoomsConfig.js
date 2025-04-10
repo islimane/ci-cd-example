@@ -74,7 +74,7 @@ export default class RateManagerRoomsConfig extends RateManagerExtendedDataTable
 
             this.dataInventory = response.data.data.Inventory ? JSON.parse(JSON.stringify(response.data.data.Inventory)) : [];
             this.dataBaseSupplements = response.data.data.BaseAndRoomSupplements ? JSON.parse(JSON.stringify(response.data.data.BaseAndRoomSupplements)) : [];
-            console.log('response.data.data', response.data.data);
+
             this.mixinBuildTable(ROOMS_COLUMNS, 'dataInventory');
             this.mixinBuildTable(ROOMS_COLUMNS, 'dataBaseSupplements');
         } else {
