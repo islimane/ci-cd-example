@@ -2,7 +2,7 @@
  * @description       : RateManagerModalRoomHandlerController
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Controllers
- * @last modified on  : 31-03-2025
+ * @last modified on  : 10-04-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 public with sharing class RateManagerAddRoomController extends DC_DynamicController {
@@ -45,12 +45,16 @@ public with sharing class RateManagerAddRoomController extends DC_DynamicControl
         }
         System.debug('data pos' + data);
 
+        Map<String, String> mRoomPicklist = new Map<String, String>();
+        for (Schema.PicklistEntry pickListVal : Schema.SObjectType.Product2.fields.Room__c.getPicklistValues()) {
+            mRoomPicklist.put(pickListVal.getValue(), pickListVal.getLabel());
+        }
         Map<String, RateManagerModel.Option> mRoomOptions = new Map<String, RateManagerModel.Option>{ 'All' => new RateManagerModel.Option('All', '') };
         Map<String, RateManagerModel.Option> mCharacteristicOptions = new Map<String, RateManagerModel.Option>{ 'All' => new RateManagerModel.Option('All', '') };
 
         for (Product2 product : data) {
             if (!String.isEmpty(product.Room__c) && !mRoomOptions.containsKey(product.Room__c)) {
-                mRoomOptions.put(product.Room__c, new RateManagerModel.Option(product.Room__c, product.Room__c));
+                mRoomOptions.put(product.Room__c, new RateManagerModel.Option(mRoomPicklist.get(product.Room__c), product.Room__c));
             }
             if (
                 !String.isEmpty(product.Characteristic__c) &&
