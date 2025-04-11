@@ -2,8 +2,8 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 24-03-2025
- * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+ * @last modified on  : 04-10-2025
+ * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 import { api} from 'lwc';
 import LightningModal from 'lightning/modal';
@@ -17,7 +17,6 @@ export default class RateManagerModalEventHandler extends RateManagerMixin(Light
 
 	labels = LABELS;
 	_dateIntervals = [];
-	_proposedInterval = {};
 	_IntervalUtils;
 	_onLoadFormData = {};
 
@@ -51,7 +50,6 @@ export default class RateManagerModalEventHandler extends RateManagerMixin(Light
     set intervalsData(value){
         try{
             this._IntervalUtils = new RateManagerPeriodUtils(value.dateIntervals, { StartDate__c: value.parent.StartDate__c, EndDate__c: value.parent.EndDate__c });
-            this._proposedInterval = this._IntervalUtils.findFirstAvailableIntervalDays(1);
         }catch(e){
             console.error(e.message);
             this.showToast('Error', e.message, 'error');
@@ -60,14 +58,6 @@ export default class RateManagerModalEventHandler extends RateManagerMixin(Light
 
     get intervalsData(){
         return { dateIntervals: this._dateIntervals, parent: this.parent };
-    }
-
-    get proposedInterval(){
-        if(this._recordId && this._onLoadFormData){
-            return { StartDate__c : this._onLoadFormData?.StartDate__c?.value, EndDate__c : this._onLoadFormData?.EndDate__c?.value };
-        }else{
-            return this._proposedInterval;
-        }
     }
 
     get dateIntervals(){

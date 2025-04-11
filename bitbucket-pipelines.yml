@@ -8,7 +8,6 @@ pipelines:
           runs-on:
             - self.hosted
           script:
-            - sfdx update
             - sfdx --version
             - sfdx plugins --core
       - step:

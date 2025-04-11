@@ -91,7 +91,7 @@ public with sharing class RateManagerSmntsAndDntsController extends DC_DynamicCo
 
         RatePriceManager.upsertRatePricesEditedFromRatePlanner(ratePlannerId, lWrappedData);
 
-        return new DC_ResponseWr(true, null, 'OK');
+        return new DC_ResponseWr(true, new Map<String, Object>(), 'OK');
     }
 
 
@@ -107,7 +107,7 @@ public with sharing class RateManagerSmntsAndDntsController extends DC_DynamicCo
 
         RateLineManager.updateRateLinesEditedFromRatePlanner(lWrappedData);
 
-        return new DC_ResponseWr(true, null, 'OK');
+        return new DC_ResponseWr(true, new Map<String, Object>(), 'OK');
     }
 
 }
