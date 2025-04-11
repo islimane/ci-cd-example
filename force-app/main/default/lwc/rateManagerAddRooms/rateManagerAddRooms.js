@@ -2,19 +2,20 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 10-04-2025
+ * @last modified on  : 11-04-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 import { track, api, wire } from 'lwc'
 import LwcDCExtension from 'c/lwcDCExtension'
 import { getPicklistValues } from 'lightning/uiObjectInfoApi'
 import ROOM_FIELD from "@salesforce/schema/Product2.Room__c";
+import CHARACTERISTIC_FIELD from "@salesforce/schema/Product2.Characteristic__c";
 
 const MASTER_RECORD_TYPE_ID = '012000000000000AAA';
 const COLUMNS = [
     { label: 'NOMBRE', fieldName: 'Name', type: 'text' },
     { label: 'HABITACIÓN', fieldName: 'RoomLabel', type: 'text' },
-    { label: 'CARACTERÍSTICA', fieldName: 'Characteristic__c', type: 'text' }
+    { label: 'CARACTERÍSTICA', fieldName: 'CharacteristicLabel', type: 'text' }
 ]
 const CONTROLLER = 'RateManagerAddRoomController'
 
@@ -24,6 +25,7 @@ export default class RateManagerAddRooms extends LwcDCExtension {
     @track _tableData = []
     @track filteredData = []
     _roomPicklistValues = []
+    _characteristicPicklistValues = []
 
     set tableData(value) {
         const data = []
@@ -34,6 +36,7 @@ export default class RateManagerAddRooms extends LwcDCExtension {
                     row[column.fieldName] = record[column.fieldName] || null
                 })
                 row.RoomLabel = this._roomPicklistValues.find((item) => item.value === row.Room__c)?.label || null
+                row.CharacteristicLabel = this._characteristicPicklistValues.find((item) => item.value === row.Room__c)?.label || null
                 data.push(row)
             })
             this._tableData = data
@@ -51,7 +54,18 @@ export default class RateManagerAddRooms extends LwcDCExtension {
     }
 
     @wire(getPicklistValues, { recordTypeId: MASTER_RECORD_TYPE_ID, fieldApiName: ROOM_FIELD })
-    picklistResults({ error, data }) {
+    roomPicklistResults({ error, data }) {
+        if (data) {
+            this._roomPicklistValues = data.values.map((item) => {
+                return { label: item.label, value: item.value }
+            })
+        } else if (error) {
+            console.error(error)
+        }
+    }
+
+    @wire(getPicklistValues, { recordTypeId: MASTER_RECORD_TYPE_ID, fieldApiName: CHARACTERISTIC_FIELD })
+    characteristicPicklistResults({ error, data }) {
         if (data) {
             this._roomPicklistValues = data.values.map((item) => {
                 return { label: item.label, value: item.value }
