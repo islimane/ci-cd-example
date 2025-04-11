@@ -2,7 +2,7 @@
  * @description       : Enables adding Supplements and Discounts to a Rate Planner.
  * @author            : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  * @group             :
- * @last modified on  : 10-04-2025
+ * @last modified on  : 11-04-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 import { track, api } from 'lwc'
@@ -12,8 +12,7 @@ const CONTROLLER = 'RateManagerAddSupplDiscController'
 const COLUMNS = [
     { label: 'NOMBRE', fieldName: 'Name', type: 'text' },
     { label: 'TIPO', fieldName: 'Family', type: 'text' },
-    { label: 'TIPO VARIACIÓN', fieldName: 'ApplicationType__c', type: 'text' },
-    { label: 'IMPORTE', fieldName: '', type: 'text' }
+    { label: 'TIPO VARIACIÓN', fieldName: 'ApplicationType__c', type: 'text' }
 ]
 export default class rateManagerAddSupplementsAndDiscounts extends LwcDCExtension {
     @api parentId
