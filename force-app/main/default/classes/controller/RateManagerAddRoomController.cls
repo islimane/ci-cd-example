@@ -2,11 +2,10 @@
  * @description       : RateManagerModalRoomHandlerController
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Controllers
- * @last modified on  : 10-04-2025
+ * @last modified on  : 11-04-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 public with sharing class RateManagerAddRoomController extends DC_DynamicController {
-
     /**
      * @description
      * @author Inetum Team <alberto.martinez-lopez@inetum.com> | 28-02-2025
@@ -25,13 +24,8 @@ public with sharing class RateManagerAddRoomController extends DC_DynamicControl
      **/
     private static DC_ResponseWr getFiltersOptionsData(Map<String, Object> params) {
         Id ratePlannerId = (Id) params.get('parentId');
-        Set<Id> sHotelJoin = HotelSelector.getHotelJoinByRatePlanner(new Set<Id>{ ratePlannerId })
-            ?.get(ratePlannerId)
-            ?.keySet();
-        List<Product2> data = Product2Selector.getProductsByHotelIdAndFamily(
-            sHotelJoin,
-            GlobalConstants.PRODUCT2_FAMILY_ROOM
-        );
+        Set<Id> sHotelJoin = HotelSelector.getHotelJoinByRatePlanner(new Set<Id>{ ratePlannerId })?.get(ratePlannerId)?.keySet();
+        List<Product2> data = Product2Selector.getProductsByHotelIdAndFamily(sHotelJoin, GlobalConstants.PRODUCT2_FAMILY_ROOM);
         System.debug('data pre' + data);
         //Do not include Products with RatePlanner = ratePlannerId. These are already added.
         for (RateLine__c rateLine : RateLineSelector.getRatesLinesByRatePlannerId(new Set<Id>{ ratePlannerId })) {
@@ -46,8 +40,12 @@ public with sharing class RateManagerAddRoomController extends DC_DynamicControl
         System.debug('data pos' + data);
 
         Map<String, String> mRoomPicklist = new Map<String, String>();
+        Map<String, String> mCharacPicklist = new Map<String, String>();
         for (Schema.PicklistEntry pickListVal : Schema.SObjectType.Product2.fields.Room__c.getPicklistValues()) {
             mRoomPicklist.put(pickListVal.getValue(), pickListVal.getLabel());
+        }
+        for (Schema.PicklistEntry pickListVal : Schema.SObjectType.Product2.fields.Characteristic__c.getPicklistValues()) {
+            mCharacPicklist.put(pickListVal.getValue(), pickListVal.getLabel());
         }
         Map<String, RateManagerModel.Option> mRoomOptions = new Map<String, RateManagerModel.Option>{ 'All' => new RateManagerModel.Option('All', '') };
         Map<String, RateManagerModel.Option> mCharacteristicOptions = new Map<String, RateManagerModel.Option>{ 'All' => new RateManagerModel.Option('All', '') };
@@ -56,13 +54,10 @@ public with sharing class RateManagerAddRoomController extends DC_DynamicControl
             if (!String.isEmpty(product.Room__c) && !mRoomOptions.containsKey(product.Room__c)) {
                 mRoomOptions.put(product.Room__c, new RateManagerModel.Option(mRoomPicklist.get(product.Room__c), product.Room__c));
             }
-            if (
-                !String.isEmpty(product.Characteristic__c) &&
-                !mCharacteristicOptions.containsKey(product.Characteristic__c)
-            ) {
+            if (!String.isEmpty(product.Characteristic__c) && !mCharacteristicOptions.containsKey(product.Characteristic__c)) {
                 mCharacteristicOptions.put(
                     product.Characteristic__c,
-                    new RateManagerModel.Option(product.Characteristic__c, product.Characteristic__c)
+                    new RateManagerModel.Option(mCharacPicklist.get(product.Characteristic__c), product.Characteristic__c)
                 );
             }
         }
