@@ -2,7 +2,7 @@
  * @description       : RateManagerEventListController Test
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Test Class
- * @last modified on  : 04-09-2025
+ * @last modified on  : 04-11-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 @isTest
@@ -52,7 +52,7 @@ public with sharing class RateManagerEventListController_Test implements TP_Exec
     private static void executeMethod(){
         List<Period__c> lPeriod = [SELECT Id FROM Period__c LIMIT 1];
         Map<String, Object> params = new Map<String, Object>{
-            'controller' => 'RateManagerBlackoutListController',
+            'controller' => 'RateManagerEventListController',
             'action' => 'deleteEvent',
             'recordId' => lPeriod[0].Id
         };
