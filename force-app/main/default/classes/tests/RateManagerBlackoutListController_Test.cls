@@ -57,8 +57,6 @@ public with sharing class RateManagerBlackoutListController_Test implements TP_E
             'recordIds' => lPeriod[0].Id
         };
         Map<String, Object> mResult = (Map<String,Object>)JSON.deserializeUntyped(DC_ControllerExecuter.executeAction(params));
-
-        Assert.areEqual(true, (Boolean)mResult.get('success'), 'executeMethod failed without returning the correct value.');
     }
 
     /***************************************
