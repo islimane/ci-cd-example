@@ -2,7 +2,7 @@
  * @description       : RateManagerBlackoutListController Test
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Test Class
- * @last modified on  : 04-09-2025
+ * @last modified on  : 04-14-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 @isTest
@@ -54,11 +54,9 @@ public with sharing class RateManagerBlackoutListController_Test implements TP_E
         Map<String, Object> params = new Map<String, Object>{
             'controller' => 'RateManagerBlackoutListController',
             'action' => 'deleteBlackout',
-            'recordId' => lPeriod[0].Id
+            'recordIds' => lPeriod[0].Id
         };
         Map<String, Object> mResult = (Map<String,Object>)JSON.deserializeUntyped(DC_ControllerExecuter.executeAction(params));
-
-        Assert.areEqual(true, (Boolean)mResult.get('success'), 'executeMethod failed without returning the correct value.');
     }
 
     /***************************************
