@@ -2,7 +2,7 @@
  * @description       : RateManagerEventListController Test
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Test Class
- * @last modified on  : 04-11-2025
+ * @last modified on  : 04-14-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 @isTest
@@ -54,7 +54,7 @@ public with sharing class RateManagerEventListController_Test implements TP_Exec
         Map<String, Object> params = new Map<String, Object>{
             'controller' => 'RateManagerEventListController',
             'action' => 'deleteEvent',
-            'recordId' => lPeriod[0].Id
+            'recordIds' => lPeriod[0].Id
         };
         Map<String, Object> mResult = (Map<String,Object>)JSON.deserializeUntyped(DC_ControllerExecuter.executeAction(params));
 
