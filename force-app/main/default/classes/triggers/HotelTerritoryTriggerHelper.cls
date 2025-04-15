@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 01-04-2025
+ * @last modified on  : 04-15-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 public with sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
@@ -80,8 +80,9 @@ public with sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
 
     private static Boolean isValidChunk(String chunk) {
         return (
-            (chunk.length() == 1 && !EXCLUDED_CODES.contains(chunk.left(1).toUpperCase()))
-            || chunk.length() > 1
+            chunk.isAlphanumeric() &&
+            ((chunk.length() == 1 && !EXCLUDED_CODES.contains(chunk.left(1).toUpperCase()))
+            || chunk.length() > 1)
         );
     }
 
@@ -169,11 +170,9 @@ public with sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
         for (HotelTerritory__c currentTerritory : lHotelTerritories) sGroupNames.add(currentTerritory.Public_Group_Code__c);
 
         Map<String, Id> mGroupIdByGroupName = GroupSelector.getGroupIdsByCode(sGroupNames);
-        Set<String> sGroupDevNamesAlreadyAdded = new Set<String>();
         for (HotelTerritory__c currentTerritory : lHotelTerritories) {
-            if (!sGroupDevNamesAlreadyAdded.contains(currentTerritory.Public_Group_Code__c)
+            if (!mGroupsToInsertByCode.containsKey(currentTerritory.Public_Group_Code__c)
                 && !mGroupIdByGroupName.containsKey(currentTerritory.Public_Group_Code__c)) {
-                sGroupDevNamesAlreadyAdded.add(currentTerritory.Public_Group_Code__c);
                 mGroupsToInsertByCode.put(currentTerritory.Public_Group_Code__c, new Group(
                     Name = currentTerritory.Public_Group_Code__c,
                     DeveloperName = currentTerritory.Public_Group_Code__c,
