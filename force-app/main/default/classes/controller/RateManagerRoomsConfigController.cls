@@ -58,12 +58,15 @@ public with sharing class RateManagerRoomsConfigController extends DC_DynamicCon
         Map<String, RateManagerModel.Option> mTypeOptions = new Map<String, RateManagerModel.Option>{'All' => new RateManagerModel.Option('All', '')};
         Map<String, RateManagerModel.Option> mRoomOptions = new Map<String, RateManagerModel.Option>{'All' => new RateManagerModel.Option('All', '')};
         Map<String, RateManagerModel.Option> mCharacteristicOptions = new Map<String, RateManagerModel.Option>{'All' => new RateManagerModel.Option('All', '')};
+        Map<String, String> mTypePicklist = RateManagerModel.getPicklistMap(Product2.Regimen_Type__c);
+        Map<String, String> mRoomPicklist = RateManagerModel.getPicklistMap(Product2.Room__c);
+        Map<String, String> mCharacPicklist = RateManagerModel.getPicklistMap(Product2.Characteristic__c);
 
         Boolean isBaseSupplements = ratePlanner.ConfigurationMode__c == GlobalConstants.RATE_PLANNER_CONFIGURATION_MODE_BASE_SUPPLEMENTS;
         for (RateLine__c rateLine : data) {
             Product2 product = rateLine.getSObject('Product__r') != null ? (Product2) rateLine.getSObject('Product__r') : new Product2();
             if (!String.isEmpty(product.Regimen_Type__c) && !mTypeOptions.containsKey(product.Regimen_Type__c)) {
-                mTypeOptions.put(product.Regimen_Type__c, new RateManagerModel.Option(product.Regimen_Type__c, product.Regimen_Type__c));
+                mTypeOptions.put(product.Regimen_Type__c, new RateManagerModel.Option(mTypePicklist.get(product.Regimen_Type__c), product.Regimen_Type__c));
             }
             if (!String.isEmpty(product.Room__c) && !mRoomOptions.containsKey(product.Room__c)) {
                 mRoomOptions.put(product.Room__c, new RateManagerModel.Option(mRoomPicklist.get(product.Room__c), product.Room__c));

@@ -2,7 +2,7 @@
  * @description       : RateManagerModalRoomHandlerController
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Controllers
- * @last modified on  : 11-04-2025
+ * @last modified on  : 16-04-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 public with sharing class RateManagerAddRoomController extends DC_DynamicController {
@@ -39,16 +39,10 @@ public with sharing class RateManagerAddRoomController extends DC_DynamicControl
         }
         System.debug('data pos' + data);
 
-        Map<String, String> mRoomPicklist = new Map<String, String>();
-        Map<String, String> mCharacPicklist = new Map<String, String>();
-        for (Schema.PicklistEntry pickListVal : Schema.SObjectType.Product2.fields.Room__c.getPicklistValues()) {
-            mRoomPicklist.put(pickListVal.getValue(), pickListVal.getLabel());
-        }
-        for (Schema.PicklistEntry pickListVal : Schema.SObjectType.Product2.fields.Characteristic__c.getPicklistValues()) {
-            mCharacPicklist.put(pickListVal.getValue(), pickListVal.getLabel());
-        }
         Map<String, RateManagerModel.Option> mRoomOptions = new Map<String, RateManagerModel.Option>{ 'All' => new RateManagerModel.Option('All', '') };
         Map<String, RateManagerModel.Option> mCharacteristicOptions = new Map<String, RateManagerModel.Option>{ 'All' => new RateManagerModel.Option('All', '') };
+        Map<String, String> mRoomPicklist = RateManagerModel.getPicklistMap(Product2.Room__c);
+        Map<String, String> mCharacPicklist = RateManagerModel.getPicklistMap(Product2.Characteristic__c);
 
         for (Product2 product : data) {
             if (!String.isEmpty(product.Room__c) && !mRoomOptions.containsKey(product.Room__c)) {

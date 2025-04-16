@@ -54,7 +54,6 @@ public with sharing class RateManagerSmntsAndDntsController extends DC_DynamicCo
         Map<String, RateManagerModel.Option> mApplicableOptions = new Map<String, RateManagerModel.Option>{'All' => new RateManagerModel.Option('All', '')};
         Map<String, RateManagerModel.Option> mApplicationTypeOptions = new Map<String, RateManagerModel.Option>{'All' => new RateManagerModel.Option('All', '')};
         Map<String, RateManagerModel.Option> mTypeOptions = new Map<String, RateManagerModel.Option>{'All' => new RateManagerModel.Option('All', '')};
-
         Map<String, String> mTypePicklist = RateManagerModel.getPicklistMap(Product2.fields.Regimen_Type__c);
         Map<String, String> mApplTypePicklist = RateManagerModel.getPicklistMap(Product2.fields.ApplicationType__c);
         Map<String, String> mApplicablePicklist = RateManagerModel.getPicklistMap(Product2.fields.Applicable__c);

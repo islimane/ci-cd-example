@@ -2,7 +2,7 @@
  * @description       : Controller for rateManagerAddSupplementsAndDiscounts component.
  * @author            : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  * @group             : Controllers
- * @last modified on  : 10-04-2025
+ * @last modified on  : 16-04-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 public with sharing class RateManagerAddSupplDiscController extends DC_DynamicController {
@@ -39,15 +39,17 @@ public with sharing class RateManagerAddSupplDiscController extends DC_DynamicCo
 
         Map<String, RateManagerModel.Option> mFamilyOptions = new Map<String, RateManagerModel.Option>{ 'All' => new RateManagerModel.Option('All', '') };
         Map<String, RateManagerModel.Option> mApplicationOptions = new Map<String, RateManagerModel.Option>{ 'All' => new RateManagerModel.Option('All', '') };
+        Map<String, String> mFamilyPicklist = RateManagerModel.getPicklistMap(Product2.Family);
+        Map<String, String> mApplicationPicklist = RateManagerModel.getPicklistMap(Product2.ApplicationType__c);
 
         for (Product2 product : data) {
             if (!String.isEmpty(product.Family) && !mFamilyOptions.containsKey(product.Family)) {
-                mFamilyOptions.put(product.Family, new RateManagerModel.Option(product.Family, product.Family));
+                mFamilyOptions.put(product.Family, new RateManagerModel.Option(mFamilyPicklist.get(product.Family), product.Family));
             }
             if (!String.isEmpty(product.ApplicationType__c) && !mApplicationOptions.containsKey(product.ApplicationType__c)) {
                 mApplicationOptions.put(
                     product.ApplicationType__c,
-                    new RateManagerModel.Option(product.ApplicationType__c, product.ApplicationType__c)
+                    new RateManagerModel.Option(mApplicationPicklist.get(product.ApplicationType__c), product.ApplicationType__c)
                 );
             }
         }
