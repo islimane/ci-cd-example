@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             :
- * @last modified on  : 11-04-2025
+ * @last modified on  : 16-04-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 public with sharing class RateManagerRoomsConfigController extends DC_DynamicController {
@@ -38,32 +38,28 @@ public with sharing class RateManagerRoomsConfigController extends DC_DynamicCon
     }
 
     /**
-     * @description
-     * @author Inetum Team <alberto.martinez-lopez@inetum.com> | 28-02-2025
-     * @param params
-     * @return DC_ResponseWr
-     **/
-    private DC_ResponseWr getFiltersOptionsData(Map<String, Object> params) {
-        Id ratePlannerId = (Id) params.get('ratePlannerId');
-        Id rateId = (Id) params.get('rateId');
-        Set<Id> sHotelJoin = HotelSelector.getHotelJoinByRatePlanner(new Set<Id>{ ratePlannerId }).get(ratePlannerId).keySet();
-        List<RateLine__c> data = RateLineSelector.getRateLinesByRateIdsAndHotelIdAndProductFamily(new Set<Id>{ rateId }, sHotelJoin, GlobalConstants.PRODUCT2_FAMILY_ROOM);
-        List<Period__c> lPeriods = PeriodSelector.getPeriodsByRatePlannerId(new Set<Id>{ ratePlannerId });
-        List<RateManagerModel.RateLine> wrappedData = new List<RateManagerModel.RateLine>();
-
-        Map<String, RateManagerModel.Option> mTypeOptions = new Map<String, RateManagerModel.Option>{ 'All' => new RateManagerModel.Option('All', '') };
-        Map<String, RateManagerModel.Option> mRoomOptions = new Map<String, RateManagerModel.Option>{ 'All' => new RateManagerModel.Option('All', '') };
-        Map<String, RateManagerModel.Option> mCharacteristicOptions = new Map<String, RateManagerModel.Option>{ 'All' => new RateManagerModel.Option('All', '') };
-
-        Map<String, String> mRoomPicklist = new Map<String, String>();
-        Map<String, String> mCharacPicklist = new Map<String, String>();
-        for (Schema.PicklistEntry pickListVal : Schema.SObjectType.Product2.fields.Room__c.getPicklistValues()) {
-            mRoomPicklist.put(pickListVal.getValue(), pickListVal.getLabel());
+    * @description
+    * @author Inetum Team <alberto.martinez-lopez@inetum.com> | 28-02-2025
+    * @param params
+    * @return DC_ResponseWr
+    **/
+    private DC_ResponseWr getFiltersOptionsData(Map<String, Object> params){
+        Id ratePlannerId = (Id)params.get('ratePlannerId');
+        Id rateId = (Id)params.get('rateId');
+        RatePlanner__c ratePlanner = RatePlannerSelector.getRatePlannerById(new Set<Id>{ratePlannerId})?.get(0);
+        if(ratePlanner == null){
+            return new DC_ResponseWr('Rate Planner not found');
         }
-        for (Schema.PicklistEntry pickListVal : Schema.SObjectType.Product2.fields.Characteristic__c.getPicklistValues()) {
-            mCharacPicklist.put(pickListVal.getValue(), pickListVal.getLabel());
-        }
+        Set<Id> sHotelJoin = HotelSelector.getHotelJoinByRatePlanner(new Set<Id>{ratePlannerId}).get(ratePlannerId).keySet();
+        List<RateLine__c> data = RateLineSelector.getRateLinesByRateIdsAndHotelIdAndProductFamily(new Set<Id>{rateId}, sHotelJoin, GlobalConstants.PRODUCT2_FAMILY_ROOM);
+        List<Period__c> lPeriods = PeriodSelector.getPeriodsByRatePlannerId(new Set<Id>{ratePlannerId});
 
+        Map<String, List<RateManagerModel.RateLine>> mRateLinesByCategories = new Map<String, List<RateManagerModel.RateLine>>();
+        Map<String, RateManagerModel.Option> mTypeOptions = new Map<String, RateManagerModel.Option>{'All' => new RateManagerModel.Option('All', '')};
+        Map<String, RateManagerModel.Option> mRoomOptions = new Map<String, RateManagerModel.Option>{'All' => new RateManagerModel.Option('All', '')};
+        Map<String, RateManagerModel.Option> mCharacteristicOptions = new Map<String, RateManagerModel.Option>{'All' => new RateManagerModel.Option('All', '')};
+
+        Boolean isBaseSupplements = ratePlanner.ConfigurationMode__c == GlobalConstants.RATE_PLANNER_CONFIGURATION_MODE_BASE_SUPPLEMENTS;
         for (RateLine__c rateLine : data) {
             Product2 product = rateLine.getSObject('Product__r') != null ? (Product2) rateLine.getSObject('Product__r') : new Product2();
             if (!String.isEmpty(product.Regimen_Type__c) && !mTypeOptions.containsKey(product.Regimen_Type__c)) {
@@ -78,7 +74,26 @@ public with sharing class RateManagerRoomsConfigController extends DC_DynamicCon
                     new RateManagerModel.Option(mCharacPicklist.get(product.Characteristic__c), product.Characteristic__c)
                 );
             }
-            wrappedData.add(new RateManagerModel.RateLine(rateLine, lPeriods));
+
+            if(isBaseSupplements){
+                if(product.Base__c){
+                    if(!mRateLinesByCategories.containsKey(GlobalConstants.RATE_PLANNER_CONFIGURATION_MODE_BASE_SUPPLEMENTS)){
+                        mRateLinesByCategories.put(GlobalConstants.RATE_PLANNER_CONFIGURATION_MODE_BASE_SUPPLEMENTS, new List<RateManagerModel.RateLine>());
+                    }
+                    mRateLinesByCategories.get(GlobalConstants.RATE_PLANNER_CONFIGURATION_MODE_BASE_SUPPLEMENTS).add(new RateManagerModel.RateLine(rateLine, lPeriods));
+
+                }else{
+                    if(!mRateLinesByCategories.containsKey(GlobalConstants.RATE_PLANNER_CONFIGURATION_MODE_INVENTORY)){
+                        mRateLinesByCategories.put(GlobalConstants.RATE_PLANNER_CONFIGURATION_MODE_INVENTORY, new List<RateManagerModel.RateLine>());
+                    }
+                    mRateLinesByCategories.get(GlobalConstants.RATE_PLANNER_CONFIGURATION_MODE_INVENTORY).add(new RateManagerModel.RateLine(rateLine, lPeriods));
+                }
+            }else{
+                if(!mRateLinesByCategories.containsKey(GlobalConstants.RATE_PLANNER_CONFIGURATION_MODE_INVENTORY)){
+                    mRateLinesByCategories.put(GlobalConstants.RATE_PLANNER_CONFIGURATION_MODE_INVENTORY, new List<RateManagerModel.RateLine>());
+                }
+                mRateLinesByCategories.get(GlobalConstants.RATE_PLANNER_CONFIGURATION_MODE_INVENTORY).add(new RateManagerModel.RateLine(rateLine, lPeriods));
+            }
         }
 
         List<RateManagerModel.FilterWp> filterWp = new List<RateManagerModel.FilterWp>();
@@ -99,7 +114,7 @@ public with sharing class RateManagerRoomsConfigController extends DC_DynamicCon
             )
         );
 
-        return new DC_ResponseWr(true, new RateManagerModel.RateLineDataTableWp(filterWp, wrappedData));
+        return new DC_ResponseWr(true, new RateManagerModel.RateLineDataTableByConfigurationModeWp(filterWp, mRateLinesByCategories));
     }
 
     /**

@@ -5,7 +5,7 @@
  * @last modified on  : 16-04-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
-import { wire } from 'lwc'
+import { track, wire } from 'lwc'
 import LwcDCExtension from 'c/lwcDCExtension'
 import { RateManagerMixin } from 'c/rateManagerMixin'
 import { RateManagerExtendedDataTableMixin } from 'c/rateManagerExtendedDataTableMixin'
@@ -46,8 +46,13 @@ const ROOMS_COLUMNS = [
 
 export default class RateManagerRoomsConfig extends RateManagerExtendedDataTableMixin(RateManagerMixin(LwcDCExtension)) {
     get configurationBaseSupplements() {
-        return this.parent.ConfigurationMode__c === 'Base + room supplements'
+        return this.parent.ConfigurationMode__c === 'BaseAndRoomSupplements';
     }
+
+    @track
+    dataBaseSupplements = [];
+    @track
+    dataInventory = [];
 
     labels = LABELS
     _roomPicklistValues = []
@@ -78,15 +83,19 @@ export default class RateManagerRoomsConfig extends RateManagerExtendedDataTable
     fetch = (response) => {
         const fetchedRecords = response?.data?.filters && response?.data?.data
         if (fetchedRecords) {
-            this.filters = response.data.filters
-            this.data = JSON.parse(JSON.stringify(response.data.data))
+            this.filters = response.data.filters;
+
+            this.dataInventory = response.data.data.Inventory ? JSON.parse(JSON.stringify(response.data.data.Inventory)) : [];
+            this.dataBaseSupplements = response.data.data.BaseAndRoomSupplements ? JSON.parse(JSON.stringify(response.data.data.BaseAndRoomSupplements)) : [];
             // modify data to add picklist values
-            this.data.forEach((item) => {
+            [this.dataInventory, this.dataBaseSupplements].forEach((item) => {
                 item.RoomLabel = this._roomPicklistValues.find((picklistVal) => picklistVal.value === item.Room)?.label
                 item.CharactLabel = this._charactPicklistValues.find((picklistVal) => picklistVal.value === item.Characteristic)?.label
                 item.ApplicableLabel = this._applicablePicklistValues.find((picklistVal) => picklistVal.value === item.Applicable)?.label
             })
-            this.mixinBuildTable(ROOMS_COLUMNS)
+
+            this.mixinBuildTable(ROOMS_COLUMNS, 'dataInventory');
+            this.mixinBuildTable(ROOMS_COLUMNS, 'dataBaseSupplements');
         } else {
             console.warn('No records available in response')
         }

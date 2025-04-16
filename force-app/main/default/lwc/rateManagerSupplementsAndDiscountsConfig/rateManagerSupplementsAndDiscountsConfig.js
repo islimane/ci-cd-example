@@ -5,7 +5,7 @@
  * @last modified on  : 16-04-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
-import { wire } from 'lwc'
+import { track, wire } from 'lwc'
 import LwcDCExtension from 'c/lwcDCExtension'
 import { RateManagerMixin } from 'c/rateManagerMixin'
 import { RateManagerExtendedDataTableMixin } from 'c/rateManagerExtendedDataTableMixin'
@@ -44,6 +44,9 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
     labels = LABELS
     _applicablePicklistValues = []
 
+    @track
+    supplementsData = [];
+
     /*** Connected callback.*/
     connectedCallback() {
         this.setWireParams()
@@ -67,13 +70,13 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
     fetch = (response) => {
         const fetchedRecords = response?.data?.filters && response?.data?.data
         if (fetchedRecords) {
-            this.filters = response.data.filters
-            this.data = response.data.data
+            this.filters = response.data.filters;
+            this.supplementsData = response.data.data;
             // modify data to add picklist values
-            this.data.forEach((item) => {
+            this.supplementsData.forEach((item) => {
                 item.ApplicableLabel = this._applicablePicklistValues.find((picklistVal) => picklistVal.value === item.Applicable)?.label
             })
-            this.mixinBuildTable(SUPPLEMENT_COLUMNS)
+            this.mixinBuildTable(SUPPLEMENT_COLUMNS, 'supplementsData');
         } else {
             console.warn('No records available in response')
         }
