@@ -2,15 +2,20 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 10-04-2025
+ * @last modified on  : 16-04-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
+import { wire } from 'lwc'
 import LwcDCExtension from 'c/lwcDCExtension'
 import { RateManagerMixin } from 'c/rateManagerMixin'
 import { RateManagerExtendedDataTableMixin } from 'c/rateManagerExtendedDataTableMixin'
 import LABELS from './labels'
 import modalSupplementsAndDiscounts from 'c/rateManagerModalSupplementsAndDiscountsHandler'
 
+import { getPicklistValues } from 'lightning/uiObjectInfoApi'
+import APPLICABLE_FIELD from '@salesforce/schema/Product2.Applicable__c'
+
+const MASTER_RECORD_TYPE_ID = '012000000000000AAA'
 const CONTROLLER_NAME = 'RateManagerSmntsAndDntsController'
 
 const SUPPLEMENT_COLUMNS = [
@@ -37,6 +42,7 @@ const SUPPLEMENT_COLUMNS = [
 
 export default class RateManagerSupplementsAndDiscountsConfig extends RateManagerExtendedDataTableMixin(RateManagerMixin(LwcDCExtension)) {
     labels = LABELS
+    _applicablePicklistValues = []
 
     /*** Connected callback.*/
     connectedCallback() {
@@ -63,6 +69,10 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
         if (fetchedRecords) {
             this.filters = response.data.filters
             this.data = response.data.data
+            // modify data to add picklist values
+            this.data.forEach((item) => {
+                item.ApplicableLabel = this._applicablePicklistValues.find((picklistVal) => picklistVal.value === item.Applicable)?.label
+            })
             this.mixinBuildTable(SUPPLEMENT_COLUMNS)
         } else {
             console.warn('No records available in response')
@@ -110,9 +120,22 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
             size: 'large',
             headerLabel: 'Add Supplements and Reductions',
             onrefreshtable: (e) => {
-                e.stopPropagation();
-                this.refreshFetch();
+                e.stopPropagation()
+                this.refreshFetch()
             }
-        });
+        })
     }
+
+    // #region Picklist wire
+    @wire(getPicklistValues, { recordTypeId: MASTER_RECORD_TYPE_ID, fieldApiName: APPLICABLE_FIELD })
+    applicablePicklistResults({ error, data }) {
+        if (data) {
+            this._applicablePicklistValues = data.values.map((item) => {
+                return { label: item.label, value: item.value }
+            })
+        } else if (error) {
+            console.error(error)
+        }
+    }
+    // #endregion Picklist wire
 }
