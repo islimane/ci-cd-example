@@ -51,7 +51,7 @@ public with sharing class RateManagerModel {
 
     public class RateLineDataTableByConfigurationModeWp {
         public List<FilterWp> filters = new List<FilterWp>();
-        Map<String, List<RateLine>> data = new Map<String, List<RateLine>>();
+        public Map<String, List<RateLine>> data = new Map<String, List<RateLine>>();
 
 
         public RateLineDataTableByConfigurationModeWp(List<FilterWp> filters, Map<String, List<RateLine>> data) {
