@@ -88,11 +88,13 @@ export default class RateManagerRoomsConfig extends RateManagerExtendedDataTable
             this.dataInventory = response.data.data.Inventory ? JSON.parse(JSON.stringify(response.data.data.Inventory)) : [];
             this.dataBaseSupplements = response.data.data.BaseAndRoomSupplements ? JSON.parse(JSON.stringify(response.data.data.BaseAndRoomSupplements)) : [];
             // modify data to add picklist values
-            [this.dataInventory, this.dataBaseSupplements].forEach((item) => {
-                item.RoomLabel = this._roomPicklistValues.find((picklistVal) => picklistVal.value === item.Room)?.label
-                item.CharactLabel = this._charactPicklistValues.find((picklistVal) => picklistVal.value === item.Characteristic)?.label
-                item.ApplicableLabel = this._applicablePicklistValues.find((picklistVal) => picklistVal.value === item.Applicable)?.label
-            })
+            [this.dataInventory, this.dataBaseSupplements].forEach((dataArray) => {
+                dataArray.forEach((item) => {
+                    item.RoomLabel = this._roomPicklistValues.find((picklistVal) => picklistVal.value === item.Room)?.label
+                    item.CharactLabel = this._charactPicklistValues.find((picklistVal) => picklistVal.value === item.Characteristic)?.label
+                    item.ApplicableLabel = this._applicablePicklistValues.find((picklistVal) => picklistVal.value === item.Applicable)?.label
+                });
+            });
 
             this.mixinBuildTable(ROOMS_COLUMNS, 'dataInventory');
             this.mixinBuildTable(ROOMS_COLUMNS, 'dataBaseSupplements');
