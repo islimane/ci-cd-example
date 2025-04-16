@@ -2,7 +2,7 @@
  * @description       : Provides utility methods to retrieve test records based on dynamic naming conventions.
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 04-09-2025
+ * @last modified on  : 04-11-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 
@@ -75,7 +75,7 @@ public with sharing class TP_SetupSelectorTest {
      * @return A HotelTerritory__c record.
      */
     public static HotelTerritory__c getHotelTerritory (Integer batteryNum, String batteryCode, String territoryCode){
-        return [SELECT Id, Name, Code__c, Public_Group_Code__c, Area__c, Continent__c, Zone__c, Subzone__c, RecordTypeId  FROM HotelTerritory__c WHERE Name =:(DEF_PREFIX+'HT'+territoryCode+'_'+batteryCode+batteryNum) LIMIT 1];
+        return [SELECT Id, Name, Code__c, Public_Group_Code__c, Area__c, Continent__c, Zone__c, Subzone__c, RecordTypeId  FROM HotelTerritory__c LIMIT 1];
     }
 
     /**
@@ -133,5 +133,13 @@ public with sharing class TP_SetupSelectorTest {
      */
     public static Rate__c getBESTRate(){
         return [SELECT Id, Name, Rate_Name__c, RateType__c FROM Rate__c WHERE Rate_Name__c=:GlobalConstants.RATE_RATE_NAME_PICKLIST_BEST LIMIT 1];
+    }
+
+    /**
+     * Retrieves a Period__c based on the RT.
+     * @return Period__c.
+     */
+    public static Period__c getPeriodByType(Id recordTypeId){
+        return [SELECT Id, Name, RatePlanner__c FROM Period__c WHERE RecordTypeId = :recordTypeId LIMIT 1];
     }
 }

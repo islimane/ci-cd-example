@@ -13,12 +13,8 @@
         </template>
         <div class="slds-grid slds-grid_align-end slds-p-around_small">
             <div class="slds-col">
-                <span if:true={disableAddBlackout} class="slds-p-vertical_small slds-p-right_small full-of-periods-msg">
-                    No puedes añadir mas blackouts a este tarifario
-                </span>
                 <lightning-button
                     label={labels.addBlackout}
-                    disabled={disableAddBlackout}
                     variant="neutral"
                     onclick={handleAddBlackoutModal}>
                 </lightning-button>

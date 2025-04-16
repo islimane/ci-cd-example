@@ -2,7 +2,7 @@
  * @description       : Unit Test Class for Setup Data Methods
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 04-09-2025
+ * @last modified on  : 04-11-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 @isTest
@@ -136,6 +136,7 @@ public class TP_SetupDataTest {
         ByPassConfig__c byPassRecord = new ByPassConfig__c();
         byPassRecord.DisableTriggers__c = true;
         byPassRecord.DisableValidationRules__c = true;
+        byPassRecord.DisableFlow__c = true;
         byPassRecord.SetupOwnerId = UserInfo.getProfileId();
         return byPassRecord;
     }
@@ -197,7 +198,17 @@ public class TP_SetupDataTest {
             StartDate__c = Date.today(),
             EndDate__c = Date.today().addDays(2)
         );
-        mPeriod = TP_SetupDataUtilsTest.setMapByName(mPeriod, new List<sObject>{period});
+        Period__c periodEvent = new Period__c(
+            RecordTypeId = GlobalConstants.PERIOD_RT_EVENT_ID,
+            StartDate__c = Date.today(),
+            EndDate__c = Date.today().addDays(2)
+        );
+        Period__c periodBlackout = new Period__c(
+            RecordTypeId = GlobalConstants.PERIOD_RT_BLACKOUT_ID,
+            StartDate__c = Date.today(),
+            EndDate__c = Date.today().addDays(2)
+        );
+        mPeriod = TP_SetupDataUtilsTest.setMapByName(mPeriod, new List<sObject>{period, periodEvent, periodBlackout});
         return period;
     }
 
@@ -403,8 +414,8 @@ public class TP_SetupDataTest {
     private static void generateProduct2(){
         Product2 product2_Room = new Product2(
             Name = 'Default'+batteryName,
-            Room__c = 'Double',
-            Characteristic__c = 'FRONTAL',
+            Room__c = 'Z002',
+            Characteristic__c = 'Z342',
             Regimen_Type__c = 'AD',
             Family = GlobalConstants.PRODUCT2_FAMILY_ROOM,
             isActive = true
@@ -441,7 +452,7 @@ public class TP_SetupDataTest {
      * @return A new RateLine__c object with dummy values for a test environment.
      */
     public static void generateRateLine() { // no va aquí porque no se hace insert de los records relacionados
-        RateLine__c rateLineRoom = new RateLine__c(Room__c = 'Individual');
+        RateLine__c rateLineRoom = new RateLine__c(Room__c = 'Z001');
         RateLine__c rateLineSupplement = new RateLine__c(Description__c = 'Children');
         mRateLineRoom = TP_SetupDataUtilsTest.setMapByName(mRateLineRoom, new List<sObject>{rateLineRoom});
         mRateLineSupplement = TP_SetupDataUtilsTest.setMapByName(mRateLineSupplement, new List<sObject>{rateLineSupplement});

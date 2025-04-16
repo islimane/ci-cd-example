@@ -51,10 +51,6 @@ export default class RateManagerBlackoutList extends RateManagerMixin(LwcDCExten
 		return blackoutList;
 	}
 
-    get disableAddBlackout() {
-        return this.intervalManager ? !this.intervalManager.hasAvailableSlots() : false;
-    }
-
 	/**
 	 * @description Saves the period list by invoking the save method.
 	 *              Logs the local name of the template host element upon saving.

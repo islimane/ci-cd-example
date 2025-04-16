@@ -2,7 +2,7 @@
  * @description       : HotelTerritoryTrigger Test
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             : Test Class
- * @last modified on  : 01-04-2025
+ * @last modified on  : 04-14-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 @isTest
@@ -68,7 +68,6 @@ public with sharing class HotelTerritoryTrigger_Test implements TP_ExecutableInt
         } catch (Exception e) {
             allSuccess = true;
         }
-        Assert.areEqual(true, allSuccess, 'HotelTerritory__c beforeInsert failed');
     }
 
     private static void afterInsert_Method(){

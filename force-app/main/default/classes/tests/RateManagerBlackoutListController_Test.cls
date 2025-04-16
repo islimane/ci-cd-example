@@ -2,8 +2,8 @@
  * @description       : RateManagerBlackoutListController Test
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Test Class
- * @last modified on  : 06-03-2025
- * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+ * @last modified on  : 04-14-2025
+ * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 @isTest
 public with sharing class RateManagerBlackoutListController_Test implements TP_ExecutableInterface{
@@ -28,6 +28,13 @@ public with sharing class RateManagerBlackoutListController_Test implements TP_E
         Test.stopTest();
     }
 
+    @isTest
+    public static void executeMethodTest(){
+        Test.startTest();
+            executeMethod();
+        Test.stopTest();
+    }
+
     /***************************************
      *           Operation Methods         *
     ***************************************/
@@ -42,6 +49,16 @@ public with sharing class RateManagerBlackoutListController_Test implements TP_E
         Assert.areEqual(true, (Boolean)mResult.get('success'), 'initMethod failed without returning the correct value.');
     }
 
+    private static void executeMethod(){
+        List<Period__c> lPeriod = [SELECT Id FROM Period__c LIMIT 1];
+        Map<String, Object> params = new Map<String, Object>{
+            'controller' => 'RateManagerBlackoutListController',
+            'action' => 'deleteBlackout',
+            'recordIds' => lPeriod[0].Id
+        };
+        Map<String, Object> mResult = (Map<String,Object>)JSON.deserializeUntyped(DC_ControllerExecuter.executeAction(params));
+    }
+
     /***************************************
      *           TestAll Method            *
     ***************************************/
@@ -49,6 +66,7 @@ public with sharing class RateManagerBlackoutListController_Test implements TP_E
     public static void testAll(){
         Test.startTest();
             initMethod();
+            executeMethod();
         Test.stopTest();
     }
 }
