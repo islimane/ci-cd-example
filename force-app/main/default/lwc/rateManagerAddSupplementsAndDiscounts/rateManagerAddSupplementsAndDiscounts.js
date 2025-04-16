@@ -2,12 +2,16 @@
  * @description       : Enables adding Supplements and Discounts to a Rate Planner.
  * @author            : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  * @group             :
- * @last modified on  : 11-04-2025
+ * @last modified on  : 16-04-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
-import { track, api } from 'lwc'
+import { track, api, wire } from 'lwc'
 import LwcDCExtension from 'c/lwcDCExtension'
+import { getPicklistValues } from 'lightning/uiObjectInfoApi'
+import FAMILY_FIELD from '@salesforce/schema/Product2.Family'
+import APP_TYPE_FIELD from '@salesforce/schema/Product2.ApplicationType__c'
 
+const MASTER_RECORD_TYPE_ID = '012000000000000AAA';
 const CONTROLLER = 'RateManagerAddSupplDiscController'
 const COLUMNS = [
     { label: 'NOMBRE', fieldName: 'Name', type: 'text' },
@@ -19,6 +23,8 @@ export default class rateManagerAddSupplementsAndDiscounts extends LwcDCExtensio
     @track filters = []
     @track _tableData = []
     @track filteredData = []
+    _familyPicklistValues = []
+    _appTypePicklistValues = []
 
     set tableData(value) {
         const data = []
@@ -28,6 +34,8 @@ export default class rateManagerAddSupplementsAndDiscounts extends LwcDCExtensio
                 this.columns.forEach((column) => {
                     row[column.fieldName] = record[column.fieldName] || null
                 })
+                row.Family = this._familyPicklistValues.find((item) => item.value === row.Family)?.label || null
+                row.ApplicationType__c = this._appTypePicklistValues.find((item) => item.value === row.ApplicationType__c)?.label || null
                 data.push(row)
             })
             this._tableData = data
@@ -43,6 +51,30 @@ export default class rateManagerAddSupplementsAndDiscounts extends LwcDCExtensio
     get columns() {
         return COLUMNS
     }
+
+    // #region Picklist wire
+    @wire(getPicklistValues, { recordTypeId: MASTER_RECORD_TYPE_ID, fieldApiName: FAMILY_FIELD })
+    familyPicklistResults({ error, data }) {
+        if (data) {
+            this._familyPicklistValues = data.values.map((item) => {
+                return { label: item.label, value: item.value }
+            })
+        } else if (error) {
+            console.error(error)
+        }
+    }
+
+    @wire(getPicklistValues, { recordTypeId: MASTER_RECORD_TYPE_ID, fieldApiName: APP_TYPE_FIELD })
+    appTypePicklistResults({ error, data }) {
+        if (data) {
+            this._appTypePicklistValues = data.values.map((item) => {
+                return { label: item.label, value: item.value }
+            })
+        } else if (error) {
+            console.error(error)
+        }
+    }
+    // #endregion Picklist wire
 
     /*** Connected callback.*/
     connectedCallback() {
