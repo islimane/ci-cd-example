@@ -2,9 +2,10 @@
  * @description       : Enables adding Rooms to a Rate Planner.
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 08-04-2025
+ * @last modified on  : 09-04-2025
  * @last modified by  : alberto.martinez-lopez@inetum.com
  **/
+import { track } from 'lwc'
 import LwcDCExtension from 'c/lwcDCExtension';
 import { RateManagerMixin } from 'c/rateManagerMixin';
 import { RateManagerExtendedDataTableMixin } from 'c/rateManagerExtendedDataTableMixin';
@@ -36,8 +37,13 @@ const ROOMS_COLUMNS = [{
 export default class RateManagerRoomsConfig extends RateManagerExtendedDataTableMixin(RateManagerMixin(LwcDCExtension)) {
 
     get configurationBaseSupplements() {
-        return this.parent.ConfigurationMode__c === 'Base + room supplements';
+        return this.parent.ConfigurationMode__c === 'BaseAndRoomSupplements';
     }
+
+    @track
+    dataBaseSupplements = [];
+    @track
+    dataInventory = [];
 
     labels = LABELS;
 
@@ -65,8 +71,12 @@ export default class RateManagerRoomsConfig extends RateManagerExtendedDataTable
         const fetchedRecords = response?.data?.filters && response?.data?.data;
         if (fetchedRecords) {
             this.filters = response.data.filters;
-            this.data = JSON.parse(JSON.stringify(response.data.data)); //response.data.data;
-            this.mixinBuildTable(ROOMS_COLUMNS);
+
+            this.dataInventory = response.data.data.Inventory ? JSON.parse(JSON.stringify(response.data.data.Inventory)) : [];
+            this.dataBaseSupplements = response.data.data.BaseAndRoomSupplements ? JSON.parse(JSON.stringify(response.data.data.BaseAndRoomSupplements)) : [];
+
+            this.mixinBuildTable(ROOMS_COLUMNS, 'dataInventory');
+            this.mixinBuildTable(ROOMS_COLUMNS, 'dataBaseSupplements');
         } else {
             console.warn('No records available in response');
         }

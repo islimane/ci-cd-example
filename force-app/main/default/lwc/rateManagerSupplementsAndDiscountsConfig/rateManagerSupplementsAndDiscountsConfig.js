@@ -2,9 +2,10 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 08-04-2025
+ * @last modified on  : 09-04-2025
  * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
+import { track } from 'lwc';
 import LwcDCExtension from 'c/lwcDCExtension';
 import { RateManagerMixin } from 'c/rateManagerMixin';
 import { RateManagerExtendedDataTableMixin } from 'c/rateManagerExtendedDataTableMixin';
@@ -36,6 +37,9 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
 
     labels = LABELS;
 
+    @track
+    supplementsData = [];
+
     /*** Connected callback.*/
     connectedCallback() {
         this.setWireParams();
@@ -60,8 +64,8 @@ export default class RateManagerSupplementsAndDiscountsConfig extends RateManage
         const fetchedRecords = response?.data?.filters && response?.data?.data;
         if (fetchedRecords) {
             this.filters = response.data.filters;
-            this.data = response.data.data;
-            this.mixinBuildTable(SUPPLEMENT_COLUMNS);
+            this.supplementsData = response.data.data;
+            this.mixinBuildTable(SUPPLEMENT_COLUMNS, 'supplementsData');
         } else {
             console.warn('No records available in response');
         }

@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : alberto.martinez-lopez@inetum.com
  * @group             : 
- * @last modified on  : 28-03-2025
+ * @last modified on  : 09-04-2025
  * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 public with sharing class RatePriceManager {
@@ -41,7 +41,7 @@ public with sharing class RatePriceManager {
                 for(RateManagerModel.RatePrice ratePrice : rateLine.getRatePricesWp()){
                     if(ratePricesEdited.containsKey(ratePrice.periodKey)){
                         RatePrice__c ratePriceToUpsert = ratePrice.getRatePrice();
-                        ratePriceToUpsert.TotalPrice__c = ratePricesEdited.get(ratePrice.periodKey).TotalPrice;
+                        ratePriceToUpsert.TotalPrice__c = ratePricesEdited.get(ratePrice.periodKey).getTotalPrice();
                         lratePricesToUpsert.add(ratePriceToUpsert);
                     }
                 }
