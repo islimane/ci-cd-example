@@ -1,20 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
-        <members>GlobalConstants</members>
-        <members>RateLineSelector</members>
-        <members>RateManagerModel</members>
-        <members>RateManagerRoomsConfigController</members>
-        <members>RatePlannerSelector</members>
-        <members>RatePriceManager</members>
+        <members>HotelTerritoryTriggerHelper</members>
         <name>ApexClass</name>
-    </types>
-    <types>
-        <members>extendedDataTable</members>
-        <members>rateManagerExtendedDataTableMixin</members>
-        <members>rateManagerRoomsConfig</members>
-        <members>rateManagerSupplementsAndDiscountsConfig</members>
-        <name>LightningComponentBundle</name>
     </types>
     <version>55.0</version>
 </Package>
