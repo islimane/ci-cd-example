@@ -1,6 +1,6 @@
 /**
- * @description  : 
- * @author       : development@nubika.com 
+ * @description  :
+ * @author       : development@nubika.com
 **/
 @isTest
 public class TriggerUtils_Test {
@@ -221,7 +221,7 @@ public class TriggerUtils_Test {
 
     static void generateAdminRole(){
         adminRole = new UserRole(Name= 'System Administrator');
-        
+
         insert adminRole;
         system.debug('### CM_SetupClass_Test - generateAdminRole() - [adminRole]: ' + adminRole);
     }
@@ -236,7 +236,7 @@ public class TriggerUtils_Test {
     static void generateAdminUser(){
         List<User> listUser = new List<User>();
         DateTime now = system.now();
-        List<PermissionSet> permSet = [SELECT ProfileId FROM PermissionSet 
+        List<PermissionSet> permSet = [SELECT ProfileId FROM PermissionSet
                         WHERE Profile.UserType = 'Standard'
                             AND Profile.PermissionsPrivacyDataAccess = true
                             AND IsOwnedByProfile = true
@@ -276,16 +276,17 @@ public class TriggerUtils_Test {
     static void generateContacts(){
         System.runAs(userAdmin) {
             List<Contact> contactList = (List<Contact>) generateSobjectList(STANDARD_SIZE_TEST_LIST, 'Contact', null, new List<String>());
-            
+
             for(Contact cont : contactList){
                 cont.Phone = '666555444';
                 cont.Email = 'test' + cont.Name + '@test.com';
                 cont.Salutation = 'Mr.';
+                cont.MailingStreet = cont.Name + ' street';
             }
 
             setMapByName(contactMap, contactList);
             insert contactMap.values();
-        } 
+        }
     }
 
     public static Map<String, sObject> setMapByName(Map<String, sObject> genericMap, List<sObject> objectList){
