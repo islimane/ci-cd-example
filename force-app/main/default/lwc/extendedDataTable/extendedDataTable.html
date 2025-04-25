@@ -2,7 +2,7 @@
   @description       : 
   @author            : alberto.martinez-lopez@inetum.com
   @group             : 
-  @last modified on  : 07-04-2025
+  @last modified on  : 08-04-2025
   @last modified by  : alberto.martinez-lopez@inetum.com
 -->
 <template>
@@ -36,6 +36,7 @@
                     data={scrollableTableData}
                     columns={scrollableColumns}
                     hide-checkbox-column
+                    wrap-table-header="all"
                     lwc:ref="scrollableTable"
                     draft-values={draftValues}
             ></lightning-datatable>

@@ -23,8 +23,6 @@ export const RateManagerExtendedDataTableMixin = (BaseClass) => class extends Ba
 
     @track filters = [];
 
-    @track data = [];
-
     _columns = [];
 
     get columns() {
@@ -48,10 +46,10 @@ export const RateManagerExtendedDataTableMixin = (BaseClass) => class extends Ba
         }
     }
 
-    mixinBuildTable(columns){
+    mixinBuildTable(columns, listDataName){
         this._columns = columns;
         const periods = new Set();
-        this.data.forEach((item) => {
+        this[listDataName].forEach((item) => {
             item.ratesPrices.forEach((rate) => {
                 if (rate.StartDate && rate.EndDate) {
                     periods.add(rate.periodKey);
@@ -60,10 +58,13 @@ export const RateManagerExtendedDataTableMixin = (BaseClass) => class extends Ba
         });
 
         periods.forEach((period) => {
-            this._columns.push({ label: period, fieldName: period, type: 'currency', editable: true, fixedWidth: 200 });
+            let index = this._columns.findIndex((item) => item.fieldName === period);
+            if (index === -1) {
+                this._columns.push({ label: period, fieldName: period, type: 'currency', editable: true, fixedWidth: 100, hideDefaultActions: true });
+            }
         });
 
-        this.data = this.data.map((item) => {
+        this[listDataName] = this[listDataName].map((item) => {
             const newItem = { ...item };
             periods.forEach((period) => {
                 const rate = item.ratesPrices.find((element) => element.periodKey === period);

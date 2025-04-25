@@ -2,7 +2,7 @@
  * @description       : Unified model class for Rate Manager controllers
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             :
- * @last modified on  : 07-04-2025
+ * @last modified on  : 09-04-2025
  * @last modified by  : alberto.martinez-lopez@inetum.com
 **/
 public with sharing class RateManagerModel {
@@ -49,18 +49,31 @@ public with sharing class RateManagerModel {
         }
     }
 
+    public class RateLineDataTableByConfigurationModeWp {
+        public List<FilterWp> filters = new List<FilterWp>();
+        Map<String, List<RateLine>> data = new Map<String, List<RateLine>>();
+
+
+        public RateLineDataTableByConfigurationModeWp(List<FilterWp> filters, Map<String, List<RateLine>> data) {
+            this.filters = filters;
+            this.data = data;
+        }
+    }
+
     public class RateLine {
-        public String Name;
-        public String Characteristic;
-        public String Room;
-        public String RegimenType;
-        public String Applicable;
-        public String ApplicationType;
-        public String Observations;
         public Id Id;
         public Id RateId;
         public Id HotelId;
         public Id RatePlannerId;
+        
+        String Name;
+        String Characteristic;
+        String Room;
+        String RegimenType;
+        String Applicable;
+        String ApplicationType;
+        String Observations;
+        Boolean Base;
         
         @TestVisible
         Map<String, Period__c> mPeriodsByPeriodKey = new Map<String, Period__c>();
@@ -75,9 +88,11 @@ public with sharing class RateManagerModel {
             this.RegimenType = rateLine.Product__r.Regimen_Type__c;
             this.Applicable = rateLine.Product__r.Applicable__c;
             this.ApplicationType = rateLine.Product__r.ApplicationType__c;
+            this.Base = rateLine.Product__r.Base__c;
             this.RateId = rateLine.Rate__c;
             this.HotelId = rateLine.Hotel__c;
             this.RatePlannerId = rateLine.RatePlanner__c;
+            
 
             // These fields might be null for some RateLine records (e.g., supplements)
             this.Characteristic = rateLine.Product__r.Characteristic__c;
@@ -101,6 +116,10 @@ public with sharing class RateManagerModel {
                     this.ratePricesByPeriodString.put(periodKey, new RatePrice(periodKey, this.Id, period));
                 }
             }
+        }
+
+        public Boolean isBase() {
+            return this.Base;
         }
 
         public List<RatePrice> getRatePricesWp() {
@@ -133,9 +152,9 @@ public with sharing class RateManagerModel {
         public Id Id;
         public Id ParentPeriodId;
         public Id ParentRateLineId;
-        public Date StartDate;
-        public Date EndDate;
-        public Decimal TotalPrice;
+        Date StartDate;
+        Date EndDate;
+        Decimal TotalPrice;
 
         //FROM EXISTING RATE PRICES
         public RatePrice(String periodKey, RatePrice__c rateP) {
@@ -158,6 +177,10 @@ public with sharing class RateManagerModel {
             this.ParentRateLineId = RateLineId;
         }
 
+        public Decimal getTotalPrice() {
+            return this.TotalPrice;
+        }
+
         public RatePrice__c getRatePrice() {
             return new RatePrice__c(
                 Id = this.Id,
@@ -173,14 +196,14 @@ public with sharing class RateManagerModel {
      * @author       : development@nubika.com
      **/
     public class FilterWp {
-        public String fieldApiName;
-        public String label;
-        public Object defaultValue;
-        public Object value;
-        public String type; //Date, text, checkbox, select
-        public List<Option> options;
-        public Date min;
-        public Date max;
+        String fieldApiName;
+        String label;
+        Object defaultValue;
+        Object value;
+        String type; //Date, text, checkbox, select
+        List<Option> options;
+        Date min;
+        Date max;
 
         public FilterWp(String fieldApiName, String label, Object defaultValue, Object value, String type, List<Option> options, Date min, Date max) {
             this.fieldApiName = fieldApiName;
