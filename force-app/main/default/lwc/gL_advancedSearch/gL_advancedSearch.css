@@ -1,0 +1,64 @@
+.advanced-search-content{
+    width: 100%;
+    display: block;
+    position: relative;
+    /*display: flex;
+    justify-content: flex-start;
+    align-items: center;*/
+}
+.advanced-search-content .slds-button{
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0;
+    border-radius: 0 6px 6px 0;
+    border:none;
+    background: #fff;
+}
+.advanced-search-content .slds-button .slds-icon {
+    /*--sds-c-icon-color-foreground-default: #fff;*/
+    padding: 0.5rem;
+    border-right: solid 1px #ccc;
+    border-top: solid 1px #ccc;
+    border-bottom: solid 1px #ccc;
+
+}
+.advanced-search-content .advanced-search-input {
+    width: 100%;
+    /*padding-right: 2.1rem;*/
+}
+
+
+.advanced-search-dropdown{
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    max-height: 50vh;
+    overflow-y:auto;
+}
+
+.advanced-search-dropdown p a{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0.65rem 0.5rem;
+    transition: ease all 0.35s;
+}
+.no-search-result{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0.65rem 0.5rem;
+	color: #989898;
+}
+.advanced-search-dropdown p a:hover{
+    background: #f9f9f9;
+    text-decoration: none;
+}
+.advanced-search-dropdown p a img{
+    width: 1.75rem;
+    margin-right: 0.15rem;
+}
+.advanced-search-dropdown a img{
+    max-width: 2.25rem;
+    margin-right: 0.15rem;
+}

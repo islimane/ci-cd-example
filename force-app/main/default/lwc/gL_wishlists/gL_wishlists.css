@@ -1,0 +1,213 @@
+.headerlass {
+    display: flex; 
+    justify-content: space-between; 
+    color: #111111;
+}
+.tabclass {
+    display: flex;
+    justify-content: space-between;
+}
+.lirecordsclass {
+    display: flex; 
+    font-size: 0.875rem; 
+    border-bottom: 1px solid #f3f2f2;
+    padding: 1rem;
+}
+.lirecords_figureclass {
+    cursor: pointer; 
+    height: 120px; 
+    width: 120px
+}
+.lirecords_aclass {
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    height: 100%; 
+    width: 100%;
+}
+.lirecords_imgclass {
+    height: auto; 
+    flex: 0 0 auto; 
+    max-height: 100%; 
+    max-width: 100%;
+}
+.product-details {
+    display: flex; 
+    flex-direction: column; 
+    align-items: stretch;
+    padding: 0.75rem;
+}
+.line-item-properties{
+    display: flex; 
+    justify-content: stretch;
+}
+.product-fields{
+    color: #4f4f4f; 
+    font-weight: var(--lwc-fontWeightRegular, 600); 
+    width: 90vw;
+}
+.product-fields div {
+    display: flex; 
+    color: #4f4f4f; 
+    align-items: initial;
+}
+
+.product-fields div ul {
+    width: 100%
+}
+
+.product-fields div ul li {
+    display:flex;
+    align-items:center
+}
+
+.product-fields-label {
+    display:inline-block; 
+    width:6rem !important; 
+    text-align: right; 
+    font-weight: bold; 
+    padding-right: 0.5rem;
+}
+
+.product-fields-icon {
+    display:inline-block; 
+    width:5%;
+    text-align: center;
+}
+.product-fields-value {
+    display:inline-block; 
+    width:calc(90% - 6rem);
+    padding-left: 0.5rem;
+}
+.product-fields div lightning-icon{
+    margin-top: 0.5%;
+}
+.product-field-price{
+    color: #4f4f4f; 
+    display: flex; 
+    flex-wrap: wrap; 
+    width: 50%; 
+    align-content: center; 
+    justify-content: center; 
+    font-size: 20px; 
+    align-items: start;
+}
+.quantity-price-remove{
+    display: flex; 
+    flex-grow: 1; 
+    width: 25%; 
+    align-items: center;
+}
+.price-buttons{
+    display:flex;
+    width: 50vw;
+    align-items: center;
+}
+.alltocart-buttons{
+    text-align-last: end;
+}
+
+@media (max-width: 1028px) {
+    .lirecords_figureclass{
+        height: 100px; 
+        width: 100px
+    }
+    .lirecordsclass {
+        padding: 0.5rem;
+    }
+    .product-details {
+        padding: 0px;
+    }
+    .product-field-price{        
+        font-size: 18px;        
+    }
+}
+
+@media (max-width: 865px) {
+    .product-field-price{
+        width: 50%;
+        place-content: end;
+    }
+    .product-fields{
+        width: 100%;
+    }
+    .quantity-price-remove{
+        width: 50%;
+        padding-right: 1.2rem;
+    }
+    .line-item-properties{
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 450px) {
+    .lirecords_figureclass{
+        height: 50px; 
+        width: 50px
+    }
+    .lirecordsclass {
+        padding-top: 0.5rem;
+    }
+    .product-details {
+        display: flex; 
+        flex-direction: column; 
+        align-items: stretch;
+        padding: 0px;
+    }    
+    .product-field-price{
+        width: 100%;
+        font-size: 15px;        
+    }
+    .quantity-price-remove {
+        width: none;
+        margin-left: -5%;
+    }
+    .tabclass{
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        align-items: stretch;
+        padding-bottom: 0.5rem;
+    }
+    .buttonAddToCart {
+        align-self: center;
+        padding-top: 0.5rem;
+    }
+    .buttonGroupStyle {
+        align-self: center;
+        padding-top: 0.5rem;
+    }
+    .alltocart-buttons{
+        text-align-last: center;
+        padding-top: 0.5rem;
+    }
+    .product-fields div ul li:first-of-type{
+        border-bottom: 1px solid #c1c1c163;
+        list-style-position: inside;
+        padding-bottom: 2px;
+    }
+    .product-fields div ul li:nth-of-type(2) {
+        border-bottom: 1px solid #c1c1c163;
+        list-style-position: inside;
+        padding-bottom: 2px;
+        padding-top: 2px;
+    }
+    .product-fields div ul li:last-of-type {
+        padding-bottom: 10px;
+    }
+}
+
+.lightningDelete {
+    --slds-c-button-color-border: transparent;
+    --slds-c-button-color-border-active: transparent;
+    --slds-c-button-color-border-hover: transparent;
+    --slds-c-button-sizing-border: 0px;
+    --lwc-borderWidthThin: 0px;
+}
+.buttonicondel {
+    --slds-c-icon-color-foreground: var(--lwc-brandAccessible)
+}
+.buttoniconcart {
+    --slds-c-button-spacing-inline-end: 3rem;
+    --slds-c-button-spacing-inline-start: 3rem;
+}

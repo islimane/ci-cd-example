@@ -1,0 +1,62 @@
+<template>
+    
+    <template if:true={spinnerCheck}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" >
+                <lightning-spinner
+                class="slds-is-relative slds-align_absolute-center slds-var-m-around_large"
+                alternative-text="loading"
+                size="medium"
+                variant="brand">
+                </lightning-spinner>
+            </div>
+        </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>       
+    
+    <div class="advanced-search" onclick={ignore} onkeydown={handleKeyUp}>
+        <div class="advanced-search-content">
+            <lightning-input class="advanced-search-input"
+				id="search2"
+				data-target-id="searchInput"
+				variant="label-hidden"
+				type="text"
+				placeholder={labels.searchPlaceholder}
+				onchange={handleInputChange}
+				onkeydown={handleInputChange}
+				onmouseout={closeDropdown}>
+			</lightning-input>
+            <button class="slds-button"> 
+                <lightning-icon size="x-small" class="slds-icon" icon-name="utility:search" onclick={handleInputChange} data-target-id="lookup"></lightning-icon>
+            </button>
+        </div>
+
+        <div if:true={searchInputIsFocused} class="advanced-search-dropdown">            
+            <template if:true={isloading}>
+                <div style="height:2.5rem;position:relative">
+                    <div class="slds-spinner_container">
+                      <div role="status" class="slds-spinner slds-spinner_small slds-spinner_brand">
+                        <span class="slds-assistive-text">{labels.loadingLabel}</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                      </div>
+                    </div>
+                  </div>
+            </template>
+            <template for:each={filterRecords} for:item="rec">
+                <div data-target-id={rec.materialId} key={rec.materialId} onclick={redirectToRecord}>
+                    <a data-target-id={rec.materialId}>
+                        <img src={rec.imageUrl} data-target-id={rec.materialId}>
+                        <span data-target-id={rec.materialId}>{rec.material} - {rec.familyDescript}</span>
+                    </a>
+                </div>
+            </template>
+
+			<div if:true={noResults}>
+				<span class="no-search-result">{labels.noResults}</span>
+			</div>
+        </div>
+        
+    </div>
+    
+</template>

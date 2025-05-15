@@ -1,0 +1,324 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <lightning-spinner
+        if:false={isLoaded}
+        class="slds-is-relative slds-align_absolute-center slds-var-m-around_large"
+        alternative-text={labels.loadingAlt}
+        size="medium"
+        variant="brand">
+    </lightning-spinner>
+
+	<template if:true={hasNotify}>
+		<lightning-icon onclick={handleClickNotify}
+						size="small"
+						style="cursor: pointer;"
+						class="iconenablepointerevetns slds-icon slds-input__icon slds-input__icon_right slds-icon-text-default orange-icon" 
+						icon-name="utility:alert">
+		</lightning-icon>
+	</template>
+
+	<c-g-l_popup-cart if:true={showpopup}
+						 notify-map={notifyMap}
+						 onpopupcart={handlePopUp}>
+	</c-g-l_popup-cart>
+	<c-g-l_popup if:true={showpopupcoupon}
+				 modalopen={showpopupcoupon}
+				 onapply={couponPopUp}>
+	</c-g-l_popup>
+
+	<template if:true={isLoaded}>
+
+		<div class="cart-header">
+			<div class="slds-grid slds-wrap">
+				<div class="slds-size_6-of-6 slds-medium-size_2-of-12">
+					<h1 class={cartLabelClass}>{labels.myCartLabel}</h1>
+				</div>
+
+				<div class="slds-size_6-of-6 slds-medium-size_5-of-12 slds-large-size_4-of-12 quickorderclass">
+					<c-g-l_quick-order onquickrefresh={getNewCartLines}>
+					</c-g-l_quick-order>
+				</div>
+
+				<!--<div class="slds-size_6-of-6 slds-medium-size_1-of-6"></div>-->
+
+				<div class="slds-size_6-of-6 slds-medium-size_4-of-12 amount-shipment">
+					<p>
+						<strong data-target-id="cart-amount" class="cart-amount">{labels.amountLabel}: &nbsp;
+							<lightning-formatted-number value={cartSummaryInfo.grandTotalAmount} 
+														format-style="currency" 
+														currency-code={cartSummaryInfo.currencyIsoCode}
+														minimum-fraction-digits="2"
+														maximum-fraction-digits="2">
+							</lightning-formatted-number>
+						</strong>
+					</p>
+					<div data-target-id="cart-amount-bar" class="cart-amount-bar"></div>
+					<p if:true={showfreeshipment}>
+						<small class="paid">{labels.shipmentLabel}: &nbsp;
+							<lightning-formatted-number value={freeShipment} 
+														format-style="currency" 
+														currency-code={cartSummaryInfo.currencyIsoCode}
+														minimum-fraction-digits="2"
+														maximum-fraction-digits="2">
+							</lightning-formatted-number>
+						</small>
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="cart-body">
+
+			<template if:true={isMobile}>
+				<c-g-l_cart-line-list-mobile
+					if:false={isRefreshed}
+					cart-id={recordId}
+					effective-account={resolvedEffectiveAccountId}
+					cartinfo={cartSummaryInfo}
+					ontotalweightloaded={totalWeightLoaded}
+					oncartchanged={refreshTotals}
+					onchangecartline={changeCartLines}
+					skus-map={skusMap}
+					labels={labels}>
+				</c-g-l_cart-line-list-mobile>
+			</template>
+			<template if:true={isDesktop}>
+				<c-g-l_cart-line-list
+					if:false={isRefreshed}
+					cart-id={recordId}
+					effective-account={resolvedEffectiveAccountId}
+					cartinfo={cartSummaryInfo}
+					ontotalweightloaded={totalWeightLoaded}
+					oncartchanged={refreshTotals}
+					onchangecartline={changeCartLines}
+					skus-map={skusMap}
+					labels={labels}>
+				</c-g-l_cart-line-list>
+			</template>
+			<template if:true={isTablet}>
+				<c-g-l_cart-line-list
+					if:false={isRefreshed}
+					cart-id={recordId}
+					effective-account={resolvedEffectiveAccountId}
+					cartinfo={cartSummaryInfo}
+					ontotalweightloaded={totalWeightLoaded}
+					oncartchanged={refreshTotals}
+					onchangecartline={changeCartLines}
+					skus-map={skusMap}
+					labels={labels}>
+				</c-g-l_cart-line-list>
+			</template>
+			<!-- <lightning-spinner
+				if:true={isRefreshed}
+				class="slds-is-relative slds-align_absolute-center slds-var-m-around_large"
+				alternative-text={labels.loadingAlt}
+				size="medium"
+				variant="brand">
+			</lightning-spinner> -->
+
+			<div class="cart-total">
+				<div class="slds-grid slds-wrap">
+					<div class="slds-size_1-of-1 slds-medium-size_1-of-2 slds-grid slds-wrap cart-total-promo">
+						<lightning-input class="couponInput"
+							type="text"
+							name="couponCode"
+							label={labels.promoCodeLabel}
+							maxlength="30"
+							placeholder={labels.codePlaceholder}
+							onchange={handleCouponCodeChange}>
+						</lightning-input>
+						<template if:false={ischaves}>
+							<lightning-button class="slds-var-m-left_x-small slds-var-m-top_large"
+								variant="neutral"
+								label={labels.applyLabel}
+								onclick={handleCouponCodeSave}>
+							</lightning-button>
+						</template>
+						<template if:true={ischaves}>
+							<lightning-button class="button-chaves-neutral slds-var-m-left_x-small slds-var-m-top_large"
+								variant="neutral"
+								label={labels.applyLabel}
+								onclick={handleCouponCodeSave}>
+							</lightning-button>						
+						</template>
+					</div>
+
+					<div class="slds-size_1-of-1 slds-medium-size_1-of-2 slds-text-align_right cart-total-amount">
+						<h2 if:true={zeroSavings} class="slds-text-heading_medium">
+							<strong>{labels.totalLabel} 
+								<template if:true={ischaves}>
+									<lightning-formatted-number value={cartSummaryInfo.grandTotalAmount} 
+																format-style="currency" 
+																currency-code={cartSummaryInfo.currencyIsoCode} 
+																minimum-fraction-digits="2"
+																maximum-fraction-digits="2">
+									</lightning-formatted-number>
+								</template>
+								<template if:false={ischaves}>
+									<lightning-formatted-number value={cartSummaryInfo.grandTotalAmount} 
+																format-style="currency" 
+																currency-code={cartSummaryInfo.currencyIsoCode} 
+																minimum-fraction-digits="2"
+																maximum-fraction-digits="2">
+									</lightning-formatted-number>
+								</template>
+							</strong>
+						</h2>
+
+						<div if:false={zeroSavings}>
+							<h2 class="slds-text-heading_medium">
+								<strong>{labels.adjustLabel} 
+									<template if:true={ischaves}>
+										<lightning-formatted-number value={cartSummaryInfo.grandTotalAmount} 
+																	format-style="currency" 
+																	currency-code={cartSummaryInfo.currencyIsoCode} 
+																	minimum-fraction-digits="2"
+																	maximum-fraction-digits="2">
+										</lightning-formatted-number>
+									</template>
+									<template if:false={ischaves}>
+										<lightning-formatted-number value={cartSummaryInfo.grandTotalAmount} 
+																	format-style="currency" 
+																	currency-code={cartSummaryInfo.currencyIsoCode} 
+																	minimum-fraction-digits="2"
+																	maximum-fraction-digits="2">
+										</lightning-formatted-number>
+									</template>
+								</strong>
+							</h2>
+							<p><small>
+								{labels.iniPriceLabel}: <template if:true={ischaves}>
+															<lightning-formatted-number value={cartSummaryInfo.totalListPrice} 
+																						format-style="currency" 
+																						currency-code={cartSummaryInfo.currencyIsoCode}
+																						minimum-fraction-digits="2"
+																						maximum-fraction-digits="2">
+															</lightning-formatted-number>
+														</template>
+														<template if:false={ischaves}>
+															<lightning-formatted-number value={cartSummaryInfo.totalListPrice} 
+																						format-style="currency" 
+																						currency-code={cartSummaryInfo.currencyIsoCode}
+																						minimum-fraction-digits="2"
+																						maximum-fraction-digits="2">
+															</lightning-formatted-number>
+														</template>
+								&nbsp;({labels.saveLabel} <template if:true={ischaves}>
+																<lightning-formatted-number value={totalSavings} 
+																							format-style="currency" 
+																							currency-code={cartSummaryInfo.currencyIsoCode}
+																							minimum-fraction-digits="2"
+																							maximum-fraction-digits="2">
+																</lightning-formatted-number>
+															</template>
+															<template if:false={ischaves}>
+																<lightning-formatted-number value={totalSavings} 
+																							format-style="currency" 
+																							currency-code={cartSummaryInfo.currencyIsoCode}
+																							minimum-fraction-digits="2"
+																							maximum-fraction-digits="2">
+																</lightning-formatted-number>
+															</template>)
+							</small></p>
+						</div>
+
+						<p><small>{cartSummaryInfo.uniqueProductCount} {labels.itemsLabel} | {labels.weightLabel}: <lightning-formatted-number value={totalCartWeight} format-style="decimal" maximum-fraction-digits="4"></lightning-formatted-number>kg</small></p>
+						<template if:true={showSpecialDiscount}>
+							<!-- <div class="slds-size_1-of-1  slds-medium-size_3-of-6 slds-large-size_7-of-12 slds-text-align_right"> -->
+								<p class="special-discount">{discountMessage}</p>
+							<!-- </div> -->
+						</template>
+					</div>
+				</div>
+			</div>
+
+			<div class="cart-actions">
+				<div class="slds-grid  slds-wrap slds-grid_vertical-align-end">
+					<div class="slds-size_1-of-1  slds-medium-size_3-of-6 slds-large-size_5-of-12 slds-grid slds-wrap cart-actions-name">
+						<lightning-input class="cart-name"
+							type="text"
+							name="changeName"
+							placeholder={labels.orderNamingLabel}
+							label={labels.namingLabel}
+							value={currentCartName}
+							onchange={changeCartName}>
+						</lightning-input>
+						<template if:false={ischaves}>
+							<lightning-button class="slds-var-m-left_x-small slds-var-m-top_large"
+								variant="neutral"
+								label={labels.applyLabel}
+								onclick={handleChangeCartName}>
+							</lightning-button>
+						</template>
+						<template if:true={ischaves}>
+							<lightning-button class="button-chaves-neutral slds-var-m-left_x-small slds-var-m-top_large"
+								variant="neutral"
+								label={labels.applyLabel}
+								onclick={handleChangeCartName}>
+							</lightning-button>							
+						</template>
+					</div>
+					<div class="slds-size_1-of-1  slds-medium-size_3-of-6 slds-large-size_7-of-12 slds-text-align_right cart-actions-btns">
+						<template if:false={isDesktop}>
+							<template if:false={ischaves}>
+								<button onclick={handleRequestOffer} disabled={createQuoteDisabled} class="slds-button slds-button_stretch">{labels.offerLabel}</button>
+								<button onclick={handleContinueShopping} class="slds-button slds-button_neutral slds-button_stretch">{labels.continueLabel}</button>
+							</template>
+							<template if:true={ischaves}>
+								<button onclick={handleRequestOffer} disabled={createQuoteDisabled} class="button-chaves-base slds-button slds-button_stretch">{labels.offerLabel}</button>
+								<button onclick={handleContinueShopping} class="button-chaves-neutral slds-button slds-button_neutral slds-button_stretch">{labels.continueLabel}</button>
+							</template>
+							<lightning-button variant="brand" label={labels.checkoutLabel} onclick={handleContinueOrder} disabled={checkoutdisabled} class="checkoutclass"></lightning-button>	
+						</template>
+						<template if:true={isDesktop}>
+							<template if:false={ischaves}>
+								<lightning-button variant="base" label={labels.offerLabel} onclick={handleRequestOffer} disabled={createQuoteDisabled} class="slds-var-m-left_x-small"></lightning-button>
+								<lightning-button variant="neutral" label={labels.continueLabel} onclick={handleContinueShopping} class="slds-var-m-left_x-small"></lightning-button>
+							</template>
+							<template if:true={ischaves}>
+								<lightning-button class="button-chaves-base slds-var-m-left_x-small" variant="base" label={labels.offerLabel} disabled={createQuoteDisabled} onclick={handleRequestOffer} ></lightning-button>
+								<lightning-button class="button-chaves-neutral slds-var-m-left_x-small" variant="neutral" label={labels.continueLabel} onclick={handleContinueShopping} ></lightning-button>							
+							</template>
+							<lightning-button variant="brand" label={labels.checkoutLabel} onclick={handleContinueOrder} disabled={checkoutdisabled} class="slds-var-m-left_x-small"></lightning-button>	
+						</template>
+					</div>
+				</div>
+				<template if:true={showNameError}>
+					<div class="name-error">
+						{showNameErrorMssg}
+					</div>
+				</template>
+			</div>
+		</div>
+
+		<template if:true={showFooterActions}>
+			<div class="cart-footer slds-text-align_center">
+				<div style="display:none">
+					<c-g-l_cart-resume-download
+						cart-id={recordId}
+						effective-account={resolvedEffectiveAccountId}
+						cartlinesdownloadpdf={cartLinesToDownloadPDF}
+		    			userinfopdf={userInfoPDF}
+						cart-name={currentCartName}>
+					</c-g-l_cart-resume-download>
+				</div>
+				<lightning-button variant="base" label={labels.downloadLabel} onclick={handleDownload} class="slds-var-m-left_x-small"></lightning-button>
+				&nbsp;|&nbsp;
+				<lightning-button-menu class=""
+					alternative-text="favorite"
+					label={labels.addToListLabel}
+					variant="border-filled"
+					onselect={handleListMenuSelect}>
+					<template for:each={wishLists} for:item="menuItem">
+						<lightning-menu-item
+							key={menuItem.Id}
+							value={menuItem}
+							label={menuItem.Name}
+							icon-name={menuItem.iconName}>
+						</lightning-menu-item>
+					</template>
+				</lightning-button-menu>
+			</div>
+		</template>
+	</template>
+</template>

@@ -1,0 +1,13 @@
+.quote-list-item {
+    border-bottom: solid 1px #eee;
+    padding: 0.75rem 0;
+}
+
+h1 {
+    font-size: 24px;
+}
+
+.emptyStateTitle{
+    padding-top: calc(3 * var(--lwc-spacingXLarge, 2rem));
+    padding-bottom: calc(5 * var(--lwc-spacingXLarge, 2rem));
+}

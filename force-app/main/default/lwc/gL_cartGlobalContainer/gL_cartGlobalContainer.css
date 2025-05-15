@@ -1,0 +1,228 @@
+/*--cart header---*/
+.amount-shipment{
+    margin-left: auto;
+}
+.cart-header{
+    margin-top: 1.5rem;
+    margin-bottom: -1.5rem;
+}
+.cart-header h1{
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+}
+@media (max-width: 767px) {
+    .cart-header h1{
+        margin-bottom: 0.5rem;
+    }
+    .amount-shipment{
+        margin-top: 1rem;
+    }
+}
+
+.cart-header h1.index-color{
+    color: #003865;
+}
+.cart-header h1.chaves-color {
+    color:rgb(176, 22, 48);
+}
+
+@media (max-width: 1360px) {
+    .cart-header h1.index-color {
+        overflow-wrap: break-word;
+    }
+    .cart-header h1.chaves-color {
+        overflow-wrap: break-word;
+    }
+    .quickorderclass{
+        padding-left: 1rem;
+    }
+}
+
+.cart-header .d-flex{
+    display: flex;
+}
+.cart-header .cart-amount-bar{
+    position: relative;
+    width: 100%;
+    height: 1.5rem;
+    display: block;
+    background: #f0f0f0;
+}
+.cart-header .cart-amount-bar:before{
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    width: var(--greenBar); /* 50%; */
+    height: 1.5rem;
+    display: block;
+    background: #2e844a;
+}
+.cart-header .cart-amount-bar:after{
+    position: absolute;
+    /*content: "";*/
+    top: 0;
+    left: var(--arrowDistance); /* calc(50% - 0.375rem) */
+    display: block;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0.75rem 0.375rem 0 0.375rem;
+    border-color: #333 transparent transparent transparent;
+}
+.cart-header .paid{
+    display: block;
+    text-align: right;
+    position: relative;
+
+}
+.cart-body{
+    margin-top: 1rem;
+}
+.cart-amount{
+    position: relative;
+}
+
+/*--cart total---*/
+.cart-total{
+    background: #f9f9f9;
+    padding: 1rem;
+}
+.cart-total .d-flex{
+    display: flex;
+    align-items: flex-end;
+}
+@media only screen and (max-width: 600px) {
+    .cart-total{
+        background: #f9f9f9;
+        padding: 1rem;
+    }
+    .cart-total-promo{
+        width: 100%;
+    }
+    .cart-total-promo lightning-button{
+        margin-left: auto;
+    }
+    .cart-total-amount{
+        width: 100%;
+        margin-top: 1rem;
+    }
+    .quickorderclass{
+        padding-left: 0px;
+    }
+}
+/*--fimcart total---*/
+
+/*--cart actions---*/
+.cart-actions{
+    border-top: solid 1px #eee;
+    background: #f9f9f9;
+    padding: 1rem;
+}
+
+@media only screen and (max-width: 600px) {
+    .cart-actions-name lightning-button{
+        margin-left: auto;
+    }
+    .cart-actions-btns {
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+    }
+    .cart-actions-btns > * {
+        display: flex;
+        margin: 0.65rem 0 0 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .quickorderclass{
+        padding-left: 0px;
+    }
+    .cart-name, .couponInput {
+        width: 12rem !important;
+    }
+    .checkoutclass{
+        --slds-c-button-brand-spacing-inline-end:5.9rem; 
+        --slds-c-button-brand-spacing-inline-start:5.9rem;
+    }
+}
+
+@media (max-width: 900px) {
+    .checkoutclass{
+        --slds-c-button-brand-spacing-inline-end:6.1rem; 
+        --slds-c-button-brand-spacing-inline-start:6.1rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    .checkoutclass{
+        --slds-c-button-brand-spacing-inline-end:13.8rem; 
+        --slds-c-button-brand-spacing-inline-start:13.8rem;
+    }
+}
+
+.slds-input__icon.iconpointerevetns{
+    pointer-events:all
+}
+.orange-icon{
+    --lwc-colorTextIconDefault: orange;
+}
+/*--fimcart actions---*/
+
+/*--cart footer---*/
+.cart-footer{
+    padding: 1.5rem;
+}
+/*--fimcart footer---*/
+/*Add to list button*/
+.lgc-bg {
+    background-color: rgb(242, 242, 242);
+}
+
+.lgc-bg-inverse {
+    background-color: rgb(22, 50, 92);
+}
+
+.couponInput {
+    font-size: inherit;
+    min-width: 10rem;
+    width: 15rem;
+}
+
+.cart-name {
+    font-size: inherit;
+    min-width: 10rem;
+    width: 15rem;
+}
+
+.name-button {
+    padding-left: 0.5rem;
+    display: inline;
+}
+
+.name-error {
+    color: red;
+    font-size: 0.7rem;
+}
+
+.button-chaves-base {
+    --slds-c-button-text-color: #2d2926;
+    --slds-c-button-text-color-hover: #2d2926;
+    --slds-c-button-text-color-active: #2d2926;
+}
+
+.button-chaves-neutral {
+    --slds-c-button-text-color: #2d2926;
+    --slds-c-button-text-color-hover: #2d2926;
+    --slds-c-button-text-color-active: #2d2926;
+    --slds-c-button-color-border-hover: #2d2926;
+    --slds-c-button-color-background-hover: #FFFFFF;
+    --slds-c-button-color-background-active: #FFFFFF;
+}
+
+.special-discount{
+	font-weight: bold;
+	font-size: 12px;
+	color: #2e844a;
+}

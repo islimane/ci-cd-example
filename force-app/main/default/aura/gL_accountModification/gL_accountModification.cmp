@@ -1,0 +1,6 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" description="Account Modification Button">
+    <lightning:quickActionAPI aura:id="quickActionAPI" />
+    <div>
+        <lightning:button label="Solicit Modification" onclick="{!c.sendAccountEmail}"/>
+    </div>
+</aura:component>

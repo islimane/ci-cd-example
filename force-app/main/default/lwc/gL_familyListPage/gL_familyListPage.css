@@ -1,0 +1,212 @@
+.plp .num-items {
+    color: #003865;
+    border-bottom: solid 1px #d4d4d4;
+    font-size: 1.05rem;
+}
+.plp-wrapper {
+    display: flex;
+}
+.plp .plp-filters {
+    flex: 1 0 20%;
+    max-width: 15rem;
+}
+.plp .plp-filters .plp-filters-header {
+    display: flex;
+    justify-content: space-between;
+}
+.plp .sort-btn-mobile{
+    margin-top: 0.75rem;
+}
+.plp .sort-btn-mobile span{
+    font-size: 12px;
+    color: #55AAA7;
+    text-align: left;
+    display: block;
+}
+.plp-filter-title {
+	padding-top: .37rem;
+}
+.plp .plp-items {
+    flex: 1 0 80%;
+    margin-top: 2.25rem;
+}
+@media (max-width: 991px) {
+    .plp .plp-filters {
+        flex: 1 0 30%;
+    }
+    .plp .plp-items {
+        flex: 1 0 70%;
+    }
+}
+@media (max-width: 768px) {
+    .plp-wrapper{
+       flex-direction: column;
+    }
+    .plp .plp-filters {
+        flex: 1 0 100%;
+        max-width: 100%;
+    }
+    .plp .plp-items {
+        flex: 1 0 100%;
+        margin-top: 0.75rem;
+    }
+}
+.plp .plp-items .btn-compare{
+    background: #f9f9f9;
+    padding: 0.85rem 0.5rem;
+    position: fixed;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    z-index: 999;
+    text-align: right;
+    box-shadow: 0 -4px 8px rgba(0,0,0,0.08);
+}
+.plp .plp-items .plp-items-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    position: relative;
+}
+.plp .plp-items .plp-items-list li {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding:0.75rem;
+    width: 18%;
+    margin:0 0 2rem 2%;
+	cursor: pointer;
+}
+.plp .plp-items .plp-items-list hr {
+    margin: 0.5rem;
+}
+.plp .plp-items .plp-items-list li .checkbox-class {
+   margin-top:1rem;
+}
+.plp .plp-items .plp-items-list li .checkbox-class-desktop {
+    bottom: 0;
+    margin-top:1rem;
+ }
+@media (max-width: 1199px) {
+    .plp .plp-items .plp-items-list li {
+        width: 31%;
+    }
+}
+@media (max-width: 991px) {
+    .plp .plp-items .plp-items-list li {
+        width: 48%;
+    }
+}
+
+.plp .plp-items .plp-items-list li:hover {
+    cursor: pointer;
+}
+.plp .plp-items .plp-items-list li div figure {
+    height: auto; /*9.5rem;*/
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.plp .plp-items .plp-items-list li div figure img {
+    width: 100%;
+    object-fit: contain;
+    max-width: 100%;
+    margin-bottom: 0.75rem;
+    max-height: 100%;
+}
+.plp .plp-items .plp-items-list li div .title {
+   font-size: 1.25rem;
+   color: #003865;
+   text-align: left;
+   transition: ease all 0.3s;
+   font-weight: bold;
+}
+
+.plp .plp-items .plp-items-list li div .description {
+    white-space: initial;
+    text-align: left;
+    color: #003865;
+}
+.plp .plp-items .plp-items-list li:hover div .title, .plp .plp-items .plp-items-list li:hover div .description  {
+    color: #55aaa7;
+    transition: ease all 0.3s;
+}
+.my-round-button {
+    --sds-c-button-radius-border: 20px;
+}
+
+/*******************CHAVESBAO*******************/
+.plp .num-items-chaves {
+    color: #2d2926;
+    border-bottom: solid 1px #d4d4d4;
+    font-size: 1.05rem;
+}
+
+.plp .plp-items .plp-items-list-chaves {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    position: relative;
+}
+.plp .plp-items .plp-items-list-chaves li {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding:0.75rem;
+    width: 18%;
+    margin:0 0 2rem 2%;
+	cursor: pointer;
+}
+.plp .plp-items .plp-items-list-chaves li .checkbox-class{
+    margin-top:1rem;
+}
+.plp .plp-items .plp-items-list-chaves li .checkbox-class-desktop{
+    /* position: absolute; */
+    bottom: 0;
+    margin-top:1rem;
+}
+@media (max-width: 1199px) {
+    .plp .plp-items .plp-items-list-chaves li {
+        width: 31%;
+    }
+}
+@media (max-width: 991px) {
+    .plp .plp-items .plp-items-list-chaves li {
+        width: 48%;
+    }
+}
+
+.plp .plp-items .plp-items-list-chaves li:hover {
+    cursor: pointer;
+}
+.plp .plp-items .plp-items-list-chaves li div figure {
+    height: auto; /*9.5rem;*/
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.plp .plp-items .plp-items-list-chaves li div figure img {
+    width: 100%;
+    object-fit: contain;
+    max-width: 100%;
+    margin-bottom: 0.75rem;
+}
+.plp .plp-items .plp-items-list-chaves li div .title {
+   font-size: 1.25rem;
+   color: #2d2926;
+   text-align: left;
+   transition: ease all 0.3s;
+   font-weight: bold;
+}
+
+.plp .plp-items .plp-items-list-chaves li div .description {
+    white-space: initial;
+    text-align: left;
+    color: #2d2926;
+}
+.plp .plp-items .plp-items-list-chaves li:hover div .title, .plp .plp-items .plp-items-list-chaves li:hover div .description  {
+    color: rgb(176, 22, 48);
+    transition: ease all 0.3s;
+}

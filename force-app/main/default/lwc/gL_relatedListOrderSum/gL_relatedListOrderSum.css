@@ -1,0 +1,14 @@
+.outputclass {
+    --lwc-spacingXxSmall: 0px;
+}
+
+.boxcss {
+    border: none;
+    border-bottom: 1px solid rgb(212,212,212);
+    box-shadow: none;
+    border-radius: 0px;
+    padding: 0px;
+}
+.licustom {
+    list-style-type: none;
+}

@@ -1,0 +1,186 @@
+<template>
+    <template if:true={showModal}>
+        <template if:true={withinLimitsLst}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_large">
+                <div class="slds-modal__container modal-compare">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small">
+                            </lightning-icon>
+                            <span class="slds-assistive-text">{labels.closeLabel}</span>
+                        </button>
+                        <h2 id="modal-heading-01" class="slds-text-heading_small slds-hyphenate slds-float_left slds-m-top_xx-small slds-m-right_x-small">
+                            <strong>{labels.comparatorLabel}</strong>
+                        </h2>
+                    </header>
+                    <div class="slds-modal__content slds-scrollable">
+
+                        <!--resumen productos mvl-->
+                        <div class="products-summary">
+                            <lightning-accordion allow-multiple-sections-open 
+                                                 class="example-accordion"
+                                                 onsectiontoggle={handleToggleSection} 
+                                                 active-section-name="A">
+                                <div class="prueba">
+                                    <button class=" marginTop slds-button slds-button_neutral slds-float_right" onclick={removeAllComponents} value={matlist}>{labels.deleteAllLabel}
+                                    </button>
+                                </div>
+                                <lightning-accordion-section name="A" label={productsNumberMobile}>
+                                    <template for:each={matlist} for:item="compareItem">
+                                        <div class="products-summary-items" key={compareItem.ProductId}>
+                                            <div class="products-summary-item">
+                                                <div class="products-summary-info">
+                                                    <template if:false={compareItem.IsDummy}>
+                                                        <p>
+                                                            <lightning-button variant="base" 
+                                                                              label={labels.deleteLabel}
+                                                                              onclick={removeFromCompare}
+                                                                              value={compareItem.ProductId}>
+                                                            </lightning-button>
+                                                        </p>
+                                                    </template>
+                                                    <div>
+                                                        <p><strong>{compareItem.Product.Name}</strong></p>
+                                                        <p>{compareItem.Product.Description}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="products-summary-img">
+                                                    <img src={compareItem.Product.Product_Image__c}>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </lightning-accordion-section>
+                            </lightning-accordion>
+                        </div>
+                        <!--fin resumen productos mvl-->
+                        <div class="comparator-wrapper">
+                            <table class="comparator-table">
+                                <thead>
+                                    <tr>
+                                        <th scope="row"></th>
+                                        <template for:each={matlist} for:item="compareItem">
+                                            <td key={compareItem.ProductId}>
+                                                <div class="compare-product">
+                                                    <template if:false={compareItem.IsDummy}>
+                                                        <lightning-button-icon icon-name="utility:delete"
+                                                            variant="brand-outline" class="delete-compare-item"
+                                                            alternative-text={labels.deleteLabel}
+                                                            onclick={removeFromCompare} value={compareItem.ProductId}>
+                                                        </lightning-button-icon>
+                                                    </template>
+                                                    <figure>
+                                                        <img src={compareItem.Product.Product_Image__c}>
+                                                    </figure>
+                                                    <p class={comparatorTitleClass}>{compareItem.Product.Name}</p>
+                                                    <p class={comparatorDescripClass}>{compareItem.Product.Description}</p>
+                                                </div>
+                                            </td>
+                                        </template>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="mobile-title">
+                                        <td colspan="5"><strong>{labels.homologationsLabel}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">{labels.homologationsLabel}</th>
+                                        <template for:each={matlist} for:item="compareItem">
+                                            <td data-title={compareItem.Product.Name} key={compareItem.ProductId}>
+                                                <span>{compareItem.Product.Homologation__c}</span>
+                                            </td>
+                                        </template>
+                                    </tr>
+                                    <tr class="mobile-title">
+                                        <td colspan="5"><strong>{labels.finishesLabel}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">{labels.finishesLabel}</th>
+                                        <template for:each={matlist} for:item="compareItem">
+                                            <td data-title={compareItem.Product.Name} key={compareItem.ProductId}>
+                                                <span>{compareItem.Product.Finish__c}</span>
+                                            </td>
+                                        </template>
+                                    </tr>
+                                    <tr class="mobile-title">
+                                        <td colspan="5"><strong>{labels.useLabel}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">{labels.useLabel}</th>
+                                        <template for:each={matlist} for:item="compareItem">
+                                            <td data-title={compareItem.Product.Name} key={compareItem.ProductId}>
+                                                <span> {compareItem.Product.Use_Material__c}</span>
+                                            </td>
+                                        </template>
+                                    </tr>
+                                    <tr class="mobile-title">
+                                        <td colspan="5"><strong>{labels.loadLabel}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">{labels.loadLabel}</th>
+                                        <template for:each={matlist} for:item="compareItem">
+                                            <td data-title={compareItem.Product.Name} key={compareItem.ProductId}>
+                                                <span>{compareItem.Product.Supported_Load__c}</span>
+                                            </td>
+                                        </template>
+                                    </tr>
+                                    <tr class="mobile-title">
+                                        <td colspan="5"><strong>{labels.imprintLabel}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">{labels.imprintLabel}</th>
+                                        <template for:each={matlist} for:item="compareItem">
+                                            <td data-title={compareItem.Product.Name} key={compareItem.ProductId}>
+                                                <span>{compareItem.Product.Imprint__c}</span>
+                                            </td>
+                                        </template>
+                                    </tr>
+                                    <tr class="mobile-title">
+                                        <td colspan="5"><strong>{labels.commercialLabel}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">{labels.commercialLabel}</th>
+                                        <template for:each={matlist} for:item="compareItem">
+                                            <td data-title={compareItem.Product.Name} key={compareItem.ProductId}>
+                                                <!-- {compareItem.Product.Imprint__c} -->
+                                            </td>
+                                        </template>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+        <template if:false={withinLimitsLst}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                            <lightning-icon icon-name="utility:close" alternative-text={labels.closeLabel} variant="inverse" size="small"></lightning-icon>
+                            <span class="slds-assistive-text">{labels.closeLabel}</span>
+                        </button>
+                        <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate">
+                            {labels.warningLabel}
+                        </h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_large slds-text-align_center" id="modal-content-id-1">
+                        <template if:true={tooLongLst}>
+                            <p>{labels.tooLongLabel}</p>
+                        </template>
+                        <template if:true={tooShortLst}>
+                            <p>{labels.tooShortLabel}</p>
+                        </template>
+                        <template if:true={emtpyLst}>
+                            <p>{labels.emptyLstLabel}</p>
+                        </template>
+                    </div>
+                    <footer class="slds-modal__footer"></footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </template>
+</template>

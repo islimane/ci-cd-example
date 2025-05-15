@@ -1,0 +1,40 @@
+<template>
+    <lightning-spinner
+        if:false={isLoaded}
+        class="slds-is-relative slds-align_absolute-center slds-m-around_large"
+        alternative-text="Loading menu..."
+        size="medium"
+        variant="brand">
+    </lightning-spinner>
+
+	<template if:true={isLoaded}>
+		<div class="header-menu-wrapper">
+			<ul class="header-menu-grid">
+				<template for:each={primarycategoryList} for:item="category">
+					<li key={category.Id}>
+						<template if:true={padding_imgs}>
+							<div data-target-id={category.Id} class="container-chaves" style={padding_imgs} onclick={handleCategorySelection}>
+								<figure>
+									<img src={category.imgURL} class="sub-image" data-target-id={category.Id} />
+								</figure>
+								<div class="header-menu-item slds-align_absolute-center" style={style}>
+									<span class="header-menu-item-name" data-target-id={category.Id}>{category.name}</span>
+								</div>
+							</div>
+						</template>
+						<template if:false={padding_imgs}>
+							<div data-target-id={category.Id} class="container" style={padding_imgs} onclick={handleCategorySelection}>
+								<figure>
+									<img src={category.imgURL} class="sub-image" data-target-id={category.Id} />
+								</figure>
+								<div class="header-menu-item slds-align_absolute-center" style={style}>
+									<span class="header-menu-item-name" data-target-id={category.Id}>{category.name}</span>
+								</div>
+							</div>
+						</template>
+					</li>
+				</template>
+			</ul>
+		</div>
+	</template>
+</template>

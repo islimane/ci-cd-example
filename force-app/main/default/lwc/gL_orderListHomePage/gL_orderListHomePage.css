@@ -1,0 +1,104 @@
+.slds-button_icon-inverse{
+    border: 0.7px solid;
+}
+
+.slds-modal__header{
+    padding: 20px; 
+    border: 0;
+}
+
+.paragraphs > p {
+    padding: 2px 0px;
+    width: 100%;
+}
+
+.paragraphs2 > p {
+    text-align: start;
+    float: right;
+}
+
+.tooltip {
+    pointer-events: visible !important;
+}
+
+.rcnt{
+    font-size: 24px;
+
+}
+.order-list-item{
+    border-bottom: solid 1px #eee; 
+    padding: 0.75rem 0;
+}
+
+.slds-modal__footer.slds-modal__footer_directional{
+    padding: 20px; 
+    border: 0; 
+    display: flex; 
+    justify-content: space-around;
+}
+
+.lightningClose {
+    --lwc-colorTextIconDefault: white;
+    display: flex;
+    flex-direction: row-reverse;
+    --slds-c-button-color-border: transparent;
+    --slds-c-button-color-border-active: transparent;
+    --slds-c-button-color-border-hover: transparent;
+    --slds-c-button-text-color-active: white;
+    --slds-c-button-text-color-hover: white;
+    --slds-c-button-sizing-border: 0px;
+    --lwc-borderWidthThin: 0px;
+}
+
+.lightning-button-icon:focus, .lightning-button-icon:hover, .lightning-button-icon:active {
+    --lwc-colorTextIconDefault: white;
+    color: white;
+}
+
+.slds-modal__title.slds-hyphenate > h1{
+    font-size: 30px; 
+    font-weight: bold;
+}
+
+.slds-modal__title.slds-hyphenate{
+    font-size: 26px;
+}
+
+.slds-text-heading_large.slds-var-p-bottom_medium >h1 {
+    font-size: 24px;
+}
+
+.slds-modal__footer.slds-modal__footer_directional > button {
+    width: 50%;
+}
+
+.slds-col.slds-grid.slds-grid_align-end.slds-size_5-of-12.slds-small-size_3-of-7{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.slds-button__icon_large {
+    --lwc-squareIconMediumContentAlt: 1.3rem;
+}
+
+.emptyStateTitle{
+    padding-top: calc(3 * var(--lwc-spacingXLarge, 2rem));
+    padding-bottom: calc(5 * var(--lwc-spacingXLarge, 2rem));
+}
+
+.slds-wrap{
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.trackingChaves{
+    --slds-c-icon-color-foreground: rgb(118, 113, 107);
+}
+
+@media (max-width: 640px) {
+    .slds-grid.slds-wrap{
+        display: flex;
+        justify-content: space-between;
+    }
+}

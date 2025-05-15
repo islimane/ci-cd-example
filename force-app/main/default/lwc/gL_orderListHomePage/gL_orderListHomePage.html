@@ -1,0 +1,154 @@
+<!---->
+<template>
+	<template if:true={isLoading}>
+		<section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open">
+			<div class="slds-modal__container" >
+				<lightning-button-icon icon-name="utility:close" size="medium" onclick={customHideModalPopup} alternative-text="Close" class="lightningClose"></lightning-button-icon>
+				<div class="slds-modal__header">
+				<h1 id="modal-heading-02" class="slds-modal__title slds-hyphenate">{labels.reorder}</h1>
+				<p class="slds-modal__title slds-hyphenate">{labels.addingItems}</p>
+				<lightning-spinner
+				class="slds-is-relative slds-align_absolute-center slds-var-m-around_large"
+				alternative-text="loading"
+				size="medium"
+				variant="brand">
+				</lightning-spinner>
+				</div>
+			</div>
+			</section>
+			<div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+	</template>
+	<template if:true={isLoaded}>
+		<div class="slds-var-p-top_medium">
+			<h1 class="slds-text-heading_large slds-var-p-bottom_medium rcnt">{labels.recentOrders}</h1>
+		</div>
+		<template if:false={orderListIsEmpty}>
+			<div class="slds-text-body_small slds-var-m-top_x-small">
+				{orderListLength}&nbsp;{orderListLengthCounterLabel}
+				<!--lightning-helptext style="float:right" content="Ver Tracking"></lightning-helptext>
+				<button class="slds-button slds-button_icon slds-button slds-button_icon" aria-describedby="help" aria-disabled="true" title="Help">
+					<svg class="slds-button__icon" aria-hidden="true">
+						<use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#info"></use>
+					</svg>
+					<span class="slds-assistive-text">Ver Tracking</span>
+				</button>
+				<div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left" role="tooltip" id="help" style="position:absolute;top:-4px;left:15px">
+					  <div class="slds-popover__body">Ver Tracking</div>
+				</div-->
+			</div>
+			<div role="list">
+				<template for:each={orderList} for:item="order">
+					<div key={order.id} class="order-list-item" data-target-id={order.id}>
+						<div class="slds-grid slds-wrap" data-target-id={order.id}>
+							<template if:true={isDesktop}>
+								<div class="slds-col slds-grid slds-size_10-of-12 slds-small-size_5-of-7" data-target-id={order.id}>
+									<div class="paragraphs" data-target-id={order.id}>
+										<p>{labels.name}: <lightning-button variant="base" data-target-id={order.id} label={order.name} onclick={navToRecord} class="slds-text-heading_x-small"></lightning-button></p>
+										<!--<lightning-button variant="base" data-target-id={order.id} label={order.name} onclick={navToRecord} class="slds-text-heading_x-small"></lightning-button>-->
+										<p>{labels.date}:&nbsp;{order.orderDate}</p>
+										<p>{labels.status}:&nbsp;{order.status}</p>
+										<p>{labels.total}:&nbsp;<lightning-formatted-number value={order.total} format-style="currency" currency-code="EUR" minimum-fraction-digits="2" maximum-fraction-digits="2"></lightning-formatted-number></p>
+									</div>
+								</div>
+							<div class="slds-col slds-grid slds-grid_align-end slds-size_2-of-12 slds-small-size_2-of-7" style="display: flex; flex-direction: column;">
+								<template for:each={order.trackings} for:item="tracking">
+									<div key={tracking} class="paragraphs2">
+										<p>
+											<template if:false={isChaves}>
+												<lightning-button variant="base" data-target-id={tracking.value} label={tracking.label} title={tracking.label} icon-name="utility:truck" icon-position="left" onclick={openURL} class="slds-text-heading_x-small slds-button__icon_large"></lightning-button>
+											</template>
+											<template if:true={isChaves}>
+												<lightning-button variant="base" data-target-id={tracking.value} label="" title="" icon-class="slds-m-bottom_x-small" icon-name="utility:truck" icon-position="left" onclick={openURL} class="slds-m-left_large trackingChaves slds-button__icon_large" style="--lwc-dxpGNeutral3: rgb(118, 113, 107);"></lightning-button>
+											</template>
+										</p>
+									</div>
+								</template>
+							</div>
+						</template>
+						<template if:true={isMobile}>
+							<div class="slds-col slds-grid slds-size_4.5-of-14 slds-small-size_4-of-7" data-target-id={order.id}>
+								<div class="paragraphs" data-target-id={order.id}>
+									<!-- <p>{labels.name}:&nbsp;{order.name}</p> -->
+									<lightning-button variant="neutral" data-target-id={order.Id} label={order.name} onclick={navToRecord} class="slds-text-heading_x-small"></lightning-button>
+									<p>{labels.date}:&nbsp;{order.orderDate}</p>
+									<p>{labels.status}:&nbsp;{order.status}</p>
+									<p>{labels.total}:&nbsp;<lightning-formatted-number value={order.total} format-style="currency" currency-code="EUR" minimum-fraction-digits="2" maximum-fraction-digits="2"></lightning-formatted-number></p>
+								</div>
+							</div>
+							<div class="slds-col slds-grid slds-grid_align-end slds-size_5.5-of-12 slds-small-size_2-of-7" style="display: flex; flex-direction: column; ">
+								<template for:each={order.trackings} for:item="tracking">
+									<div key={tracking} class="paragraphs2" style="float: right">
+										<p>
+											<template if:false={isChaves}>
+												<lightning-button variant="base" data-target-id={tracking.value} label={tracking.label} title={tracking.label} icon-name="utility:truck" icon-position="left" onclick={openURL} class="slds-text-heading_x-small slds-button__icon_large"></lightning-button>
+											</template>
+											<template if:true={isChaves}>
+												<lightning-button variant="base" data-target-id={tracking.value} label={tracking.label} title={tracking.label} icon-class="slds-m-bottom_x-small" icon-name="utility:truck" icon-position="left" onclick={openURL} class="slds-m-left_large trackingChaves slds-button__icon_large" style="--lwc-dxpGNeutral3: rgb(118, 113, 107);"></lightning-button>
+											</template>
+									</p>
+									</div>
+								</template>
+							</div>
+						</template>
+						<template if:true={isTablet}>
+							<div class="slds-col slds-grid slds-size_6-of-12 slds-small-size_7-of-8" style="width:80%" data-target-id={order.id}>
+								<div class="paragraphs" data-target-id={order.id}>
+									<!-- <p>{labels.name}:&nbsp;{order.name}</p> -->
+									<lightning-button variant="neutral" data-target-id={order.Id} label={order.name} onclick={navToRecord} class="slds-text-heading_x-small"></lightning-button>
+									<p>{labels.date}:&nbsp;{order.orderDate}</p>
+									<p>{labels.status}:&nbsp;{order.status}</p>
+									<p>{labels.total}:&nbsp;<lightning-formatted-number value={order.total} format-style="currency" currency-code="EUR" minimum-fraction-digits="2" maximum-fraction-digits="2"></lightning-formatted-number></p>
+								</div>
+							</div>
+							<div class="slds-col slds-grid slds-grid_align-end slds-size_6-of-12 slds-small-size_1-of-8" style="display: flex;flex-direction: column;align-items: flex-start;width: 20%;flex-wrap: wrap;align-content: flex-end;">
+								<template for:each={order.trackings} for:item="tracking">
+									<div key={tracking} class="paragraphs2">
+										<p>
+											<template if:false={isChaves}>
+												<lightning-button variant="base" data-target-id={tracking.value} label={tracking.label} title="Ver Tracking" icon-name="utility:truck" icon-position="left" onclick={openURL} class="slds-text-heading_x-small slds-button__icon_large"></lightning-button>
+											</template>
+											<template if:true={isChaves}>
+												<lightning-button variant="base" data-target-id={tracking.value} label={tracking.label} title="Ver Tracking" icon-class="slds-m-bottom_x-small" icon-name="utility:truck" icon-position="left" onclick={openURL} class="slds-m-left_large trackingChaves slds-button__icon_large" style="--lwc-dxpGNeutral3: rgb(118, 113, 107);"></lightning-button>
+											</template>
+									</p>
+									</div>
+								</template>
+							</div>
+						</template>
+						</div>
+						<div data-target-id={order.id}>
+                            <button class="slds-button slds-button_neutral slds-button_stretch" type="button" data-target-id={order.id} disabled={order.disabled} onclick={addItems}>{labels.addToCart}</button>
+						</div>   
+					</div>
+				</template>
+				<div class="slds-var-p-around_x-small slds-align_absolute-center">
+					<lightning-button variant="base" label={labels.goTo} onclick={navToList}></lightning-button>
+				</div>
+			</div>
+		</template>
+        <template if:true={customFormModal}>
+			<template if:true={isLoaded}>
+            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" >
+					<lightning-button-icon icon-name="utility:close" onclick={customHideModalPopup} alternative-text="Close" size="medium" class="lightningClose"></lightning-button-icon>
+                    <div class="slds-modal__header">
+                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{labels.allItems}</h1>
+                    </div>
+                    <div class="slds-modal__footer slds-modal__footer_directional">
+                    <button class="slds-button slds-button_neutral" onclick={navToCart}>{labels.viewCart}</button>
+                    <button class="slds-button slds-button_brand" onclick={customHideModalPopup}>{labels.shopping}</button>
+                    </div>
+                </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+            </template>
+		</template>
+		<template if:true={orderListIsEmpty}>
+			<div class="slds-grid_vertical slds-align_absolute-left emptyState">
+				<div class="emptyStateTitle">
+					<p>{labels.emptyList}</p>
+				</div>
+			</div>
+		</template>
+	</template>
+</template>

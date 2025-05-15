@@ -1,0 +1,76 @@
+<template>
+    <lightning-spinner if:false={isLoaded}
+					   class="slds-is-relative slds-align_absolute-center slds-var-m-around_large"
+					   alternative-text="Loading"
+					   size="medium"
+					   variant="brand">
+    </lightning-spinner>
+
+    <template if:true={isLoaded}>
+        <div class="converter-container">
+			<template if:false={factorTablet}>
+			<div class="slds-grid slds-gutters slds-wrap slds-grid_vertical-align-center">
+				<div class="slds-col slds-size_12-of-12 slds-medium-size_4-of-12 slds-large-size_6-of-12 converter-img-wrapper">
+					<img class="converter-img" src="/indexfix/cms/delivery/media/MCWBVEUKC6PZAFZAOSUELP4LNFPA">
+				</div>                        
+				<div class="slds-col slds-size_12-of-12 slds-medium-size_8-of-12 slds-large-size_6-of-12 converter-info">
+					<h1 class="slds-text-heading_large slds-var-m-bottom_small slds-var-m-top_small">{labels.uploadFile}</h1>
+					<div class="slds-var-m-right_small">
+						<p class="slds-var-m-bottom_large">{labels.description} {storeLabel}.</p>
+						<p class="slds-var-m-bottom_large">{labels.steps}</p>
+						<p class="slds-var-m-left_medium slds-var-m-bottom_large">{labels.fstep}</p>
+						<p class="slds-var-m-left_medium slds-var-m-bottom_large">{labels.sstep}</p>
+						<p class="slds-var-m-left_medium slds-var-m-bottom_large">{labels.tstep}</p>
+						<p class="slds-var-m-left_medium slds-var-m-bottom_large">{labels.fourstep}</p>
+						<p class="slds-var-m-bottom_large">{labels.limitAdvice}</p>
+					</div>
+					<div class="converter-container-actions">
+						<lightning-input class="slds-var-m-right_x-small"
+											variant="label-hidden"
+											name="file uploader" 
+											accept=".xlsx" 
+											onchange={handleUploadFinished}
+											type="file" 
+											multiple>
+						</lightning-input>
+						<lightning-button class="slds-var-m-bottom_xxx-small" 
+											label={labels.downloadProducts}
+											icon-name="utility:download"
+											onclick={download}>
+						</lightning-button>
+					</div>
+				</div>                     
+			</div>
+			</template>
+			<template if:true={factorTablet}>
+				<div class="slds-grid slds-gutters slds-wrap slds-align_absolute-center">
+					<div class="slds-col slds-size_12-of-12 slds-medium-size_10-of-12 slds-large-size_10-of-12 converter-info">
+						<h1 class="slds-text-heading_large slds-var-m-bottom_small slds-var-m-top_small">{labels.uploadFile}</h1>
+						<div class="slds-var-m-right_small">
+							<p class="slds-var-m-bottom_large">{labels.description} {storeLabel}.</p>
+							<p class="slds-var-m-bottom_large">{labels.limitAdvice}</p>
+						</div>
+						<div class="slds-col slds-size_12-of-12 slds-medium-size_7-of-12 slds-large-size_7-of-12 slds-align_absolute-center">
+							<img class="converter-img" src="/indexfix/cms/delivery/media/MCWBVEUKC6PZAFZAOSUELP4LNFPA">
+						</div>  
+						<div class="converter-container-actions">
+								<lightning-input class="slds-var-m-right_x-small"
+												variant="label-hidden"
+												 name="file uploader" 
+												 accept=".xlsx" 
+												 onchange={handleUploadFinished}
+												 type="file" 
+												 multiple>
+								</lightning-input>
+								<lightning-button class="slds-var-m-bottom_xxx-small" 
+												  label={labels.downloadProducts}
+												  icon-name="utility:download"
+												  onclick={download}>
+								</lightning-button>
+						</div>
+					</div>
+				</div>
+			</template>
+        </div>
+    </template>
+</template>

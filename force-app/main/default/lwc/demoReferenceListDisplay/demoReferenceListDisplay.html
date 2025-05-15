@@ -1,0 +1,316 @@
+<template>
+    <lightning-spinner
+        if:false={isLoaded}
+        class="slds-is-relative slds-align_absolute-center slds-m-around_large"
+        alternative-text="Loading product information..."
+        size="medium"
+        variant="brand">
+    </lightning-spinner>
+
+	<div if:true={isLoaded}>
+		<div if:true={hasReferences}>
+			<p class="slds-align_absolute-center slds-text-heading_large slds-m-bottom_small">{listTitle}</p>
+			<div class="slds-wrap slds-grid slds">
+				<div class="slds-size_1-of-1 slds-wrap slds-grid slds">
+					<span class="slds-size_3-of-15">Diametro: </span>
+					<template for:each={set_diameterFilter} for:item="diameterFilter">
+						<lightning-button key={diameterFilter} label={diameterFilter} data-target-id={diameterFilter} onclick={handleDiameterFilter} class="slds-size_1-of-15 slds-m-around_xx-small slds-p-around_xx-small"></lightning-button>
+					</template>
+				</div>
+				<div class="slds-size_1-of-1 slds-wrap slds-grid slds">
+					<span class="slds-size_3-of-15">Longitud: </span>
+					<template for:each={set_lengthFilter} for:item="lengthFilter">
+						<lightning-button key={lengthFilter} label={lengthFilter} data-target-id={lengthFilter} onclick={handleLengthFilter} class="slds-size_1-of-15 slds-m-around_xx-small slds-p-around_xx-small"></lightning-button>
+					</template>
+				</div>
+			</div>
+			<table class="table-refs">
+				<thead>
+					<tr>
+						<th>Código</th>
+						<th>Medida</th>
+						<th>Precio</th>
+						<th>Unidades</th>
+						<th>Acciones</th>
+					</tr>	
+				</thead>
+				<tbody>
+					<template for:each={referenceList} for:item="reference">
+						<tr key={reference.Id}>
+							<td data-title="Código">{reference.stockKeepingUnit}</td>
+							<td data-title="Medida">{reference.measurements}</td>
+							<td data-title="Precio">{reference.price}</td>
+							<td data-title="Unidades" class="slds-wrap slds-grid slds">
+								<lightning-button-icon
+									data-target-id={reference.Id}
+									icon-name="utility:dash"
+									variant="brand"
+									alternative-text="dash"
+									onclick={subtractQuantityStep}>
+								</lightning-button-icon>
+								<lightning-input
+									data-target-id={reference.Id}
+									variant="label-hidden"
+									type="number"
+									name="quantity"
+									value={reference.quantity}
+									oncommit={handleQuantityChange}>
+								</lightning-input>
+								<lightning-button-icon
+									data-target-id={reference.Id}
+									icon-name="utility:add"
+									variant="brand"
+									alternative-text="add"
+									onclick={addQuantityStep}>
+								</lightning-button-icon>
+							</td>
+							<td data-title="Acciones">
+								<lightning-button-menu alternative-text="favorite" variant="border-filled" icon-name="utility:favorite" class="slds-m-right_x-small">
+									<lightning-menu-item value="favorites" label="Añadir a favoritos" icon-name="utility:favorite"></lightning-menu-item>
+									<lightning-menu-item value="lista1" label="Añadir a lista 1" icon-name="utility:metrics"></lightning-menu-item>
+									<lightning-menu-item value="lista2" label="Añadir a lista 'Ofertas'" icon-name="utility:date_input"></lightning-menu-item>
+									<lightning-menu-item value="lista3" label="Añadir a lista 'Anclajes met...'" icon-name="utility:custom_apps"></lightning-menu-item>
+								</lightning-button-menu>
+								<!-- <lightning-button-icon class="slds-m-right_x-small"
+									data-target-id={reference.Id}
+									data-name="FAVORITOS"
+									icon-name="utility:favorite"
+									variant="border-filled"
+									alternative-text="favorite"
+									onclick={addToList}>
+								</lightning-button-icon> -->
+								<lightning-button-icon
+									data-target-id={reference.Id}
+									icon-name="utility:cart"
+									variant="brand"
+									alternative-text="cart"
+									onclick={addToCart}>
+								</lightning-button-icon>
+							</td>
+						</tr>
+					</template>
+				</tbody>
+			</table>
+			<!-- <div class="slds-wrap slds-grid slds">
+				<div class="slds-size_1-of-1 slds-wrap slds-grid slds">
+					<span class="slds-size_3-of-15">Longitud: </span>
+					<lightning-button label="50" data-target-id="50" onclick={handleLengthFilter} class="slds-size_1-of-15 slds-m-around_xx-small slds-p-around_xx-small"></lightning-button>
+					<lightning-button label="75" data-target-id="75" onclick={handleLengthFilter} class="slds-size_1-of-15 slds-m-around_xx-small slds-p-around_xx-small"></lightning-button>
+					<lightning-button label="90" data-target-id="90" onclick={handleLengthFilter} class="slds-size_1-of-15 slds-m-around_xx-small slds-p-around_xx-small"></lightning-button>
+					<lightning-button label="100" data-target-id="100" onclick={handleLengthFilter} class="slds-size_1-of-15 slds-m-around_xx-small slds-p-around_xx-small"></lightning-button>
+				</div>
+				<div class="slds-size_1-of-1 slds-wrap slds-grid slds">
+					<span class="slds-size_3-of-15">Diametro: </span>
+					<lightning-button label="8" data-target-id="8" onclick={handleDiameterFilter} class="slds-size_1-of-15 slds-m-around_xx-small slds-p-around_xx-small"></lightning-button>
+					<lightning-button label="10" data-target-id="10" onclick={handleDiameterFilter} class="slds-size_1-of-15 slds-m-around_xx-small slds-p-around_xx-small"></lightning-button>
+					<lightning-button label="12" data-target-id="12" onclick={handleDiameterFilter} class="slds-size_1-of-15 slds-m-around_xx-small slds-p-around_xx-small"></lightning-button>
+				</div>
+			</div>
+			<table class="table-refs">
+				<thead>
+					<tr>
+						<th>Código</th>
+						<th>Medida</th>
+						<th>Precio</th>
+						<th>Unidades</th>
+						<th>Acciones</th>
+					</tr>	
+				</thead>
+				<tbody>
+					<tr class={ref1class}>
+						<td data-title="Código">AP08050</td>
+						<td data-title="Medida">M8 x 50 Ø8</td>
+						<td data-title="Precio">92,276€ /100</td>
+						<td data-title="Unidades" class="slds-wrap slds-grid slds">
+							<lightning-button-icon
+								data-target-id="01t1w000007YC7hAAG"
+								icon-name="utility:dash"
+								variant="brand"
+								alternative-text="dash"
+								onclick={subtractQuantityStep}>
+							</lightning-button-icon>
+							<lightning-input
+								data-target-id="01t1w000007YC7hAAG"
+								variant="label-hidden"
+								type="number"
+								name="quantity"
+								value={selectedQuantity1}
+								oncommit={handleQuantityChange}>
+							</lightning-input>
+							<lightning-button-icon
+								data-target-id="01t1w000007YC7hAAG"
+								icon-name="utility:add"
+								variant="brand"
+								alternative-text="add"
+								onclick={addQuantityStep}>
+							</lightning-button-icon>
+						</td>
+						<td data-title="Acciones">
+							<lightning-button-icon class="slds-m-right_x-small"
+								data-target-id="01t1w000007YC7hAAG"
+								data-name="FAVORITOS"
+								icon-name="utility:favorite"
+								variant="border-filled"
+								alternative-text="favorite"
+								onclick={addToList}>
+							</lightning-button-icon>
+							<lightning-button-icon
+								data-target-id="01t1w000007YC7hAAG"
+								icon-name="utility:cart"
+								variant="brand"
+								alternative-text="cart"
+								onclick={addToCart}>
+							</lightning-button-icon>
+						</td>
+					</tr><tr class={ref2class}>
+						<td data-title="Código">AP08075</td>
+						<td data-title="Medida">M8 x 75 Ø8</td>
+						<td data-title="Precio">97,737€ /100</td>
+						<td data-title="Unidades" class="slds-wrap slds-grid slds">
+							<lightning-button-icon
+								data-target-id="01t1w000007YC7iAAG"
+								icon-name="utility:dash"
+								variant="brand"
+								alternative-text="dash"
+								onclick={subtractQuantityStep}>
+							</lightning-button-icon>
+							<lightning-input
+								data-target-id="01t1w000007YC7iAAG"
+								variant="label-hidden"
+								type="number"
+								name="quantity"
+								value={selectedQuantity2}
+								oncommit={handleQuantityChange}>
+							</lightning-input>
+							<lightning-button-icon
+								data-target-id="01t1w000007YC7iAAG"
+								icon-name="utility:add"
+								variant="brand"
+								alternative-text="add"
+								onclick={addQuantityStep}>
+							</lightning-button-icon>
+						</td>
+						<td data-title="Acciones">
+							<lightning-button-icon class="slds-m-right_x-small"
+								data-target-id="01t1w000007YC7iAAG"
+								data-name="FAVORITOS"
+								icon-name="utility:favorite"
+								variant="border-filled"
+								alternative-text="favorite"
+								onclick={addToList}>
+							</lightning-button-icon>
+							<lightning-button-icon
+								data-target-id="01t1w000007YC7iAAG"
+								icon-name="utility:cart"
+								variant="brand"
+								alternative-text="cart"
+								onclick={addToCart}>
+							</lightning-button-icon>
+						</td>
+					</tr><tr class={ref3class}>
+						<td data-title="Código">AP10090</td>
+						<td data-title="Medida">M10 x 90 Ø10</td>
+						<td data-title="Precio">133,634€ /100</td>
+						<td data-title="Unidades" class="slds-wrap slds-grid slds">
+							<lightning-button-icon
+								data-target-id="01t1w000007YC7lAAG"
+								icon-name="utility:dash"
+								variant="brand"
+								alternative-text="dash"
+								onclick={subtractQuantityStep}>
+							</lightning-button-icon>
+							<lightning-input
+								data-target-id="01t1w000007YC7lAAG"
+								variant="label-hidden"
+								type="number"
+								name="quantity"
+								value={selectedQuantity3}
+								oncommit={handleQuantityChange}>
+							</lightning-input>
+							<lightning-button-icon
+								data-target-id="01t1w000007YC7lAAG"
+								icon-name="utility:add"
+								variant="brand"
+								alternative-text="add"
+								onclick={addQuantityStep}>
+							</lightning-button-icon>
+						</td>
+						<td data-title="Acciones">
+							<lightning-button-icon class="slds-m-right_x-small"
+								data-target-id="01t1w000007YC7lAAG"
+								data-name="FAVORITOS"
+								icon-name="utility:favorite"
+								variant="border-filled"
+								alternative-text="favorite"
+								onclick={addToList}>
+							</lightning-button-icon>
+							<lightning-button-icon
+								data-target-id="01t1w000007YC7lAAG"
+								icon-name="utility:cart"
+								variant="brand"
+								alternative-text="cart"
+								onclick={addToCart}>
+							</lightning-button-icon>
+						</td>
+					</tr><tr class={ref4class}>
+						<td data-title="Código">AP12100</td>
+						<td data-title="Medida">M12 x 100 Ø12</td>
+						<td data-title="Precio">209,69€ /100</td>
+						<td data-title="Unidades" class="slds-wrap slds-grid slds">
+							<lightning-button-icon
+								data-target-id="01t1w000007YC7sAAG"
+								icon-name="utility:dash"
+								variant="brand"
+								alternative-text="dash"
+								onclick={subtractQuantityStep}>
+							</lightning-button-icon>
+							<lightning-input
+								data-target-id="01t1w000007YC7sAAG"
+								variant="label-hidden"
+								type="number"
+								name="quantity"
+								value={selectedQuantity4}
+								oncommit={handleQuantityChange}>
+							</lightning-input>
+							<lightning-button-icon
+								data-target-id="01t1w000007YC7sAAG"
+								icon-name="utility:add"
+								variant="brand"
+								alternative-text="add"
+								onclick={addQuantityStep}>
+							</lightning-button-icon>
+						</td>
+						<td data-title="Acciones">
+							<lightning-button-icon class="slds-m-right_x-small"
+								data-target-id="01t1w000007YC7sAAG"
+								data-name="FAVORITOS"
+								icon-name="utility:favorite"
+								variant="border-filled"
+								alternative-text="favorite"
+								onclick={addToList}>
+							</lightning-button-icon>
+							<lightning-button-icon
+								data-target-id="01t1w000007YC7sAAG"
+								icon-name="utility:cart"
+								variant="brand"
+								alternative-text="cart"
+								onclick={addToCart}>
+							</lightning-button-icon>
+						</td>
+					</tr>
+				</tbody>
+			</table> -->
+		</div>
+
+		<div if:false={hasReferences} class="slds-align_absolute-center slds-grid slds-wrap">
+			<lightning-icon
+				class="slds-m-around_xx-small"
+				icon-name="utility:info"
+				alternative-text="info"
+				size="small"
+				title="small size">
+			</lightning-icon>
+			<span>Este producto no tiene referencias</span>
+		</div>
+	</div>
+</template>

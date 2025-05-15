@@ -1,0 +1,19 @@
+.store-selection-wrapper{
+    padding: 0.35rem 0;
+}
+.store-selection-wrapper .store-selection{
+    /* max-width: 100%; */
+    /* width: 105rem; */
+    padding: 0 0.75rem;
+    margin:0 auto;
+}
+.store-selection-wrapper .store-selection .store-selection-label {
+    display: inline-block;
+}
+.store-selection-wrapper .store-selection .store-selection-store {
+    height: 1.5rem;
+    margin: 0.5rem;
+}
+.store-selection-wrapper .store-selection .store-selection-store:hover {
+    cursor: pointer;
+}

@@ -1,0 +1,95 @@
+/*---header---*/
+.mobile-header-chavesbao {
+    padding: 0.5rem;
+    background: #75787B; 
+    color: #FFFFFF;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.mobile-header-indexfix {
+    padding: 0.5rem;
+    background: #003865;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.material-name {
+	padding-left: 0.1rem;
+    font-weight: bold;
+    font-size: large;
+}
+@media (max-width: 767px) {
+    .flex-wrap{
+        flex-wrap: wrap;
+    }
+    .filter-list-name{
+        width:100%;
+    }
+    .filter-list-filters{
+        width:100%;
+    }
+  }
+/*---body---*/
+.ref-list-mobile-body{
+    overflow: auto;
+    height: 75vh;
+    display: block;
+    width: 100%;
+    position: relative;
+}
+.ref-list-mobile-body .ref-list-mobile-line {
+    background: #ffff;
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    display: block;
+    border-bottom: solid 1px #ccc;
+}
+/*.ref-list-mobile-body .ref-list-mobile-line:nth-child(even) {
+    background: #f9f9f9;
+}*/
+
+.filters-border-chavesbao {
+	border-top-style: solid;
+	border-top-color: rgb(176, 22, 48);
+	border-top-width: 1px;
+}
+.filters-border-indexfix {
+    border-top-style: solid;
+	border-top-color: #003865;
+	border-top-width: 1px;
+}
+
+.button-chaves {
+    --lwc-colorTextIconDefault: #2d2926;
+    --slds-c-tooltip-color-background: rgb(176, 22, 48) !important;
+    --slds-c-popover-color-background: rgb(176, 22, 48) !important;
+}
+.button-filters {
+    display: inline-block;
+    margin: 0.2rem 0.4rem 0.2rem 0;
+    --slds-c-button-line-height: 1.5rem;
+    --slds-c-button-outline-brand-spacing-inline-start: 0.8rem;
+    --slds-c-button-outline-brand-spacing-inline-end: 0.8rem;
+    --slds-c-button-radius-border: 0rem;
+    --slds-c-button-text-color: #000000;
+    --slds-c-button-outline-brand-color-border: #000000;
+}
+
+.button-style{
+    --slds-c-button-text-color: #003865;
+    --slds-c-button-text-color-active: #003865;
+    --slds-c-button-text-color-hover: #003865;
+    --slds-c-button-outline-brand-color-border: #003865;
+    --slds-c-button-radius-border: 1rem;
+    margin-left: 20px;
+}
+.button-style-chaves{
+    --slds-c-button-text-color: rgb(176, 22, 48);
+    --slds-c-button-text-color-active: rgb(176, 22, 48);
+    --slds-c-button-text-color-hover: rgb(176, 22, 48);
+    --slds-c-button-outline-brand-color-border: rgb(176, 22, 48);
+    --slds-c-button-radius-border: 1rem;
+    margin-left: 20px;
+}

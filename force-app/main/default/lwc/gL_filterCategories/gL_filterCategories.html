@@ -1,0 +1,93 @@
+<template>
+    <div class="product-filter-header-mobile">
+        <lightning-button 
+        variant="neutral" 
+        label="Cancel" 
+        onclick={cancelFilter} 
+        style="margin-top: -3px">
+        </lightning-button>
+
+        <h1>{labels.filtersLabel}</h1>
+
+        <lightning-button 
+        variant="neutral" 
+        label="Apply" 
+        onclick={applyFilter} 
+        style="margin-top: -3px">
+        </lightning-button>
+    </div>
+  
+    <div>
+        <lightning-button 
+        class="clear-all-button"
+        variant="base"
+        label={labels.clearAllLabel} 
+        alternative-text={labels.filtersLabel} 
+        onclick={buttonClearFilters}>
+        </lightning-button>
+    </div> 
+
+    <div>
+        <lightning-accordion
+            class="slds-border_top"
+            active-section-name={activeSectionsList}>
+            <lightning-accordion-section if:true={showUseMaterialFilter}
+                name="use_material"
+                label={labels.useMaterialLabel}>
+                <template for:each={useMaterialFilterSet} for:item="filter">
+                    <lightning-input
+                        class="slds-p-left_medium slds-p-bottom_small"
+                        key={filter}
+                        label={filter}
+                        data-target-id={filter}
+                        type="checkbox"
+                        onchange={handleFilterSel}>
+                    </lightning-input>
+                </template>
+            </lightning-accordion-section>
+            <lightning-accordion-section if:true={showCoveringFilter}
+                name="covering"
+                label={labels.finishLabel}>
+                <template for:each={coveringFilterSet} for:item="filter">
+                    <lightning-input
+                        class="slds-p-left_medium slds-p-bottom_small"
+                        key={filter}
+                        label={filter}
+                        data-target-id={filter}
+                        type="checkbox"
+                        onchange={handleFilterSel}>
+                        </lightning-input>
+                </template>
+            </lightning-accordion-section>
+            <lightning-accordion-section if:true={showHomologatedFilter}
+                name="homologated"
+                label={labels.homologatedLabel}>
+                <template for:each={homologatedFilterSet} for:item="filter">
+                    <lightning-input
+                        class="slds-p-left_medium slds-p-bottom_small"
+                        key={filter}
+                        label={filter}
+                        data-target-id={filter}
+                        type="checkbox"
+                        onchange={handleFilterSel}>
+                        </lightning-input>
+                </template>
+            </lightning-accordion-section>
+            <lightning-accordion-section if:true={showImprintFilter}
+                name="imprint"
+                label={labels.imprintLabel}>
+                <template for:each={imprintFilterSet} for:item="filter">
+                    <lightning-input
+                        class="slds-p-left_medium slds-p-bottom_small"
+                        key={filter}
+                        label={filter}
+                        data-target-id={filter}
+                        type="checkbox"
+                        onchange={handleFilterSel}>
+                        </lightning-input>
+                </template>
+            </lightning-accordion-section>
+        </lightning-accordion>
+        </div> 
+    
+</template>

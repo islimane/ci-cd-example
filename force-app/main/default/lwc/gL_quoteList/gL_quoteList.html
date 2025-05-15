@@ -1,0 +1,204 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 12-12-2022
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
+<template>
+    <lightning-spinner
+		if:false={isLoaded}
+		class="slds-is-relative slds-align_absolute-center slds-var-m-around_large"
+		alternative-text="loading"
+		size="medium"
+		variant="brand">
+    </lightning-spinner>
+
+	<template if:true={isLoaded}>
+		<div class="slds-var-p-top_medium">
+			<h1 class="slds-text-heading_large slds-var-p-bottom_medium my-quotes-heading">{labels.myQuotes}</h1>
+			<div class="slds-grid slds-wrap">
+				<div class="slds-grid slds-wrap">
+					<div class="slds-align-middle slds-var-m-right_small">{labels.filter}</div>
+					<div class="slds-grid_vertical">
+						<div class="slds-grid">
+							<lightning-input class="slds-var-m-right_small" type="date" label={labels.startDate} value={startDate} onblur={setStartDate} date-style="short"></lightning-input>
+							<lightning-input class="slds-var-m-right_small" type="date" label={labels.endDate} value={endDate} onblur={setEndDate} date-style="short"></lightning-input>
+						</div>
+					</div>
+					<div class="slds-grid my-quotes-filter-actions">
+						<lightning-button class="slds-var-m-right_small" variant="brand" label={labels.apply} disabled={disableApplyBtn} onclick={applyDateFilters}></lightning-button>
+						<lightning-button variant="base" label={labels.reset} onclick={resetDateFilters}></lightning-button>
+					</div>
+				</div>
+				<div class="slds-container_right slds-align-middle">
+					<lightning-button-menu
+						variant="container"
+						menu-alignment="left"
+						label={sortingOrderLabel}
+						onselect={handleSortChange}>
+						<template for:each={sortingOptions} for:item="option">
+							<lightning-menu-item
+								key={option.value}
+								value={option.value}
+								label={option.label}
+								checked={option.checked}>
+							</lightning-menu-item>
+						</template>
+					</lightning-button-menu>
+				</div>
+			</div>
+		</div>
+
+		<template if:false={quoteListIsEmpty}>
+			<div class="slds-text-body_small slds-var-m-top_x-small record-count">
+				{quoteListLengthCounter}&nbsp;{quoteListLengthCounterLabel}
+			</div>
+
+			<div class="quote-list">
+				<template if:true={showEntireQuoteList}>
+					<template if:true={showFilteredQuoteList}>
+						<template for:each={filteredQuoteList} for:item="quote">
+							<div key={quote.id} class="quote-list-item" data-target-id={quote.id}>
+								<div class="slds-box slds-grid slds-grid_align-spread slds-grid_vertical-align-center" data-target-id={quote.id}>
+									<div class="quote-list-item-info" data-target-id={quote.id}>
+										<div class="slds-grid slds-wrap" data-target-id={quote.id}>
+											<div class="slds-truncate slds-var-p-right_small  quote-list-item-col1">
+												<strong>{labels.name}</strong>&nbsp;<span>{quote.name}</span>
+											</div>
+											<div class="slds-truncate slds-var-p-right_small  quote-list-item-col2">
+												<strong>{labels.date}</strong>&nbsp;<span>{quote.quoteDate}</span>
+											</div>
+											<div class="slds-truncate slds-var-p-right_small  quote-list-item-col3">
+												<strong>{labels.status}</strong>&nbsp;<span>{quote.statusLabel}</span>
+											</div>
+											<div class="slds-truncate slds-var-p-right_small  quote-list-item-col4">
+												<strong>{labels.total}</strong>&nbsp;<span><lightning-formatted-number value={quote.total} format-style="currency" currency-code="EUR" minimum-fraction-digits="2" maximum-fraction-digits="2"></lightning-formatted-number></span>
+											</div>
+										</div>
+									</div>
+									<div class="quote-list-item-actions slds-grid small-region slds-align-middle" data-target-id={quote.id}>
+										<button class="slds-button slds-button_neutral slds-button_stretch" type="button" data-target-id={quote.id} disabled={quote.disabled} onclick={addItemsToCart}>{labels.addToCart}</button>
+										<lightning-button class="slds-align_absolute-center" variant="base" label={labels.view} data-target-id={quote.id} onclick={navToDetail}></lightning-button>
+									</div>
+								</div>
+							</div>
+						</template>
+
+						<div if:true={filteredQuoteListIsEmpty} class="slds-text-align_center slds-text-color_weak slds-var-m-vertical_xx-large">
+							<h3 class="slds-text-heading_medium">{labels.emptyFilterList0}</h3>
+							<p class="slds-text-body_regular slds-var-p-top_small">{labels.emptyFilterList1}</p>
+						</div>
+					</template>
+
+					<template if:false={showFilteredQuoteList}>
+						<template for:each={quoteList} for:item="quote">
+							<div key={quote.id} class="quote-list-item" data-target-id={quote.id}>
+								<div class="slds-box slds-grid slds-grid_align-spread slds-grid_vertical-align-center" data-target-id={quote.id}>
+									<div class="quote-list-item-info" data-target-id={quote.id}>
+										<div class="slds-grid slds-wrap" data-target-id={quote.id}>
+											<div class="slds-truncate slds-var-p-right_small  quote-list-item-col1">
+												<strong>{labels.name}</strong>&nbsp;<span>{quote.name}</span>
+											</div>
+											<div class="slds-truncate slds-var-p-right_small  quote-list-item-col2">
+												<strong>{labels.date}</strong>&nbsp;<span>{quote.quoteDate}</span>
+											</div>
+											<div class="slds-truncate slds-var-p-right_small  quote-list-item-col3">
+												<strong>{labels.status}</strong>&nbsp;<span>{quote.statusLabel}</span>
+											</div>
+											<div class="slds-truncate slds-var-p-right_small  quote-list-item-col4">
+												<strong>{labels.total}</strong>&nbsp;<span><lightning-formatted-number value={quote.total} format-style="currency" currency-code="EUR" minimum-fraction-digits="2" maximum-fraction-digits="2"></lightning-formatted-number></span>
+											</div>
+										</div>
+									</div>
+									<div class="quote-list-item-actions slds-grid small-region slds-align-middle" data-target-id={quote.id}>
+										<button class="slds-button slds-button_neutral slds-button_stretch" type="button" data-target-id={quote.id} disabled={quote.disabled} onclick={addItemsToCart}>{labels.addToCart}</button>
+										<lightning-button class="slds-align_absolute-center" variant="base" label={labels.view} data-target-id={quote.id} onclick={navToDetail}></lightning-button>
+									</div>
+								</div>
+							</div>
+						</template>
+					</template>
+				</template>
+
+				<template if:true={showInitialQuoteList}>
+					<template if:true={showFilteredQuoteList}>
+						<template for:each={filteredQuoteList} for:item="quote">
+							<div key={quote.id} class="quote-list-item" data-target-id={quote.id}>
+								<div class="slds-box slds-grid slds-grid_align-spread slds-grid_vertical-align-center" data-target-id={quote.id}>
+									<div class="quote-list-item-info" data-target-id={quote.id}>
+										<div class="slds-grid slds-wrap" data-target-id={quote.id}>
+											<div class="slds-truncate slds-var-p-right_small  quote-list-item-col1">
+												<strong>{labels.name}</strong>&nbsp;<span>{quote.name}</span>
+											</div>
+											<div class="slds-truncate slds-var-p-right_small  quote-list-item-col2">
+												<strong>{labels.date}</strong>&nbsp;<span>{quote.quoteDate}</span>
+											</div>
+											<div class="slds-truncate slds-var-p-right_small  quote-list-item-col3">
+												<strong>{labels.status}</strong>&nbsp;<span>{quote.statusLabel}</span>
+											</div>
+											<div class="slds-truncate slds-var-p-right_small  quote-list-item-col4">
+												<strong>{labels.total}</strong>&nbsp;<span><lightning-formatted-number value={quote.total} format-style="currency" currency-code="EUR" minimum-fraction-digits="2" maximum-fraction-digits="2"></lightning-formatted-number></span>
+											</div>
+										</div>
+									</div>
+									<div class="quote-list-item-actions slds-grid small-region slds-align-middle" data-target-id={quote.id}>
+										<button class="slds-button slds-button_neutral slds-button_stretch" type="button" data-target-id={quote.id} disabled={quote.disabled} onclick={addItemsToCart}>{labels.addToCart}</button>
+										<lightning-button class="slds-align_absolute-center" variant="base" label={labels.view} data-target-id={quote.id} onclick={navToDetail}></lightning-button>
+									</div>
+								</div>
+							</div>
+						</template>
+
+						<div if:true={filteredQuoteListShowMore} class="slds-var-p-around_small slds-align_absolute-center">
+							<lightning-button class="slds-var-p-around_small" variant="base" label={labels.showMore} onclick={showMore}></lightning-button>
+						</div>
+
+						<div if:true={filteredQuoteListIsEmpty} class="slds-text-align_center slds-text-color_weak slds-var-m-vertical_xx-large">
+							<h3 class="slds-text-heading_medium">{labels.emptyFilterList0}</h3>
+							<p class="slds-text-body_regular slds-var-p-top_small">{labels.emptyFilterList1}</p>
+						</div>
+					</template>
+
+					<template if:false={showFilteredQuoteList}>
+						<template for:each={initialQuoteList} for:item="quote">
+							<div key={quote.id} class="quote-list-item" data-target-id={quote.id}>
+								<div class="slds-box slds-grid slds-grid_align-spread slds-grid_vertical-align-center" data-target-id={quote.id}>
+									<div class="quote-list-item-info" data-target-id={quote.id}>
+										<div class="slds-grid slds-wrap" data-target-id={quote.id}>
+											<div class="slds-truncate slds-var-p-right_small  quote-list-item-col1">
+												<strong>{labels.name}</strong>&nbsp;<span>{quote.name}</span>
+											</div>
+											<div class="slds-truncate slds-var-p-right_small  quote-list-item-col2">
+												<strong>{labels.date}</strong>&nbsp;<span>{quote.quoteDate}</span>
+											</div>
+											<div class="slds-truncate slds-var-p-right_small  quote-list-item-col3">
+												<strong>{labels.status}</strong>&nbsp;<span>{quote.statusLabel}</span>
+											</div>
+											<div class="slds-truncate slds-var-p-right_small  quote-list-item-col4">
+												<strong>{labels.total}</strong>&nbsp;<span><lightning-formatted-number value={quote.total} format-style="currency" currency-code="EUR" minimum-fraction-digits="2" maximum-fraction-digits="2"></lightning-formatted-number></span>
+											</div>
+										</div>
+									</div>
+									<div class="quote-list-item-actions slds-grid small-region slds-align-middle" data-target-id={quote.id}>
+										<button class="slds-button slds-button_neutral slds-button_stretch" type="button" data-target-id={quote.id} disabled={quote.disabled} onclick={addItemsToCart}>{labels.addToCart}</button>
+										<lightning-button class="slds-align_absolute-center" variant="base" label={labels.view} data-target-id={quote.id} onclick={navToDetail}></lightning-button>
+									</div>
+								</div>
+							</div>
+						</template>
+
+						<div class="slds-var-p-around_small slds-align_absolute-center">
+							<lightning-button class="slds-var-p-around_small" variant="base" label={labels.showMore} onclick={showMore}></lightning-button>
+						</div>
+					</template>
+				</template>
+			</div>
+		</template>
+
+		<div if:true={quoteListIsEmpty} class="slds-text-align_center slds-text-color_weak slds-var-m-vertical_xx-large">
+			<h3 class="slds-text-heading_medium">{labels.emptyList0}</h3>
+			<p class="slds-text-body_regular slds-var-p-top_small">{labels.emptyList1}</p>
+		</div>
+	</template>
+</template>

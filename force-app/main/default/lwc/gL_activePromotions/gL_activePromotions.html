@@ -1,0 +1,259 @@
+<!-- sldsValidatorIgnore -->
+<!--
+
+-->
+<template>
+    <template if:false={ischaves}>
+        <div class="certificate-header">
+            <h1>
+                <lightning-icon icon-name="standard:promotions" 
+                                alternative-text="Promociones" 
+                                title="Promociones"
+                                class="icon-color" 
+                                size="large">
+                </lightning-icon>
+                {labels.proms}
+            </h1>
+        </div>
+    </template>
+    <template if:true={ischaves}>
+        <div class="chaves-header">
+            <h1>
+                <lightning-icon icon-name="standard:promotions" 
+                                alternative-text="Promociones" 
+                                title="Promociones"
+                                class="icon-chaves" 
+                                size="large">
+                </lightning-icon> 
+                {labels.proms}
+            </h1>
+        </div>
+    </template>
+    <div class="promotion-check">
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-large-size_6-of-12">
+                <template if:false={ischaves}>
+                    <h2 class="index-h2">{labels.check}</h2>
+                </template>
+                <template if:true={ischaves}>
+                    <h2 class="chaves-h2">{labels.check}</h2>
+                </template>
+                <div class="d-flex">
+                    <lightning-input data-name="linputvalue"
+                                     class="b2b_buyer_cart-constrainedquantityselector_constrainedquantityselector"
+                                     variant="label-hidden" 
+                                     type="text" 
+                                     name="checkcoupon" 
+                                     placeholder="POREJEMPLO2201"
+                                     onchange={handleCPChange} 
+                                     oncommit={handleCheck} 
+                                     onkeypress={handleEnter}
+                                     style="--sds-c-input-radius-border: 0px">
+                    </lightning-input>
+                    <lightning-button-icon icon-name="utility:check" variant="brand" alternative-text="Check Coupon"
+                        disabled={isCouponDisabled} onclick={handleCheckCoupons}
+                        style="--sds-c-button-radius-border: 0px">
+                    </lightning-button-icon>
+                </div>
+            </div>
+        </div>
+        <div class="slds-grid slds-gutters slds-var-m-top_large">
+            <div class="slds-col slds-size_1-of-1">
+                <div class="promotion-items">
+                    <template if:true={haspromotions}>
+                        <template if:true={hascoupons}>
+                            <template for:each={mapDataC} for:item="mapKeyC">
+                                <div key={mapKeyC.key} class="slds-var-m-right_large">
+                                    <template if:true={mapKeyC.value.active}>
+                                        <p class="slds-var-m-bottom_x-small"><span
+                                                class="slds-badge slds-theme_success">{mapKeyC.value.code}</span></p>
+                                    </template>
+                                    <template if:false={mapKeyC.value.active}>
+                                        <p class="slds-var-m-bottom_x-small"><span class="slds-badge slds-theme_error">{mapKeyC.value.code}</span></p>
+                                    </template>
+                                    <p class="slds-var-m-bottom_x-small">{labels.date} {mapKeyC.value.enddate}</p>
+                                    <template if:true={mapKeyC.value.nameprom}>
+                                        <p class="slds-var-m-bottom_x-small">
+                                            <span>{labels.promo} </span>
+                                            <template if:false={ischaves}>
+                                                <span style="font-weight: bold; color: #003865;">{mapKeyC.value.nameprom}</span>
+                                            </template>
+                                            <template if:true={ischaves}>
+                                                <span style="font-weight: bold; color: rgb(176, 22, 48);">{mapKeyC.value.nameprom}</span>
+                                            </template>
+                                        </p>
+                                    </template>
+                                    <p class="slds-var-m-bottom_x-small">{labels.descri} {mapKeyC.value.description}</p>
+                                </div>
+                            </template>
+                        </template>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+    <template if:false={haspromotions}>
+        <p class="slds-var-m-vertical_large slds-align_absolute-center">{labels.noProms}</p>
+    </template>
+    <template if:true={haspromotions}>
+        <template for:each={mapData} for:item="mapKey">
+            <div key={mapKey.key} class="slds-grid slds-gutters slds-var-m-top_small">
+                <div class="slds-col slds-size_1-of-1">
+                    <template if:false={ischaves}>
+                        <h2 class="index-h2 slds-var-m-top_medium">{mapKey.value.name}</h2>
+                    </template>
+                    <template if:true={ischaves}>
+                        <h2 class="chaves-h2 slds-var-m-top_medium">{mapKey.value.name}</h2>
+                    </template>
+                    <div class="promotion-state">
+                        <template if:true={mapKey.value.active}>
+                            <span class="slds-badge slds-theme_success slds-var-m-right_medium">{labels.active}</span>
+                        </template>
+                        <template if:false={mapKey.value.active}>
+                            <span class="slds-badge slds-theme_error slds-var-m-right_medium">{labels.inactive}</span>
+                        </template>
+                        <span class="slds-var-m-right_medium">{labels.date} {mapKey.value.enddate}</span>
+                    </div>
+                </div>
+            </div>
+            <div key={mapKey.key} class="slds-grid slds-gutters slds-var-m-top_small">
+                <div class="slds-col slds-size_1-of-1">
+                    <div class="promotion-items">
+                        <template if:true={mapKey.value.all}>
+                            <template if:true={mapKey.value.percent}>
+                                <div class="promotion-item">
+                                    <template if:true={mapKey.value.img}>
+                                        <img class="promotion-img" src={mapKey.value.img}></img>
+                                    </template>
+                                    <div class="slds-grid slds-wrap slds-grid_pull-padded slds-grid_vertical-align-center">
+                                        <div class="slds-col slds-grid slds-size_7-of-12 slds-small-size_1-of-2">
+                                            <div>
+                                                <p class="promo-dto">{labels.DIS} {mapKey.value.percent} %</p>
+                                                <p>{labels.web}</p>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-grid slds-grid_align-end slds-size_5-of-12 slds-small-size_1-of-2">
+                                            <lightning-button data-id={mapKey.key} variant="brand"
+                                                label={labels.buy} class="slds-float_left" onclick={handleClick}>
+                                            </lightning-button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                            <template if:true={mapKey.value.amount}>
+                                <div class="promotion-item">
+                                    <template if:true={mapKey.value.img}>
+                                        <img class="promotion-img" src={mapKey.value.img}></img>
+                                    </template>
+                                    <div class="slds-grid slds-wrap slds-grid_pull-padded slds-grid_vertical-align-center">
+                                        <div class="slds-col slds-grid slds-size_7-of-12 slds-small-size_1-of-2">
+                                            <div>
+                                                <p class="promo-dto">fffffff{labels.DIS} {mapKey.value.amount} €</p>
+                                                <p>{labels.web}</p>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-grid slds-grid_align-end slds-size_5-of-12 slds-small-size_1-of-2">
+                                            <lightning-button data-id={mapKey.key} variant="brand"
+                                                label={labels.buy} class="slds-float_left" onclick={handleClick}>
+                                            </lightning-button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </template>
+                        </template>
+                        <template if:false={mapKey.value.all}>
+                            <template for:each={mapKey.value.products} for:item="prodkey">
+                                <div key={prodkey.idred} class="promotion-item">
+                                    <template if:true={prodkey.img}>
+                                        <img class="promotion-img" src={prodkey.img}></img>
+                                    </template>
+                                    <template if:true={prodkey.percent}>
+                                        <div class="slds-grid slds-wrap slds-grid_pull-padded slds-grid_vertical-align-center">
+                                            <div class="slds-col slds-grid slds-size_7-of-12 slds-small-size_1-of-2">
+                                                <div>
+                                                    <p>{labels.prod} {prodkey.name}</p>
+                                                    <p>{labels.family} {prodkey.family}</p>
+                                                    <p class="promo-dto">{labels.DIS} {prodkey.percent} %</p>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-grid  slds-grid_align-end slds-size_5-of-12 slds-small-size_1-of-2">
+                                                <lightning-button data-id={prodkey.idred} variant="brand"
+                                                    label={labels.buy} class="slds-float_left"
+                                                    onclick={handleProductClick}>
+                                                </lightning-button>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <template if:true={prodkey.amount}>
+                                        <div class="slds-grid slds-wrap slds-grid_pull-padded slds-grid_vertical-align-center">
+                                            <div class="slds-col slds-grid slds-size_7-of-12 slds-small-size_1-of-2">
+                                                <div>
+                                                    <p>{labels.prod} {prodkey.name}</p>
+                                                    <p>{labels.family} {prodkey.family}</p>
+                                                    <p class="promo-dto">{labels.DIS} {prodkey.amount} €</p>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-grid  slds-grid_align-end slds-size_5-of-12 slds-small-size_1-of-2">
+                                                <lightning-button data-id={prodkey.idred} variant="brand"
+                                                    label={labels.buy} class="slds-float_left"
+                                                    onclick={handleProductClick}>
+                                                </lightning-button>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+                            <template for:each={mapKey.value.categories} for:item="catkey">
+                                <div key={catkey.idred} class="promotion-item">
+                                    <template if:true={catkey.img}>
+                                        <img class="promotion-img" src={catkey.img}></img>
+                                    </template>
+                                    <template if:true={catkey.percent}>
+                                        <div class="slds-grid slds-wrap slds-grid_pull-padded slds-grid_vertical-align-center">
+                                            <div class="slds-col slds-grid slds-size_7-of-12 slds-small-size_1-of-2">
+                                                <div>
+                                                    <p>{labels.category} {catkey.name}</p>
+                                                    <p class="promo-dto">{labels.DIS} {catkey.percent} %</p>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-grid  slds-grid_align-end slds-size_5-of-12 slds-small-size_1-of-2">
+                                                <lightning-button data-id={mapKey.key} variant="brand"
+                                                    label={labels.buy} class="slds-float_left"
+                                                    onclick={handleClick}>
+                                                </lightning-button>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <template if:true={catkey.amount}>
+                                        <div class="slds-grid slds-wrap slds-grid_pull-padded slds-grid_vertical-align-center">
+                                            <div class="slds-col slds-grid slds-size_7-of-12 slds-small-size_1-of-2">
+                                                <div>
+                                                    <p>{labels.category} {catkey.name}</p>
+                                                    <p class="promo-dto">{labels.DIS} {catkey.amount} €</p>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-grid  slds-grid_align-end slds-size_5-of-12 slds-small-size_1-of-2">
+                                                <lightning-button data-id={mapKey.key} variant="brand"
+                                                    label={labels.buy} class="slds-float_left"
+                                                    onclick={handleClick}>
+                                                </lightning-button>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+                        </template>
+                    </div>
+                </div>
+            </div>
+            <lightning-accordion key={mapKey.key} if:false={showFilters} allow-multiple-sections-open
+                active-section-name="filters" class="slds-border_bottom accordion-style">
+                <lightning-accordion-section name="conditions" label={labels.conditions}>
+                    <p>{mapKey.value.description}</p>
+                    <lightning-formatted-rich-text value={mapKey.value.terms}></lightning-formatted-rich-text>
+                </lightning-accordion-section>
+            </lightning-accordion>
+        </template>
+    </template>
+</template>

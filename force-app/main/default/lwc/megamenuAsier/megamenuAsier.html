@@ -1,0 +1,147 @@
+<template>
+    <!--megamenu inicio-->
+    <div class="header-menu-wrapper">
+        <ul class="header-menu-grid">
+            <template for:each={listaCategorias} for:item="rec">
+                <li key={rec.id} data-target-id={rec.id} onclick={setSelectedCategory}>
+                    <a data-target-id={rec.id} data-slug="fijaciones-metalicas">
+                        <picture data-target-id={rec.id} >
+                            <!--<img src="/img/b2b/default-product-image.svg" class="sub-image" data-target-id={rec.id} >-->
+                            <!--<img src="https://www.indexfix.com/uploads_imgs/ImgProd/mtp.jpg" class="sub-image" data-target-id={rec.id} >-->
+                            <img src={rec.urlImagen} class="sub-image" data-target-id={rec.id} >
+                        </picture>
+                        <span class="header-menu-item" data-target-id={rec.id} >
+                            <span class="header-menu-item-name" data-target-id={rec.id} >{rec.nombre}</span>
+                            <span class="header-menu-item-description" data-target-id={rec.id} >{rec.descripcion}</span>
+                        </span>
+                    </a>
+                </li>
+            </template>
+        <!--
+        <li>
+            <a href="/canales-venta/industrial/anclajes/fijaciones-metalicas" data-slug="fijaciones-metalicas">
+                <picture>
+                    <img src="img/categoria1.png" class="sub-image">
+                </picture>
+                <span class="header-menu-item">
+                    <span class="header-menu-item-name">Nombre categoría</span>
+                    <span class="header-menu-item-description">Texto descriptivo relacionado con la catagoría en la que nos encontramos</span>
+                </span>
+            </a>
+        </li>
+        <li>
+            <a href="/canales-venta/industrial/anclajes/fijaciones-metalicas" data-slug="fijaciones-metalicas">
+                <picture>
+                    <img src="img/categoria1.png" class="sub-image">
+                </picture>
+                <span class="header-menu-item">
+                    <span class="header-menu-item-name">Nombre categoría</span>
+                    <span class="header-menu-item-description">Texto descriptivo relacionado con la catagoría en la que nos encontramos</span>
+                </span>
+            </a>
+        </li>
+        <li>
+            <a href="/canales-venta/industrial/anclajes/fijaciones-metalicas" data-slug="fijaciones-metalicas">
+                <picture>
+                    <img src="img/categoria1.png" class="sub-image">
+                </picture>
+                <span class="header-menu-item">
+                    <span class="header-menu-item-name">Nombre categoría</span>
+                    <span class="header-menu-item-description">Texto descriptivo relacionado con la catagoría en la que nos encontramos</span>
+                </span>
+            </a>
+        </li>
+        <li>
+            <a href="/canales-venta/industrial/anclajes/fijaciones-metalicas" data-slug="fijaciones-metalicas">
+                <picture>
+                    <img src="img/categoria1.png" class="sub-image">
+                </picture>
+                <span class="header-menu-item">
+                    <span class="header-menu-item-name">Nombre categoría</span>
+                    <span class="header-menu-item-description">Texto descriptivo relacionado con la catagoría en la que nos encontramos</span>
+                </span>
+            </a>
+        </li>
+        <li>
+            <a href="/canales-venta/industrial/anclajes/fijaciones-metalicas" data-slug="fijaciones-metalicas">
+                <picture>
+                    <img src="img/categoria1.png" class="sub-image">
+                </picture>
+                <span class="header-menu-item">
+                    <span class="header-menu-item-name">Nombre categoría</span>
+                    <span class="header-menu-item-description">Texto descriptivo relacionado con la catagoría en la que nos encontramos</span>
+                </span>
+            </a>
+        </li>
+        <li>
+            <a href="/canales-venta/industrial/anclajes/fijaciones-metalicas" data-slug="fijaciones-metalicas">
+                <picture>
+                    <img src="img/categoria1.png" class="sub-image">
+                </picture>
+                <span class="header-menu-item">
+                    <span class="header-menu-item-name">Nombre categoría</span>
+                    <span class="header-menu-item-description">Texto descriptivo relacionado con la catagoría en la que nos encontramos</span>
+                </span>
+            </a>
+        </li>
+        <li>
+            <a href="/canales-venta/industrial/anclajes/fijaciones-metalicas" data-slug="fijaciones-metalicas">
+                <picture>
+                    <img src="img/categoria1.png" class="sub-image">
+                </picture>
+                <span class="header-menu-item">
+                    <span class="header-menu-item-name">Nombre categoría</span>
+                    <span class="header-menu-item-description">Texto descriptivo relacionado con la catagoría en la que nos encontramos</span>
+                </span>
+            </a>
+        </li>
+        <li>
+            <a href="/canales-venta/industrial/anclajes/fijaciones-metalicas" data-slug="fijaciones-metalicas">
+                <picture>
+                    <img src="img/categoria1.png" class="sub-image">
+                </picture>
+                <span class="header-menu-item">
+                    <span class="header-menu-item-name">Nombre categoría</span>
+                    <span class="header-menu-item-description">Texto descriptivo relacionado con la catagoría en la que nos encontramos</span>
+                </span>
+            </a>
+        </li>
+        <li>
+            <a href="/canales-venta/industrial/anclajes/fijaciones-metalicas" data-slug="fijaciones-metalicas">
+                <picture>
+                    <img src="img/categoria1.png" class="sub-image">
+                </picture>
+                <span class="header-menu-item">
+                    <span class="header-menu-item-name">Nombre categoría</span>
+                    <span class="header-menu-item-description">Texto descriptivo relacionado con la catagoría en la que nos encontramos</span>
+                </span>
+            </a>
+        </li>
+        <li>
+            <a href="/canales-venta/industrial/anclajes/fijaciones-metalicas" data-slug="fijaciones-metalicas">
+                <picture>
+                    <img src="img/categoria1.png" class="sub-image">
+                </picture>
+                <span class="header-menu-item">
+                    <span class="header-menu-item-name">Nombre categoría</span>
+                    <span class="header-menu-item-description">Texto descriptivo relacionado con la catagoría en la que nos encontramos</span>
+                </span>
+            </a>
+        </li>
+        <li>
+            <a href="/canales-venta/industrial/anclajes/fijaciones-metalicas" data-slug="fijaciones-metalicas">
+                <picture>
+                    <img src="img/categoria1.png" class="sub-image">
+                </picture>
+                <span class="header-menu-item">
+                    <span class="header-menu-item-name">Nombre categoría</span>
+                    <span class="header-menu-item-description">Texto descriptivo relacionado con la catagoría en la que nos encontramos</span>
+                </span>
+            </a>
+        </li>
+        -->
+        </ul>
+    
+    </div>
+    <!--megamenu fin-->
+</template>

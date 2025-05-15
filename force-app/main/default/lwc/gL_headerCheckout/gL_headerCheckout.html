@@ -1,0 +1,16 @@
+<template>
+	<div class="slds-grid slds-wrap checkout-header" style={style}>
+		<div class="slds-col slds-size_5-of-12">
+			<img src={logoURL}>
+        </div>
+        <div class="slds-col slds-size_7-of-12 slds-m-top_x-small">
+			<lightning-button-icon
+				class="white-icon slds-float_right slds-m-top_xx-small"
+				icon-name="utility:cart"
+				onclick={cancelCheckoutMethod}
+				variant="bare"
+				size="large">
+			</lightning-button-icon>
+        </div>
+    </div>
+</template>

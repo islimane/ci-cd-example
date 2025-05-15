@@ -1,0 +1,17 @@
+<aura:component implements="forceCommunity:searchInterface,forceCommunity:availableForAllPageTypes,lightning:isUrlAddressable" access="global">
+    <aura:attribute name="effectiveAccountId" type="String"/>
+    <!--aura:attribute name="currentUser" type="User"/>
+
+	<force:recordData aura:id="recordLoader" recordId="{!$SObjectType.CurrentUser.Id}"  fields="AccountId" targetFields="{!v.currentUser}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/-->
+    <div class="search">
+        <div class="search-wrapper">  
+            <form class="search-form">
+                <div class="search-input-wrapper">
+                    <c:gL_advancedSearch/>
+                </div>
+                <input type="hidden" name="language" value="en"/>
+            </form>
+        </div>
+    </div>
+</aura:component>

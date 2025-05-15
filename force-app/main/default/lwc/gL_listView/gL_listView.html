@@ -1,0 +1,156 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <div class="spinnerstyle">
+        <template if:true={loaded}>
+            <lightning-spinner alternative-text="Loading" variant="brand"></lightning-spinner>
+        </template>
+    </div>
+    <template if:true={isDesktop}>
+        <template if:true={isindex}>
+            <div class="certificate-header">
+                <h1>{labelStore} {labelObj}</h1>
+                <lightning-button variant="neutral" label={labels.docu} onclick={getDocuments} style="margin-top: -3px"></lightning-button>
+            </div>
+        </template>
+        <template if:false={isindex}>
+            <div class="certificate-header-chaves">
+                <h1>{labelStore} {labelObj}</h1>
+                <lightning-button variant="neutral" label={labels.docu} onclick={getDocuments} style="margin-top: -3px"></lightning-button>
+            </div>
+        </template>
+        <div class="slds-grid slds-gutters" style="margin-top: -25px">
+            <div class="slds-col slds-size_2-of-7">
+                <lightning-input type="search"
+                                 placeholder={labels.search} 
+                                 id="SearchBox"
+                                 onchange={searchTable}
+                                 class="slds-m-bottom_medium"
+                                 style="margin-top: -10px">
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_5-of-7">
+            </div>
+        </div>
+        <template if:true={isindex}>
+            <lightning-datatable
+                class="table-style slds-m-bottom_large slds-table_header-fixed_container slds-scrollable_x slds-border_top"
+                key-field="id"
+                data={objList}
+                columns={columns}
+                sorted-by={sortBy}
+                sorted-direction={sortDirection}
+                onsort={doSorting}
+                onrowselection={getSelectedName}>
+            </lightning-datatable>
+            <br>
+            <p class="slds-align_absolute-center">{loadMoreStatus}</p>
+            <br>
+            <template if:false={isempty}>
+                <lightning-button disabled={disableButton} variant="base" label={labels.viewmore} title={labels.viewmore} onclick={loadMoreData} class="slds-align_absolute-center"></lightning-button>
+            </template>
+        </template>
+        <template if:false={isindex}>
+            <lightning-datatable
+                class="table-style-chaves slds-m-bottom_large slds-table_header-fixed_container slds-scrollable_x slds-border_top"
+                key-field="id"
+                data={objList}
+                columns={columns}
+                sorted-by={sortBy}
+                sorted-direction={sortDirection}
+                onsort={doSorting}
+                onrowselection={getSelectedName}>
+            </lightning-datatable>
+            <br>
+            <p class="slds-align_absolute-center">{loadMoreStatus}</p>
+            <br>
+            <template if:false={isempty}>
+                <lightning-button disabled={disableButton} variant="base" label={labels.viewmore} title={labels.viewmore} onclick={loadMoreData} class="slds-align_absolute-center"></lightning-button>
+            </template>            
+        </template>
+        <div if:true={isempty} class="slds-align_absolute-center" style="height:568px">
+            <p>{labels.noitems}.</p>
+        </div>
+    </template>
+    <template if:false={isDesktop}>
+        <template if:false={callchild}>
+            <template if:true={isindex}>
+                <div class="certificate-header slds-m-top_large">
+                    <div>
+                        <lightning-button-icon icon-name="action:sort" label={labels.sort} size="large" variant="brand" alternative-text={labels.sort} onclick={handleSort} class="my-round-button"></lightning-button-icon>
+                        <p style="font-size: 12px; color: #55AAA7; text-align: center;">Sort</p>
+                    </div>
+                    <lightning-button variant="neutral" label={labels.docu} onclick={getDocuments} style="margin-top: -3px; margin-left: 10px"></lightning-button>
+                </div>            
+                <div class="certificate-header">
+                    <h1>{labelStore} {labelObj}</h1>
+                </div>
+            </template>
+            <template if:false={isindex}>
+                <div class="certificate-header-chaves slds-m-top_large">
+                    <div>
+                        <lightning-button-icon icon-name="action:sort" label={labels.sort} size="large" variant="brand" alternative-text={labels.sort} onclick={handleSort} class="my-round-button"></lightning-button-icon>
+                        <p style="font-size: 12px; color: rgb(176, 22, 48); text-align: center;">Sort</p>
+                    </div>
+                    <lightning-button variant="neutral" label={labels.docu} onclick={getDocuments} style="margin-top: -3px; margin-left: 10px"></lightning-button>
+                </div>            
+                <div class="certificate-header-chaves">
+                    <h1>{labelStore} {labelObj}</h1>
+                </div>
+            </template>
+            <lightning-input type="search"
+                             placeholder={labels.search} 
+                             id="SearchBoxM"
+                             onchange={searchTable}
+                             class="slds-m-bottom_medium"
+                             style="margin-top: -10px">
+            </lightning-input>
+            <template if:true={isindex}>
+                <div class="myTable">
+                    <lightning-datatable
+                        class="table-styleM slds-m-bottom_large"
+                        key-field="id"
+                        data={objListTM}
+                        columns={columnsTM}
+                        onrowselection={getSelectedName}>
+                    </lightning-datatable>
+                    <br>
+                    <p class="slds-align_absolute-center">{loadMoreStatus}</p>
+                    <br>
+                    <template if:false={isempty}>
+                        <lightning-button disabled={disableButton} variant="base" label={labels.viewmore} title={labels.viewmore} onclick={loadMoreData} class="slds-align_absolute-center"></lightning-button>
+                    </template>
+                </div>
+                <div if:true={isempty} class="slds-align_absolute-center empty-style">
+                    {labels.nothing} {labelStore} {labelObj} {labels.yet}.
+                    <p>{labels.added}.</p>
+                </div>
+            </template>
+            <template if:false={isindex}>
+                <div class="myTable">
+                    <lightning-datatable
+                        class="table-styleM-chaves slds-m-bottom_large"
+                        key-field="id"
+                        data={objListTM}
+                        columns={columnsTM}
+                        onrowselection={getSelectedName}>
+                    </lightning-datatable>
+                    <br>
+                    <p class="slds-align_absolute-center">{loadMoreStatus}</p>
+                    <br>
+                    <template if:false={isempty}>
+                        <lightning-button disabled={disableButton} variant="base" label={labels.viewmore} title={labels.viewmore} onclick={loadMoreData} class="slds-align_absolute-center"></lightning-button>
+                    </template>
+                </div>
+                <div if:true={isempty} class="slds-align_absolute-center empty-style">
+                    {labels.nothing} {labelStore} {labelObj} {labels.yet}.
+                    <p>{labels.added}.</p>
+                </div>
+            </template>
+        </template>
+        <template if:true={callchild}>
+            <div>
+               <c-g-l_sort-list-view onchildmethod={callFromChild} sobj={_sobj}></c-g-l_sort-list-view>
+            </div>
+        </template>
+    </template>
+</template>

@@ -1,0 +1,17 @@
+<template>
+	<lightning-button-menu class="slds-float_right"
+						   alternative-text="favorite"
+						   label={labels.addToListLabel}
+						   variant="border-filled"
+						   onselect={handleListMenuSelect}>
+		<template for:each={wishLists} for:item="menuItem">
+			<lightning-menu-item
+				key={menuItem.Id}
+				value={menuItem}
+				label={menuItem.Name}
+				icon-name={menuItem.iconName}
+				checked={menuItem.checked}>
+			</lightning-menu-item>
+		</template>
+	</lightning-button-menu>
+</template>

@@ -1,0 +1,28 @@
+<!---->
+<template>
+    <div if:true={records}>
+        <lightning-card title={labels.title} style="--slds-c-card-radius-border: 0px">
+            <div class="slds-var-m-around_medium">
+                <template for:each={records} for:item="rec">
+                    <div key={rec.Delivery_Note__r.value.fields.Id.value} class="slds-box slds-var-m-bottom_small boxcss">
+                        <lightning-record-view-form record-id={rec.Delivery_Note__r.value.fields.Id.value} object-api-name="Delivery_Note__c">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-1">
+                                    <li id={rec.Delivery_Note__r.value.fields.Id.value} class="slds-breadcrumb__item licustom">
+                                        <a id={rec.Delivery_Note__r.value.fields.Id.value} onclick={handleNavigateTo}>{rec.idLion}</a>
+                                    </li>
+                                </div>
+                                <template if:true={rec.Delivery_Note__r.value.fields.Tracking__c.value}>
+                                    <div class="slds-col slds-size_1-of-1 outputclass">
+                                        <div style="font-weight: bold;">{labels.tracking}</div>
+                                        <div><a href={rec.Delivery_Note__r.value.fields.Tracking__c.value} target="_blank">{labels.shipping}</a></div>
+                                    </div>
+                                </template>
+                            </div>
+                        </lightning-record-view-form>
+                    </div>
+                </template>
+            </div>
+        </lightning-card>
+    </div>
+</template>

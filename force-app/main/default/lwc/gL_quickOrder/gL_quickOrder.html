@@ -1,0 +1,96 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <!--Spinner titulo y descripcion-->
+    <div class="spinner">
+        <template if:true={isLoaded}>
+             <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+             </lightning-spinner>
+        </template>
+    </div>
+    <template if:true={ishome}>
+        <p class="slds-text-heading_large" style="padding-top: 1rem; font-size: 24px;">{labels.title}</p>
+        <p style="padding-top: 2.4rem;">
+            {labels.first} {labels.second} {storeLabel}.
+        </p>
+        <div class="slds-grid slds-wrap slds-m-top_small slds-m-bottom_large">
+            <div class="slds-col slds-large-size_2-of-3">
+                <lightning-input 
+                    data-name="linputvalue"
+                    class="b2b_buyer_cart-constrainedquantityselector_constrainedquantityselector"
+                    variant="label-hidden"
+                    type="text"
+                    name="quickOrder"
+                    placeholder={labels.placeHolder}
+                    onchange={handleSkuChange}
+                    oncommit={handleCheckOrder}
+                    onkeypress={handleEnter}
+                    style="--sds-c-input-radius-border: 0px">
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-large-size_1-of-3">
+                <lightning-button-icon
+                    icon-name="utility:cart"
+                    variant="brand"
+                    alternative-text="cart"
+                    disabled={isCartDisabled}
+                    onclick={handleAddToCart}
+                    style="--sds-c-button-radius-border: 0px">
+                    <label>Cart</label>
+                </lightning-button-icon>
+            </div>
+        </div>
+    </template>
+    <template if:false={ishome}>    
+        <div class="quick-order">
+                <p class="slds-m-top_x-small slds-m-right_x-small">{labels.title}:</p>
+                <lightning-input 
+                    data-name="linputvalue"
+                    class="b2b_buyer_cart-constrainedquantityselector_constrainedquantityselector"
+                    variant="label-hidden"
+                    type="text"
+                    name="quickOrder"
+                    placeholder={labels.placeHolder}
+                    onchange={handleSkuChange}
+                    oncommit={handleCheckOrder}
+                    onkeypress={handleEnter}
+                    style="--sds-c-input-radius-border: 0px">
+                </lightning-input>
+                <lightning-button-icon
+                    icon-name="utility:cart"
+                    variant="brand"
+                    alternative-text="cart"
+                    disabled={isCartDisabled}
+                    onclick={handleAddToCart}
+                    style="--sds-c-button-radius-border: 0px">
+                    <label>Cart</label>
+                </lightning-button-icon>
+        </div>
+        <small class="quick-order-description">{labels.first} {labels.second} {storeLabel}.</small>
+    </template>
+    <!--Exportar plantilla y cargar plantilla-->
+    <template if:true={ishome}>
+        <p>{labels.third} {storeLabel}{labels.fourth}</p>
+        <div class="quickOrder-wrapper">
+            <div class="quickOrderr-files">
+                <lightning-button 
+                    class="--slds-button slds-button_neutral" 
+                    variant="base" 
+                    label={labels.template}
+                    title={labels.template}
+                    icon-name="utility:download"
+                    icon-position="left"
+                    onclick={download}>
+                </lightning-button>
+            </div>
+            <div class="quickOrderr-files">
+                <lightning-input 
+                    type="file"
+                    variant="label-hidden"
+                    name="fileUploader"
+                    accept={acceptedFormats}
+                    onchange={handleUploadFinished}>
+                </lightning-input>
+            </div>
+        </div>
+    </template>
+</template>

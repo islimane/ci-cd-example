@@ -1,0 +1,19 @@
+.slds-modal__header{
+   color: #fff;
+   background: #003865;
+}
+.header-chaves{
+   color: #fff;
+   background: #75787B;
+}
+.list-item{
+   border-bottom:solid 1px #eee;
+   padding:0.75rem  0.35rem;
+}
+.list-item:last-child{
+   border-bottom:none;
+}
+.list-item .list-item-btn {
+   display: inline-block;
+   margin: 0.5rem 0.5rem 0 0;
+}

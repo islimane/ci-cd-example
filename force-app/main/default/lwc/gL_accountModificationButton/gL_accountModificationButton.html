@@ -1,0 +1,37 @@
+<template>
+    <lightning-spinner
+        if:false={isLoaded}
+        class="slds-is-relative slds-align_absolute-center slds-var-m-around_large"
+        alternative-text="Loading..."
+        size="medium"
+        variant="brand">
+    </lightning-spinner>
+
+	<template if:true={isLoaded}>
+		<div class="slds-align_absolute-center">
+			<lightning-button class="slds-var-p-bottom_x-small" variant="brand" label={labels.buttonLabel} onclick={showPopUp}></lightning-button>
+		</div>
+
+		<template if:true={showpopup}>
+			<section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+				<div class="slds-modal__container">
+					<div class="slds-modal__header">
+						<lightning-button-icon class="slds-modal__close" icon-name="utility:close" variant="border-inverse" alternative-text="Close" title="Close" onclick={closePopUp}></lightning-button-icon>
+						<h2 class="slds-text-heading_medium slds-hyphenate">{labels.buttonLabel}</h2>
+					</div>
+					<div class="slds-modal__content slds-var-p-around_medium">
+						<lightning-input type="email" label={labels.toLabel} value={toValue} disabled onblur={handleToValue}></lightning-input>
+						<lightning-input type="email" label={labels.ccLabel} value={ccValue} field-level-help={labels.ccHelptext} multiple onblur={handleCcValue}></lightning-input>
+						<lightning-input label={labels.subjectLabel} placeholder={labels.subjectPlaceholder} value={subjectValue} onblur={handleSubjectValue}></lightning-input>
+						<lightning-textarea label={labels.messageLabel} value={textAreaValue} onblur={handleTextAreaChange}></lightning-textarea>
+					</div>
+					<div class="slds-modal__footer">
+						<lightning-button label={labels.cancelLabel} onclick={closePopUp}></lightning-button>
+						<lightning-button variant="brand" label={labels.sendLabel} onclick={solicitModification} class="slds-var-m-left_x-small"></lightning-button>
+					</div>
+				</div>
+			</section>
+			<div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+		</template>
+	</template>
+</template>

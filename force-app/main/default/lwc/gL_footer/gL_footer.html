@@ -1,0 +1,34 @@
+<!--
+  @description       : 
+  @author            : luis.martin@devoteam.com
+  @group             : 
+  @last modified on  : 21-03-2024
+  @last modified by  : luis.martin@devoteam.com
+-->
+<template>
+    <div class="footer-wrapper-class">
+        <div class="selector-class">
+            <c-g-l_store-selector></c-g-l_store-selector>
+        </div>
+        <template if:true={isMobile}>
+            <br/><br/>
+        </template>
+        <div class={storeStyle}>
+            <ul>
+                <li data-target-id="legalNotice" onclick={setPageToRedirect}>{labels.legalNotice}</li>
+                <div class="vertLine"> | </div>
+                <li data-target-id="privacyPolicy" onclick={setPageToRedirect}>{labels.privacyPolicy}</li>
+                <div class="vertLine"> | </div>
+                <li data-target-id="cookies" onclick={setPageToRedirect}>{labels.cookies}</li>
+                <!-- <div class="vertLine"> | </div> -->
+                <!-- <template if:false={isChaves}> -->
+                    <div class="vertLine"> | </div>
+                    <li data-target-id="termOfBussiness" onclick={setPageToRedirect}>{labels.termOfBussiness}</li>
+                    <!-- <div class="vertLine"> | </div> -->
+                <!-- </template> -->
+                <!-- <li data-target-id="rss" onclick={setPageToRedirect}>{labels.rss}</li> -->
+            </ul>
+        </div>
+        <div></div>
+    </div>
+</template>

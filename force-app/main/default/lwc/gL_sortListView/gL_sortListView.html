@@ -1,0 +1,381 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 04-01-2024
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
+<template>
+	<div class={headerstyle}>
+		<lightning-button variant="neutral" label="Cancel" onclick={cancelSort} style="margin-top: -3px"></lightning-button>
+		<h1>{labels.sort}</h1>
+		<lightning-button variant="neutral" label="Apply" onclick={applySort} style="margin-top: -3px"></lightning-button>
+	</div>
+	<li class="licustom" data-id="namecert" onclick={onItemSelected}>
+		<a class="filterclass">
+			<div class="labelcustom truncatecustom">{labels.name}</div>
+			<template if:true={nameselected}>
+				<span class="stateIndicatorcustom">
+					<span class="indicatorBoxcustom">
+						<template if:true={asc}>
+							<lightning-icon icon-name="utility:arrowup" size="x-small" alternative-text="Ascending" class={iconcolorstyle}></lightning-icon>
+							<span class="indicatorLabel">{labels.asc}</span>
+						</template>
+						<template if:false={asc}>
+							<lightning-icon icon-name="utility:arrowdown" size="x-small" alternative-text="Descending" class={iconcolorstyle}></lightning-icon>
+							<span class="indicatorLabel">{labels.dsc}</span>
+						</template>
+					</span>
+				</span>
+			</template>
+		</a>
+	</li>
+	<template if:true={iscert}>
+		<li class="licustom" data-id="namedn" onclick={onItemSelected}>
+			<a class="filterclass">
+				<div class="labelcustom truncatecustom">{labels.dnline}</div>
+				<template if:true={dnselected}>
+					<span class="stateIndicatorcustom">
+						<span class="indicatorBoxcustom">
+							<template if:true={asc}>
+								<lightning-icon icon-name="utility:arrowup" size="x-small" alternative-text="Ascending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.asc}</span>
+							</template>
+							<template if:false={asc}>
+								<lightning-icon icon-name="utility:arrowdown" size="x-small" alternative-text="Descending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.dsc}</span>
+							</template>
+						</span>
+					</span>
+				</template>
+			</a>
+		</li>
+		<li class="licustom" data-id="nameorder" onclick={onItemSelected}>
+			<a class="filterclass">
+				<div class="labelcustom truncatecustom">{labels.order}</div>
+				<template if:true={orderselected}>
+					<span class="stateIndicatorcustom">
+						<span class="indicatorBoxcustom">
+							<template if:true={asc}>
+								<lightning-icon icon-name="utility:arrowup" size="x-small" alternative-text="Ascending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.asc}</span>
+							</template>
+							<template if:false={asc}>
+								<lightning-icon icon-name="utility:arrowdown" size="x-small" alternative-text="Descending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.dsc}</span>
+							</template>
+						</span>
+					</span>
+				</template>
+			</a>
+		</li>
+		<li class="licustom" data-id="dndate" onclick={onItemSelected}>
+			<a class="filterclass">
+				<div class="labelcustom truncatecustom">{labels.date}</div>
+				<template if:true={dndateselected}>
+					<span class="stateIndicatorcustom">
+						<span class="indicatorBoxcustom">
+							<template if:true={asc}>
+								<lightning-icon icon-name="utility:arrowup" size="x-small" alternative-text="Ascending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.asc}</span>
+							</template>
+							<template if:false={asc}>
+								<lightning-icon icon-name="utility:arrowdown" size="x-small" alternative-text="Descending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.dsc}</span>
+							</template>
+						</span>
+					</span>
+				</template>
+			</a>
+		</li>
+		<li class="licustom" data-id="prodname" onclick={onItemSelected}>
+			<a class="filterclass">
+				<div class="labelcustom truncatecustom">{labels.prodname}</div>
+				<template if:true={prodselected}>
+					<span class="stateIndicatorcustom">
+						<span class="indicatorBoxcustom">
+							<template if:true={asc}>
+								<lightning-icon icon-name="utility:arrowup" size="x-small" alternative-text="Ascending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.asc}</span>
+							</template>
+							<template if:false={asc}>
+								<lightning-icon icon-name="utility:arrowdown" size="x-small" alternative-text="Descending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.dsc}</span>
+							</template>
+						</span>
+					</span>
+				</template>
+			</a>
+		</li>
+		<li class="licustom" data-id="measure" onclick={onItemSelected}>
+			<a class="filterclass">
+				<div class="labelcustom truncatecustom">{labels.measure}</div>
+				<template if:true={measureselected}>
+					<span class="stateIndicatorcustom">
+						<span class="indicatorBoxcustom">
+							<template if:true={asc}>
+								<lightning-icon icon-name="utility:arrowup" size="x-small" alternative-text="Ascending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.asc}</span>
+							</template>
+							<template if:false={asc}>
+								<lightning-icon icon-name="utility:arrowdown" size="x-small" alternative-text="Descending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.dsc}</span>
+							</template>
+						</span>
+					</span>
+				</template>
+			</a>
+		</li>
+		<li class="licustom" data-id="heatnumber" onclick={onItemSelected}>
+			<a class="filterclass">
+				<div class="labelcustom truncatecustom">{labels.heat}</div>
+				<template if:true={heatselected}>
+					<span class="stateIndicatorcustom">
+						<span class="indicatorBoxcustom">
+							<template if:true={asc}>
+								<lightning-icon icon-name="utility:arrowup" size="x-small" alternative-text="Ascending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.asc}</span>
+							</template>
+							<template if:false={asc}>
+								<lightning-icon icon-name="utility:arrowdown" size="x-small" alternative-text="Descending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.dsc}</span>
+							</template>
+						</span>
+					</span>
+				</template>
+			</a>
+		</li>
+	</template>
+	<template if:true={isinv}>
+		<li class="licustom" data-id="date" onclick={onItemSelected}>
+			<a class="filterclass">
+				<div class="labelcustom truncatecustom">{labels.date}</div>
+				<template if:true={dateselected}>
+					<span class="stateIndicatorcustom">
+						<span class="indicatorBoxcustom">
+							<template if:true={asc}>
+								<lightning-icon icon-name="utility:arrowup" size="x-small" alternative-text="Ascending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.asc}</span>
+							</template>
+							<template if:false={asc}>
+								<lightning-icon icon-name="utility:arrowdown" size="x-small" alternative-text="Descending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.dsc}</span>
+							</template>
+						</span>
+					</span>
+				</template>
+			</a>
+		</li>
+		<li class="licustom" data-id="expdate" onclick={onItemSelected}>
+			<a class="filterclass">
+				<div class="labelcustom truncatecustom">{labels.expdate}</div>
+				<template if:true={expdateselected}>
+					<span class="stateIndicatorcustom">
+						<span class="indicatorBoxcustom">
+							<template if:true={asc}>
+								<lightning-icon icon-name="utility:arrowup" size="x-small" alternative-text="Ascending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.asc}</span>
+							</template>
+							<template if:false={asc}>
+								<lightning-icon icon-name="utility:arrowdown" size="x-small" alternative-text="Descending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.dsc}</span>
+							</template>
+						</span>
+					</span>
+				</template>
+			</a>
+		</li>
+		<li class="licustom" data-id="type" onclick={onItemSelected}>
+			<a class="filterclass">
+				<div class="labelcustom truncatecustom">{labels.type}</div>
+				<template if:true={tpselected}>
+					<span class="stateIndicatorcustom">
+						<span class="indicatorBoxcustom">
+							<template if:true={asc}>
+								<lightning-icon icon-name="utility:arrowup" size="x-small" alternative-text="Ascending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.asc}</span>
+							</template>
+							<template if:false={asc}>
+								<lightning-icon icon-name="utility:arrowdown" size="x-small" alternative-text="Descending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.dsc}</span>
+							</template>
+						</span>
+					</span>
+				</template>
+			</a>
+		</li>
+		<li class="licustom" data-id="pay" onclick={onItemSelected}>
+			<a class="filterclass">
+				<div class="labelcustom truncatecustom">{labels.pay}</div>
+				<template if:true={payselected}>
+					<span class="stateIndicatorcustom">
+						<span class="indicatorBoxcustom">
+							<template if:true={asc}>
+								<lightning-icon icon-name="utility:arrowup" size="x-small" alternative-text="Ascending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.asc}</span>
+							</template>
+							<template if:false={asc}>
+								<lightning-icon icon-name="utility:arrowdown" size="x-small" alternative-text="Descending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.dsc}</span>
+							</template>
+						</span>
+					</span>
+				</template>
+			</a>
+		</li>
+		<li class="licustom" data-id="currency" onclick={onItemSelected}>
+			<a class="filterclass">
+				<div class="labelcustom truncatecustom">{labels.currency}</div>
+				<template if:true={ccyselected}>
+					<span class="stateIndicatorcustom">
+						<span class="indicatorBoxcustom">
+							<template if:true={asc}>
+								<lightning-icon icon-name="utility:arrowup" size="x-small" alternative-text="Ascending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.asc}</span>
+							</template>
+							<template if:false={asc}>
+								<lightning-icon icon-name="utility:arrowdown" size="x-small" alternative-text="Descending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.dsc}</span>
+							</template>
+						</span>
+					</span>
+				</template>
+			</a>
+		</li>
+		<li class="licustom" data-id="amount" onclick={onItemSelected}>
+			<a class="filterclass">
+				<div class="labelcustom truncatecustom">{labels.totalamount}</div>
+				<template if:true={amountselected}>
+					<span class="stateIndicatorcustom">
+						<span class="indicatorBoxcustom">
+							<template if:true={asc}>
+								<lightning-icon icon-name="utility:arrowup" size="x-small" alternative-text="Ascending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.asc}</span>
+							</template>
+							<template if:false={asc}>
+								<lightning-icon icon-name="utility:arrowdown" size="x-small" alternative-text="Descending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.dsc}</span>
+							</template>
+						</span>
+					</span>
+				</template>
+			</a>
+		</li>
+	</template>
+	<template if:true={isdn}>
+		<li class="licustom" data-id="date" onclick={onItemSelected}>
+			<a class="filterclass">
+				<div class="labelcustom truncatecustom">{labels.date}</div>
+				<template if:true={dateselected}>
+					<span class="stateIndicatorcustom">
+						<span class="indicatorBoxcustom">
+							<template if:true={asc}>
+								<lightning-icon icon-name="utility:arrowup" size="x-small" alternative-text="Ascending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.asc}</span>
+							</template>
+							<template if:false={asc}>
+								<lightning-icon icon-name="utility:arrowdown" size="x-small" alternative-text="Descending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.dsc}</span>
+							</template>
+						</span>
+					</span>
+				</template>
+			</a>
+		</li>
+		<li class="licustom" data-id="expedition" onclick={onItemSelected}>
+			<a class="filterclass">
+				<div class="labelcustom truncatecustom">{labels.expedition}</div>
+				<template if:true={expedselected}>
+					<span class="stateIndicatorcustom">
+						<span class="indicatorBoxcustom">
+							<template if:true={asc}>
+								<lightning-icon icon-name="utility:arrowup" size="x-small" alternative-text="Ascending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.asc}</span>
+							</template>
+							<template if:false={asc}>
+								<lightning-icon icon-name="utility:arrowdown" size="x-small" alternative-text="Descending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.dsc}</span>
+							</template>
+						</span>
+					</span>
+				</template>
+			</a>
+		</li>
+		<li class="licustom" data-id="type" onclick={onItemSelected}>
+			<a class="filterclass">
+				<div class="labelcustom truncatecustom">{labels.type}</div>
+				<template if:true={tpselected}>
+					<span class="stateIndicatorcustom">
+						<span class="indicatorBoxcustom">
+							<template if:true={asc}>
+								<lightning-icon icon-name="utility:arrowup" size="x-small" alternative-text="Ascending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.asc}</span>
+							</template>
+							<template if:false={asc}>
+								<lightning-icon icon-name="utility:arrowdown" size="x-small" alternative-text="Descending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.dsc}</span>
+							</template>
+						</span>
+					</span>
+				</template>
+			</a>
+		</li>
+		<li class="licustom" data-id="kg" onclick={onItemSelected}>
+			<a class="filterclass">
+				<div class="labelcustom truncatecustom">{labels.weight}</div>
+				<template if:true={kgselected}>
+					<span class="stateIndicatorcustom">
+						<span class="indicatorBoxcustom">
+							<template if:true={asc}>
+								<lightning-icon icon-name="utility:arrowup" size="x-small" alternative-text="Ascending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.asc}</span>
+							</template>
+							<template if:false={asc}>
+								<lightning-icon icon-name="utility:arrowdown" size="x-small" alternative-text="Descending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.dsc}</span>
+							</template>
+						</span>
+					</span>
+				</template>
+			</a>
+		</li>
+		<li class="licustom" data-id="total" onclick={onItemSelected}>
+			<a class="filterclass">
+				<div class="labelcustom truncatecustom">{labels.totalamount}</div>
+				<template if:true={totalselected}>
+					<span class="stateIndicatorcustom">
+						<span class="indicatorBoxcustom">
+							<template if:true={asc}>
+								<lightning-icon icon-name="utility:arrowup" size="x-small" alternative-text="Ascending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.asc}</span>
+							</template>
+							<template if:false={asc}>
+								<lightning-icon icon-name="utility:arrowdown" size="x-small" alternative-text="Descending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.dsc}</span>
+							</template>
+						</span>
+					</span>
+				</template>
+			</a>
+		</li>
+		<li class="licustom" data-id="inv" onclick={onItemSelected}>
+			<a class="filterclass">
+				<div class="labelcustom truncatecustom">{labels.invoice}</div>
+				<template if:true={invselected}>
+					<span class="stateIndicatorcustom">
+						<span class="indicatorBoxcustom">
+							<template if:true={asc}>
+								<lightning-icon icon-name="utility:arrowup" size="x-small" alternative-text="Ascending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.asc}</span>
+							</template>
+							<template if:false={asc}>
+								<lightning-icon icon-name="utility:arrowdown" size="x-small" alternative-text="Descending" class={iconcolorstyle}></lightning-icon>
+								<span class="indicatorLabel">{labels.dsc}</span>
+							</template>
+						</span>
+					</span>
+				</template>
+			</a>
+		</li>
+	</template>
+</template>

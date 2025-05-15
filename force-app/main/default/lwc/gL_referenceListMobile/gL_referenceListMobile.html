@@ -1,0 +1,216 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 02-27-2024
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
+<template>
+    <template if:true={isMobTab}>
+        <lightning-spinner
+            if:false={isLoaded}
+            class="slds-is-relative slds-align_absolute-center slds-var-m-around_large"
+            alternative-text={labels.loadingProdInfo}
+            size="medium"
+            variant="brand">
+        </lightning-spinner>
+        <div class="spinner">
+            <template if:true={isLoadedCart}>
+                <lightning-spinner alternative-text={labels.loading} variant="brand" size="large">
+                </lightning-spinner>
+            </template>
+        </div>
+
+        <div if:true={isLoaded}>
+            <div if:true={referenceListIsNotEmpty}>
+                <div if:true={showFilters}>
+                    <h2 class="slds-text-heading_medium slds-var-m-bottom_xx-small" style="line-height: inherit;" >{labels.fullrange}</h2>
+                </div>
+				<div if:false={showFilters}>
+					<div style="display:flex; margin-bottom: 10px;">
+						<template if:true={ischaves}>
+							<h2 class="slds-text-heading_medium slds-var-m-bottom_xx-small" style="line-height: inherit; color: rgb(176, 22, 48);" >{labels.fullrange}</h2>
+							<lightning-button label={labels.filters} 
+											title={labels.filters} 
+											variant="brand-outline" 
+											icon-name="utility:chevronright" 
+											class="slds-m-left_x-small button-style-chaves" 
+											onclick={handleToggleClick}>
+							</lightning-button>
+						</template>
+						<template if:false={ischaves}>
+							<h2 class="slds-text-heading_medium slds-var-m-bottom_xx-small" style="line-height: inherit; color: #003865;" >{labels.fullrange}</h2>
+							<lightning-button label={labels.filters} 
+											title={labels.filters} 
+											variant="brand-outline" 
+											icon-name="utility:chevronright" 
+											class="slds-m-left_x-small button-style" 
+											onclick={handleToggleClick}>
+							</lightning-button>
+						</template>
+					</div>
+					<div if:true={showFiltersButton} style="margin-left: -8px;">
+						<div if:true={showDia} class="slds-grid slds-grid_vertical-align-center slds-var-m-around_x-small flex-wrap">
+							<div class="filter-list-name"><p class="slds-var-m-top_xx-small slds-var-m-right_x-small">{labels.diameter}</p></div>
+							<div class="filter-list-filters">
+								<template for:each={diamFilterSet} for:item="diamFilterItem">
+									<lightning-button class="slds-var-m-around_xx-small page-detail-filter button-filters"
+										key={diamFilterItem.label}
+										data-target-id={diamFilterItem.id}
+										label={diamFilterItem.label}
+										variant="brand-outline"
+										onclick={handleDiamFilter}
+										disabled={disableButton}>
+									</lightning-button>
+								</template>
+							</div>
+						</div>
+		
+						<div if:true={showLong} class="slds-grid slds-grid_vertical-align-center slds-var-m-around_x-small flex-wrap">
+							<div  class="filter-list-name"><p class="slds-var-m-top_xx-small slds-var-m-right_x-small">{labels.long}</p></div>						
+							<div  class="filter-list-filters">
+								<template for:each={longFilterSet} for:item="longFilterItem">
+									<lightning-button class="slds-var-m-around_xx-small button-filters"
+										key={longFilterItem.label}
+										data-target-id={longFilterItem.id}
+										label={longFilterItem.label}
+										variant="brand-outline"
+										onclick={handleLongFilter}
+										disabled={disableButton}>
+									</lightning-button>
+								</template>
+							</div>
+						</div>
+		
+						<div if:true={showColor} class="slds-grid slds-grid_vertical-align-center slds-var-m-around_x-small flex-wrap">
+							<div  class="filter-list-name"><p class="slds-var-m-top_xx-small slds-var-m-right_x-small">{labels.color}</p></div>
+							<div  class="filter-list-filters">
+								<template for:each={colorFilterSet} for:item="colorFilterItem">
+									<lightning-button class="slds-var-m-around_xx-small slds-var-m-bottom_xx-small button-filters"
+										key={colorFilterItem}
+										data-target-id={colorFilterItem}
+										label={colorFilterItem}
+										variant="brand-outline"
+										onclick={handleColorFilter}
+										disabled={disableButton}>
+									</lightning-button>
+								</template>
+							</div>
+						</div>
+		
+						<div if:true={showWidth} class="slds-grid slds-grid_vertical-align-center slds-var-m-around_x-small flex-wrap">
+							<div  class="filter-list-name"><p class="slds-var-m-top_xx-small slds-var-m-right_x-small">{labels.width}</p></div>
+							<div  class="filter-list-filters">
+								<template for:each={widthFilterSet} for:item="widthFilterItem">
+									<lightning-button class="slds-var-m-around_xx-small button-filters"
+										key={widthFilterItem}
+										data-target-id={widthFilterItem}
+										label={widthFilterItem}
+										variant="brand-outline"
+										onclick={handleWidthFilter}
+										disabled={disableButton}>
+									</lightning-button>
+								</template>
+							</div>
+						</div>
+		
+						<div if:true={showPower} class="slds-grid slds-grid_vertical-align-center slds-var-m-around_x-small flex-wrap">
+							<div  class="filter-list-name"><p class="slds-var-m-top_x-small slds-var-m-right_x-small">{labels.power}</p></div>
+							<div  class="filter-list-filters">
+								<template for:each={powerFilterSet} for:item="powerFilterItem">
+									<lightning-button class="slds-var-m-around_xx-small slds-var-m-bottom_xx-small button-filters"
+										key={powerFilterItem}
+										data-target-id={powerFilterItem}
+										label={powerFilterItem}
+										variant="brand-outline"
+										onclick={handlePowerFilter}
+										disabled={disableButton}>
+									</lightning-button>
+								</template>
+							</div>
+						</div>
+					</div>
+				</div>	
+
+                <div class="ref-list-mobile-wrapper">
+                    <div class={style}>
+                        <h2 class="material-name">{materialName}</h2>
+						<lightning-button-icon
+							class="button-chaves"
+							variant="brand"
+							title={labels.alltocart}
+							icon-name="utility:cart"
+                            name="addAllToCart"
+							onclick={addAllToCart}>
+						</lightning-button-icon>
+                    </div>
+                    <div class="ref-list-mobile-body">
+                        <template for:each={referenceByIdList} for:item="reference">
+                            <c-g-l_reference-details-mobile
+                                class="ref-list-mobile-line"
+                                key={reference.id}
+                                reference-detail={reference}
+                                effective-account={resolvedEffectiveAccountId}
+                                has-replacements={hasReplacements}
+                                onnavtorelatedprods={scrollToRelatedProds}>
+                            </c-g-l_reference-details-mobile>
+                        </template>
+                        <!--template for:each={referenceByIdList} for:item="reference">
+                            <c-g-l_reference-details-mobile-alt
+                                class="ref-list-mobile-line" 
+                                key={reference.id} 
+                                reference-detail={reference} 
+                                effective-account={resolvedEffectiveAccountId} 
+                                has-replacements={hasReplacements}
+                                onnavtorelatedprods={scrollToRelatedProds}>
+                            </c-g-l_reference-details-mobile-alt>
+                        </template-->
+                    </div>
+                </div>
+
+                <div if:true={replacementConditions} class="related-items" data-id="replacements">
+                    <div class={style} style="text-align: center;">
+                        {labels.relatedItems}
+                    </div>
+
+                    <c-g-l_related-product-list
+                        related-prod-list={replacementsList}
+                        max-products-per-page={maxprod}
+                        max-number-of-sections={sectionsnum}
+                        iscart=false>
+                    </c-g-l_related-product-list>
+                </div>
+
+                <div if:true={hasUpgrades} class="related-items">
+                    <div class={style} style="text-align: center;">
+                        {labels.upgradeItems}
+                    </div>
+
+                    <c-g-l_related-product-list
+                        related-prod-list={upgradesList}
+                        max-products-per-page={maxprod}
+                        max-number-of-sections={sectionsnum}
+                        iscart=false>
+                    </c-g-l_related-product-list>
+                </div>
+            </div>
+
+            <div if:false={referenceListIsNotEmpty} class="slds-align_absolute-center slds-grid slds-wrap">
+                <lightning-icon
+                    class="slds-var-m-around_xx-small"
+                    icon-name="utility:info"
+                    alternative-text="info"
+                    size="small"
+                    title="small size">
+                </lightning-icon>
+                <span>{labels.noref}</span>
+            </div>
+        </div>
+
+        <c-g-l_popup-product
+            if:true={showpopup}
+            refmap={refMap}
+            onpopup={handlePopUp}>
+        </c-g-l_popup-product>
+    </template>    
+</template>

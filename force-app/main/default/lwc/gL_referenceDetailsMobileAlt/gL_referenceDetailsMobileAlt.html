@@ -1,0 +1,199 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 03-27-2024
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
+<template>
+    <div class="alternativa">
+        <template if:true={showTierPricing}>
+            <div class="ref-list-mobile-item">
+                <div style="flex: 1;padding-right:0.25rem; text-align:left">{referenceDetail.sku}</div>
+                <div style="flex: 1;font-weight:bold; text-align:center">{referenceDetail.measurement}</div>
+            </div>
+            <div style="padding-left:0.25rem; text-align:right">
+                <div class="ref-list-mobile-col" style="text-align: start;"><strong>{labels.price}</strong></div>
+                <table class="table-refs-prices">
+                    <template if:true={hastiers}>
+                        <tr>
+                            <td style="width:35%">{labels.uds}</td>
+                            <td style="width:40%; text-align: center;">
+                                <strong>{referenceDetail.priceByAmount}</strong>
+                            </td>
+                            <td style="width:15%; text-align:right">
+                                <span class="slds-text-color_success"> {labels.dto}</span>
+                            </td>
+                        </tr>
+                    </template>
+                    <template for:each={referenceDetail.priceWrapper} for:item="tier">
+                        <template if:true={tier.lowerUnits}>
+                            <tr key={tier.lowerUnits} data-target-id={tier.lowerUnits}>
+                                <td style="width:35%">
+                                    <lightning-formatted-number value={tier.lowerUnits} format-style="decimal" minimum-fraction-digits="0"></lightning-formatted-number> - 
+                                    <lightning-formatted-number value={tier.higherUnits} format-style="decimal" minimum-fraction-digits="0"></lightning-formatted-number>
+                                </td>
+                                <td style="width:40%; text-align: center;">
+                                    <strong><lightning-formatted-number value={tier.unitPrice} format-style="decimal" minimum-fraction-digits="3"></lightning-formatted-number></strong>
+                                </td>
+                                <td style="width:15%; text-align:right">
+                                    <span class="slds-text-color_success"> -{tier.discount}%</span>
+                                </td>
+                            </tr>
+                        </template>
+                        <template if:false={tier.lowerUnits}>
+                            <div key={tier.unitPrice} style="text-align: initial;">
+                                <lightning-formatted-number value={tier.unitPrice} format-style="decimal" minimum-fraction-digits="3"></lightning-formatted-number>
+                                <span> {tier.priceby}</span>
+                            </div>
+                        </template>
+                    </template>
+                </table>
+            </div>
+        </template>
+        <template if:false={showTierPricing}>
+            <div class="ref-list-mobile-item">
+                <div style="flex: 1;padding-right:0.25rem; text-align:left">{referenceDetail.sku}</div>
+                <div style="flex: 1;font-weight:bold; text-align:center">{referenceDetail.measurement}</div>
+                <div style="flex: 1;padding-left:0.25rem; text-align:right">
+                    <template for:each={referenceDetail.priceWrapper} for:item="uniquePrice">
+                        <lightning-formatted-number key={uniquePrice.unitPrice} value={uniquePrice.unitPrice} format-style="decimal" minimum-fraction-digits="3"></lightning-formatted-number>
+                        <span key={uniquePrice.priceby}> {uniquePrice.priceby}</span>
+                    </template>                      
+                </div>
+            </div>
+        </template>
+		<div class="ref-list-mobile-item">
+			<div style="width: 100%">
+				<div class="ref-list-mobile-units slds-m-top_x-small">
+					<lightning-button-icon
+						icon-name="utility:dash"
+						alternative-text={labels.dash}
+						onclick={subtractQuantityStep}>
+					</lightning-button-icon>
+					<lightning-input 
+						class="slds-var-m-left_x-small units-2"
+						data-name="quantityInput"
+						variant="label-hidden"
+						type="number"
+						name="quantity"
+						maxlength="8"
+						value={referenceDetail.quantity}
+						oncommit={handleInputQuantityChange}>
+					</lightning-input>
+					<lightning-button-icon
+						class="slds-var-m-left_x-small"
+						icon-name="utility:add"
+						alternative-text={labels.add}
+						onclick={addQuantityStep}>
+					</lightning-button-icon>
+				</div>
+				<div class="d-flex">
+					<template if:true={referenceDetail.weight}>
+						<lightning-formatted-number class="slds-var-m-top_x-small" value={referenceDetail.weightbuy} format-style="decimal" maximum-fraction-digits="4"></lightning-formatted-number>
+						<p class="slds-var-m-left_xx-small slds-var-m-top_x-small">Kg</p>
+					</template>
+				</div>
+				<c-g-l_stock-message
+					if:true={showstock}
+					units={referenceDetail.quantity}
+					stock={stock}
+					onreferencewostock={handleShowRelatedProductsLink}>
+				</c-g-l_stock-message>
+				<template if:true={showRelatedProdLink}>
+					<div>
+						<small class="slds-text-link link-text" onclick={showComplementaryProducts}>{labels.substitutes}</small>
+					</div>
+				</template>
+			</div>
+		</div>		
+        <template if:false={showMore}>
+            <a class="ref-list-mobile-more-info-btn" onclick={handleShowMore}>Show more info</a>
+        </template>
+        <template if:true={showMore}>
+            <a class="ref-list-mobile-more-info-btn" onclick={handleShowMore}>Hide more info</a>
+            <div class="ref-list-mobile-more-info">
+                <div class="ref-list-mobile-col-full"><strong>{labels.packInfo}</strong></div>
+                <div class="ref-list-mobile-col-full">
+                    <div class="weight-info">
+                        <div class="weight-info-item">
+                            <img alt={labels.estuche} src="/indexfix/cms/delivery/media/MCETVJOYSEVFAYXIB6D56QQ43SGQ">
+                            <lightning-formatted-number value={referenceDetail.quantityStep} format-style="decimal" maximum-fraction-digits="5"></lightning-formatted-number>{labels.uds}.
+                        </div>
+                        <template if:true={referenceDetail.masterunits}>
+                            <div class="weight-info-item">
+                                <img alt={labels.estuche} src="/indexfix/cms/delivery/media/MCI5Q22Q2FTBFHDEKKCI32Q3NSPI"> 
+                                <lightning-formatted-number value={referenceDetail.masterunits} format-style="decimal" maximum-fraction-digits="5"></lightning-formatted-number>{labels.uds}.
+                            </div>
+                        </template>
+                        <template if:true={referenceDetail.palletunits}>
+                            <div class="weight-info-item">
+                                <img alt={labels.estuche} src="/indexfix/cms/delivery/media/MC3YWY2UNL7ZHRDGBG4H7WRALPWM">
+                                <lightning-formatted-number value={referenceDetail.palletunits} format-style="decimal" maximum-fraction-digits="5"></lightning-formatted-number>{labels.uds}.
+                            </div>
+                        </template>
+                    </div>
+                </div>
+                <div class="ref-list-mobile-col-full"><strong>{labels.customCode}</strong></div>
+                <div class="ref-list-mobile-code slds-m-top_x-small">
+                    <lightning-input
+                        class="ccInput units"
+                        variant="label-hidden"
+                        type="text"
+                        name="customerCode"
+                        maxlength="20"
+                        placeholder={labels.placehold}
+                        disabled={referenceDetail.customerCode.isDisabled}
+                        value={referenceDetail.customerCode.value}
+                        onchange={handleCustomerCodeChange}>
+                    </lightning-input>
+                    <lightning-button-icon
+                        class="slds-var-m-left_x-small"
+                        icon-name={referenceDetail.customerCode.iconName}
+                        alternative-text={referenceDetail.customerCode.alternativeText}
+                        onclick={handleCustomerCodeSave}>
+                    </lightning-button-icon>
+                </div>
+            </div>
+        </template>
+		<div class="ref-list-mobile-item ref-list-mobile-actions">
+			<template if:true={loaddetail}>
+				<lightning-spinner alternative-text="Loading" variant="brand"></lightning-spinner>
+			</template>
+			<template if:false={loaddetail}>
+				<c-g-l_popup-product
+					if:true={showpopup}
+					refmap={referenceMap}
+					onpopup={handlePopUp}>
+				</c-g-l_popup-product>
+				<lightning-button
+					variant="brand"
+					label="Add to cart"
+					title="Add to cart"
+					icon-name="utility:cart"
+					icon-position="right"
+					alternative-text={labels.cart}
+					disabled={isCartDisabled}
+					onclick={addToCart}>
+				</lightning-button>
+				<lightning-button-menu class="slds-var-m-left_x-small"
+					alternative-text={labels.favorite}
+					label="Add to list"
+					variant="border-filled"
+					icon-name="utility:favorite"
+					menu-alignment="right"
+					onselect={handleListMenuSelect}>
+					<template for:each={referenceDetail.customerListMenuItemList} for:item="menuItem">
+						<lightning-menu-item
+							key={menuItem.value}
+							value={menuItem.value}
+							label={menuItem.label}
+							icon-name={menuItem.iconName}
+							checked={menuItem.checked}>
+						</lightning-menu-item>
+					</template>
+				</lightning-button-menu>
+			</template>
+		</div>
+	</div>
+</template>

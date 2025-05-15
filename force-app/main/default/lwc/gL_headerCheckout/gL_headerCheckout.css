@@ -1,0 +1,10 @@
+.white-icon{
+    --lwc-colorTextIconDefault: white;
+}
+.checkout-header{
+    color: #fff;
+    padding: 1rem;
+}
+.checkout-header img{
+    max-width: 8rem;
+}

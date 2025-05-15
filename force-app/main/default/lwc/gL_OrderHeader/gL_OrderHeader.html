@@ -1,0 +1,29 @@
+<template>
+    <div class="parent">
+        <div class="child-first">
+            <h1 class="slds-text-heading_large slds-grid slds-no-space slds-truncate slds-m-right_x-small">{labels.myOrder} {orderNumber}</h1>
+        </div>
+        <div class="child-last" data-target-id={recordId}>
+            <div class="childs-item">
+                <lightning-button 
+                    data-target-id={recordId} 
+                    disabled={order.disabled}
+                    variant="base" 
+                    label={labels.reOrder} 
+                    onclick={getOrders} 
+                    class="slds-m-right_x-small slds-button_brand slds-float_right reorder_button">
+                </lightning-button>
+                <c-g-l_get-documents-button 
+                    record-id={recordId} 
+                    effective-account-id={resolvedEffectiveAccountId}
+                    class="slds-m-right_x-small">
+                </c-g-l_get-documents-button>
+            </div>
+            <c-g-L_add-to-wish-list 
+                class="buttonAdd slds-m-right_x-small"
+                record-id={recordId}
+                effective-account-id={resolvedEffectiveAccountId}>
+            </c-g-L_add-to-wish-list>
+        </div> 
+    </div>   
+</template>

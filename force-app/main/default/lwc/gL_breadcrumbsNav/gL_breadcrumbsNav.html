@@ -1,0 +1,11 @@
+<template>
+	<nav role="navigation" aria-label="Breadcrumbs" class="bread-crumbs">
+		<ol class="slds-breadcrumb slds-list_horizontal slds-wrap">
+			<template for:each={breadcrumbItems} for:item="crumbs">
+				<li key={crumbs.id} class="slds-breadcrumb__item">
+					<a id={crumbs.id} onclick={handleNavigateTo}>{crumbs.label}</a>
+				</li>
+			</template>
+		</ol>
+	</nav>
+</template>

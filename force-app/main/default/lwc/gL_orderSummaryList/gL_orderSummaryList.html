@@ -1,0 +1,198 @@
+<!--
+-->
+<template>
+    <lightning-spinner
+		if:false={isLoaded}
+		class="slds-is-relative slds-align_absolute-center slds-var-m-around_large"
+		alternative-text="loading"
+		size="medium"
+		variant="brand">
+    </lightning-spinner>
+
+	<template if:true={isLoaded}>
+		<div class="slds-var-p-top_medium">
+			<h1 class="slds-text-heading_large slds-var-p-bottom_medium my-orders-heading">{labels.myOrders}</h1>
+			<div class="slds-grid slds-wrap">
+				<div class="slds-grid slds-wrap">
+					<div class="slds-align-middle slds-var-m-right_small">{labels.filter}</div>
+					<div class="slds-grid_vertical">
+						<div class="slds-grid">
+							<lightning-input class="slds-var-m-right_small" type="date" label={labels.startDate} value={startDate} onblur={setStartDate} date-style="short"></lightning-input>
+							<lightning-input class="slds-var-m-right_small" type="date" label={labels.endDate} value={endDate} onblur={setEndDate} date-style="short"></lightning-input>
+						</div>
+					</div>
+					<div class="slds-grid my-orders-filter-actions">
+						<lightning-button class="slds-var-m-right_small" variant="brand" label={labels.apply} disabled={disableApplyBtn} onclick={applyDateFilters}></lightning-button>
+						<lightning-button variant="base" label={labels.reset} onclick={resetDateFilters}></lightning-button>
+					</div>
+				</div>
+				<div class="slds-container_right slds-align-middle">
+					<lightning-button-menu
+						variant="container"
+						menu-alignment="left"
+						label={sortingOrderLabel}
+						onselect={handleSortChange}>
+						<template for:each={sortingOptions} for:item="option">
+							<lightning-menu-item
+								key={option.value}
+								value={option.value}
+								label={option.label}
+								checked={option.checked}>
+							</lightning-menu-item>
+						</template>
+					</lightning-button-menu>
+				</div>
+			</div>
+		</div>
+        <template if:false={orderListIsEmpty}>
+			<div class="slds-text-body_small slds-var-m-top_x-small record-count">
+				{orderListLengthCounter}&nbsp;{orderListLengthCounterLabel}
+			</div>
+
+			<div class="order-list">
+				<template if:true={showEntireOrderList}>
+					<template if:true={showFilteredOrderList}>
+						<template for:each={filteredOrderList} for:item="order">
+							<div key={order.id} class="order-list-item" data-target-id={order.id}>
+								<div class="slds-box slds-grid slds-grid_align-spread slds-grid_vertical-align-center" data-target-id={order.id}>
+									<div class="order-list-item-info" data-target-id={order.id}>
+										<div class="slds-grid slds-wrap" data-target-id={order.id}>
+											<div class="slds-truncate slds-var-p-right_small  order-list-item-col">
+												<strong>{labels.orderName}</strong>&nbsp;<span>{order.name}</span>
+											</div>
+											<div class="slds-truncate slds-var-p-right_small  order-list-item-col" style="width: 30%;">
+												<strong>{labels.date}</strong>&nbsp;<span>{order.orderDate}</span>
+											</div>
+											<div class="slds-truncate slds-var-p-right_small  order-list-item-col" style="width: 18%;">
+												<strong>{labels.status}</strong>&nbsp;<span>{order.status}</span>
+											</div>
+											<div class="slds-truncate slds-var-p-right_small  order-list-item-col">
+												<strong>{labels.total}</strong>&nbsp;<span><lightning-formatted-number value={order.total} format-style="currency" currency-code="EUR" minimum-fraction-digits="2" maximum-fraction-digits="2"></lightning-formatted-number></span>
+											</div>
+										</div>
+									</div>
+									<div class="order-list-item-actions slds-grid small-region slds-align-middle" data-target-id={order.id}>
+										<button class="slds-button slds-button_neutral slds-button_stretch" type="button" data-target-id={order.id} onclick={addOrderLinesToCart}>{labels.startReorder}</button>
+										<lightning-button class="slds-align_absolute-center" variant="base" label={labels.view} data-target-id={order.id} onclick={navToDetail}></lightning-button>
+									</div>
+								</div>
+							</div>
+						</template>
+
+						<div if:true={filteredOrderListIsEmpty} class="slds-text-align_center slds-text-color_weak slds-var-m-vertical_xx-large">
+							<h3 class="slds-text-heading_medium">{labels.emptyFilterList0}</h3>
+							<p class="slds-text-body_regular slds-var-p-top_small">{labels.emptyFilterList1}</p>
+						</div>
+					</template>
+
+					<template if:false={showFilteredOrderList}>
+						<template for:each={orderList} for:item="order">
+							<div key={order.id} class="order-list-item" data-target-id={order.id}>
+								<div class="slds-box slds-grid slds-grid_align-spread slds-grid_vertical-align-center" data-target-id={order.id}>
+									<div class="order-list-item-info" data-target-id={order.id}>
+										<div class="slds-grid slds-wrap" data-target-id={order.id}>
+											<div class="slds-truncate slds-var-p-right_small  order-list-item-col">
+												<strong>{labels.orderName}</strong>&nbsp;<span>{order.name}</span>
+											</div>
+											<div class="slds-truncate slds-var-p-right_small  order-list-item-col2">
+												<strong>{labels.date}</strong>&nbsp;<span>{order.orderDate}</span>
+											</div>
+											<div class="slds-truncate slds-var-p-right_small  order-list-item-col3">
+												<strong>{labels.status}</strong>&nbsp;<span>{order.status}</span>
+											</div>
+											<div class="slds-truncate slds-var-p-right_small  order-list-item-col">
+												<strong>{labels.total}</strong>&nbsp;<span><lightning-formatted-number value={order.total} format-style="currency" currency-code="EUR" minimum-fraction-digits="2" maximum-fraction-digits="2"></lightning-formatted-number></span>
+											</div>
+										</div>
+									</div>
+									<div class="order-list-item-actions slds-grid small-region slds-align-middle" data-target-id={order.id}>
+										<button class="slds-button slds-button_neutral slds-button_stretch" type="button" data-target-id={order.id} onclick={addOrderLinesToCart}>{labels.startReorder}</button>
+										<lightning-button class="slds-align_absolute-center" variant="base" label={labels.view} data-target-id={order.id} onclick={navToDetail}></lightning-button>
+									</div>
+								</div>
+							</div>
+						</template>
+					</template>
+				</template>
+
+				<template if:true={showInitialOrderList}>
+					<template if:true={showFilteredOrderList}>
+						<template for:each={filteredOrderList} for:item="order">
+							<div key={order.id} class="order-list-item" data-target-id={order.id}>
+								<div class="slds-box slds-grid slds-grid_align-spread slds-grid_vertical-align-center" data-target-id={order.id}>
+									<div class="order-list-item-info" data-target-id={order.id}>
+										<div class="slds-grid slds-wrap" data-target-id={order.id}>
+											<div class="slds-truncate slds-var-p-right_small  order-list-item-col">
+												<strong>{labels.orderName}</strong>&nbsp;<span>{order.name}</span>
+											</div>
+											<div class="slds-truncate slds-var-p-right_small  order-list-item-col2">
+												<strong>{labels.date}</strong>&nbsp;<span>{order.orderDate}</span>
+											</div>
+											<div class="slds-truncate slds-var-p-right_small  order-list-item-col3">
+												<strong>{labels.status}</strong>&nbsp;<span>{order.status}</span>
+											</div>
+											<div class="slds-truncate slds-var-p-right_small  order-list-item-col">
+												<strong>{labels.total}</strong>&nbsp;<span><lightning-formatted-number value={order.total} format-style="currency" currency-code="EUR" minimum-fraction-digits="2" maximum-fraction-digits="2"></lightning-formatted-number></span>
+											</div>
+										</div>
+									</div>
+									<div class="order-list-item-actions slds-grid small-region slds-align-middle" data-target-id={order.id}>
+										<button class="slds-button slds-button_neutral slds-button_stretch" type="button" data-target-id={order.id} onclick={addOrderLinesToCart}>{labels.startReorder}</button>
+										<lightning-button class="slds-align_absolute-center" variant="base" label={labels.view} data-target-id={order.id} onclick={navToDetail}></lightning-button>
+									</div>
+								</div>
+							</div>
+						</template>
+
+						<div if:true={filteredOrderListShowMore} class="slds-var-p-around_small slds-align_absolute-center">
+							<lightning-button class="slds-var-p-around_small" variant="base" label={labels.showMore} onclick={showMore}></lightning-button>
+						</div>
+
+						<div if:true={filteredOrderListIsEmpty} class="slds-text-align_center slds-text-color_weak slds-var-m-vertical_xx-large">
+							<h3 class="slds-text-heading_medium">{labels.emptyFilterList0}</h3>
+							<p class="slds-text-body_regular slds-var-p-top_small">{labels.emptyFilterList1}</p>
+						</div>
+					</template>
+
+					<template if:false={showFilteredOrderList}>
+						<template for:each={initialOrderList} for:item="order">
+							<div key={order.id} class="order-list-item" data-target-id={order.id}>
+								<div class="slds-box slds-grid slds-grid_align-spread slds-grid_vertical-align-center" data-target-id={order.id}>
+									<div class="order-list-item-info" data-target-id={order.id}>
+										<div class="slds-grid slds-wrap" data-target-id={order.id}>
+											<div class="slds-truncate slds-var-p-right_small  order-list-item-col">
+												<strong>{labels.orderName}</strong>&nbsp;<span>{order.name}</span>
+											</div>
+											<div class="slds-truncate slds-var-p-right_small  order-list-item-col2">
+												<strong>{labels.date}</strong>&nbsp;<span>{order.orderDate}</span>
+											</div>
+											<div class="slds-truncate slds-var-p-right_small  order-list-item-col3">
+												<strong>{labels.status}</strong>&nbsp;<span>{order.status}</span>
+											</div>
+											<div class="slds-truncate slds-var-p-right_small  order-list-item-col">
+												<strong>{labels.total}</strong>&nbsp;<span><lightning-formatted-number value={order.total} format-style="currency" currency-code="EUR" minimum-fraction-digits="2" maximum-fraction-digits="2"></lightning-formatted-number></span>
+											</div>
+										</div>
+									</div>
+									<div class="order-list-item-actions slds-grid small-region slds-align-middle" data-target-id={order.id}>
+										<button class="slds-button slds-button_neutral slds-button_stretch" type="button" data-target-id={order.id} onclick={addOrderLinesToCart}>{labels.startReorder}</button>
+										<lightning-button class="slds-align_absolute-center" variant="base" label={labels.view} data-target-id={order.id} onclick={navToDetail}></lightning-button>
+									</div>
+								</div>
+							</div>
+						</template>
+
+						<div class="slds-var-p-around_small slds-align_absolute-center">
+							<lightning-button class="slds-var-p-around_small" variant="base" label={labels.showMore} onclick={showMore}></lightning-button>
+						</div>
+					</template>
+				</template>
+			</div>
+		</template>
+
+		<div if:true={orderListIsEmpty} class="slds-text-align_center slds-text-color_weak slds-var-m-vertical_xx-large">
+			<h3 class="slds-text-heading_medium">{labels.emptyFilterList0}</h3>
+			<p class="slds-text-body_regular slds-var-p-top_small">{labels.emptyFilterList1}</p>
+		</div>
+	</template>
+</template>

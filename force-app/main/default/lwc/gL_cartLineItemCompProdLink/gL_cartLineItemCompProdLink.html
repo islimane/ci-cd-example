@@ -1,0 +1,15 @@
+<template>
+	<td colspan="7">
+		<div if:true={hasComplementaryProducts}>
+			<small class="slds-text-link link-text" onclick={showComplementaryProducts}>{showCompProductsText}</small>
+		</div>
+		<div if:true={showCompProducts}>
+			<c-g-l_related-product-list
+				related-prod-list={cartLine.relatedProductSet}
+				max-products-per-page={maxprod}
+				max-number-of-sections={sectionsnum}
+				iscart=true>
+			</c-g-l_related-product-list>
+		</div>
+	</td>
+</template>

@@ -1,0 +1,107 @@
+.parent {
+    display: flex;
+    height: 90px;
+    flex-direction: row;
+    align-items: flex-start;
+}
+.child-first {
+    display: inline-flex;
+    width: 70%;
+    height: 60%;
+    align-items: flex-start;
+}
+.child-last {
+    display: inline-flex;
+    width: 100%;
+    justify-content: flex-end;
+    flex-direction: row;
+}
+.childs-item{
+    display: inline-flex;
+}
+
+.child-last button {
+    padding: 10px 24px; 
+    cursor: pointer; 
+    width: 50%; 
+    display: block; 
+}
+
+.addListButton{
+    width: 108%;
+}
+.buttonAdd{
+    float: right;
+}
+
+.boton2{
+    margin-bottom: 20px;
+}
+
+@media (max-width: 1600px){
+    .child-first {
+        width: 60%;
+    }
+}
+
+@media (max-width: 1350px){
+    .child-first {
+        width: 50%;
+    }
+}
+
+@media (max-width: 1028px){
+    .parent {
+        width: 100%;
+        height: 100%;
+        white-space: nowrap;
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 0.5rem;
+    }
+    .child-first {
+        display: inline-flex;
+        width: 100%;
+        height: 60%;
+        padding-bottom: 0.5rem;
+    }
+    .childs-item{
+        display: flex;
+        flex-direction: none;
+    }
+    .child-last {
+        display: inline-flex;
+        width: 100%;
+        height: 60%;
+        flex-direction: none;
+        justify-content: space-between;
+    }
+}
+
+@media (max-width: 450px){
+    .parent {
+        width: 100%;
+        height: 100%;
+        white-space: nowrap;
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 0.5rem;
+    }
+    .child-first {
+        display: inline-flex;
+        width: 100%;
+        height: 60%;
+        padding-bottom: 0.5rem;
+    }
+    .childs-item{
+        display: flex;
+        flex-direction: none;
+        font-size: 14px;
+    }
+    .child-last {
+        display: inline-flex;
+        width: 100%;
+        height: 60%;
+        flex-direction: column;
+    }
+}

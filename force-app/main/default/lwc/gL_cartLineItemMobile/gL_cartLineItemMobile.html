@@ -1,0 +1,220 @@
+<!-- sldsValidatorIgnore -->
+<template>
+	<template if:true={showTierPricing}>
+		<td class="table-cart-td table-cart-td_prod2 td-width-product-2" data-title="Producto">
+			<div class="table-cart-info">
+				<div style="width: 40%;">
+					<img class="img-product" src={cartLine.materialImgURL}>
+				</div>
+				<div style="width: 60%;">
+					<p><strong>{labels.code} </strong>{cartLine.sku}</p>
+					<p><strong>{labels.measure} </strong>{cartLine.measurement}</p>
+					<p><strong>{labels.price} </strong>
+						<template if:true={hastiers}>
+							<span>{defaultPriceWithTiers}</span>
+						</template>
+						<template if:false={hastiers}>
+							<template for:each={cartLine.priceWrapper} for:item="tier">
+								<lightning-formatted-number key={tier.unitPrice} value={tier.unitPrice} format-style="decimal" minimum-fraction-digits="2"></lightning-formatted-number>&nbsp;
+								<span key={tier.priceby}> {tier.priceby}</span>
+							</template>
+						</template>
+					</p>
+				</div>
+			</div>
+		</td>
+		<td class="table-cart-td td-width-quantity-2" data-title="Cantidad">
+			<div class="display-flex v-alignment">
+				<lightning-button-icon icon-name="utility:dash" alternative-text={labels.remove} onclick={subtractQuantityStep}>
+				</lightning-button-icon>
+				<lightning-input class="slds-m-horizontal_small" data-name="quantityInput" variant="label-hidden"
+					type="number" name="quantity" maxlength="8" value={cartLine.quantity}
+					oncommit={handleInputQuantityChange}>
+				</lightning-input>
+				<lightning-button-icon icon-name="utility:add" alternative-text={labels.add} onclick={addQuantityStep}>
+				</lightning-button-icon>
+				<template if:true={cartLine.weight}>
+					<div class="display-flex v-alignment">
+						<lightning-formatted-number class="slds-var-m-left_x-small" value={cartLine.weightbuy}
+							format-style="decimal" maximum-fraction-digits="4"></lightning-formatted-number>
+						<p class="slds-var-m-left_xx-small">Kg</p>
+					</div>
+				</template>
+			</div>
+			<div class="stock">
+				<template if:true={red}>
+					<p class="slds-m-bottom_none slds-text-color_error"><small>{stocktext}</small></p>
+				</template>
+				<template if:true={orange}>
+					<p class="slds-m-bottom_none" style="color:orange"><small>{stocktext}</small></p>
+				</template>
+				<template if:true={green}>
+					<p class="slds-m-bottom_none slds-text-color_success"><small>{stocktext}</small></p>
+				</template>
+			</div>
+		</td>
+	</template>
+	<template if:false={showTierPricing}>
+		<td class="table-cart-td table-cart-td_prod2 td-width-product" data-title="Producto">
+			<div class="table-cart-info">
+				<div style="width: 40%;">
+					<img class="img-product" src={cartLine.materialImgURL}>
+				</div>
+				<div style="width: 60%;">
+					<p><strong>{labels.code} </strong>{cartLine.sku}</p>
+					<p><strong>{labels.measure} </strong>{cartLine.measurement}</p>
+					<p><strong>{labels.price} </strong>
+						<template if:true={hastiers}>
+							<span>{defaultPriceWithTiers}</span>
+						</template>
+						<template if:false={hastiers}>
+							<template for:each={cartLine.priceWrapper} for:item="tier">
+								<lightning-formatted-number key={tier.unitPrice} value={tier.unitPrice} format-style="decimal" minimum-fraction-digits="2"></lightning-formatted-number>&nbsp;
+								<span key={tier.priceby}> {tier.priceby}</span>
+							</template>
+						</template>
+					</p>
+				</div>
+			</div>
+		</td>
+		<td class="table-cart-td td-width-quantity" data-title="Cantidad">
+			<div class="display-flex v-alignment">
+				<lightning-button-icon icon-name="utility:dash" alternative-text={labels.remove} onclick={subtractQuantityStep}>
+				</lightning-button-icon>
+				<lightning-input class="slds-m-horizontal_small-2" data-name="quantityInput" variant="label-hidden"
+					type="number" name="quantity" maxlength="8" value={cartLine.quantity}
+					oncommit={handleInputQuantityChange}>
+				</lightning-input>
+				<lightning-button-icon icon-name="utility:add" alternative-text={labels.add} onclick={addQuantityStep}>
+				</lightning-button-icon>
+			</div>
+			<div class="stock">
+				<template if:true={red}>
+					<p class="slds-m-bottom_none slds-text-color_error"><small>{stocktext}</small></p>
+				</template>
+				<template if:true={orange}>
+					<p class="slds-m-bottom_none" style="color:orange"><small>{stocktext}</small></p>
+				</template>
+				<template if:true={green}>
+					<p class="slds-m-bottom_none slds-text-color_success"><small>{stocktext}</small></p>
+				</template>
+			</div>
+		</td>
+	</template>
+	<td class="table-cart-td td-width-total" data-title="Precio total">
+		<div if:true={zeroSavings}>
+			<p class="slds-text-heading_medium" style="text-align: right">
+				<strong>
+					<lightning-formatted-number value={cartLine.totalPrice} format-style="currency"
+						currency-code={cartLine.currencyCode} minimum-fraction-digits="2">
+					</lightning-formatted-number>
+				</strong>
+			</p>
+		</div>
+		<div if:false={zeroSavings} class="zeroSavings">
+			<div>
+				<p>
+					<del>
+						<lightning-formatted-number value={cartLine.initialTotalPrice} format-style="currency"
+							currency-code={cartLine.currencyCode} minimum-fraction-digits="2">
+						</lightning-formatted-number>
+					</del>
+				</p>
+			</div>
+			<div>
+				<p class="slds-text-heading_medium" style="text-align: right">
+					<strong>
+						<lightning-formatted-number value={cartLine.totalPrice} format-style="currency"
+							currency-code={cartLine.currencyCode} minimum-fraction-digits="2">
+						</lightning-formatted-number>
+					</strong>
+				</p>
+			</div>
+		</div>
+
+	</td>
+	<td class="table-cart-td td-width-price-2" data-title="Precio">
+		<table class="table-refs-prices">
+			<td style="float:right">
+				<lightning-button-icon data-target-id={cartLine.cartItemId} icon-name="utility:delete" variant="brand"
+					alternative-text={labels.delete} onclick={removeItem}>
+				</lightning-button-icon>
+			</td>
+			<template if:false={showMoreInfo}>
+				<lightning-button variant="base" label={labels.info} icon-name="utility:chevrondown"
+					icon-position="right" class="" onclick={handleShowMoreInfo}></lightning-button>
+			</template>
+			<template if:true={showMoreInfo}>
+				<lightning-button variant="base" label={labels.info} icon-name="utility:chevronup" icon-position="right"
+					class="" onclick={handleShowMoreInfo}></lightning-button>
+			</template>
+			<template if:true={hastiers}>
+				<template if:false={showMorePricing}>
+					<lightning-button variant="base" label={labels.dto} icon-name="utility:chevrondown"
+						icon-position="right" class="slds-var-m-left_small" onclick={handleShowMorePricing}>
+					</lightning-button>
+				</template>
+				<template if:true={showMorePricing}>
+					<lightning-button variant="base" label={labels.dto} icon-name="utility:chevronup"
+						icon-position="right" class="slds-var-m-left_small" onclick={handleShowMorePricing}>
+					</lightning-button>
+				</template>
+				<template if:true={showMorePricing}>
+					<div class="line-list-mobile-more-info">
+						<table class="table-refs-prices">
+							<tr>
+								<td>{labels.uds}</td>
+								<td>
+									<strong>{cartLine.priceByAmount}</strong>
+								</td>
+								<td style="width:15%; text-align:right">
+									<span class="slds-text-color_success"> {labels.dto}</span>
+								</td>
+							</tr>
+							<template for:each={cartLine.priceWrapper} for:item="tier">
+								<template if:true={tier.lowerUnits}>
+									<tr key={tier.lowerUnits} data-target-id={tier.lowerUnits}>
+										<td>
+											<lightning-formatted-number value={tier.lowerUnits} format-style="decimal"
+												minimum-fraction-digits="0">
+											</lightning-formatted-number> - <lightning-formatted-number
+												value={tier.higherUnits} format-style="decimal"
+												minimum-fraction-digits="0">
+											</lightning-formatted-number>
+										</td>
+										<td>
+											<strong>
+												<lightning-formatted-number value={tier.unitPrice}
+													format-style="decimal" minimum-fraction-digits="2">
+												</lightning-formatted-number>
+											</strong>
+										</td>
+										<td style="width:15%; text-align:right">
+											<span class="slds-text-color_success"> -{tier.discount}%</span>
+										</td>
+									</tr>
+								</template>
+								<template if:false={tier.lowerUnits}>
+									<lightning-formatted-number key={tier.unitPrice} value={tier.unitPrice}
+										format-style="decimal" minimum-fraction-digits="2">
+									</lightning-formatted-number>&nbsp;
+									<span key={tier.priceby}> {tier.priceby}</span>
+								</template>
+							</template>
+						</table>
+					</div>
+				</template>
+			</template>
+			<template if:true={showMoreInfo}>
+				<div class="table-disc">
+					<p><strong>{labels.case}</strong> {cartLine.quantityStep}</p>
+					<p><strong>{labels.material}</strong> {cartLine.materialName}</p>
+					<p><strong>{labels.description}</strong> {cartLine.familyDescription}</p>
+					<template if:true={customerCodeText}>
+						<p><strong>{labels.customer}</strong> {customerCodeText}</p>
+					</template>
+				</div>
+			</template>
+		</table>
+	</td>
+</template>

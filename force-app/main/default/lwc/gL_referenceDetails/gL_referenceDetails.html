@@ -1,0 +1,352 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 10-30-2024
+  @last modified by  : carlos.pisador@devoteam.com
+-->
+<template>
+	<template if:true={showTierPricing}>
+		<td class="table-refs-td td-code-width-2" data-title={labels.code}>
+			<div class="slds-grid_vertical-align-center slds-grid_align-spread display-flex">
+				<span>{referenceDetail.sku}</span>
+			</div>
+		</td>
+	</template>
+	<template if:false={showTierPricing}>
+		<td class="table-refs-td td-code-width" data-title={labels.code}>
+			<div class="slds-grid_vertical-align-center slds-grid_align-spread display-flex">
+				<span>{referenceDetail.sku}</span>
+			</div>
+		</td>
+	</template>
+	<template if:true={showTierPricing}>
+		<td class="table-refs-td td-code-custom-width-2" data-title={labels.customCode}>
+			<div class="display-flex">
+				<lightning-input
+					class="ccInput units"
+					variant="label-hidden"
+					type="text"
+					name="customerCode"
+					maxlength="20"
+					placeholder={labels.placehold}
+					disabled={referenceDetail.customerCode.isDisabled}
+					value={referenceDetail.customerCode.value}
+					onchange={handleCustomerCodeChange}>
+				</lightning-input>
+				<lightning-button-icon
+					class="slds-var-m-left_x-small"
+					variant="border-filled"
+					icon-name={referenceDetail.customerCode.iconName}
+					alternative-text={referenceDetail.customerCode.alternativeText}
+					onclick={handleCustomerCodeSave}>
+				</lightning-button-icon>
+			</div>
+		</td>
+	</template>
+	<template if:false={showTierPricing}>
+		<td class="table-refs-td td-code-custom-width" data-title={labels.customCode}>
+			<div class="display-flex">
+				<lightning-input
+					class="ccInput units"
+					variant="label-hidden"
+					type="text"
+					name="customerCode"
+					maxlength="20"
+					placeholder={labels.placehold}
+					disabled={referenceDetail.customerCode.isDisabled}
+					value={referenceDetail.customerCode.value}
+					onchange={handleCustomerCodeChange}>
+				</lightning-input>
+				<lightning-button-icon
+					class="slds-var-m-left_x-small"
+					variant="border-filled"
+					icon-name={referenceDetail.customerCode.iconName}
+					alternative-text={referenceDetail.customerCode.alternativeText}
+					onclick={handleCustomerCodeSave}>
+				</lightning-button-icon>
+			</div>
+		</td>
+	</template>
+	<template if:true={showTierPricing}>
+		<td class="table-refs-td td-measure-width-2" data-title={labels.measure}><strong>{referenceDetail.measurement}</strong></td>
+	</template>
+	<template if:false={showTierPricing}>
+		<td class="table-refs-td td-measure-width" data-title={labels.measure}><strong>{referenceDetail.measurement}</strong></td>
+	</template>
+	<template if:true={referenceDetail.weight}>
+		<td class="table-refs-td td-pack-width-2" data-title={labels.packInfo}>
+			<div class="weight-info">
+				<div class="weight-info-item">
+					<div>
+						<img alt={labels.estuche} style="height: 25px;" src="/indexfix/cms/delivery/media/MCETVJOYSEVFAYXIB6D56QQ43SGQ">&nbsp; 
+					</div>
+					
+					<div style="margin-left: auto;"><!-- margin-left: auto; -->
+						<lightning-formatted-number value={referenceDetail.quantityStep} format-style="decimal" maximum-fraction-digits="5"></lightning-formatted-number>
+					</div>
+					<div>
+						<template lwc:if={iskg}> <span>&nbsp; Kg </span></template>
+						<template lwc:else> <span>&nbsp; {labels.uds}</span> </template>
+					</div>
+				</div>
+				<template if:true={referenceDetail.masterunits}>
+					<div class="weight-info-item">
+						<div>
+							<img alt={labels.estuche} style="height: 25px;" src="/indexfix/cms/delivery/media/MCI5Q22Q2FTBFHDEKKCI32Q3NSPI">&nbsp; 
+						</div>
+						<div style="margin-left: auto;">
+							<lightning-formatted-number value={referenceDetail.masterunits} format-style="decimal" maximum-fraction-digits="5"></lightning-formatted-number>
+						</div>
+						<div>
+							<template lwc:if={iskg}> <span>&nbsp; Kg </span></template>
+							<template lwc:else> <span>&nbsp; {labels.uds}</span> </template>
+						</div>
+					</div>
+				</template>
+				<template if:true={referenceDetail.palletunits}>
+					<div class="weight-info-item">
+						<div>
+							<img alt={labels.estuche} style="height: 25px;" src="/indexfix/cms/delivery/media/MC3YWY2UNL7ZHRDGBG4H7WRALPWM">&nbsp; 
+						</div>
+						<div style="margin-left: auto;">
+							<lightning-formatted-number value={referenceDetail.palletunits} format-style="decimal" maximum-fraction-digits="5"></lightning-formatted-number>
+						</div>
+						<div>
+							<template lwc:if={iskg}> <span>&nbsp; Kg </span></template>
+							<template lwc:else> <span>&nbsp; {labels.uds}</span> </template>
+						</div>
+					</div>
+				</template>
+			</div>
+		</td>
+	</template>
+	<template if:false={referenceDetail.weight}>
+		<td class="table-refs-td td-pack-width" data-title={labels.packInfo}>
+			<div class="weight-info">
+				<div class="weight-info-item">
+					<div>
+						<img alt={labels.estuche} style="height: 25px;" src="/indexfix/cms/delivery/media/MCETVJOYSEVFAYXIB6D56QQ43SGQ">&nbsp; 
+					</div>
+					<div style="margin-left: auto;">
+						<lightning-formatted-number value={referenceDetail.quantityStep} format-style="decimal" maximum-fraction-digits="5"></lightning-formatted-number>
+					</div>
+					<div>
+						<template lwc:if={iskg}> <span>&nbsp; Kg </span></template>
+						<template lwc:else> <span>&nbsp; {labels.uds}</span> </template>
+					</div>
+				</div>
+				<template if:true={referenceDetail.masterunits}>
+					<div class="weight-info-item">
+						<div>
+							<img alt={labels.estuche} style="height: 25px;" src="/indexfix/cms/delivery/media/MCI5Q22Q2FTBFHDEKKCI32Q3NSPI">&nbsp; 
+						</div>
+						<div style="margin-left: auto;">
+							<lightning-formatted-number value={referenceDetail.masterunits} format-style="decimal" maximum-fraction-digits="5"></lightning-formatted-number>
+						</div>
+						<div>
+							<template lwc:if={iskg}> <span>&nbsp; Kg </span></template>
+							<template lwc:else> <span>&nbsp; {labels.uds}</span> </template>
+						</div>
+					</div>
+				</template>
+				<template if:true={referenceDetail.palletunits}>
+					<div class="weight-info-item">
+						<div>
+							<img alt={labels.estuche} style="height: 25px;" src="/indexfix/cms/delivery/media/MC3YWY2UNL7ZHRDGBG4H7WRALPWM">&nbsp; 
+						</div>
+						<div style="margin-left: auto;">
+							<lightning-formatted-number value={referenceDetail.palletunits} format-style="decimal" maximum-fraction-digits="5"></lightning-formatted-number>
+						</div>
+						<div>
+							<template lwc:if={iskg}> <span>&nbsp; Kg </span></template>
+							<template lwc:else> <span>&nbsp; {labels.uds}</span> </template>
+						</div>
+					</div>
+				</template>
+			</div>
+		</td>
+	</template>
+	<template if:true={showTierPricing}>
+		<td class="table-refs-td td-price-width-2" data-title={labels.price}>
+			<table class="table-refs-prices">
+				<template if:true={hastiers}>
+					<tr>
+						<td style="width:35%; text-decoration:underline; color: #75787B">
+							<template lwc:if={iskg}> <strong>Kg</strong></template>
+							<template lwc:else> <strong>{labels.uds}</strong> </template>
+						</td>
+						<td style="width:40%; text-align:center; text-decoration:underline; color: #75787B">
+							<strong>{referenceDetail.priceByAmount}</strong>
+						</td>
+						<td style="width:18%; text-align:right; text-decoration:underline; color: #75787B">
+							<strong>{labels.dto}</strong>
+						</td>
+					</tr>
+				</template>
+				<template for:each={referenceDetail.priceWrapper} for:item="tier">
+					<template if:true={tier.lowerUnits}>
+						<tr key={tier.lowerUnits} data-target-id={tier.lowerUnits}>
+							<td style="width:35%">
+								<lightning-formatted-number value={tier.lowerUnits} format-style="decimal"></lightning-formatted-number>
+								 - 
+								<lightning-formatted-number value={tier.higherUnits} format-style="decimal"></lightning-formatted-number>
+							</td>
+							<td style="width:40%; text-align:center">
+								<strong><lightning-formatted-number value={tier.unitPrice} format-style="decimal" minimum-fraction-digits="3"></lightning-formatted-number></strong>
+							</td>
+							<td style="width:18%; text-align:right">
+								<span if:true={tier.discgreen} class="slds-text-color_success"> {tier.symbol}{tier.discount}%</span>
+								<span if:false={tier.discgreen} class="slds-text-color_error"> {tier.symbol}{tier.discount}%</span>
+							</td>
+						</tr>
+					</template>
+					<template if:false={tier.lowerUnits}>
+						<lightning-formatted-number key={tier.unitPrice} value={tier.unitPrice} format-style="decimal" minimum-fraction-digits="3"></lightning-formatted-number>
+						<span key={tier.priceby}> {tier.priceby}</span>
+					</template>
+				</template>
+			</table>
+		</td>
+	</template>
+	<template if:false={showTierPricing}>
+		<td class="table-refs-td td-price-width" data-title={labels.price}>
+			<template for:each={referenceDetail.priceWrapper} for:item="uniquePrice">
+				<lightning-formatted-number key={uniquePrice.unitPrice} value={uniquePrice.unitPrice} format-style="decimal" minimum-fraction-digits="3"></lightning-formatted-number>
+				<span key={uniquePrice.priceby}> {uniquePrice.priceby}</span>
+			</template>
+		</td>
+	</template>
+	<template if:true={showTierPricing}>
+		<td class="table-refs-td td-units-custom-width-2" data-title={labels.units}>
+			<div class="display-flex v-alignment">
+				<lightning-button-icon
+					icon-name="utility:dash"
+					variant="border-filled"
+					alternative-text={labels.dash}
+					onclick={subtractQuantityStep}>
+				</lightning-button-icon>
+				<lightning-input 
+					class="slds-var-m-left_x-small units-2"
+					data-name="quantityInput"
+					variant="label-hidden"
+					type="number"
+					name="quantity"
+					maxlength="8"
+					step={referenceDetail.quantityStep}
+					value={referenceDetail.quantity}
+					oncommit={handleInputQuantityChange}
+					min="0">
+				</lightning-input>
+				<lightning-button-icon
+					class="slds-var-m-left_x-small slds-var-m-right_x-small"
+					variant="border-filled"
+					icon-name="utility:add"
+					alternative-text={labels.add}
+					onclick={addQuantityStep}>
+				</lightning-button-icon>
+			</div>
+			<div class="display-flex v-alignment">
+				<template if:true={referenceDetail.weight}>
+					<lightning-formatted-number class="slds-var-m-top_x-small" value={referenceDetail.weightbuy} format-style="decimal" maximum-fraction-digits="4"></lightning-formatted-number>
+					<template lwc:if={iskg}> <p class="slds-var-m-left_xx-small slds-var-m-top_x-small">{labels.uds}</p> </template>
+					<template lwc:else> <p class="slds-var-m-left_xx-small slds-var-m-top_x-small">Kg</p> </template>
+				</template>
+			</div>
+			<c-g-l_stock-message
+				if:true={calloutstockdone}
+				units={referenceDetail.quantity}
+				stock={stock}
+				onreferencewostock={handleShowRelatedProductsLink}>
+			</c-g-l_stock-message>
+			<template if:true={showRelatedProdLink}>
+				<div>
+					<small class="slds-text-link link-text" onclick={showComplementaryProducts}>{labels.substitutes}</small>
+				</div>
+			</template>
+		</td>
+	</template>
+	<template if:false={showTierPricing}>
+		<td class="table-refs-td td-units-custom-width" data-title={labels.units}>
+			<div class="display-flex">
+				<lightning-button-icon
+					icon-name="utility:dash"
+					variant="border-filled"
+					alternative-text={labels.dash}
+					onclick={subtractQuantityStep}>
+				</lightning-button-icon>
+				<lightning-input 
+					class="slds-var-m-left_x-small units"
+					data-name="quantityInput"
+					variant="label-hidden"
+					type="number"
+					name="quantity"
+					step={referenceDetail.quantityStep}
+					maxlength="8"
+					value={referenceDetail.quantity}
+					oncommit={handleInputQuantityChange}>
+				</lightning-input>
+				<lightning-button-icon
+					class="slds-var-m-left_x-small slds-var-m-right_x-small"
+					variant="border-filled"
+					icon-name="utility:add"
+					alternative-text={labels.add}
+					onclick={addQuantityStep}>
+				</lightning-button-icon>
+			</div>			
+			<div class="display-flex">
+				<template if:true={referenceDetail.weight}>
+					<lightning-formatted-number class="slds-var-m-top_x-small" value={referenceDetail.weightbuy} format-style="decimal" maximum-fraction-digits="4"></lightning-formatted-number>
+					<template lwc:if={iskg}> <p class="slds-var-m-left_xx-small slds-var-m-top_x-small">{labels.uds}</p> </template>
+					<template lwc:else> <p class="slds-var-m-left_xx-small slds-var-m-top_x-small">Kg</p> </template>
+				</template>
+			</div>
+			<c-g-l_stock-message
+				if:true={calloutstockdone}
+				units={referenceDetail.quantity}
+				stock={stock}
+				onreferencewostock={handleShowRelatedProductsLink}>
+			</c-g-l_stock-message>
+			<template if:true={showRelatedProdLink}>
+				<div>
+					<small class="slds-text-link link-text" onclick={showComplementaryProducts}>{labels.substitutes}</small>
+				</div>
+			</template>
+		</td>
+	</template>
+	<td class="table-refs-td td-cart-custom-width"  data-title={labels.actions}>
+		<template if:true={loaddetail}>
+			<lightning-spinner alternative-text="Loading" variant="brand"></lightning-spinner>
+        </template>
+        <template if:false={loaddetail}>
+			<c-g-l_popup-product
+				if:true={showpopup}
+				refmap={referenceMap}
+				onpopup={handlePopUp}>
+			</c-g-l_popup-product>
+			<lightning-button-icon
+				icon-name="utility:cart"
+				variant="brand"
+				alternative-text={labels.cart}
+				disabled={isCartDisabled}
+				onclick={addToCart}>
+			</lightning-button-icon>
+			<lightning-button-menu class="slds-var-m-left_x-small"
+				alternative-text={labels.favorite}
+				variant="border-filled"
+				icon-name="utility:favorite"
+				menu-alignment="right"
+				onselect={handleListMenuSelect}>
+				<template for:each={referenceDetail.customerListMenuItemList} for:item="menuItem">
+					<lightning-menu-item
+						key={menuItem.value}
+						value={menuItem.value}
+						label={menuItem.label}
+						icon-name={menuItem.iconName}
+						checked={menuItem.checked}>
+					</lightning-menu-item>
+				</template>
+			</lightning-button-menu>
+        </template>
+	</td>
+</template>

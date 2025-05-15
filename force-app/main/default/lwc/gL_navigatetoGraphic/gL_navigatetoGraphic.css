@@ -1,0 +1,9 @@
+.dummy{
+	color : black;
+}
+.button-Graphics {
+	display: flex;
+    justify-content: center;
+    align-items: stretch;
+    flex-direction: row;
+}

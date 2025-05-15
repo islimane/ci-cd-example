@@ -1,0 +1,28 @@
+/*-----inicio pdf-print-----*/
+.pdf-print{
+   margin: 2rem 0;
+}
+.pdf-print .logo{
+    width: 15rem;
+    margin-bottom: 2rem;
+ }
+.pdf-print h1{
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+ }
+.pdf-print table{
+    margin: 2rem 0 0 0;
+    width: 100%;
+ }
+.pdf-print table th,  .pdf-print table td{
+    padding: 0.5rem;
+}
+.pdf-print table tr{
+    border-bottom: solid 1px #ccc;
+}
+.pdf-print table th{
+   color:#fff;
+   background: #003865;
+}
+/*-----fin pdf-print-----*/

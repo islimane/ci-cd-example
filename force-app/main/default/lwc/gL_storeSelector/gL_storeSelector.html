@@ -1,0 +1,15 @@
+<template>
+    <div class="store-selection-wrapper">
+        <div class="store-selection">
+            <template if:true={moreThanOneStore}>
+                <span class="store-selection-label">{labels.storeSelector}: </span>
+                <template for:each={storeOptions} for:item="store">
+                    <a key={store.name} href={store.url}>
+                        <img id={store.name}
+                        class="store-selection-store" src={store.logo} />
+                    </a>
+                </template>
+            </template>
+        </div>
+    </div>
+</template>

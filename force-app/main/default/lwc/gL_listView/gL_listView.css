@@ -1,0 +1,127 @@
+.certificate-header {
+	margin: 0.25rem 0 1rem 0;
+	display: flex;
+	justify-content: space-between;
+}
+
+.certificate-header h1 {
+	font-size: 18px; 
+	color: #003865 !important;
+}
+
+.certificate-header-chaves {
+	margin: 0.25rem 0 1rem 0;
+	display: flex;
+	justify-content: space-between;
+}
+
+.certificate-header-chaves h1 {
+	font-size: 18px; 
+	color: rgb(176, 22, 48) !important;
+}
+
+@media (max-width:767px) {
+	.certificate-header {
+		margin: 0.5rem 0 0rem 0;
+		display: flex;
+		justify-content: start;
+	}
+	.certificate-header h1 {
+		font-size: 20px; 
+		color: #003865 !important;
+	}
+	.certificate-header-chaves {
+		margin: 0.5rem 0 0rem 0;
+		display: flex;
+		justify-content: start;
+	}
+	.certificate-header-chaves h1 {
+		font-size: 20px; 
+		color: rgb(176, 22, 48) !important;
+	}
+}
+
+.table-style {
+	--slds-c-icon-color-foreground: #55AAA7 !important;
+	--slds-c-icon-color-foreground-default: #55AAA7 !important;
+    --lwc-tableColorBackgroundHeader: #003865;
+	--lwc-tableColorBackgroundHeaderHover: #003865;
+    --lwc-tableColorTextHeader: #FFFFFF !important;
+    --lwc-tableColorTextHeaderHover: #55AAA7 !important;
+	--slds-c-icon-color-foreground: #FFFFFF !important;
+	--lwc-colorBackgroundRowSelected: #0038650c !important;
+	--lwc-brandTextLinkActive: #55AAA7 !important;
+}
+
+.table-styleM {
+	--slds-c-icon-color-foreground: #55AAA7 !important;
+	--slds-c-icon-color-foreground-default: #55AAA7 !important;
+    --lwc-tableColorBackgroundHeader: #ffffff;
+	--lwc-tableColorBackgroundHeaderHover: #ffffff;
+    --lwc-tableColorTextHeader: #003865 !important;
+    --lwc-tableColorTextHeaderHover: #55AAA7 !important;
+	--slds-c-icon-color-foreground: #003865 !important;
+	--lwc-colorBackgroundRowSelected: #0038650c !important;
+	--lwc-brandTextLink : #003865 !important;
+	--lwc-brandTextLinkActive: #55AAA7 !important;
+}
+
+.table-style-chaves {
+	--slds-c-icon-color-foreground: rgb(176, 22, 48) !important;
+	--slds-c-icon-color-foreground-default: rgb(176, 22, 48) !important;
+    --lwc-tableColorBackgroundHeader: #ffffff;
+	--lwc-tableColorBackgroundHeaderHover: #ffffff;
+    --lwc-tableColorTextHeader: rgb(176, 22, 48) !important;
+    --lwc-tableColorTextHeaderHover: #2d2926 !important;
+	--lwc-colorBackgroundRowSelected: #ee1d230c !important;
+	--lwc-brandTextLink : rgb(176, 22, 48) !important;
+	--lwc-brandTextLinkActive: #2d2926 !important;
+	--lwc-brandAccessible: #2d2926 !important;
+}
+
+.table-styleM-chaves {
+	--slds-c-icon-color-foreground: #2d2926 !important;
+	--slds-c-icon-color-foreground-default: #2d2926 !important;
+    --lwc-tableColorBackgroundHeader: #ffffff;
+	--lwc-tableColorBackgroundHeaderHover: #ffffff;
+    --lwc-tableColorTextHeader: rgb(176, 22, 48) !important;
+    --lwc-tableColorTextHeaderHover: #2d2926 !important;
+	--slds-c-icon-color-foreground: rgb(176, 22, 48) !important;
+	--lwc-colorBackgroundRowSelected: #ee1d230c !important;
+	--lwc-brandTextLink : rgb(176, 22, 48) !important;
+	--lwc-brandTextLinkActive: #2d2926 !important;
+}
+
+.slds-table th {
+	font-size: 20px;
+	font-weight: 300px;
+}
+
+.table-styleM a::first-line, .table-styleM .slds-table th::first-line {
+	--lwc-brandTextLink : #55AAA7 !important;
+}
+
+.table-styleM-chaves a::first-line, .table-styleM-chaves .slds-table th::first-line {
+	--lwc-brandTextLink : rgb(176, 22, 48) !important;
+}
+
+/*.slds-has-focus .slds-th__action{
+	background-color: #003865 !important;
+}*/
+
+.my-round-button {
+    --sds-c-button-radius-border: 20px;
+}
+
+.empty-style {
+	display: block; 
+	padding: 100px var(--lwc-spacingXLarge,2rem) var(--lwc-spacingMedium,1rem) var(--lwc-spacingXLarge,2rem); 
+	color: rgba(0, 0, 0, 0.6); 
+	font-size: 1rem;
+	margin-bottom: 2rem;
+}
+
+.spinnerstyle{
+    position: static;
+    display: inline-block;
+}

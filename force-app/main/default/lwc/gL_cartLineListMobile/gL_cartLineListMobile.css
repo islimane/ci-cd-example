@@ -1,0 +1,82 @@
+.chavesbao-style {
+    background:#75787B; 
+    color:#FFFFFF;
+    vertical-align: middle;  
+    padding: 0.5rem;
+}
+.indexfix-style {
+    background: #003865; 
+    color: #fff;
+    vertical-align: middle;  
+    padding: 0.5rem;
+}
+.table-cart { 
+    width: 100%; 
+    border-collapse: collapse; 
+}
+.table-cart thead tr{ 
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between
+}
+.table-cart thead tr th{ 
+   display: inline-block;
+}
+
+.table-cart-tbody{ 
+    overflow: auto;
+    display: block;
+    width: 100%;
+}
+
+.table-cart-tbody6{ 
+    overflow: auto;
+    height: 35rem;
+    display: block;
+    width: 100%;
+}
+
+.table-cart tbody::-webkit-scrollbar-track{
+	background-color: #F5F5F5;
+}
+
+.table-cart tbody::-webkit-scrollbar{
+	width: 6px;
+	background-color: #F5F5F5;
+}
+
+.table-cart tbody::-webkit-scrollbar-thumb{
+	background-color: #C3C3C3;
+}
+.table-cart-tr {
+    display: flex;
+    flex-direction: column;
+}
+.row-border {
+	border-bottom: solid 1px #f0f0f0;
+}
+.table-cart td, .table-cart th { 
+    padding: 0.5rem;
+    vertical-align: top;
+}
+.table-cart th {
+    vertical-align: middle;
+}
+.table-cart td .img-product {
+    max-width: 6rem;
+    width: 100%;
+}
+.table-cart td del {
+    color: #999;
+}
+.sort-dropdown {
+	width: 100%;
+	margin-bottom: 0.5rem;
+	float: left;
+}
+
+/* display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between; */

@@ -1,0 +1,11 @@
+<template>    
+    <template if:true={green}>
+        <p class="slds-m-bottom_none slds-text-color_success"><small>{stocktext}</small></p>
+    </template>
+    <template if:true={red}>
+        <p class="slds-m-bottom_none slds-text-color_error"><small>{stocktext}</small></p>
+    </template>
+    <template if:true={orange}>
+        <p class="slds-m-bottom_none" style="color:orange"><small>{stocktext}</small></p>
+    </template>
+</template>

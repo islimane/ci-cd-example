@@ -1,0 +1,94 @@
+.my-quotes-heading{
+    font-size: 24px;
+}
+.my-quotes-filter-actions{
+    padding-top: 1.5rem;
+}
+.quote-list.quote-list .quote-list-item .slds-box{
+    border: none;
+    border-bottom: solid 1px #eee;
+    padding: 1.25rem 0;
+}
+.quote-list .quote-list-item .quote-list-item-info{
+    width: 80%;
+}
+.quote-list .quote-list-item .quote-list-item-info .quote-list-item-col{
+    width: 25%;
+}
+.quote-list .quote-list-item .quote-list-item-actions{
+   width: 25%;
+}
+.quote-list .quote-list-item .quote-list-item-actions .slds-button_neutral {
+   width: auto;
+}
+.quote-list-item-col1 {
+    width: 30%;
+}
+.quote-list-item-col2 {
+    width: 25%;
+}
+.quote-list-item-col3 {
+    width: 18%;
+}
+.quote-list-item-col4 {
+    width: 20%;
+}
+
+@media (max-width: 640px) {
+    .my-quotes-filter-actions{
+        padding-top: 0.5rem;
+        margin-bottom: 0.75rem;
+    }
+    .quote-list .quote-list-item .slds-box {
+        flex-direction: column;
+    }
+    .quote-list .quote-list-item .quote-list-item-info{
+        width: 100%;
+    }
+    .quote-list .quote-list-item .quote-list-item-info .quote-list-item-col {
+        width: 100%;
+        display: flex;
+    }
+    .quote-list .quote-list-item .quote-list-item-actions{
+        margin-top: 0.5rem;
+        width: 100%;
+    }
+    
+    .quote-list-item-col1, .quote-list-item-col2, .quote-list-item-col3, .quote-list-item-col4  {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+    .quote-list-item-col1 > span, .quote-list-item-col1 > strong, .quote-list-item-col2 > span,.quote-list-item-col2 > strong, .quote-list-item-col2 > span, .quote-list-item-col3 > strong, .quote-list-item-col3 > span,.quote-list-item-col4 > strong, .quote-list-item-col4 > span {
+        width: 50%
+    }
+  }
+ @media (min-width: 640px) and (max-width: 1200px) {
+    .my-quotes-filter-actions{
+        padding-top: 0.5rem;
+        margin-bottom: 0.75rem;
+    }
+    .quote-list .quote-list-item .slds-box {
+        flex-direction: column;
+    }
+    .quote-list .quote-list-item .quote-list-item-info{
+        width: 100%;
+    }
+    .quote-list .quote-list-item .quote-list-item-info .quote-list-item-col {
+        width: 100%;
+        display: flex;
+    }
+    .quote-list .quote-list-item .quote-list-item-actions{
+        margin-top: 0.5rem;
+        width: 100%;
+    }
+    
+    .quote-list-item-col1, .quote-list-item-col2, .quote-list-item-col3, .quote-list-item-col4  {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+    .quote-list-item-col1 > span, .quote-list-item-col1 > strong, .quote-list-item-col2 > span,.quote-list-item-col2 > strong, .quote-list-item-col2 > span, .quote-list-item-col3 > strong, .quote-list-item-col3 > span,.quote-list-item-col4 > strong, .quote-list-item-col4 > span {
+        width: 50%
+    }
+  }

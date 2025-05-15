@@ -1,0 +1,35 @@
+.converter-container{
+    min-height: 70vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+.converter-container .converter-container-actions{
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+}
+.converter-img {
+    max-width: 100%;
+    margin: 0 auto;
+    display: block;
+    padding: 10%;
+}
+@media (max-width: 767px) {
+    .converter-img-wrapper{
+        order: 2;
+    }
+    .converter-img-info{
+        order: 1;
+    }
+}
+@media (max-width: 480px) {
+    .converter-container .converter-container-actions{
+        font-size: 0.8rem;
+        justify-content: center;
+    }
+    .converter-img {
+        padding: 5%;
+        width: 18.75rem;
+    }
+}

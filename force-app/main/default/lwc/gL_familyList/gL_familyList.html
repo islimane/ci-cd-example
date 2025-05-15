@@ -1,0 +1,210 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <lightning-spinner
+        if:false={isLoaded}
+        class="slds-is-relative slds-align_absolute-center slds-var-m-around_large"
+        alternative-text={labels.loadingMenu}
+        size="medium"
+        variant="brand">
+    </lightning-spinner>
+
+	<template if:true={isLoaded}>
+		<template if:false={callchild}>
+			<section class="plp">
+				<template if:true={ischaves}>
+					<h1 class="num-items-chaves">{totalItemsTitle}</h1>
+				</template>
+
+				<template if:false={ischaves}>
+					<h1 class="num-items">{totalItemsTitle}</h1>
+				</template>
+				<div if:false={subcategoryListIsEmpty} class="plp-wrapper">
+					<div class="plp-filters">
+						<template if:true={isMobile}>
+							<div class="sort-btn-mobile">
+								<lightning-button-icon icon-name="action:filter" label={labels.filtersLabel} size="large" variant="brand" alternative-text={labels.filtersLabel} onclick={handleFilter} class="my-round-button"></lightning-button-icon>
+								<span>Filter</span>
+							</div>
+						</template>	
+						<template if:true={isDesktop}>
+						<div class="slds-var-m-top_xx-small plp-filters-header">
+							<p class="plp-filter-title">{labels.filtersLabel}</p>
+							<lightning-button
+								class="clear-all-button"
+								variant="base"
+								label={labels.clearAllLabel}
+								onclick={handleClearAll}>
+							</lightning-button>
+						</div>
+
+						<lightning-accordion
+							allow-multiple-sections-open
+							class="slds-border_top"
+							active-section-name={activeSectionsList}>
+							<lightning-accordion-section if:true={showUseMaterialFilter}
+								name="use_material"
+								label={labels.useMaterialLabel}>
+								<template for:each={useMaterialFilterSet} for:item="filter">
+									<lightning-input
+										class="slds-var-p-left_medium slds-var-p-bottom_small"
+										key={filter}
+										label={filter}
+										data-target-id={filter}
+										type="checkbox"
+										onchange={handleUseMaterialCheckboxChange}>
+									</lightning-input>
+								</template>
+							</lightning-accordion-section>
+							<lightning-accordion-section if:true={showCoveringFilter}
+								name="covering"
+								label={labels.finishLabel}>
+								<template for:each={coveringFilterSet} for:item="filter">
+									<lightning-input
+										class="slds-var-p-left_medium slds-var-p-bottom_small"
+										key={filter}
+										label={filter}
+										data-target-id={filter}
+										type="checkbox"
+										onchange={handleCoveringCheckboxChange}>
+									</lightning-input>
+								</template>
+							</lightning-accordion-section>
+							<lightning-accordion-section if:true={showHomologatedFilter}
+								name="homologated"
+								label={labels.homologatedLabel}>
+								<template for:each={homologatedFilterSet} for:item="filter">
+									<lightning-input
+										class="slds-var-p-left_medium slds-var-p-bottom_small"
+										key={filter}
+										label={filter}
+										data-target-id={filter}
+										type="checkbox"
+										onchange={handleHomologatedCheckboxChange}>
+									</lightning-input>
+								</template>
+							</lightning-accordion-section>
+							<lightning-accordion-section if:true={showImprintFilter}
+								name="imprint"
+								label={labels.imprintLabel}>
+								<template for:each={imprintFilterSet} for:item="filter">
+									<lightning-input
+										class="slds-var-p-left_medium slds-var-p-bottom_small"
+										key={filter}
+										label={filter}
+										data-target-id={filter}
+										type="checkbox"
+										onchange={handleImprintCheckboxChange}>
+									</lightning-input>
+								</template>
+							</lightning-accordion-section>
+						</lightning-accordion>
+					</template>
+					</div>
+					
+					<div class="plp-items">
+						<lightning-spinner
+							if:true={isFiltering}
+							class="slds-is-relative slds-align_absolute-center slds-var-m-around_large"
+							alternative-text={labels.loadingMenu}
+							size="medium"
+							variant="brand">
+						</lightning-spinner>
+						<template if:true={ischaves}>
+							<ul if:false={isFiltering} class="plp-items-list-chaves">
+								<template if:false={showFilteredList} for:each={subcategoryList} for:item="subcategory">
+									<li key={subcategory.Id}>
+										<div data-target-id={subcategory.Id} onclick={handleCategorySelection}>
+											<figure data-target-id={subcategory.Id}>
+												<img src={subcategory.Category_Menu_Image__c} alt="family-img" data-target-id={subcategory.Id}/>
+											</figure>
+		
+											<p class="title" data-target-id={subcategory.Id}>{subcategory.Name}</p>
+											<p class="description" data-target-id={subcategory.Id}>{subcategory.Description}</p>
+										</div>
+									</li>
+								</template>
+		
+								<template if:true={showFilteredList} for:each={filteredSubcategoryList} for:item="subcategory">
+									<li key={subcategory.Id}>
+										<div data-target-id={subcategory.Id} onclick={handleCategorySelection}>
+											<figure data-target-id={subcategory.Id}>
+												<img src={subcategory.Category_Menu_Image__c} alt="family-img" data-target-id={subcategory.Id}/>
+											</figure>
+		
+											<p class="title" data-target-id={subcategory.Id}>{subcategory.Name}</p>
+											<p class="description" data-target-id={subcategory.Id}>{subcategory.Description}</p>
+										</div>
+									</li>
+								</template>
+							</ul>
+						</template>
+						<template if:false={ischaves}>
+							<ul if:false={isFiltering} class="plp-items-list">
+								<template if:false={showFilteredList} for:each={subcategoryList} for:item="subcategory">
+									<li key={subcategory.Id}>
+										<div data-target-id={subcategory.Id} onclick={handleCategorySelection}>
+											<figure>
+												<img src={subcategory.Category_Menu_Image__c} alt="family-img" data-target-id={subcategory.Id}/>
+											</figure>
+		
+											<p class="title" data-target-id={subcategory.Id}>{subcategory.Name}</p>
+											<p class="description" data-target-id={subcategory.Id}>{subcategory.Description}</p>
+										</div>
+									</li>
+								</template>
+		
+								<template if:true={showFilteredList} for:each={filteredSubcategoryList} for:item="subcategory">
+									<li key={subcategory.Id}>
+										<div data-target-id={subcategory.Id} onclick={handleCategorySelection}>
+											<figure>
+												<img src={subcategory.Category_Menu_Image__c} alt="family-img" data-target-id={subcategory.Id}/>
+											</figure>
+											<p class="title" data-target-id={subcategory.Id}>{subcategory.Name}</p>
+											<p class="description" data-target-id={subcategory.Id}>{subcategory.Description}</p>
+										</div>
+									</li>
+								</template>
+							</ul>
+						</template>
+					</div>
+				</div>
+
+				<div if:true={subcategoryListIsEmpty} class="slds-text-align_center slds-text-color_weak slds-var-m-vertical_xx-large">
+					<template if:true={isMobile}>
+						<div class="plp-filters">
+							<div class="sort-btn-mobile">
+								<lightning-button-icon icon-name="action:filter" label={labels.filtersLabel} size="large" variant="brand" alternative-text={labels.filtersLabel} onclick={handleFilter} class="my-round-button"></lightning-button-icon>
+								<span>Filter</span>
+							</div>
+						</div>
+					</template>	
+					<h3 class="slds-text-heading_medium">{labels.empty0label}</h3>
+					<p class="slds-text-body_regular slds-var-m-vertical_small">{labels.empty1label}</p>
+				</div>
+			</section>
+		</template>
+		<template if:true={callchild}>
+			<div>
+			    <c-g-l_filter-categories
+					active-section-list={activeSectionsList}
+					filter-names-selected={filterNamesSelected}
+					oneventfiltersel={callFromChild}	
+					oneventfilterdesel={callFromChildDesel}
+					oneventfilterreset={callFromChildReset}
+					oneventapplyfilter={callFromChildApply}
+					oneventcancelfilter={callFromChildCancel}
+					oneventbuttonclearf={callFromChildClearButton}
+					show-use-material-filter={showUseMaterialFilter}
+					show-covering-filter={showCoveringFilter}
+					show-homologated-filter={showHomologatedFilter}
+					show-imprint-filter={showImprintFilter}
+					use-material-filter-set={useMaterialFilterSet}
+					covering-filter-set={coveringFilterSet}
+					homologated-filter-set={homologatedFilterSet}
+					imprint-filter-set={imprintFilterSet}
+					>
+				</c-g-l_filter-categories>
+			</div>
+		</template>
+	</template>
+</template>

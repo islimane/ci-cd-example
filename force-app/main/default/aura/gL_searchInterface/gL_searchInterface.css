@@ -1,0 +1,17 @@
+.THIS .search-wrapper{
+    position: relative;
+    z-index: 99;
+}
+.THIS .search-wrapper .search-input-wrapper{
+    position: absolute; 
+    width: 100%;    
+}
+.THIS .search-wrapper .search-input-wrapper .advanced-search{
+    margin-top: -1rem;
+}
+.THIS .no-search-result{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0.65rem 0.5rem;
+}

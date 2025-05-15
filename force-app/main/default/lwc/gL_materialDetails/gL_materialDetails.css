@@ -1,0 +1,114 @@
+.material-items{
+    display: flex;
+    align-items: start;
+    justify-content: start;
+}
+.material-items .material-left-arrow{
+    align-self:center;
+}
+.material-items .material-left-arrow lightning-button-icon{
+    margin-right:0.75rem;
+}
+.material-items .material-right-arrow{
+    align-self:center;
+}
+
+.material-items .material-item {
+    width: 23%;
+    margin-right: 2%;
+    text-align: center;
+    display: inline-block;
+    align-items: flex-start;
+    justify-content: space-between;
+    vertical-align: top;
+}
+@media  (max-width: 1024px) {
+    .material-items .material-item {
+        width: 31%;
+    }
+}
+@media  (max-width: 767px) {
+    .material-items .material-item {
+        width: 40%;
+        margin-right: 4%;
+
+    }
+}
+.material-items .material-item p{
+    margin: 0.5rem 0;
+    font-size: 0.75rem;
+    line-height: 1rem;
+}
+.material-items .material-item img{
+    max-width: 100%;
+    width: auto;
+    max-height:4.375rem;
+}
+
+.material-items .material-left-arrow{
+    align-self:center;
+}
+.material-items .material-left-arrow lightning-button-icon{
+    margin-right:0.75rem;
+}
+.material-items .material-right-arrow{
+    align-self:center;
+}
+
+
+.material-items-hom{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+
+.material-items-hom .material-left-arrow{
+    align-self:center;
+}
+.material-items-hom .material-left-arrow lightning-button-icon{
+    margin-right:0.75rem;
+}
+.material-items-hom .material-right-arrow{
+    align-self:center;
+    padding-left: 0.35rem;
+}
+
+.material-items-hom .material-item-hom {
+    width: 23%;
+    margin-right: 2%;
+    text-align: center;
+    display: inline-block;
+    align-items: flex-start;
+    justify-content: space-between;
+    vertical-align: top;
+}
+@media  (max-width: 1024px) {
+    .material-items-hom .material-item-hom {
+        width: 31%;
+    }
+}
+@media  (max-width: 767px) {
+    .material-items-hom .material-item-hom {
+        width: 40%;
+        margin-right: 4%;
+
+    }
+}
+.material-items-hom .material-item-hom p{
+    margin: 0.5rem 0;
+    font-size: 0.75rem;
+    line-height: 1rem;
+}
+.material-items-hom .material-item-hom img{
+    max-width: 100%;
+    width: auto;
+    max-height:4.375rem;
+}
+
+.accordion {
+    --slds-c-accordion-sizing-border: 0px;
+    width: 100%;
+    text-align: left;
+    padding: 20px 25px;
+    border: thin;
+}

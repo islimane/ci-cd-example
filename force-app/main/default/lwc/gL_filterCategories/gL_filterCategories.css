@@ -1,0 +1,68 @@
+.product-filter-header-mobile{
+    margin: 0.25rem 0 1rem 0;
+    display: flex;
+    justify-content: space-between;
+}
+.product-filter-header-mobile h1{
+    font-size: 18px;
+    color: #003865;
+}
+
+.labelcustom {
+    width: 60%;
+    vertical-align: middle;
+    font-size: 16px;
+    padding-top: 3px;
+    text-align: left;
+    text-decoration: none;
+    color: rgba(0,0,0,0.8);
+}
+
+.truncatecustom {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.stateIndicatorcustom {
+    display: block;
+}
+
+.indicatorBoxcustom {
+    padding-bottom: 3px;
+    padding-left: 7px;
+    padding-right: 7px;
+    background-color: var(--lwc-colorBrand,rgb(85, 170, 167));
+    border-radius: 20px;
+}
+
+.licustom li a {
+    display: block;
+	color: var(--lwc-colorTextDefault,rgba(0, 0, 0, 0.8));
+	border-bottom: 1px solid var(--lwc-colorBorderSeparatorAlt,rgb(212, 212, 212));
+}
+
+.licustom {
+    list-style-type: none;
+	list-style: none;
+    border-bottom: solid 1px #eee;
+    padding: 1rem 0.5rem;
+}
+
+.indicatorLabel {
+    font-size: 12px;
+    margin-left: 3px;
+    color: #ffffff;
+}
+
+.iconcolor{
+	--slds-c-icon-color-foreground: #FFFFFF;
+	--slds-c-icon-color-foreground-default: #FFFFFF;
+	--slds-c-icon-color-background: #55AAA7;
+}
+
+.iconcolor-chaves{
+	--slds-c-icon-color-foreground: #FFFFFF;
+	--slds-c-icon-color-foreground-default: #FFFFFF;
+	--slds-c-icon-color-background: rgb(176, 22, 48);
+}

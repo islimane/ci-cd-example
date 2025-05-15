@@ -1,0 +1,67 @@
+.quote-detail-header {
+    margin-top: 0.25rem;
+    padding-bottom: 0;
+    display: flex;
+    justify-content: space-between;
+}
+@media (max-width:767px) {
+  .quote-detail-header {
+    flex-direction: column;
+    padding-bottom: 0;
+  }
+  .quote-detail-header h1 {
+    margin-bottom: 0.75rem;
+  }
+  .quote-detail-header button {
+    width: 100%;
+  }
+}
+.quote-detail-main .slds-card.details-card {
+    border-radius: 0;
+}
+.heading-border-bottom {
+  border-bottom: solid 1px #d4d4d4;
+}
+.quote-detail-main .list-items > li {
+  padding: 0.75rem 0;
+  border-bottom: solid 1px #d4d4d4;
+}
+.quote-detail-main .list-items > li figure {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.quote-detail-main .list-items > li figure img {
+	max-height: 100%;
+	max-width: 100%;
+}
+.quote-detail-main .list-items > li ul li {
+	margin-bottom: 0.125rem;
+}
+@media (max-width: 767px) {
+  .quote-detail-main .list-items > li figure {
+    width: 50px;
+    height: 50px;
+  }
+}
+@media (min-width: 1020px) {
+	.quote-detail-main .list-items > li {
+		width: 50%;
+		float: left;
+	}
+}
+.no-radius {
+	border-radius: 0px !important;
+}
+.quote-detail-list {
+	text-align: end !important;
+}
+.cursor-pointer {
+	cursor: pointer;
+}
+.separador-elementos{
+  overflow: hidden;
+  margin-top: 24px;
+}

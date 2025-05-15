@@ -1,0 +1,12 @@
+.bread-crumbs{
+    margin: 0.75rem 0;
+}
+.last-breadcrumb {
+    cursor: default;
+    color: #003865;
+}
+
+.last-breadcrumb-chaves {
+    cursor: default;
+    color: #2d2926;
+}

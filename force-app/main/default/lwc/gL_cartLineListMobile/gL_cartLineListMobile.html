@@ -1,0 +1,96 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 12-14-2022
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
+<template>
+	<lightning-spinner
+        if:false={isLoaded}
+        class="slds-is-relative slds-align_absolute-center slds-m-around_large"
+        alternative-text={labels.loadingCartInfo}
+        size="small"
+        variant="brand">
+    </lightning-spinner>
+
+	<div if:true={isLoaded}>
+		<div if:true={cartLineListIsNotEmpty} class="sort-dropdown">
+			<lightning-combobox
+        	    value={value}
+            	placeholder={labels.sortingLabel}
+	            options={sortingOptions}
+    	        onchange={handleSortChange} >
+			</lightning-combobox>
+		</div>
+
+		<div if:true={cartLineListIsNotEmpty}>
+			<table class="table-cart">
+				<thead class={style}>
+					<tr>
+						<template if:true={isChaves}>
+							<th class="th-width-product-2">{labels.cart}</th>
+							<th class="th-width-action2">
+								<lightning-button-icon
+								icon-name="utility:delete"
+								variant="brand"
+								alternative-text="delete"
+								onclick={removeItems}>
+							</lightning-button-icon>
+							</th>         
+						</template>
+						<template if:false={isChaves}>
+							<th class="th-width-product">{labels.cart}</th>    
+							<th class="th-width-action">
+								<lightning-button-icon
+								icon-name="utility:delete"
+								variant="brand"
+								alternative-text="delete"
+								onclick={removeItems}>
+							</lightning-button-icon>
+							</th>  
+						</template>
+					</tr>
+				</thead>
+				<template if:true={sizecartlines}>
+					<tbody class="table-cart-tbody6">
+						<template for:each={cartLineList} for:item="cartLineItem">
+							<c-g-l_cart-line-item-mobile class="table-cart-tr"
+								key={cartLineItem.id}
+								cart-line={cartLineItem}
+								effective-account={resolvedEffectiveAccountId}
+								onlineupdated={lineupdated}
+								onitemremoved={itemRemoved}>
+							</c-g-l_cart-line-item-mobile>
+							<c-g-l_cart-line-item-comp-prod-link class="table-cart-tr row-border"
+								key={cartLineItem.id}
+								cart-line={cartLineItem}>
+							</c-g-l_cart-line-item-comp-prod-link>
+						</template>
+					</tbody>
+				</template>
+				<template if:false={sizecartlines}>
+					<tbody class="table-cart-tbody">
+						<template for:each={cartLineList} for:item="cartLineItem">
+							<c-g-l_cart-line-item-mobile class="table-cart-tr"
+								key={cartLineItem.id}
+								cart-line={cartLineItem}
+								effective-account={resolvedEffectiveAccountId}
+								onlineupdated={lineupdated}
+								onitemremoved={itemRemoved}>
+							</c-g-l_cart-line-item-mobile>
+							<c-g-l_cart-line-item-comp-prod-link class="table-cart-tr row-border"
+								key={cartLineItem.id}
+								cart-line={cartLineItem}>
+							</c-g-l_cart-line-item-comp-prod-link>
+						</template>
+					</tbody>
+				</template>
+			</table>
+		</div>
+		<div if:false={cartLineListIsNotEmpty} class="slds-text-align_center slds-text-color_weak slds-m-vertical_xx-large">
+			<h3 class="slds-text-heading_medium">{labels.emptyCart}</h3>
+			<p class="slds-text-body_regular slds-vertical-top_small">{labels.searchProducts}</p>
+		</div>
+	</div>
+</template>

@@ -1,0 +1,250 @@
+<!-- sldsValidatorIgnore -->
+<template>
+	<div class="ref-list-mobile-item">
+		<div class="ref-list-mobile-col"><strong>{labels.code}</strong></div>
+		<div class="ref-list-mobile-col"><span>{referenceDetail.sku}</span></div>
+	</div>
+
+	<div class="ref-list-mobile-item">
+		<div class="ref-list-mobile-col"><strong>{labels.measure}</strong></div>
+		<div class="ref-list-mobile-col"><span>{referenceDetail.measurement}</span></div>
+	</div>
+
+	<div class="ref-list-mobile-item">
+		<div class="ref-list-mobile-col"><strong>{labels.price}</strong></div>
+		<div class="ref-list-mobile-col">
+			<template if:true={showTierPricing}>
+				<div>
+					<template if:true={hastiers}>
+						<span>{defaultPriceWithTiers}</span>
+					</template>
+					<template if:false={hastiers}>
+						<template for:each={referenceDetail.priceWrapper} for:item="tier">
+							<lightning-formatted-number key={tier.unitPrice} value={tier.unitPrice} format-style="decimal" minimum-fraction-digits="3"></lightning-formatted-number>
+							<span key={tier.priceby}> {tier.priceby}</span>
+						</template>
+					</template>
+				</div>
+			</template>
+
+			<template if:false={showTierPricing}>
+				<div class="">
+					<template for:each={referenceDetail.priceWrapper} for:item="uniquePrice">
+						<lightning-formatted-number key={uniquePrice.unitPrice} value={uniquePrice.unitPrice} format-style="decimal" minimum-fraction-digits="3"></lightning-formatted-number>
+						<span key={uniquePrice.priceby}> {uniquePrice.priceby}</span>
+					</template>
+				</div>
+			</template>
+		</div>
+	</div>
+
+	<div class="ref-list-mobile-item">
+		<div class="ref-list-mobile-quantity">
+			<div class="ref-list-mobile-units slds-var-m-vertical_xx-small">
+				<lightning-button-icon
+					icon-name="utility:dash"
+					variant="border-filled"
+					alternative-text={labels.dash}
+					onclick={subtractQuantityStep}>
+				</lightning-button-icon>
+				<lightning-input 
+					class="slds-var-m-horizontal_x-small units-2"
+					data-name="quantityInput"
+					variant="label-hidden"
+					type="number"
+					name="quantity"
+					maxlength="8"
+					value={referenceDetail.quantity}
+					oncommit={handleInputQuantityChange}>
+				</lightning-input>
+				<lightning-button-icon
+					variant="border-filled"
+					icon-name="utility:add"
+					alternative-text={labels.add}
+					onclick={addQuantityStep}>
+				</lightning-button-icon>
+			</div>
+			<template if:true={showTierPricing}>
+				<template if:true={referenceDetail.weight}>
+					<div class="ref-list-mobile-right slds-var-p-left_x-small slds-var-p-top_small">
+						<lightning-formatted-number value={referenceDetail.weightbuy} format-style="decimal" maximum-fraction-digits="4"></lightning-formatted-number>
+						<span class="slds-var-m-left_xx-small slds-var-m-top_x-small">Kg</span>
+					</div>
+				</template>
+			</template>
+		</div>
+
+
+		<div class="ref-list-mobile-col-full">
+			<c-g-l_stock-message
+				if:true={showstock}
+				units={referenceDetail.quantity}
+				stock={stock}
+				onreferencewostock={handleShowRelatedProductsLink}>
+			</c-g-l_stock-message>
+
+			<template if:true={showRelatedProdLink}>
+				<div>
+					<small class="slds-text-link link-text slds-var-p-left_small" onclick={showComplementaryProducts}>{labels.substitutes}</small>
+				</div>
+			</template>
+		</div>
+	</div>	
+
+	<div class="ref-list-mobile-item ref-list-mobile-actions">
+		<template if:true={loaddetail}>
+			<lightning-spinner alternative-text="Loading" variant="brand"></lightning-spinner>
+		</template>
+
+		<template if:false={loaddetail}>
+			<div>
+				<template if:false={showMoreInfo}>
+					<!--span class="slds-text-link link-text slds-var-p-top_x-small" onclick={handleShowMoreInfo}><b>+</b> {labels.info}</span-->
+					<lightning-button variant="base" label={labels.info} icon-name="utility:chevrondown" icon-position="right" class="" onclick={handleShowMoreInfo}></lightning-button>
+				</template>
+				<template if:true={showMoreInfo}>
+					<!--span class="slds-text-link link-text slds-var-p-top_x-small" onclick={handleShowMoreInfo}><b>-</b> {labels.info}</span-->
+					<lightning-button variant="base" label={labels.info} icon-name="utility:chevronup" icon-position="right" class="" onclick={handleShowMoreInfo}></lightning-button>
+				</template>
+				<template if:true={hastiers}>
+					<template if:false={showMorePricing}>
+						<lightning-button variant="base" label={labels.disctier} icon-name="utility:chevrondown" icon-position="right" class="slds-var-m-left_small" onclick={handleShowMorePricing}></lightning-button>
+					</template>
+					<template if:true={showMorePricing}>
+						<lightning-button variant="base" label={labels.disctier} icon-name="utility:chevronup" icon-position="right" class="slds-var-m-left_small" onclick={handleShowMorePricing}></lightning-button>
+					</template>
+				</template>
+			</div>
+
+			<c-g-l_popup-product
+				if:true={showpopup}
+				refmap={referenceMap}
+				onpopup={handlePopUp}>
+			</c-g-l_popup-product>
+
+			<div>
+				<lightning-button-menu 
+					variant="border-filled"
+					alternative-text={labels.favorite}
+					icon-name="utility:favorite"
+					menu-alignment="right"
+					onselect={handleListMenuSelect}>
+					<template for:each={referenceDetail.customerListMenuItemList} for:item="menuItem">
+						<lightning-menu-item
+							key={menuItem.value}
+							value={menuItem.value}
+							label={menuItem.label}
+							icon-name={menuItem.iconName}
+							checked={menuItem.checked}>
+						</lightning-menu-item>
+					</template>
+				</lightning-button-menu>
+				<lightning-button-icon
+					class="slds-var-m-left_x-small"
+					variant="brand"
+					label={labels.cart}
+					title={labels.cart}
+					icon-name="utility:cart"
+					disabled={isCartDisabled}
+					onclick={addToCart}>
+				</lightning-button-icon>
+			</div>
+		</template>
+	</div>
+
+	<template if:true={showMoreInfo}>
+		<div class="ref-list-mobile-more-info">
+			<div class="ref-list-mobile-col-full"><strong>{labels.packInfo}</strong></div>
+			<div class="ref-list-mobile-col-full">
+				<div class="weight-info">
+					<div class="weight-info-item">
+						<img alt={labels.estuche} src="/indexfix/cms/delivery/media/MCETVJOYSEVFAYXIB6D56QQ43SGQ">
+						<lightning-formatted-number value={referenceDetail.quantityStep} format-style="decimal" maximum-fraction-digits="5"></lightning-formatted-number>{labels.uds}
+					</div>
+					<template if:true={referenceDetail.masterunits}>
+						<div class="weight-info-item">
+							<img alt={labels.estuche} src="/indexfix/cms/delivery/media/MCI5Q22Q2FTBFHDEKKCI32Q3NSPI"> 
+							<lightning-formatted-number value={referenceDetail.masterunits} format-style="decimal" maximum-fraction-digits="5"></lightning-formatted-number>{labels.uds}
+						</div>
+					</template>
+					<template if:true={referenceDetail.palletunits}>
+						<div class="weight-info-item">
+							<img alt={labels.estuche} src="/indexfix/cms/delivery/media/MC3YWY2UNL7ZHRDGBG4H7WRALPWM">
+							<lightning-formatted-number value={referenceDetail.palletunits} format-style="decimal" maximum-fraction-digits="5"></lightning-formatted-number>{labels.uds}
+						</div>
+					</template>
+				</div>
+			</div>
+			<div class="ref-list-mobile-col-full"><strong>{labels.customCode}</strong></div>
+			<div class="ref-list-mobile-code slds-var-m-top_x-small">
+				<lightning-input
+					class="ccInput units"
+					variant="label-hidden"
+					type="text"
+					name="customerCode"
+					maxlength="20"
+					placeholder={labels.placehold}
+					disabled={referenceDetail.customerCode.isDisabled}
+					value={referenceDetail.customerCode.value}
+					onchange={handleCustomerCodeChange}>
+				</lightning-input>
+				<lightning-button-icon
+					class="slds-var-m-left_x-small"
+					variant="border-filled"
+					icon-name={referenceDetail.customerCode.iconName}
+					alternative-text={referenceDetail.customerCode.alternativeText}
+					onclick={handleCustomerCodeSave}>
+				</lightning-button-icon>
+			</div>
+		</div>
+	</template>
+
+	<template if:true={showMorePricing}>
+		<div class="ref-list-mobile-more-info">
+			<table class="table-refs-prices">
+				<tr>
+					<td style="text-decoration:underline; color: #75787B">
+						<strong>{labels.uds}</strong>
+					</td>
+					<td style="text-decoration:underline; color: #75787B">
+						<strong>{referenceDetail.priceByAmount}</strong>
+					</td>
+					<td style="width:15%; text-align:right; text-decoration:underline; color: #75787B">
+						<strong>{labels.dto}</strong>
+					</td>
+				</tr>
+				<template for:each={referenceDetail.priceWrapper} for:item="tier">
+					<template if:true={tier.lowerUnits}>
+						<tr key={tier.lowerUnits} data-target-id={tier.lowerUnits}>
+							<td>
+								<lightning-formatted-number value={tier.lowerUnits} 
+															format-style="decimal" 
+															minimum-fraction-digits="0">
+								</lightning-formatted-number> - <lightning-formatted-number value={tier.higherUnits} 
+																							format-style="decimal" 
+																							minimum-fraction-digits="0">
+								</lightning-formatted-number>
+							</td>
+							<td>
+								<strong>
+									<lightning-formatted-number value={tier.unitPrice} 
+																format-style="decimal" 
+																minimum-fraction-digits="3">
+									</lightning-formatted-number>
+								</strong>
+							</td>
+							<td style="width:15%; text-align:right">
+								<span if:true={tier.discgreen} class="slds-text-color_success"> {tier.symbol}{tier.discount}%</span>
+								<span if:false={tier.discgreen} class="slds-text-color_error"> {tier.symbol}{tier.discount}%</span>
+							</td>
+						</tr>
+					</template>
+					<template if:false={tier.lowerUnits}>
+						<lightning-formatted-number key={tier.unitPrice} value={tier.unitPrice} format-style="decimal" minimum-fraction-digits="3"></lightning-formatted-number>
+						<span key={tier.priceby}> {tier.priceby}</span>
+					</template>
+				</template>
+			</table>
+		</div>
+	</template>
+</template>

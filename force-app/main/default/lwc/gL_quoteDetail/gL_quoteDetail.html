@@ -1,0 +1,106 @@
+<!--
+  @description       : Quote Detail LWC
+  @author            : DVT
+  @last modified on  : 09-17-2024
+-->
+<template>
+    <lightning-spinner
+        if:false={isLoaded}
+        class="slds-is-relative slds-align_absolute-center slds-var-m-around_large"
+        alternative-text="loading"
+        size="medium"
+        variant="brand">
+    </lightning-spinner>
+
+	<template if:true={isLoaded}>
+		<div class="quote-detail-header">
+			<h1 class="slds-text-heading_large slds-grid slds-var-p-left_x-small slds-var-m-right_x-small">{labels.myQuote}&nbsp;{quote.name}</h1>
+			<div class="align-left">
+				<button class="slds-button slds-button_brand no-radius slds-m-top_x-small" type="button" onclick={addQuoteLinesToCart} disabled={addToCartIsDisabled}>{labels.addToCart}</button>
+			</div>
+		</div>
+		<!-- <div>
+			<lightning-button class="slds-float_right" variant="neutral" label={labels.getDocument} onclick={getDocuments}></lightning-button>
+		</div> -->
+		<div class="quote-detail-list">
+			<lightning-button class="slds-clearfix slds-m-top_large slds-m-bottom_small" style="display:block" variant="neutral" label={labels.getDocument} onclick={getDocuments}></lightning-button>
+			<!--<div class="separador-elementos"></div>-->
+			<c-g-L_add-to-wish-list record-id={quoteId} effective-account-id={resolvedEffectiveAccountId}></c-g-L_add-to-wish-list>
+		</div>
+
+		<div class="quote-detail-main slds-var-p-top_xx-large">
+			<div class="slds-grid slds-wrap slds-large-nowrap">
+				<div class="slds-size_1-of-1 slds-max-medium-size_1-of-1 slds-large-size_1-of-4 slds-var-p-around_x-small">
+					<div class="slds-card details-card">
+						<div class="slds-card__header slds-var-m-bottom_x-small">
+							<h2><span class="slds-text-title_bold">{labels.details}</span></h2>
+							<p>{labels.date}&nbsp;{quote.quoteDate}</p>
+							<p>{labels.status}&nbsp;{quote.statusLabel}</p>
+							<p>{labels.subtotal}&nbsp;<lightning-formatted-number value={quote.total} format-style="currency" currency-code="EUR" minimum-fraction-digits="2" maximum-fraction-digits="2"></lightning-formatted-number></p>
+							<!-- CPC 13/09/2024: Se añade campo del monto del descuento especial -->
+							<p>{labels.specialDiscount}&nbsp;<lightning-formatted-number value={quote.specialDisc} format-style="currency" currency-code="EUR" minimum-fraction-digits="2" maximum-fraction-digits="2"></lightning-formatted-number></p>
+							<p>{labels.total}&nbsp;<lightning-formatted-number value={quote.specialDiscTotal} format-style="currency" currency-code="EUR" minimum-fraction-digits="2" maximum-fraction-digits="2"></lightning-formatted-number></p>
+							<p>{labels.lionId}&nbsp;{quote.codeLion}</p>
+							<p>{labels.account}&nbsp;<span class="slds-text-link link-text cursor-pointer" data-target-id={quote.accountId} onclick={navToAcc}>{quote.accountName}</span></p>
+							<!-- <p>{labels.owner}&nbsp;<span class="slds-text-link link-text cursor-pointer" data-target-id={quote.ownerId} onclick={navToUser}>{quote.ownerName}</span></p> -->
+						</div>
+					</div>
+				</div>
+
+				<div class="slds-size_1-of-1 slds-max-medium-size_1-of-1 slds-large-size_2-of-3 slds-var-p-around_x-small">
+					<template if:false={quoteLineItemsListIsEmpty}>
+						<lightning-spinner
+							if:false={areLinesLoaded}
+							class="slds-is-relative slds-align_absolute-center slds-var-m-around_large"
+							alternative-text="loading"
+							size="medium"
+							variant="brand">
+						</lightning-spinner>
+
+						<template if:true={areLinesLoaded}>
+							<h1 class="slds-var-p-around_x-small slds-var-m-right_x-small heading-border-bottom">
+								<lightning-input style="display:inline-block;" type="checkbox" label={labels.quoteLineHeader} name="selectAll" checked={selectAllCheckboxValue} disabled={quote.disabled} onchange={selectAll}></lightning-input>
+							</h1>
+							<ul class="list-items">
+								<template for:each={quoteLineItems} for:item="quoteLineItem">
+									<li key={quoteLineItem.id}>
+										<div class="slds-grid">
+											<figure>
+												<img src={quoteLineItem.productImage} alt="product-img">
+											</figure>
+											<div class="slds-grid slds-grid_vertical slds-no-space slds-grow slds-var-p-horizontal_x-small"> 
+												<h3 class="slds-var-m-bottom_x-small">
+													<template if:true={quoteLineItem.productNotAvailable}>
+														{labels.productNotAvailableLabel}
+													</template>
+													<template if:false={quoteLineItem.productNotAvailable}>
+														{quoteLineItem.productName}
+													</template>
+												</h3>
+												<ul class="slds-text-body_small">
+													<li>{labels.family}&nbsp;{quoteLineItem.productFamily}</li>
+													<li>{labels.measure}&nbsp;{quoteLineItem.measure}</li>
+													<li>{labels.quantity}&nbsp;{quoteLineItem.quantity}</li>
+													<li>{labels.quantityPending}&nbsp;{quoteLineItem.quantityPending}</li>
+													<li>{labels.unitPrice}&nbsp;<lightning-formatted-number value={quoteLineItem.unitPriceShow} minimum-fraction-digits="3" maximum-fraction-digits="3"></lightning-formatted-number>&nbsp;{quoteLineItem.taxPrice}</li>
+													<li>{labels.total}&nbsp;<lightning-formatted-number value={quoteLineItem.total} format-style="currency" currency-code="EUR" minimum-fraction-digits="2" maximum-fraction-digits="2"></lightning-formatted-number></li>
+													<li>
+														<lightning-input class="slds-var-m-bottom_medium" type="checkbox" label={labels.accept} name={quoteLineItem.id} checked={quoteLineItem.checked} disabled={quoteLineItem.disabled} onchange={selectItem}></lightning-input>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</li>
+								</template>
+							</ul>
+						</template>
+					</template>
+
+					<div if:true={quoteLineItemsListIsEmpty} class="slds-text-align_center slds-text-color_weak">
+						<h3 class="slds-text-heading_medium">{labels.emptyList}</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+	</template>
+</template>

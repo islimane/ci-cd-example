@@ -1,0 +1,90 @@
+.my-orders-heading{
+    font-size: 24px;
+}
+.my-orders-filter-actions{
+    padding-top: 1.5rem;
+}
+.order-list.order-list .order-list-item .slds-box{
+    border: none;
+    border-bottom: solid 1px #eee;
+    padding: 1.25rem 0;
+}
+.order-list .order-list-item .order-list-item-info{
+    width: 80%;
+}
+.order-list .order-list-item .order-list-item-info .order-list-item-col{
+    width: 25%;
+}
+.order-list .order-list-item .order-list-item-actions{
+   width: 28%;
+}
+.order-list .order-list-item .order-list-item-actions .slds-button_neutral {
+   width: auto;
+}
+
+.order-list-item-col3  {
+    width: 18%;
+}
+.order-list-item-col2 {
+    width: 30%;
+}
+@media (max-width: 640px) {
+    .my-orders-filter-actions{
+        padding-top: 0.5rem;
+        margin-bottom: 0.75rem;
+    }
+    .order-list .order-list-item .slds-box {
+        flex-direction: column;
+    }
+    .order-list .order-list-item .order-list-item-info{
+        width: 100%;
+    }
+    .order-list .order-list-item .order-list-item-info .order-list-item-col {
+        width: 100%;
+        display: flex;
+    }
+    .order-list .order-list-item .order-list-item-actions{
+        margin-top: 0.5rem;
+        width: 100%;
+    }
+    
+    .order-list-item-col3, .order-list-item-col2 {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .order-list-item-col > span,.order-list-item-col > strong,.order-list-item-col > span, .order-list-item-col2 > strong, .order-list-item-col2 > span,.order-list-item-col3 > strong, .order-list-item-col3 > span {
+        width: 50%
+    }
+    
+  }
+  @media (min-width: 640px) and (max-width: 1200px) {
+    .my-orders-filter-actions{
+        padding-top: 0.5rem;
+        margin-bottom: 0.75rem;
+    }
+    .order-list .order-list-item .slds-box {
+        flex-direction: column;
+    }
+    .order-list .order-list-item .order-list-item-info{
+        width: 100%;
+    }
+    .order-list .order-list-item .order-list-item-info .order-list-item-col {
+        width: 100%;
+        display: flex;
+    }
+    .order-list .order-list-item .order-list-item-actions{
+        margin-top: 0.5rem;
+        width: 100%;
+    }
+    
+    .order-list-item-col1, .order-list-item-col2, .order-list-item-col3, .order-list-item-col4  {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+    .order-list-item-col3 > span,.order-list-item-col3 > strong, .order-list-item-col2 > span,.order-list-item-col3 > strong {
+        width: 50%
+    }
+  }

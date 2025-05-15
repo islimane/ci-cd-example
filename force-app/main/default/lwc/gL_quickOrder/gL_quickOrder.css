@@ -1,0 +1,32 @@
+.quick-order{
+    display: flex;
+}
+
+.quick-order lightning-input{
+    flex: 2;
+}
+.quickOrder-wrapper{
+    display: flex;
+    flex-direction: row;
+    margin-top:0.35rem;
+}
+.quickOrder-wrapper .quickOrderr-files:first-child{
+    margin: 0.2rem 0.5rem 0 0;
+}
+.quickOrder-wrapper .slds-form-element__label:empty {
+    margin: 0;
+    display: none;
+}
+.quick-order-description{
+    display: inline-block;
+    margin-top: 0.25rem;
+    line-height: 1rem;
+}
+@media (min-width: 769px) and (max-width: 1480px) {
+    .quickOrder-wrapper{
+        flex-direction: column;
+    }
+    .quickOrder-wrapper .quickOrderr-files:first-child{
+        margin: 0.2rem 0 0.5rem 0;
+    }
+}

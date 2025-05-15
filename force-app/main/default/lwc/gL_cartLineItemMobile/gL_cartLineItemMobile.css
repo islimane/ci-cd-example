@@ -1,0 +1,76 @@
+/* Table css classes */
+.display-flex{
+	display: flex;
+}
+.v-alignment{
+	align-items: center;
+}
+.table-cart-td {
+    display: flex;
+    padding: 0.2rem;
+    vertical-align: top;
+    align-items: stretch;
+    flex-direction: column;
+}
+.table-cart-prices {
+    background: #f9f9f9;
+}
+.table-cart-prices tr {
+    border: none;
+}
+.table-cart-prices td, .table-cart-prices th {
+    padding: 0.15rem;
+}
+.img-product {
+	max-width: 7rem;
+	width: 100%;
+}
+.cursor-pointer {
+	cursor: pointer;
+}
+
+.selectedRow {
+	background-color: #e4feed;
+}
+
+.stock {
+    display: flex;
+    flex-direction: row;
+}
+.table-disc {
+    margin-top: 0.5em;
+    background-color: #f7f7f7;
+}
+.table-disc p {
+    padding: 0.3em;
+}
+.table-cart-info{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.zeroSavings {
+    margin-right: 1em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.line-list-mobile-more-info{
+    background: #f9f9f9;
+    padding: 0.5rem;
+	margin-bottom: 0.35rem;
+}
+.line-list-mobile-more-info .line-list-mobile-code{
+	display: flex;
+}
+.line-list-mobile-more-info .line-list-mobile-code lightning-input{
+	flex: 2;
+} 
+.slds-m-horizontal_small-2 {
+    display: block;
+    width: 100%;
+    padding: 0.3em;
+}

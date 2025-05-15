@@ -1,0 +1,27 @@
+<aura:component implements="lightning:availableForFlowScreens" >
+    
+    <!-- Attributes -->
+    <aura:attribute name="value" type="String" />
+    <aura:attribute name="label" type="String" />
+    <aura:attribute name="required" type="Boolean" />
+    <aura:attribute name="placeholder" type="String" />
+    
+    <!-- Handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="change" value="{!v.value}" action="{!c.handleValueChange}"/>
+    <!--aura:handler event="force:refreshView" action="{!c.doInit}" /-->
+    <aura:attribute name="validate" type="Aura.Action"/>
+    <!-- 
+      isValid = true/false
+      errorMessage - 
+    -->
+    
+    <lightning:inputRichText labelVisible="true" 
+                             label="{!v.label}"
+                             required="{!v.required}"
+                             variant="bottom-toolbar" 
+                             value="{!v.value}" 
+                             placeholder="{!v.placeholder}">
+        <lightning:insertImageButton/>
+    </lightning:inputRichText>
+</aura:component>

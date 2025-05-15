@@ -1,0 +1,130 @@
+.THIS {
+    font-size: inherit;
+}
+
+.ccInput {
+    font-size: 13px;
+}
+.subscriptionNumberInput::placeholder {
+  font-size: 50%;
+}
+
+/* Table css classes */
+.display-flex{
+	display: inline-flex;
+}
+.v-alignment{
+	align-items: center;
+}
+.table-refs-td{
+    padding: 0.5rem;
+    vertical-align: middle;
+	word-break: break-all;
+}
+.table-refs-td .units{
+    max-width: 130px;
+}
+
+.table-refs-td .units-2{
+    max-width: 120px;
+}
+
+.td-code-width{width:12.1%;}
+.td-code-custom-width{width:19.3%;}
+.td-measure-width{width:12%;}
+.td-price-width{width:12.1%;}
+.td-pack-width{width:13%;}
+.td-units-custom-width{width:20%;}
+.td-cart-custom-width{width:190px; text-align: right;}
+
+.td-code-width-2{width:10.5%; overflow-wrap: anywhere;}
+.td-code-custom-width-2{width:15%;}
+.td-measure-width-2{width:10.5%;}
+.td-price-width-2{width:20%; word-break: normal;}
+.td-pack-width-2{width:13%;}
+.td-units-custom-width-2{width:20%;}
+
+/*@media  (max-width: 991px) {
+	.table-refs-td {
+		display: block; 
+		border: none;
+		position: relative;
+	}
+	.table-refs-td .display-flex{
+		width: 100%;;
+	}
+	.table-refs-td:before {
+		display: block;
+		margin-bottom: 0.25rem;
+		text-transform: uppercase;
+		font-weight: bold;
+	}
+    .table-refs-td::before {
+		content: attr(data-title);
+	}
+	.table-refs-td:last-child{
+		text-align: left;
+	}
+	.td-code-width,
+	.td-code-custom-width,
+	.td-measure-width,
+	.td-price-width,
+	.td-pack-width,
+	.td-units-custom-width,
+	.td-cart-custom-width,
+	.td-code-width-2,
+	.td-code-custom-width-2,
+	.td-units-custom-width-2,
+	.td-measure-width-2,
+	.td-price-width-2	
+	{
+		width:100%;
+	}
+	.table-refs-td .units{
+		max-width: none;
+		width: 100%;
+	}
+	.td-cart-custom-width{
+		text-align: center;
+	}
+	.table-refs-prices {
+		background: none;
+	}
+}
+*/
+.table-refs-prices {
+    background: #ffffff00;
+}
+.table-refs-prices tr {
+    border: none;
+}
+.table-refs-prices td, .table-refs-prices th {
+    padding: 0.15rem;
+}
+.weight-info{
+    display: inline-flex;
+    flex-direction: column;
+}
+.weight-info-item{
+	display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.selectedRow {
+	background-color: #e4feed;
+}
+.link-text {
+	cursor: pointer;
+}
+
+.icon-color {
+	--slds-c-icon-color-background :transparent !important;
+	--slds-c-icon-color-foreground : #003865 !important;
+	--slds-c-icon-color-foreground-default : #003865 !important;
+}
+.icon-color.aa{
+	transform: scale(0.8,0.8);
+}
+.icon-color.cc{
+	transform: scale(0.6,0.6);
+}

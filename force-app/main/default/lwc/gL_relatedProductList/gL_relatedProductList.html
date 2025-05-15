@@ -1,0 +1,89 @@
+<template>
+	<div class="container slds-var-m-bottom_small">
+		<div class="slds-align_absolute-center slds-var-m-left_small slds-var-p-right_x-small">
+			<lightning-button-icon if:true={showLeftButton}
+				icon-name="utility:left"
+				variant="border-filled"
+				alternative-text={labels.left}
+				title="left"
+				onclick={handleLeftClick}>
+			</lightning-button-icon>
+		</div>
+		<div class="spacer"></div>
+		<div class="slds-grid slds-align_absolute-center slds-var-m-horizontal_large slds-var-m-vertical_small alignment w-100">
+			<template for:each={activeRelatedProdList} for:item="relatedProd">
+				<template if:true={isdesktop}>
+					<article key={relatedProd.Id} class="desktoparticle slds-var-p-around_small">
+						<div class="slds-var-m-bottom_xx-small">
+							<div style={stylecart} class="slds-var-m-bottom_small">
+								<img src={relatedProd.imgURL} class="slds-var-p-bottom_x-small" style={relatedProd.style}>
+							</div>
+							<p class="slds-var-p-bottom_x-small" style="font-weight: bold;">{relatedProd.name}</p>
+							<p class="slds-var-p-bottom_x-small">{relatedProd.description}</p>
+						</div>
+						<div>
+							<lightning-button class="slds-var-p-bottom_x-small"
+								data-target-id={relatedProd.Id}
+								label={labels.viewArticle}
+								variant="brand"
+								title={labels.viewArticle}
+								onclick={redirectToProd}>
+							</lightning-button>
+						</div>
+					</article>
+				</template>
+				<template if:true={istablet}>
+					<article key={relatedProd.Id} class="tabletarticle slds-var-p-around_small">
+						<div class="slds-var-m-bottom_xx-small">
+							<div style={stylecart} class="slds-var-m-bottom_small">
+								<img src={relatedProd.imgURL} class="slds-var-p-bottom_x-small" style={relatedProd.style}>
+							</div>
+							<p class="slds-var-p-bottom_x-small" style="font-weight: bold;">{relatedProd.name}</p>
+							<p class="slds-var-p-bottom_x-small">{relatedProd.description}</p>
+						</div>
+						<div>
+							<lightning-button class="slds-var-p-bottom_x-small"
+								data-target-id={relatedProd.Id}
+								label={labels.viewArticle}
+								variant="brand"
+								title={labels.viewArticle}
+								onclick={redirectToProd}>
+							</lightning-button>
+						</div>
+					</article>
+				</template>
+				<template if:true={ismobile}>
+					<article key={relatedProd.Id} class="mobilearticle slds-var-p-around_small">
+						<div class="slds-var-m-bottom_xx-small">
+							<div style={stylecart} class="slds-var-m-bottom_small">
+								<img src={relatedProd.imgURL} class="slds-var-p-bottom_x-small" style={relatedProd.style}>
+							</div>
+							<p class="slds-var-p-bottom_x-small" style="font-weight: bold;">{relatedProd.name}</p>
+							<p class="slds-var-p-bottom_x-small">{relatedProd.description}</p>
+						</div>
+						<div>
+							<lightning-button class="slds-var-p-bottom_x-small"
+								data-target-id={relatedProd.Id}
+								label={labels.viewArticle}
+								variant="brand"
+								title={labels.viewArticle}
+								onclick={redirectToProd}>
+							</lightning-button>
+						</div>
+					</article>
+				</template>
+				<div class="spacer" key={relatedProd.Id}></div>
+			</template>
+		</div>
+		<div class="spacer"></div>
+		<div class="slds-align_absolute-center slds-var-m-right_small slds-var-p-left_x-small">
+			<lightning-button-icon if:true={showRightButton}
+				icon-name="utility:right"
+				variant="border-filled"
+				alternative-text={labels.right}
+				title="right"
+				onclick={handleRightClick}>
+			</lightning-button-icon>
+		</div>
+	</div>
+</template>
