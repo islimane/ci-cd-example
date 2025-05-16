@@ -2,7 +2,7 @@
  * @description       : Enables adding Supplements and Discounts to a Rate Planner.
  * @author            : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  * @group             :
- * @last modified on  : 23-04-2025
+ * @last modified on  : 16-05-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 import { track, api, wire } from 'lwc'
@@ -50,6 +50,10 @@ export default class rateManagerAddSupplementsAndDiscounts extends LwcDCExtensio
 
     get columns() {
         return COLUMNS
+    }
+
+    renderedCallback() {
+        this.refreshFetch()
     }
 
     // #region Picklist wire
