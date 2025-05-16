@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 16-04-2025
+ * @last modified on  : 16-05-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 import { track, api, wire } from 'lwc'
@@ -77,9 +77,13 @@ export default class RateManagerAddRooms extends LwcDCExtension {
     }
     // #endregion Picklist wire
 
-    /*** Connected callback.*/
+    /** Callbacks **/
     connectedCallback() {
         this.setWireParams()
+    }
+
+    renderedCallback() {
+        this.refreshFetch()
     }
 
     /**

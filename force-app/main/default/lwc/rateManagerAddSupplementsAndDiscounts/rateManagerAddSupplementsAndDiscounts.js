@@ -52,10 +52,6 @@ export default class rateManagerAddSupplementsAndDiscounts extends LwcDCExtensio
         return COLUMNS
     }
 
-    renderedCallback() {
-        this.refreshFetch()
-    }
-
     // #region Picklist wire
     @wire(getPicklistValues, { recordTypeId: MASTER_RECORD_TYPE_ID, fieldApiName: FAMILY_FIELD })
     familyPicklistResults({ error, data }) {
@@ -80,9 +76,13 @@ export default class rateManagerAddSupplementsAndDiscounts extends LwcDCExtensio
     }
     // #endregion Picklist wire
 
-    /*** Connected callback.*/
+    /** Callbacks **/
     connectedCallback() {
         this.setWireParams()
+    }
+
+    renderedCallback() {
+        this.refreshFetch()
     }
 
     /**
