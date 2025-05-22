@@ -1,16 +1,17 @@
 /* @description       : Shows a modal to attach rooms to a rate
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 02-04-2025
+ * @last modified on  : 31-03-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 import { api } from 'lwc';
-import LwcDCExtension from 'c/lwcDCExtension';
+import LightningModal from 'lightning/modal';
 import LABELS from './labels';
 import { RateManagerMixin } from 'c/rateManagerMixin';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { createRecord } from 'lightning/uiRecordApi';
 
-export default class RateManagerModalRoomHandler extends RateManagerMixin(LwcDCExtension) {
+export default class RateManagerModalRoomHandler extends RateManagerMixin(LightningModal) {
     labels = LABELS;
     disableSaveButton = false;
 
@@ -80,6 +81,16 @@ export default class RateManagerModalRoomHandler extends RateManagerMixin(LwcDCE
             detail: dateInverval
         });
         this.dispatchEvent(confirmEvent);
+    }
+
+    showToast(title, message, variant = 'success') {
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title: title,
+                variant: variant,
+                message: message
+            })
+        );
     }
 
     async notifyParent() {

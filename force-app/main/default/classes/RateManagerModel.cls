@@ -2,8 +2,8 @@
  * @description       : Unified model class for Rate Manager controllers
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             :
- * @last modified on  : 09-04-2025
- * @last modified by  : alberto.martinez-lopez@inetum.com
+ * @last modified on  : 16-04-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 public with sharing class RateManagerModel {
 
@@ -51,7 +51,7 @@ public with sharing class RateManagerModel {
 
     public class RateLineDataTableByConfigurationModeWp {
         public List<FilterWp> filters = new List<FilterWp>();
-        Map<String, List<RateLine>> data = new Map<String, List<RateLine>>();
+        public Map<String, List<RateLine>> data = new Map<String, List<RateLine>>();
 
 
         public RateLineDataTableByConfigurationModeWp(List<FilterWp> filters, Map<String, List<RateLine>> data) {
@@ -65,7 +65,7 @@ public with sharing class RateManagerModel {
         public Id RateId;
         public Id HotelId;
         public Id RatePlannerId;
-        
+
         String Name;
         String Characteristic;
         String Room;
@@ -74,7 +74,7 @@ public with sharing class RateManagerModel {
         String ApplicationType;
         String Observations;
         Boolean Base;
-        
+
         @TestVisible
         Map<String, Period__c> mPeriodsByPeriodKey = new Map<String, Period__c>();
         @TestVisible
@@ -92,7 +92,7 @@ public with sharing class RateManagerModel {
             this.RateId = rateLine.Rate__c;
             this.HotelId = rateLine.Hotel__c;
             this.RatePlannerId = rateLine.RatePlanner__c;
-            
+
 
             // These fields might be null for some RateLine records (e.g., supplements)
             this.Characteristic = rateLine.Product__r.Characteristic__c;
@@ -215,5 +215,19 @@ public with sharing class RateManagerModel {
             this.min = min;
             this.max = max;
         }
+    }
+
+    /**
+    * @description Aux method for retrieving the picklist values of a field
+    * @author Inetum Team <ruben.sanchez-gonzalez@inetum.com> | 16-04-2025
+    * @param field
+    * @return Map<String, String>
+    **/
+    public static Map<String, String> getPicklistMap(Schema.SObjectField field) {
+        Map<String, String> picklistMap = new Map<String, String>();
+        for (Schema.PicklistEntry pickListVal : field.getDescribe().getPicklistValues()) {
+            picklistMap.put(pickListVal.getValue(), pickListVal.getLabel());
+        }
+        return picklistMap;
     }
 }
