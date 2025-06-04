@@ -4,7 +4,7 @@
     * Created Date:    20/02/2025
     * Function:        Trigger Helper of OpportunityHotelTriggerHandler
 ----------------------------------------------------------------------------------------------------------------------------------------*/
-public with sharing class OpportunityHotelTriggerHelper extends TriggerUtils {
+public without sharing class OpportunityHotelTriggerHelper extends TriggerUtils {
 
 	/**
 	 * Create OppShare records based on lOpportunityHotel records
@@ -13,7 +13,7 @@ public with sharing class OpportunityHotelTriggerHelper extends TriggerUtils {
 	public static void shareOpportunityHotel(List<Opportunity_Hotel__c> lOpportunityHotel) {
 		createManualOppHotelSharing(lOpportunityHotel);
     }
-	
+
 	/**
 	 * Delete OppShare records based on lOpportunityHotel records
 	 * @param lOpportunityHotel List of opp hotel to work
@@ -30,7 +30,7 @@ public with sharing class OpportunityHotelTriggerHelper extends TriggerUtils {
 		Map<Id, List<Id>> mGroupIdByOppId = getGroupIdByOppId(lOpportunityHotel);
 		Map<Id, List<OpportunityShare>> mOpportunitiesShareByOppId = getOpportunitiesShareByOppId(lOpportunityHotel);
 		List<OpportunityShare> lOppShareToCreate = getOppShareToCreate(mGroupIdByOppId, mOpportunitiesShareByOppId);
-		
+
 		// TODO: mover a manager
 		insert lOppShareToCreate;
 	}
@@ -39,7 +39,7 @@ public with sharing class OpportunityHotelTriggerHelper extends TriggerUtils {
 		Map<Id, List<OpportunityShare>> mOpportunitiesShareByOppId = getOpportunitiesShareByOppId(lOpportunityHotel);
 		List<OpportunityShare> lOppShareToDelete = new List<OpportunityShare>();
 		for (Id currentOppId : mOpportunitiesShareByOppId.keySet()) lOppShareToDelete.addAll(mOpportunitiesShareByOppId.get(currentOppId));
-		
+
 		// TODO: mover a manager
 		if (!lOppShareToDelete.isEmpty()) delete lOppShareToDelete;
 	}
@@ -76,7 +76,7 @@ public with sharing class OpportunityHotelTriggerHelper extends TriggerUtils {
 	private static Map<Id, Hotel__c> getRelatedHotels(List<Opportunity_Hotel__c> lOpportunityHotel) {
 		Set<Id> sHotelIds = new Set<Id>();
 		for (Opportunity_Hotel__c currentOppHotel : lOpportunityHotel) sHotelIds.add(currentOppHotel.Hotel__c);
-		
+
 		return HotelSelector.getHotelById(sHotelIds);
 	}
 
@@ -105,7 +105,7 @@ public with sharing class OpportunityHotelTriggerHelper extends TriggerUtils {
 	private static List<OpportunityShare> buildOppShareToCreate(Id oppId, List<Id> lGroupIdsToAssign, List<OpportunityShare> lOppShareAlreadyCreated) {
 		Set<Id> sGroupIdsAlreadyCreatedForOpp = new Set<Id>();
 		for (OpportunityShare currentOppShare : lOppShareAlreadyCreated) sGroupIdsAlreadyCreatedForOpp.add(currentOppShare.UserOrGroupId);
-		
+
 		List<OpportunityShare> lOppShareToCreate = new List<OpportunityShare>();
 		for (Id currentGroupId : lGroupIdsToAssign) {
 			if (!sGroupIdsAlreadyCreatedForOpp.contains(currentGroupId)) {

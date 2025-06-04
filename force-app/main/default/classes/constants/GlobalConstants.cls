@@ -2,8 +2,8 @@
  * @description       : Global constants class for the entire system.
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 16-04-2025
- * @last modified by  : alberto.martinez-lopez@inetum.com
+ * @last modified on  : 05-20-2025
+ * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 @SuppressWarnings('PMD')
 public without sharing class GlobalConstants {
@@ -92,5 +92,12 @@ public without sharing class GlobalConstants {
 
     /** Group */
     public static final String GROUP_TYPE_REGULAR { get { return 'Regular'; } }
+
+    /** AccountRequest__c */
+    public static final String ACCOUNT_REQUEST_TYPE_NEW { get { return 'New'; } }
+    public static final String ACCOUNT_REQUEST_TYPE_MODIFY { get { return 'Modify'; } }
+    public static final String ACCOUNT_REQUEST_TYPE_INACTIVE { get { return 'Inactive'; } }
+
+    public static final String ACCOUNT_REQUEST_STATUS_PROCESSED { get { return 'Processed'; } }
 
 }
