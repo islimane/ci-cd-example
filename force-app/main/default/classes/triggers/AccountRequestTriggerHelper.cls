@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-04-2025
+ * @last modified on  : 06-07-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 public without sharing class AccountRequestTriggerHelper extends TriggerUtils {
@@ -50,23 +50,23 @@ public without sharing class AccountRequestTriggerHelper extends TriggerUtils {
 
             // Is new account request
             if (currentAccountRequest.Type__c == GlobalConstants.ACCOUNT_REQUEST_TYPE_NEW &&
-                currentAccountRequest.Status__c == GlobalConstants.ACCOUNT_REQUEST_STATUS_PROCESSED &&
+                currentAccountRequest.Closure__c == GlobalConstants.ACCOUNT_REQUEST_STATUS_PROCESSED &&
                 currentAccountRequest.Account__c != null &&
                 currentAccountRequest.Account__c != mOldAccountRequests.get(currentAccountRequest.Id).Account__c) {
                 lValidAccountRequests.add(currentAccountRequest);
             }
             // Is modification account request
             else if (currentAccountRequest.Type__c == GlobalConstants.ACCOUNT_REQUEST_TYPE_MODIFY &&
-                currentAccountRequest.Status__c == GlobalConstants.ACCOUNT_REQUEST_STATUS_PROCESSED &&
-                currentAccountRequest.Status__c != mOldAccountRequests.get(currentAccountRequest.Id).Status__c &&
+                currentAccountRequest.Closure__c == GlobalConstants.ACCOUNT_REQUEST_STATUS_PROCESSED &&
+                currentAccountRequest.Closure__c != mOldAccountRequests.get(currentAccountRequest.Id).Closure__c &&
                 currentAccountRequest.Account__c != null &&
                 hasRelevantFieldChanged(currentAccountRequest)) {
                 lValidAccountRequests.add(currentAccountRequest);
             }
             // Is inactive account request
             else if (currentAccountRequest.Type__c == GlobalConstants.ACCOUNT_REQUEST_TYPE_INACTIVE &&
-                currentAccountRequest.Status__c == GlobalConstants.ACCOUNT_REQUEST_STATUS_PROCESSED &&
-                currentAccountRequest.Status__c != mOldAccountRequests.get(currentAccountRequest.Id).Status__c &&
+                currentAccountRequest.Closure__c == GlobalConstants.ACCOUNT_REQUEST_STATUS_PROCESSED &&
+                currentAccountRequest.Closure__c != mOldAccountRequests.get(currentAccountRequest.Id).Closure__c &&
                 currentAccountRequest.Account__c != null) {
                 lValidAccountRequests.add(currentAccountRequest);
             }

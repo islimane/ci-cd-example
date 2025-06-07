@@ -2,12 +2,14 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-04-2025
+ * @last modified on  : 06-07-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 public without sharing class IntegrationDTO {
 
-    public class AccountDTO {
+    public interface IAccountDTO {}
+
+    public class AccountDTO implements IAccountDTO {
         public String Id;
         public String AccountRequestID;
         public String AccountExternalID;
@@ -56,11 +58,11 @@ public without sharing class IntegrationDTO {
         public ContactDTO Contact;
         public List<AccountPmsDTO> PMSExternalId;
 
-        public AccountDTO(Account account) {
+        public AccountDTO(Account account, AccountRequest__c request) {
             this.Id = account.Id;
-            //this.AccountRequestID = account.AccountRequestID__c;
+            this.AccountRequestID = request.Id;
             this.AccountExternalID = account.Account_External_ID__c;
-            //this.AccountRequestExternalID = account.Account_Request_External_ID__c;
+            this.AccountRequestExternalID = request.Account_Request_External_ID__c;
             this.Name = account.Name;
             this.SocialReason = account.SocialReason__c;
             this.FiscalId = account.Fiscal_Id__c;
@@ -111,6 +113,23 @@ public without sharing class IntegrationDTO {
         }
     }
 
+    public class AccountRetryDTO implements IAccountDTO {
+        public String systemPMS;
+        public String subSystem;
+        public AccountDTO account;
+
+        public AccountRetryDTO(Account account, AccountRequest__c request, ResponseAccountRequest__c responseAccountRequest) {
+            this.systemPMS = responseAccountRequest.PMS__c;
+            this.subSystem = responseAccountRequest.PMS_Subsystem__c;
+            this.account = new AccountDTO(account, request);
+            List<AccountPmsDTO> lPMSData = new List<AccountPmsDTO>();
+            for (AccountPmsDTO pms : this.account.PMSExternalId) {
+                if (pms.PMS == this.systemPMS && pms.PMSSubsystem == this.subSystem) lPMSData.add(pms);
+            }
+            this.account.PMSExternalId = lPMSData;
+        }
+    }
+
     public class ContactDTO {
         public String FirstName;
         public String LastName;
@@ -138,14 +157,14 @@ public without sharing class IntegrationDTO {
     }
 
     public class AccountPmsDTO {
-        public String PMS_c;
-        public String PMS_Subsystem_c;
-        public String Account_PMS_Code_c;
+        public String PMS;
+        public String PMSSubsystem;
+        public String AccountPMSCode;
 
         public AccountPmsDTO(Account_PMS__c pms) {
-            this.PMS_c = pms.PMS__c;
-            this.PMS_Subsystem_c = pms.PMS_Subsystem__c;
-            this.Account_PMS_Code_c = pms.Account_PMS_Code__c;
+            this.PMS = pms.PMS__c;
+            this.PMSSubsystem = pms.PMS_Subsystem__c;
+            this.AccountPMSCode = pms.Account_PMS_Code__c;
         }
     }
 }

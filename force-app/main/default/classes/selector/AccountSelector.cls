@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-04-2025
+ * @last modified on  : 06-07-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 public with sharing class AccountSelector {
@@ -13,10 +13,11 @@ public with sharing class AccountSelector {
     * @param sAccountIds Account ids
     * @return Map<Id, List<GroupMember>>
     **/
-	public static List<Account> getAccountDataToSync(Set<Id> sAccountIds) {
-		return [
+	public static Map<Id, Account> getAccountDataToSync(Set<Id> sAccountIds) {
+		return new Map<Id, Account>([
 			SELECT
                 Id,
+                Account_External_ID__c,
                 Name,
                 SocialReason__c,
                 Fiscal_Id__c,
@@ -59,9 +60,9 @@ public with sharing class AccountSelector {
                 SendToPMS__c,
                 Description,
                 (SELECT FirstName, LastName, Phone, Birthdate, Email, MailingStreet, MailingPostalCode__c, MailingCity, MailingStateCode, MailingCountryCode FROM Contacts ORDER BY CreatedDate DESC LIMIT 1),
-                (SELECT Id, PMS__c, WS_URL__c, Account_PMS_Code__c FROM Accounts_PMS__r)
+                (SELECT Id, PMS__c, PMS_Subsystem__c, WS_URL__c, Account_PMS_Code__c FROM Accounts_PMS__r)
             FROM Account
             WHERE Id IN :sAccountIds
-		];
+		]);
     }
 }
