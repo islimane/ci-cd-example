@@ -60,5 +60,60 @@ public with sharing class RatePriceManager {
         }
     }
 
-    public class RatePriceManagerException extends Exception {}
-}
+    /**
+     * @description
+     * @author Inetum Team <ruben.sanchez-gonzalez@inetum.com> | 02-06-2025
+     * @param quoteId
+     * @param lRatePrices
+     **/
+    public static void upsertRatePricesFromQuote(Id quoteId, List<RateManagerModel.RatePrice> lRatePrices, Boolean fillQuota) {
+        List<RatePrice__c> lRatePricesToUpsert = new List<RatePrice__c>();
+        Map<String, Id> mPeriodKeys = new Map<String, Id>();
+        Map<String, Id> mRateLinePeriodsToPrice = new Map<String, Id>();
+
+        for (Period__c period : PeriodSelector.getPeriodsByQuoteId(new Set<Id>{ quoteId })) {
+            String periodKey = period.StartDate__c.format() + ' - ' + period.EndDate__c.format();
+            mPeriodKeys.put(periodKey, period.Id);
+        }
+
+        for (RateLine__c rateLine : RateLineSelector.getRatesLinesByQuoteId(new Set<Id>{ quoteId })) {
+            for (RatePrice__c ratePrice : rateLine.Rates__r) {
+                String linePeriodKey = rateLine.Id + '-' + ratePrice.Period__r.Id;
+                mRateLinePeriodsToPrice.put(linePeriodKey, ratePrice.Id);
+            }
+        }
+
+        for (RateManagerModel.RatePrice ratePrice : lRatePrices) {
+            String periodId = mPeriodKeys.get(ratePrice.periodKey);
+            Id ratePriceId = mRateLinePeriodsToPrice.get(ratePrice.ParentRateLineId + '-' + periodId);
+
+            RatePrice__c vRatePrice = new RatePrice__c(
+                Id = ratePriceId,
+                RateLine__c = ratePrice.ParentRateLineId,
+                Rate__c = ratePrice.ParentRateId,
+                Period__c = periodId,
+                Product__c = ratePrice.ParentProductId,
+                Quote__c = quoteId
+            );
+            if (fillQuota) {
+                vRatePrice.Quota__c = ratePrice.getQuota();
+            }
+            else {
+                vRatePrice.TotalPrice__c = ratePrice.getTotalPrice();
+            }
+            lRatePricesToUpsert.add(vRatePrice);
+        }
+        try {
+            if (!lRatePricesToUpsert.isEmpty()) {
+                upsert lRatePricesToUpsert;
+            }
+        } catch (Exception e) {
+            System.debug(LoggingLevel.ERROR, 'Error in upsertRatePricesFromQuote: ' + e.getMessage() + ' ' + e.getStackTraceString());
+            Logger.info('Error in RatePriceManager.upsertRatePricesFromQuote: ' + e.getMessage() + ' ' + e.getStackTraceString());
+            Logger.saveLog();
+            throw new RatePriceManagerException(e.getMessage() + ' ' + e.getStackTraceString());
+        }
+    }
+
+    public class RatePriceManagerException extends Exception {
+    }
