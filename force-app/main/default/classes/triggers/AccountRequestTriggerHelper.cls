@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-07-2025
+ * @last modified on  : 06-10-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 public without sharing class AccountRequestTriggerHelper extends TriggerUtils {
@@ -68,6 +68,10 @@ public without sharing class AccountRequestTriggerHelper extends TriggerUtils {
                 currentAccountRequest.Closure__c == GlobalConstants.ACCOUNT_REQUEST_STATUS_PROCESSED &&
                 currentAccountRequest.Closure__c != mOldAccountRequests.get(currentAccountRequest.Id).Closure__c &&
                 currentAccountRequest.Account__c != null) {
+                lValidAccountRequests.add(currentAccountRequest);
+            }
+            // Is a rejected account request
+            else if (currentAccountRequest.Closure__c == GlobalConstants.ACCOUNT_REQUEST_STATUS_REJECTED) {
                 lValidAccountRequests.add(currentAccountRequest);
             }
         }

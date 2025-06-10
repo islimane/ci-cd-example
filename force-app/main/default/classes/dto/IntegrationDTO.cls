@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-07-2025
+ * @last modified on  : 06-10-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 public without sharing class IntegrationDTO {
@@ -110,6 +110,18 @@ public without sharing class IntegrationDTO {
             for (Account_PMS__c pms : account.Accounts_PMS__r) {
                 this.PMSExternalId.add(new AccountPmsDTO(pms));
             }
+        }
+    }
+
+    public class AccountRejectedDTO implements IAccountDTO {
+        public String AccountRequestID;
+        public String AccountRequestExternalID;
+        public String Status;
+
+        public AccountRejectedDTO(AccountRequest__c request) {
+            this.AccountRequestID = request.Id;
+            this.AccountRequestExternalID = request.Account_Request_External_ID__c;
+            this.Status = request.Closure__c;
         }
     }
 

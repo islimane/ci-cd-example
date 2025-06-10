@@ -26,16 +26,15 @@ public without sharing class AccountSyncService {
     }
 
     @InvocableMethod(label='Retry account sync')
-    public static void retry(List<String> lRetriesData) {
-        System.debug('AccountSyncService.retry() - [lRetriesData]:' + lRetriesData);
-        /*Set<Id> sAccountRequestIds = new Set<Id>();
-        for (RetryAccountData currentRetryAccountData : lRetriesData) sAccountRequestIds.add(currentRetryAccountData.record.Id);
-        List<ResponseAccountRequest__c> lResponseAccountRequestToRetry = ResponseAccountRequestSelector.getResponseRequestToSync(sAccountRequestIds);
-        System.debug('AccountSyncService.retry() - [lResponseAccountRequestToRetry]:' + lResponseAccountRequestToRetry);
+    public static void retry(List<List<String>> lRetriesData) {
+        System.debug('AccountSyncService.retry() - [lRetriesData]: ' + lRetriesData);
+        List<Id> lAccountRequestIds = (List<Id>)(lRetriesData[0]);
+        List<ResponseAccountRequest__c> lResponseAccountRequestToRetry = ResponseAccountRequestSelector.getResponseRequestToSync(new Set<Id>(lAccountRequestIds));
+        System.debug('AccountSyncService.retry() - [lResponseAccountRequestToRetry]: ' + lResponseAccountRequestToRetry);
         if (!lResponseAccountRequestToRetry.isEmpty()) {
             AccountSyncService syncService = AccountSyncService.instance(lResponseAccountRequestToRetry);
             syncService.sync();
-        }*/
+        }
     }
 
 	/**
@@ -129,13 +128,28 @@ public without sharing class AccountSyncService {
     // AUX METHODS
 
     private static List<IntegrationDTO.IAccountDTO> parseRequests(List<AccountRequest__c> lAccountRequests) {
-        Set<Id> sAccountIds = new Set<Id>();
-        for (AccountRequest__c currentRequest : lAccountRequests) sAccountIds.add(currentRequest.Account__c);
-        Map<Id, Account> mFullAccountsById = AccountSelector.getAccountDataToSync(sAccountIds);
         List<IntegrationDTO.IAccountDTO> lAccountsDTO = new List<IntegrationDTO.IAccountDTO>();
-        for (AccountRequest__c currentRequest : lAccountRequests) {
+        List<AccountRequest__c> lProcessedAccountRequest = new List<AccountRequest__c>();
+        List<AccountRequest__c> lRejectedAccountRequest = new List<AccountRequest__c>();
+        for (AccountRequest__c request : lAccountRequests) {
+            if (request.Closure__c == GlobalConstants.ACCOUNT_REQUEST_STATUS_PROCESSED) {
+                lProcessedAccountRequest.add(request);
+            } else if (request.Closure__c == GlobalConstants.ACCOUNT_REQUEST_STATUS_REJECTED) {
+                lRejectedAccountRequest.add(request);
+            }
+        }
+
+        // Parse processed requests
+        Set<Id> sAccountIds = new Set<Id>();
+        for (AccountRequest__c currentRequest : lProcessedAccountRequest) sAccountIds.add(currentRequest.Account__c);
+        Map<Id, Account> mFullAccountsById = AccountSelector.getAccountDataToSync(sAccountIds);
+        for (AccountRequest__c currentRequest : lProcessedAccountRequest) {
             if (mFullAccountsById.containsKey(currentRequest.Account__c)) lAccountsDTO.add(new IntegrationDTO.AccountDTO(mFullAccountsById.get(currentRequest.Account__c), currentRequest));
         }
+
+        // Parse rejected requests
+        for (AccountRequest__c currentRequest : lRejectedAccountRequest) lAccountsDTO.add(new IntegrationDTO.AccountRejectedDTO(currentRequest));
+
         return lAccountsDTO;
     }
 

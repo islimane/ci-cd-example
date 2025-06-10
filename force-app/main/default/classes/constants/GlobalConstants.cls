@@ -2,7 +2,7 @@
  * @description       : Global constants class for the entire system.
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 05-20-2025
+ * @last modified on  : 06-10-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 @SuppressWarnings('PMD')
@@ -99,5 +99,6 @@ public without sharing class GlobalConstants {
     public static final String ACCOUNT_REQUEST_TYPE_INACTIVE { get { return 'Inactive'; } }
 
     public static final String ACCOUNT_REQUEST_STATUS_PROCESSED { get { return 'Processed'; } }
+    public static final String ACCOUNT_REQUEST_STATUS_REJECTED { get { return 'Rejected'; } }
 
 }
