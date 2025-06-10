@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-07-2025
+ * @last modified on  : 06-10-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
  **/
 public with sharing class AccountSyncQueueable implements Queueable, Database.AllowsCallouts {
@@ -22,7 +22,7 @@ public with sharing class AccountSyncQueueable implements Queueable, Database.Al
         System.debug('### AccountSyncQueueable.sync() - [lAccountsToSync]: ' + lAccountsToSync);
 
         HttpRequest request = new HttpRequest();
-        //request.setEndpoint('callout:Mulesoft');
+        request.setEndpoint('callout:Auth_Mule');
         request.setEndpoint('https://bhg-eapi-crm-dev-diqyem.6adi94.irl-e1.cloudhub.io:443/api/salesforce/customer');
         request.setHeader('client_id', '5bb26228-0cd4-4861-b98d-2ae655157266');
         request.setHeader('client_secret', 'UID8Q~ybZdkIOb9d1BCraMwOXTmLD3SApcrocddX');

@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-07-2025
+ * @last modified on  : 06-10-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 public without sharing class AccountSyncService {
@@ -18,6 +18,25 @@ public without sharing class AccountSyncService {
 	private static AccountSyncService INSTANCE = null;
 
     private static final Integer BATCH_SIZE = 100;
+
+    public class RetryAccountData {
+        @AuraEnabled
+        @InvocableVariable(label='Record')
+        public ResponseAccountRequest__c record;
+    }
+
+    @InvocableMethod(label='Retry account sync')
+    public static void retry(List<String> lRetriesData) {
+        System.debug('AccountSyncService.retry() - [lRetriesData]:' + lRetriesData);
+        /*Set<Id> sAccountRequestIds = new Set<Id>();
+        for (RetryAccountData currentRetryAccountData : lRetriesData) sAccountRequestIds.add(currentRetryAccountData.record.Id);
+        List<ResponseAccountRequest__c> lResponseAccountRequestToRetry = ResponseAccountRequestSelector.getResponseRequestToSync(sAccountRequestIds);
+        System.debug('AccountSyncService.retry() - [lResponseAccountRequestToRetry]:' + lResponseAccountRequestToRetry);
+        if (!lResponseAccountRequestToRetry.isEmpty()) {
+            AccountSyncService syncService = AccountSyncService.instance(lResponseAccountRequestToRetry);
+            syncService.sync();
+        }*/
+    }
 
 	/**
 	 * Return the service class instance

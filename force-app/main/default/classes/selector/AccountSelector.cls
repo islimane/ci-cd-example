@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-07-2025
+ * @last modified on  : 06-10-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 public with sharing class AccountSelector {
@@ -11,7 +11,7 @@ public with sharing class AccountSelector {
     * @description Get a list of accounts by ids
     * @author Inetum Team <alvaro.marin@inetum.com>
     * @param sAccountIds Account ids
-    * @return Map<Id, List<GroupMember>>
+    * @return Map<Id, Account>
     **/
 	public static Map<Id, Account> getAccountDataToSync(Set<Id> sAccountIds) {
 		return new Map<Id, Account>([
