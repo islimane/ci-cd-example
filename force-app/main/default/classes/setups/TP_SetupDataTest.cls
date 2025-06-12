@@ -2,8 +2,8 @@
  * @description       : Unit Test Class for Setup Data Methods
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 04-11-2025
- * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
+ * @last modified on  : 12-06-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 @isTest
 public class TP_SetupDataTest {
@@ -42,6 +42,8 @@ public class TP_SetupDataTest {
     public static Map<String, sObject> mRateLineSupplement = new Map<String, sObject>();
     public static Map<String, sObject> mPricebookEntryRoom = new Map<String, sObject>();
     public static Map<String, sObject> mPricebookEntrySupplement = new Map<String, sObject>();
+    public static Map<String, sObject> mQuote = new Map<String, sObject>();
+    public static Map<String, sObject> mWeekDaySet = new Map<String, sObject>();
     public static Pricebook2 pricebookSingleton{get{
         if(pricebookSingleton == null){
             pricebookSingleton = [SELECT Id, Name FROM Pricebook2 WHERE isActive = true AND Name = :PRICEBOOK_NAME_TEST LIMIT 1];
@@ -70,6 +72,7 @@ public class TP_SetupDataTest {
     /*********************************/
     /*    BUNDLE FACTORY METHODS     */
     /*********************************/
+    // #region bundle factory methods
 
     /**
      * Generates and inserts all system data for the test context in bulk.
@@ -120,13 +123,16 @@ public class TP_SetupDataTest {
         generateRateLine();
         generatePricebook();
         generateProduct2();
+        generateQuote();
+        generateWeekDaySet();
         //generatePricebookEntry();
     }
-
+    // #endregion bundle factory methods
 
     /*********************************/
     /*     SINGLE FACTORY METHODS    */
     /*********************************/
+    // #region single factory methods
 
     /**
      * Creates a ByPassConfig__c record to disable triggers for testing purposes.
@@ -147,10 +153,12 @@ public class TP_SetupDataTest {
     public static ByPassConfig__c unsetByPassTriggers(){
         return [SELECT Id FROM ByPassConfig__c];
     }
+    // #endregion single factory methods
 
     /*********************************/
     /*     BULK FACTORY METHODS      */
     /*********************************/
+    // #region bulk factory methods
 
     /**
      * Generates an Account object with dummy values for testing purposes.
@@ -170,7 +178,8 @@ public class TP_SetupDataTest {
             ShippingCountry = 'Spain',
             ShippingState = 'Madrid',
             Description = 'Test account for unit testing',
-            OwnerId = UserInfo.getUserId()
+            OwnerId = UserInfo.getUserId(),
+            Email__c = 'Test'+batteryName+'@test.com'
         );
         mAccount = TP_SetupDataUtilsTest.setMapByName(mAccount, new List<sObject>{account});
         return account;
@@ -458,6 +467,30 @@ public class TP_SetupDataTest {
         mRateLineSupplement = TP_SetupDataUtilsTest.setMapByName(mRateLineSupplement, new List<sObject>{rateLineSupplement});
     }
 
+    /**
+     * Generates a RateLine__c object with dummy values for testing purposes.
+     * @return A new RateLine__c object with dummy values for a test environment.
+     */
+    public static void generateQuote() {
+        Quote quoteRecord = new Quote(
+            Name = 'Default'+batteryName
+        );
+        mQuote = TP_SetupDataUtilsTest.setMapByName(mQuote, new List<sObject>{quoteRecord});
+    }
+
+    /**
+     * Generates a RateLine__c object with dummy values for testing purposes.
+     * @return A new RateLine__c object with dummy values for a test environment.
+     */
+    public static void generateWeekDaySet() {
+        WeekDaySet__c WeekDaySetRecord = new WeekDaySet__c(
+            Weekdays__c = 'Mon; Tue; Wed'
+        );
+        mWeekDaySet = TP_SetupDataUtilsTest.setMapByName(mWeekDaySet, new List<sObject>{WeekDaySetRecord});
+    }
+
+    // #endregion bulk factory methods
+
     /************************************************/
     /*    			BUILD AUX METHODS     			*/
     /************************************************/
@@ -471,6 +504,7 @@ public class TP_SetupDataTest {
     /************************************************/
     /*    INSERT & RELATIONSHIP FACTORY METHODS     */
     /************************************************/
+    // #region insert relationships factory methods
 
     public static List<Account> lAccountToInsert = new List<Account>();
     public static List<RatePlanner__c> lRatePlannerToInsert = new List<RatePlanner__c>();
@@ -482,6 +516,8 @@ public class TP_SetupDataTest {
     public static List<Product2> product2toInsert = new List<Product2>();
     public static List<PricebookEntry> lPricebookEntryToInsert = new List<PricebookEntry>();
     public static List<RateLine__c> lRateLineToInsert = new List<RateLine__c>();
+    public static List<Quote> lQuoteToInsert = new List<Quote>();
+    public static List<WeekdaySet__c> lWeekdaySetToInsert = new List<WeekdaySet__c>();
 
     /**
     * Calls individual methods to insert all records and set up necessary parent-child relationships.
@@ -502,6 +538,8 @@ public class TP_SetupDataTest {
         insertProduct2();
         insertPricebookEntry();
         insertRateLineData();
+        insertQuoteData();
+        insertWeekdaySetData();
     }
 
     /**
@@ -564,14 +602,25 @@ public class TP_SetupDataTest {
     **/
     private static void insertHotelTerritory(){
 		insert mHotelTerritoryArea.values();
+        TP_SetupDataUtilsTest.setMapByName(mHotelTerritoryArea, mHotelTerritoryArea.values());
         TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryArea.values(), mHotelTerritoryContinent.values(), 'Area__c');
 		insert mHotelTerritoryContinent.values();
+        TP_SetupDataUtilsTest.setMapByName(mHotelTerritoryContinent, mHotelTerritoryContinent.values());
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryArea.values(), mHotelTerritoryZone.values(), 'Area__c');
         TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryContinent.values(), mHotelTerritoryZone.values(), 'Continent__c');
 		insert mHotelTerritoryZone.values();
+        TP_SetupDataUtilsTest.setMapByName(mHotelTerritoryZone, mHotelTerritoryZone.values());
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryArea.values(), mHotelTerritorySubzone.values(), 'Area__c');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryContinent.values(), mHotelTerritorySubzone.values(), 'Continent__c');
         TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryZone.values(), mHotelTerritorySubzone.values(), 'Zone__c');
 		insert mHotelTerritorySubzone.values();
+        TP_SetupDataUtilsTest.setMapByName(mHotelTerritorySubzone, mHotelTerritorySubzone.values());
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryArea.values(), mHotelTerritoryHotel.values(), 'Area__c');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryContinent.values(), mHotelTerritoryHotel.values(), 'Continent__c');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryZone.values(), mHotelTerritoryHotel.values(), 'Zone__c');
         TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritorySubzone.values(), mHotelTerritoryHotel.values(), 'Subzone__c');
 		insert mHotelTerritoryHotel.values();
+        TP_SetupDataUtilsTest.setMapByName(mHotelTerritoryHotel, mHotelTerritoryHotel.values());
     }
 
     /**
@@ -605,7 +654,7 @@ public class TP_SetupDataTest {
         TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryHotel.values(), mUserAuthorization.values(), 'Hotel__c');
         lUserAuthorizationToInsert.addAll((List<User_authorization__c>)mUserAuthorization.values());
 		for (User_authorization__c currentAuthorization : lUserAuthorizationToInsert) currentAuthorization.User__c = UserInfo.getUserId();
-        insert lUserAuthorizationToInsert;
+        // insert lUserAuthorizationToInsert;
     }
 
     /**
@@ -660,10 +709,35 @@ public class TP_SetupDataTest {
         insert lRateLineToInsert;
     }
 
+    /**
+     * @description Inserts all Quote records and sets relationships.
+     * @author Inetum Team <ruben.sanchez-gonzalez@inetum.com> | 12-06-2025
+     */
+    private static void insertQuoteData() {
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mHotel.values(), mQuote.values(), 'Hotel__c');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mOpportunity.values(), mQuote.values(), 'OpportunityId');
+        lQuoteToInsert.addAll((List<Quote>) mQuote.values());
+        insert lQuoteToInsert;
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mQuote.values(), mRateLineRoom.values(), 'Quote__c');
+        upsert mRateLineRoom.values();
+    }
+
+    /**
+     * @description Inserts all WeekdaySet__c records and sets relationships.
+     * @author Inetum Team <ruben.sanchez-gonzalez@inetum.com> | 12-06-2025
+     */
+    private static void insertWeekdaySetData() {
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mQuote.values(), mWeekDaySet.values(), 'Quote__c');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mRatePlanner.values(), mWeekDaySet.values(), 'RatePlanner__c');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mRate.values(), mWeekDaySet.values(), 'Rate__c');
+        lWeekdaySetToInsert.addAll((List<WeekdaySet__c>) mWeekDaySet.values());
+        insert lWeekdaySetToInsert;
+    }
+
 	@future
 	private static void insertFutureRecord(String recordJSON) {
 		sObject record = (sObject)JSON.deserialize(recordJSON, sObject.class);
 		insert record;
 	}
-
+    // #endregion insert relationships factory methods
 }

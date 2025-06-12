@@ -2,8 +2,8 @@
  * @description       : Provides utility methods to retrieve test records based on dynamic naming conventions.
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 04-11-2025
- * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
+ * @last modified on  : 12-06-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 
 @isTest
@@ -141,5 +141,13 @@ public with sharing class TP_SetupSelectorTest {
      */
     public static Period__c getPeriodByType(Id recordTypeId){
         return [SELECT Id, Name, RatePlanner__c FROM Period__c WHERE RecordTypeId = :recordTypeId LIMIT 1];
+    }
+
+    /**
+     * Retrieves a list of Quote records based on the DB.
+     * @return Period__c.
+     */
+    public static List<Quote> getQuotes(){
+        return [SELECT Id, Name, Hotel__c, OpportunityId FROM Quote LIMIT 5];
     }
 }
