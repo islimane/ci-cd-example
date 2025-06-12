@@ -1,0 +1,55 @@
+<!--
+  @description       :
+  @author            : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
+  @group             :
+  @last modified on  : 06-11-2025
+  @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
+-->
+<template>
+    <!--* HEADER -->
+    <lightning-quick-action-panel header="Configure prices & allotments">
+
+        <template lwc:if={isLoading}>
+            <div class="slds-is-relative" style="min-height: 80px;">
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <template lwc:else>
+            <!-- * BODY -->
+            <div class="content-modal">
+                <template lwc:if={showWeekdaySelector}>
+                    <lightning-combobox
+                        name="weekdaySelector"
+                        label="Select Weekday Set to configure"
+                        value={weekDaySetValue}
+                        placeholder="Select an option"
+                        class="slds-m-bottom_medium"
+                        options={optionsWeekDay}
+                        onchange={handleChange}
+                        disabled={disableButton}
+                    ></lightning-combobox>
+                </template>
+                <template lwc:if={showRatePricesTable}>
+                    <c-quote-manager-price-config
+                        record-id={recordId}
+                        weekday-set-id={weekdaySetId}
+                    ></c-quote-manager-price-config>
+                </template>
+            </div>
+            <!-- * FOOTER -->
+            <div slot="footer">
+                <template lwc:if={showWeekdaySelector}>
+                    <lightning-button variant="bare" label="Cancel" onclick={close} class="slds-p-right_medium"></lightning-button>
+                    <lightning-button variant="brand" label="Next" onclick={weekDayNext} disabled={disableButton}></lightning-button>
+                </template>
+                <template lwc:else>
+                    <template lwc:if={showBackButton}>
+                        <lightning-button variant="bare" label="Back" onclick={weekDayBack} class="slds-p-right_medium"></lightning-button>
+                    </template>
+                    <lightning-button variant="brand" label="End changes" onclick={close}></lightning-button>
+                </template>
+            </div>
+        </template>
+    </lightning-quick-action-panel>
+</template>
