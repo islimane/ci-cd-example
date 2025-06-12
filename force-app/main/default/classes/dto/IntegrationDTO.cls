@@ -2,15 +2,16 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-05-2025
+ * @last modified on  : 06-11-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 global without sharing class IntegrationDTO {
 
-    global class APIResponse {
+    global class SCResponseAPI {
         public Boolean success;
         public String message;
-        public String recordId;
+        public Object resultOpp;
+        public Object resultItems;
     }
 
     public class AccountDTO {
@@ -178,7 +179,35 @@ global without sharing class IntegrationDTO {
         public SCAudiovisualDTO audiovisual;
         public SCOthersDTO otros;
 
+        //Metadata to parse data
+        private Map<String, Id> mProductIdByType;
+        private Id pricebookId = null;
+        private Map<String, Id> mPricebookEntryIdByType;
+
+        private void buildMetadata() {
+            Map<String, String> productCodesByNames = new Map<String, String> {
+                'Room' => 'room',
+                'Food & Beverage' => 'food_beverage',
+                'Venue Room' => 'venue_room',
+                'Audiovisuals' => 'audiovisuals',
+                'Others' => 'others'
+            };
+            String pricebookName = 'MICE Price Book';
+            mProductIdByType = new Map<String, Id>();
+            mPricebookEntryIdByType = new Map<String, Id>();
+
+            pricebookId = [SELECT Id FROM Pricebook2 WHERE Name = :pricebookName LIMIT 1].Id;
+            for(Product2 product : [SELECT Id, Name FROM Product2 WHERE Name IN :productCodesByNames.keySet()]) {
+                mProductIdByType.put(productCodesByNames.get(product.Name), product.Id);
+            }
+            for(PricebookEntry pbe : [SELECT Id, Product2.Name FROM PricebookEntry WHERE Pricebook2Id = :pricebookId AND Product2.Name IN :productCodesByNames.keySet()]) {
+                mPricebookEntryIdByType.put(productCodesByNames.get(pbe.Product2.Name), pbe.Id);
+            }
+        }
+
         public Opportunity parse() {
+            system.debug('test this: ' + this.toString());
+            buildMetadata();
             String accountExternalId = String.isNotBlank(this.cliEmp) ? this.cliEmp : this.cliAgen;
             Account relatedAccount = new Account(Account_External_ID__c = accountExternalId);
             return new Opportunity(
@@ -191,28 +220,41 @@ global without sharing class IntegrationDTO {
                 CurrencyISOCode = this.moneda,
                 EventStartDate__c = Date.parse(this.fechaDesde),
                 EventEndDate__c = Date.parse(this.fechaHasta),
+                CloseDate = Date.parse(this.fechaHasta),
                 BlockingDate__c = Date.parse(this.fechaBloq),
                 Reason__c = this.motNoForm, //loss_reason__c no existe
-                Pricebook2Id = [SELECT ID FROM Pricebook2 WHERE Name ='MICE Price Book'].Id,//se pasa desde mule??
-                Hotel__r = new Hotel__c(ID_PMS__c = this.idHotel)//se crea automaticamente el opphotel???
+                Pricebook2Id = pricebookId,
+                Hotel__r = new Hotel__c(ID_PMS__c = this.idHotel)
             );
         }
 
         public List<Opportunity_Account__c> parseOpportunityAccounts(Id opportunityId) {
             List<Opportunity_Account__c> lOpportunityAccounts = new List<Opportunity_Account__c>();
-            if (String.isNotBlank(this.cliEmp)) lOpportunityAccounts.add(new Opportunity_Account__c(Account__r = new Account(Account_External_ID__c = this.cliEmp), Opportunity__c = opportunityId, Rol__c = 'Customer'));
-            if (String.isNotBlank(this.cliAgen)) lOpportunityAccounts.add(new Opportunity_Account__c(Account__r = new Account(Account_External_ID__c = this.cliAgen), Opportunity__c = opportunityId, Rol__c = 'Intermediary'));
-            if (String.isNotBlank(this.delegacion)) lOpportunityAccounts.add(new Opportunity_Account__c(Account__r = new Account(Account_External_ID__c = this.delegacion), Opportunity__c = opportunityId, Rol__c = 'Delegation'));
+            if (String.isNotBlank(this.cliEmp)) lOpportunityAccounts.add(new Opportunity_Account__c(
+                Account__r = new Account(Account_External_ID__c = this.cliEmp),
+                Opportunity__c = opportunityId,
+                Rol__c = GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_CUSTOMER)
+            );
+            if (String.isNotBlank(this.cliAgen)) lOpportunityAccounts.add(new Opportunity_Account__c(
+                Account__r = new Account(Account_External_ID__c = this.cliAgen),
+                Opportunity__c = opportunityId,
+                Rol__c = GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_INTERMEDIARY)
+            );
+            if (String.isNotBlank(this.delegacion)) lOpportunityAccounts.add(new Opportunity_Account__c(
+                Account__r = new Account(Account_External_ID__c = this.delegacion),
+                Opportunity__c = opportunityId,
+                Rol__c = GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_DELEGATION)
+            );
             return lOpportunityAccounts;
         }
 
         public List<QuoteLineItem> parseQuoteLineItems(Id quoteId) {
             List<QuoteLineItem> lQuoteLineItems = new List<QuoteLineItem>();
-            if (this.alojamiento != null) lQuoteLineItems.add(this.alojamiento.parse(quoteId));
-            if (this.aYB != null) lQuoteLineItems.add(this.aYB.parse(quoteId));
-            if (this.salas != null) lQuoteLineItems.add(this.salas.parse(quoteId));
-            if (this.audiovisual != null) lQuoteLineItems.add(this.audiovisual.parse(quoteId));
-            if (this.otros != null) lQuoteLineItems.add(this.otros.parse(quoteId));
+            if (this.alojamiento != null) lQuoteLineItems.add(this.alojamiento.parse(quoteId, mProductIdByType, mPricebookEntryIdByType));
+            if (this.aYB != null) lQuoteLineItems.add(this.aYB.parse(quoteId, mProductIdByType, mPricebookEntryIdByType));
+            if (this.salas != null) lQuoteLineItems.add(this.salas.parse(quoteId, mProductIdByType, mPricebookEntryIdByType));
+            if (this.audiovisual != null) lQuoteLineItems.add(this.audiovisual.parse(quoteId, mProductIdByType, mPricebookEntryIdByType));
+            if (this.otros != null) lQuoteLineItems.add(this.otros.parse(quoteId, mProductIdByType, mPricebookEntryIdByType));
             return lQuoteLineItems;
         }
     }
@@ -224,11 +266,11 @@ global without sharing class IntegrationDTO {
         public Decimal aloPorComision;
         public String aloComentarios;
 
-        public QuoteLineItem parse(Id quoteId) {
+        public QuoteLineItem parse(Id quoteId, Map<String, Id> mProductIdByType, Map<String, Id> mPricebookEntryIdByType) {
             return IntegrationDTO.generateQLI(
                 quoteId,
-                [SELECT ID FROM Product2 WHERE Name ='Room'].Id,
-                [SELECT ID FROM PricebookEntry WHERE Pricebook2.Name ='MICE Price Book' AND Product2.Name ='Room'].Id,
+                mProductIdByType.get('room'),
+                mPricebookEntryIdByType.get('room'),
                 this.aloSubtotal,
                 this.aloPorImpto,
                 this.aloImpIncluidos,
@@ -245,11 +287,11 @@ global without sharing class IntegrationDTO {
         public Decimal aybPorComision;
         public String aybComentarios;
 
-        public QuoteLineItem parse(Id quoteId) {
+        public QuoteLineItem parse(Id quoteId, Map<String, Id> mProductIdByType, Map<String, Id> mPricebookEntryIdByType) {
             return IntegrationDTO.generateQLI(
                 quoteId,
-                [SELECT ID FROM Product2 WHERE Name ='Food & Beverage'].Id,
-                [SELECT ID FROM PricebookEntry WHERE Pricebook2.Name ='MICE Price Book' AND Product2.Name ='Food & Beverage'].Id,
+                mProductIdByType.get('food_beverage'),
+                mPricebookEntryIdByType.get('food_beverage'),
                 this.aybSubtotal,
                 this.aybPorImpto,
                 this.aybImpIncluidos,
@@ -266,11 +308,11 @@ global without sharing class IntegrationDTO {
         public Decimal salPorComision;
         public String salComentarios;
 
-        public QuoteLineItem parse(Id quoteId) {
+        public QuoteLineItem parse(Id quoteId, Map<String, Id> mProductIdByType, Map<String, Id> mPricebookEntryIdByType) {
             return IntegrationDTO.generateQLI(
                 quoteId,
-                [SELECT ID FROM Product2 WHERE Name ='Venue Room'].Id,
-                [SELECT ID FROM PricebookEntry WHERE Pricebook2.Name ='MICE Price Book' AND Product2.Name ='Venue Room'].Id,
+                mProductIdByType.get('venue_room'),
+                mPricebookEntryIdByType.get('venue_room'),
                 this.salSubtotal,
                 this.salPorImpto,
                 this.salImpIncluidos,
@@ -287,11 +329,11 @@ global without sharing class IntegrationDTO {
         public Decimal audPorComision;
         public String audComentarios;
 
-        public QuoteLineItem parse(Id quoteId) {
+        public QuoteLineItem parse(Id quoteId, Map<String, Id> mProductIdByType, Map<String, Id> mPricebookEntryIdByType) {
             return IntegrationDTO.generateQLI(
                 quoteId,
-                [SELECT ID FROM Product2 WHERE Name ='Audiovisuals'].Id,
-                [SELECT ID FROM PricebookEntry WHERE Pricebook2.Name ='MICE Price Book' AND Product2.Name ='Audiovisuals'].Id,
+                mProductIdByType.get('audiovisuals'),
+                mPricebookEntryIdByType.get('audiovisuals'),
                 this.audSubtotal,
                 this.audPorImpto,
                 this.audImpIncluidos,
@@ -308,11 +350,11 @@ global without sharing class IntegrationDTO {
         public Decimal otrPorComision;
         public String otrComentarios;
 
-        public QuoteLineItem parse(Id quoteId) {
+        public QuoteLineItem parse(Id quoteId, Map<String, Id> mProductIdByType, Map<String, Id> mPricebookEntryIdByType) {
             return IntegrationDTO.generateQLI(
                 quoteId,
-                [SELECT ID FROM Product2 WHERE Name ='Others'].Id,
-                [SELECT ID FROM PricebookEntry WHERE Pricebook2.Name ='MICE Price Book' AND Product2.Name ='Others'].Id,
+                mProductIdByType.get('others'),
+                mPricebookEntryIdByType.get('others'),
                 this.otrSubtotal,
                 this.otrPorImpto,
                 this.otrImpIncluidos,
