@@ -68,5 +68,18 @@ public with sharing class PeriodSelector {
 		}
 	}
 
-
+    /**
+     * @description Retrieves the Period__c fields by its own Quote Id
+     * @author Inetum Team <ruben.sanchez-gonzalez@inetum.com> | 29-05-2025
+     * @param quoteIds
+     * @return List<Period__c>
+     **/
+    public static List<Period__c> getPeriodsByQuoteId(Set<Id> quoteIds) {
+        return [
+            SELECT Id, Name, StartDate__c, EndDate__c, Type__c, RatePlanner__c, Hotel__c, Dates__c
+            FROM Period__c
+            WHERE Quote__c IN :quoteIds OR Opportunity_Hotel__c IN :quoteIds
+            ORDER BY StartDate__c ASC
+        ];
+    }
 }

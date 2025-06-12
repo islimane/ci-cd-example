@@ -1,57 +1,57 @@
 /**
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
- * @group             : 
- * @last modified on  : 09-04-2025
- * @last modified by  : alberto.martinez-lopez@inetum.com
-**/
+ * @group             :
+ * @last modified on  : 06-11-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
+ **/
 public class RateLineSelector {
     /**
-    * @description
-    * @author Inetum Team <alberto.martinez-lopez@inetum.com> | 19-03-2025
-    * @param hotelIds
-    * @param productFamily
-    * @return List<RateLine__c>
-    **/
-    public static List<RateLine__c> getRateLinesByRateIdsAndHotelIdAndProductFamily(Set<Id> rateIds, Set<Id> hotelIds, String productFamily) {
-        return [SELECT 
-                    Id, 
-                    Hotel__c, 
-                    Rate__c,
-                    RatePlanner__c,
-                    Observations__c,
-                    Product__r.Name, 
-                    Product__r.Family,
-                    Product__r.Description, 
-                    Product__r.Room__c, 
-                    Product__r.Characteristic__c, 
-                    Product__r.Regimen_Type__c, 
-                    Product__r.Applicable__c, 
-                    Product__r.ApplicationType__c,
-                    Product__r.Base__c,
-                    (SELECT 
-                        Id, 
-                        RateLine__c,
-                        Period__r.StartDate__c, 
-                        Period__r.EndDate__c, 
-                        Period__r.Type__c,
-                        TotalPrice__c 
-                    FROM Rates__r)
-                FROM 
-                    RateLine__c 
-                WHERE 
-                    Product__r.isActive = true
-                    AND Rate__c IN :rateIds 
-                    AND (
-                        (Product__r.Family = :GlobalConstants.PRODUCT2_FAMILY_ROOM AND Product__r.Room__c != null)
-                        OR (Product__r.Family = :GlobalConstants.PRODUCT2_FAMILY_SUPPLEMENT AND Product__r.Applicable__c != null)
-                    )
-                    AND Hotel__c IN :hotelIds
-                    AND Product__r.Family = :productFamily
-            ];
+     * @description
+     * @author Inetum Team <alberto.martinez-lopez@inetum.com> | 19-03-2025
+     * @param hotelIds
+     * @param productFamily
+     * @return List<RateLine__c>
+     **/
+    public static List<RateLine__c> getRateLinesByRateIdsAndHotelIdAndProductFamily(
+        Set<Id> rateIds,
+        Set<Id> hotelIds,
+        String productFamily
+    ) {
+        return [
+            SELECT
+                Id,
+                Hotel__c,
+                Rate__c,
+                RatePlanner__c,
+                Observations__c,
+                Product__r.Name,
+                Product__r.Family,
+                Product__r.Description,
+                Product__r.Room__c,
+                Product__r.Characteristic__c,
+                Product__r.Regimen_Type__c,
+                Product__r.Applicable__c,
+                Product__r.ApplicationType__c,
+                Product__r.Base__c,
+                (
+                    SELECT Id, RateLine__c, Period__r.StartDate__c, Period__r.EndDate__c, Period__r.Type__c, TotalPrice__c
+                    FROM Rates__r
+                )
+            FROM RateLine__c
+            WHERE
+                Product__r.isActive = TRUE
+                AND Rate__c IN :rateIds
+                AND ((Product__r.Family = :GlobalConstants.PRODUCT2_FAMILY_ROOM
+                AND Product__r.Room__c != NULL)
+                OR (Product__r.Family = :GlobalConstants.PRODUCT2_FAMILY_SUPPLEMENT
+                AND Product__r.Applicable__c != NULL))
+                AND Hotel__c IN :hotelIds
+                AND Product__r.Family = :productFamily
+        ];
     }
 
-     /**
+    /**
      * @description Retrieves the RateLine__c fields by its own Id
      * @author Inetum Team <ruben.sanchez-gonzalez@inetum.com> | 21-03-2025
      * @param ratePlannerIds
@@ -63,13 +63,13 @@ public class RateLineSelector {
                 Id,
                 Product__c,
                 ProductName__c,
-                Product__r.Name, 
+                Product__r.Name,
                 Product__r.Family,
-                Product__r.Description, 
-                Product__r.Room__c, 
-                Product__r.Characteristic__c, 
-                Product__r.Regimen_Type__c, 
-                Product__r.Applicable__c, 
+                Product__r.Description,
+                Product__r.Room__c,
+                Product__r.Characteristic__c,
+                Product__r.Regimen_Type__c,
+                Product__r.Applicable__c,
                 Product__r.ApplicationType__c,
                 Product__r.Base__c,
                 Room__c,
@@ -79,14 +79,10 @@ public class RateLineSelector {
                 Description__c,
                 Opportunity__c,
                 Observations__c,
-                (SELECT 
-                    Id, 
-                    RateLine__c,
-                    Period__r.StartDate__c, 
-                    Period__r.EndDate__c, 
-                    Period__r.Type__c,
-                    TotalPrice__c 
-                FROM Rates__r)
+                (
+                    SELECT Id, RateLine__c, Period__r.StartDate__c, Period__r.EndDate__c, Period__r.Type__c, TotalPrice__c
+                    FROM Rates__r
+                )
             FROM RateLine__c
             WHERE Id IN :rateIds
         ];
@@ -100,18 +96,57 @@ public class RateLineSelector {
      **/
     public static List<RateLine__c> getRatesLinesByRatePlannerId(Set<Id> ratePlannerIds) {
         return [
+            SELECT Id, Product__c, ProductName__c, Room__c, Hotel__c, Rate__c, RatePlanner__c, Description__c, Opportunity__c
+            FROM RateLine__c
+            WHERE RatePlanner__c IN :ratePlannerIds
+        ];
+    }
+
+    /**
+     * @description Retrieves the RateLine__c records by RatePlanner__c
+     * @author Inetum Team <ruben.sanchez-gonzalez@inetum.com> | 21-03-2025
+     * @param quoteIds
+     * @return List<RateLine__c>
+     **/
+    public static List<RateLine__c> getRLByQuoteIdAndWeekDaySet(Set<Id> quoteIds, Set<Id> weekDaySetIds) {
+        return [
             SELECT
                 Id,
                 Product__c,
                 ProductName__c,
+                Product__r.Name,
+                Product__r.Family,
+                Product__r.Description,
+                Product__r.Room__c,
+                Product__r.Characteristic__c,
+                Product__r.Regimen_Type__c,
+                Product__r.Applicable__c,
+                Product__r.ApplicationType__c,
+                Product__r.Base__c,
                 Room__c,
                 Hotel__c,
                 Rate__c,
                 RatePlanner__c,
                 Description__c,
-                Opportunity__c
+                Opportunity__c,
+                Observations__c,
+                (
+                    SELECT
+                        Id,
+                        RateLine__c,
+                        Period__r.Id,
+                        Period__r.StartDate__c,
+                        Period__r.EndDate__c,
+                        Period__r.Type__c,
+                        TotalPrice__c,
+                        Rate__c,
+                        Product__c,
+                        Quota__c
+                    FROM Rates__r
+                    WHERE WeekdaySet__c IN :weekDaySetIds
+                )
             FROM RateLine__c
-            WHERE RatePlanner__c IN :ratePlannerIds
+            WHERE Quote__c IN :quoteIds OR OpportunityHotel__c IN :quoteIds
         ];
     }
 }
