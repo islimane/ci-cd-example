@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-11-2025
+ * @last modified on  : 06-12-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 global without sharing class IntegrationDTO {
@@ -10,8 +10,8 @@ global without sharing class IntegrationDTO {
     global class SCResponseAPI {
         public Boolean success;
         public String message;
-        public Object resultOpp;
-        public Object resultItems;
+        //public Object resultOpp;
+        //public Object resultItems;
     }
 
     public class AccountDTO {

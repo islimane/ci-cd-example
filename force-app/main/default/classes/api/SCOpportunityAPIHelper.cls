@@ -18,13 +18,18 @@ public with sharing class SCOpportunityAPIHelper {
 
             //Process opportunities
             Map<Boolean, Map<String, Opportunity>> mOpportunitiesSuccessByExternalId = processOpportunities(lRequestedOpportunities);
-            response.resultOpp = mOpportunitiesSuccessByExternalId;
+
+            //Process opportunity hotels
+            Map<Boolean, Map<String, Opportunity_Hotel__c>> mOpportunityHotelsSuccessByExternalId = processOpportunityHotels(mOpportunitiesSuccessByExternalId.get(true));
 
             //Process opportunity accounts
             Map<Boolean, Map<String, List<Opportunity_Account__c>>> mOpportunityAccountSuccessByExternalId = processOpportunityAccounts(lRequestedOpportunities, mOpportunitiesSuccessByExternalId.get(true));
 
             //Process quote line items
-            //List<QuoteLineItem> lQuoteLineItems = requestedOpportunity.parseQuoteLineItems(relatedQuote.Id);
+            //Map<Boolean, Map<String, List<QuoteLineItem>>> mOpportunityItemsSuccessByExternalId = processOpportunityItems(lRequestedOpportunities, mOpportunitiesSuccessByExternalId.get(true));
+
+            //Response with num of oks/kos
+
         } catch (Exception e) {
             response.success = false;
             response.message = e.getMessage() + '\n' + e.getStackTraceString();
@@ -63,6 +68,11 @@ public with sharing class SCOpportunityAPIHelper {
         return mResults;
     }
 
+    private static Map<Boolean, Map<String, Opportunity_Hotel__c>> processOpportunityHotels(Map<String, Opportunity> mOpportunitiesSuccess) {
+        List<Opportunity_Hotel__c> lOpportunityHotelsToInsert = new List<Opportunity_Hotel__c>();
+        return null;
+    }
+
     private static Map<Boolean, Map<String, List<Opportunity_Account__c>>> processOpportunityAccounts(List<IntegrationDTO.SCOpportunityDTO> lRequestedOpportunities, Map<String, Opportunity> mOpportunitiesSuccess) {
         Map<Boolean, Map<String, List<Opportunity_Account__c>>> mResults = new Map<Boolean, Map<String, List<Opportunity_Account__c>>>{
             true => new Map<String, List<Opportunity_Account__c>>(),
@@ -79,7 +89,7 @@ public with sharing class SCOpportunityAPIHelper {
         List<Database.SaveResult> lResults = Database.insert(lOpportunityAccountsToInsert, false);
         for (Database.SaveResult result : lResults) {
             Map<String, List<Opportunity_Account__c>> mOpportunityAccountsByExternalId = mResults.get(result.isSuccess());
-            List<Opportunity_Account__c> lOpportunityAccounts = mOpportunityAccountsByExternalId.get(lRequestedOpportunities.get(lResults.indexOf(result)).codReserva);
+            List<Opportunity_Account__c> lOpportunityAccounts = mOpportunityAccountsByExternalId.get(mOppExternalIdById.get(lOpportunityAccountsToInsert.get(lResults.indexOf(result)).Opportunity__c));
             if (lOpportunityAccounts == null) lOpportunityAccounts = new List<Opportunity_Account__c>();
             lOpportunityAccounts.add(lOpportunityAccountsToInsert.get(lResults.indexOf(result)));
             mOpportunityAccountsByExternalId.put(
