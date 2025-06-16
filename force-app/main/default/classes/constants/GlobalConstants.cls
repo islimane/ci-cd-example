@@ -2,8 +2,8 @@
  * @description       : Global constants class for the entire system.
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 16-04-2025
- * @last modified by  : alberto.martinez-lopez@inetum.com
+ * @last modified on  : 06-16-2025
+ * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 @SuppressWarnings('PMD')
 public without sharing class GlobalConstants {
@@ -64,6 +64,7 @@ public without sharing class GlobalConstants {
 
     /** sObjects Share  */
     public static final String SOBJECT_SHARE_ACCESS_LEVEL_READ { get { return 'Read'; } }
+    public static final String SOBJECT_SHARE_ACCESS_LEVEL_EDIT { get { return 'Edit'; } }
 
     /** Rate */
     public static final String RATE_RATE_NAME_PICKLIST_BEST { get { return 'BEST'; } }
