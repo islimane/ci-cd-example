@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-12-2025
+ * @last modified on  : 06-13-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 public with sharing class SCOpportunityAPIHelper {
@@ -41,9 +41,23 @@ public with sharing class SCOpportunityAPIHelper {
 
     // AUX METHODS
 
+    /*private static List<IntegrationDTO.SCOpportunityDTO> parseRequest(String requestBody) {
+        Type listType = Type.forName('List<IntegrationDTO.SCOpportunityDTO>');
+        return (List<IntegrationDTO.SCOpportunityDTO>) JSON.deserialize(requestBody, listType);
+    }*/
+
     private static List<IntegrationDTO.SCOpportunityDTO> parseRequest(String requestBody) {
-        return (List<IntegrationDTO.SCOpportunityDTO>) JSON.deserialize(requestBody, List<IntegrationDTO.SCOpportunityDTO>.class);
+        List<Object> rawList = (List<Object>) JSON.deserializeUntyped(requestBody);
+        List<IntegrationDTO.SCOpportunityDTO> result = new List<IntegrationDTO.SCOpportunityDTO>();
+
+        for (Object item : rawList) {
+            String itemJson = JSON.serialize(item);
+            result.add((IntegrationDTO.SCOpportunityDTO) JSON.deserialize(itemJson, IntegrationDTO.SCOpportunityDTO.class));
+        }
+
+        return result;
     }
+
 
     private static Map<Boolean, Map<String, Opportunity>> processOpportunities(List<IntegrationDTO.SCOpportunityDTO> lRequestedOpportunities) {
         Map<Boolean, Map<String, Opportunity>> mResults = new Map<Boolean, Map<String, Opportunity>>{
