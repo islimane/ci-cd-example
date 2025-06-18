@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-10-2025
+ * @last modified on  : 06-18-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 public without sharing class IntegrationDTO {
@@ -117,11 +117,57 @@ public without sharing class IntegrationDTO {
         public String AccountRequestID;
         public String AccountRequestExternalID;
         public String Status;
+        public String FiscalID;
+        public String CustomerType;
+        public String SocialReason;
+        public String Name;
+        public String Phone;
+        public String BillingStreet;
+        public String BillingPostalCode;
+        public String BillingCity;
+        public String BillingState;
+        public String BillingCountry;
+        public String ContactName;
+        public String ContactLastName;
+        public String ContactIdentification;
+        public String ContactPhone;
+        public String ContactEmail;
+        public String ContactBillingStreet;
+        public String ContactBillingPostalCode;
+        public String ContactBillingCity;
+        public String ContactBillingState;
+        public String ContactBillingCountry;
+        public String IDBPRO;
+        public String Type;
+        public Boolean SameAddress;
 
         public AccountRejectedDTO(AccountRequest__c request) {
             this.AccountRequestID = request.Id;
             this.AccountRequestExternalID = request.Account_Request_External_ID__c;
             this.Status = request.Closure__c;
+            this.FiscalID = request.FiscalID_request__c;
+            this.CustomerType = request.Customer_Type_request__c;
+            this.SocialReason = request.SocialReason_request__c;
+            this.Name = request.Name_request__c;
+            this.Phone = request.Phone_request__c;
+            this.BillingStreet = request.Billing_Address_request__Street__s;
+            this.BillingPostalCode = request.Billing_Address_request__PostalCode__s;
+            this.BillingCity = request.Billing_Address_request__City__s;
+            this.BillingState = request.Billing_Address_request__StateCode__s;
+            this.BillingCountry = request.Billing_Address_request__CountryCode__s;
+            this.ContactName = request.ContactName__c;
+            this.ContactLastName = request.ContactLastName__c;
+            this.ContactIdentification = request.ContactIdentification__c;
+            this.ContactPhone = request.ContactPhone__c;
+            this.ContactEmail = request.Email_request__c;
+            this.ContactBillingStreet = request.ContactBillingStreet__c;
+            this.ContactBillingPostalCode = request.ContactBillingPostalCode__c;
+            this.ContactBillingCity = request.ContactBillingCity__c;
+            this.ContactBillingState = request.ContactBillingState__c;
+            this.ContactBillingCountry = request.ContactBillingCountry__c;
+            this.IDBPRO = request.ID_BPRO__c;
+            this.Type = request.Type__c;
+            this.SameAddress = request.SameAddress__c;
         }
     }
 
