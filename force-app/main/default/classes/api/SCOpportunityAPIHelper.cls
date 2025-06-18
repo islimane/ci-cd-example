@@ -2,34 +2,25 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-13-2025
+ * @last modified on  : 06-18-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 public with sharing class SCOpportunityAPIHelper {
     public static void processPostRequest(RestRequest request) {
         IntegrationDTO.SCResponseAPI response = new IntegrationDTO.SCResponseAPI();
         response.success = true;
-        response.message = 'The opportunity with related records was created successfully.';
+        response.message = 'Opportunities with related records have been processed successfully.';
         RestContext.response.statusCode = 201;
 
         try {
-            //Parse request
-            List<IntegrationDTO.SCOpportunityDTO> lRequestedOpportunities = parseRequest(request.requestBody.toString());
+            String requestBody = request.requestBody.toString();
+            List<IntegrationDTO.SCOpportunityDTO> lRequestedOpportunities = parseRequest(requestBody);
 
-            //Process opportunities
-            Map<Boolean, Map<String, Opportunity>> mOpportunitiesSuccessByExternalId = processOpportunities(lRequestedOpportunities);
+            Map<String, Opportunity> mOpportunitiesSuccessByExternalId = processOpportunities(lRequestedOpportunities, requestBody);
+            processOpportunityAccounts(lRequestedOpportunities, mOpportunitiesSuccessByExternalId, requestBody);
+            processOpportunityItems(lRequestedOpportunities, mOpportunitiesSuccessByExternalId, requestBody);
 
-            //Process opportunity hotels
-            Map<Boolean, Map<String, Opportunity_Hotel__c>> mOpportunityHotelsSuccessByExternalId = processOpportunityHotels(mOpportunitiesSuccessByExternalId.get(true));
-
-            //Process opportunity accounts
-            Map<Boolean, Map<String, List<Opportunity_Account__c>>> mOpportunityAccountSuccessByExternalId = processOpportunityAccounts(lRequestedOpportunities, mOpportunitiesSuccessByExternalId.get(true));
-
-            //Process quote line items
-            //Map<Boolean, Map<String, List<QuoteLineItem>>> mOpportunityItemsSuccessByExternalId = processOpportunityItems(lRequestedOpportunities, mOpportunitiesSuccessByExternalId.get(true));
-
-            //Response with num of oks/kos
-
+            Logger.saveLog();
         } catch (Exception e) {
             response.success = false;
             response.message = e.getMessage() + '\n' + e.getStackTraceString();
@@ -39,80 +30,200 @@ public with sharing class SCOpportunityAPIHelper {
         RestContext.response.responseBody = Blob.valueOf(JSON.serializePretty(response));
     }
 
-    // AUX METHODS
-
-    /*private static List<IntegrationDTO.SCOpportunityDTO> parseRequest(String requestBody) {
-        Type listType = Type.forName('List<IntegrationDTO.SCOpportunityDTO>');
-        return (List<IntegrationDTO.SCOpportunityDTO>) JSON.deserialize(requestBody, listType);
-    }*/
+    // LOGIC METHODS
 
     private static List<IntegrationDTO.SCOpportunityDTO> parseRequest(String requestBody) {
-        List<Object> rawList = (List<Object>) JSON.deserializeUntyped(requestBody);
-        List<IntegrationDTO.SCOpportunityDTO> result = new List<IntegrationDTO.SCOpportunityDTO>();
-
-        for (Object item : rawList) {
-            String itemJson = JSON.serialize(item);
-            result.add((IntegrationDTO.SCOpportunityDTO) JSON.deserialize(itemJson, IntegrationDTO.SCOpportunityDTO.class));
-        }
-
-        return result;
+        Type listType = Type.forName('List<IntegrationDTO.SCOpportunityDTO>');
+        return (List<IntegrationDTO.SCOpportunityDTO>) JSON.deserialize(requestBody, listType);
     }
 
-
-    private static Map<Boolean, Map<String, Opportunity>> processOpportunities(List<IntegrationDTO.SCOpportunityDTO> lRequestedOpportunities) {
-        Map<Boolean, Map<String, Opportunity>> mResults = new Map<Boolean, Map<String, Opportunity>>{
-            true => new Map<String, Opportunity>(),
-            false => new Map<String, Opportunity>()
-        };
-
+    private static Map<String, Opportunity> processOpportunities(List<IntegrationDTO.SCOpportunityDTO> lRequestedOpportunities, String requestBody) {
         List<Opportunity> lOpportunitiesToInsert = new List<Opportunity>();
         for (IntegrationDTO.SCOpportunityDTO requestedOpportunity : lRequestedOpportunities) lOpportunitiesToInsert.add(requestedOpportunity.parse());
 
-        List<Database.SaveResult> lResults = Database.insert(lOpportunitiesToInsert, false);
-        for (Database.SaveResult result : lResults) {
-            Map<String, Opportunity> mOpportunitiesByResult = mResults.get(result.isSuccess());
-            mOpportunitiesByResult.put(
-                lRequestedOpportunities.get(lResults.indexOf(result)).codReserva,
-                lOpportunitiesToInsert.get(lResults.indexOf(result))
-            );
-            mResults.put(result.isSuccess(), mOpportunitiesByResult);
+        List<IntegrationDTO.SCOpportunityDTO> lRequestedOpportunitiesToProcessHotels = new List<IntegrationDTO.SCOpportunityDTO>();
+        List<Database.UpsertResult> lResults = Database.upsert(lOpportunitiesToInsert, Opportunity.Fields.SalesCatering_External_ID__c, false);
+
+        Set<String> sOpportunitySuccessExternalIds = new Set<String>();
+        for (Database.UpsertResult result : lResults) {
+            if (result.isSuccess()) {
+                sOpportunitySuccessExternalIds.add(lRequestedOpportunities.get(lResults.indexOf(result)).codReserva);
+                lRequestedOpportunitiesToProcessHotels.add(lRequestedOpportunities.get(lResults.indexOf(result)));
+            } else {
+                Logger.error(String.join(result.getErrors(), '\n---\n') + '\nFULL JSON: ' + requestBody);
+            }
         }
-        mResults.put(true, OpportunitySelector.getOpportunityIdBySCExternalId(mResults.get(true).keySet()));
-
-        return mResults;
+        Map<String, Opportunity> mOpportunities = OpportunitySelector.getOpportunityIdBySCExternalId(sOpportunitySuccessExternalIds);
+        processOpportunityHotels(lRequestedOpportunitiesToProcessHotels, mOpportunities, requestBody);
+        return mOpportunities;
     }
 
-    private static Map<Boolean, Map<String, Opportunity_Hotel__c>> processOpportunityHotels(Map<String, Opportunity> mOpportunitiesSuccess) {
+    private static Map<String, Opportunity_Hotel__c> processOpportunityHotels(List<IntegrationDTO.SCOpportunityDTO> lRequestedOpportunities, Map<String, Opportunity> mOpportunitiesSuccess, String requestBody) {
+        Map<String, Opportunity_Hotel__c> mOpportunityHotels = new Map<String, Opportunity_Hotel__c>();
+
         List<Opportunity_Hotel__c> lOpportunityHotelsToInsert = new List<Opportunity_Hotel__c>();
-        return null;
+        List<Opportunity_Hotel__c> lOpportunityHotelsToDelete = new List<Opportunity_Hotel__c>();
+
+        // Get already opportunity hotels created
+        Set<String> sCustomIdsFromOpportunityHotels = new Set<String>();
+        for (Opportunity opportunity : mOpportunitiesSuccess.values()) {
+            if (opportunity.Opportunity_Hotels__r != null && !opportunity.Opportunity_Hotels__r.isEmpty())
+            for (Opportunity_Hotel__c opportunityHotel : opportunity.Opportunity_Hotels__r) {
+                sCustomIdsFromOpportunityHotels.add(opportunityHotel.Opportunity__r.SalesCatering_External_ID__c + '-' + opportunityHotel.Hotel__r.ID_PMS__c);
+            }
+        }
+
+        // Check which records needs to be created
+        Set<String> sAllRequestedOppHotelsCustomIds = new Set<String>();
+        for (IntegrationDTO.SCOpportunityDTO requestedOpportunity : lRequestedOpportunities) {
+            String customId = requestedOpportunity.codReserva + '-' + requestedOpportunity.idHotel;
+            sAllRequestedOppHotelsCustomIds.add(customId);
+            if (!sCustomIdsFromOpportunityHotels.contains(customId)) {
+                lOpportunityHotelsToInsert.add(requestedOpportunity.parseOpportunityHotel());
+            }
+        }
+
+        // Check which records already created needs to be deleted
+        for (Opportunity opportunity : mOpportunitiesSuccess.values()) {
+            if (opportunity.Opportunity_Hotels__r != null && !opportunity.Opportunity_Hotels__r.isEmpty())
+            for (Opportunity_Hotel__c opportunityHotel : opportunity.Opportunity_Hotels__r) {
+                String oppHotelCustomId = opportunityHotel.Opportunity__r.SalesCatering_External_ID__c + '-' + opportunityHotel.Hotel__r.ID_PMS__c;
+                if (!sAllRequestedOppHotelsCustomIds.contains(oppHotelCustomId)) lOpportunityHotelsToDelete.add(opportunityHotel);
+            }
+        }
+
+        List<Database.SaveResult> lResults = Database.insert(lOpportunityHotelsToInsert, false);
+        for (Database.SaveResult result : lResults) {
+            if (result.isSuccess()) {
+                mOpportunityHotels.put(
+                    lRequestedOpportunities.get(lResults.indexOf(result)).codReserva,
+                    lOpportunityHotelsToInsert.get(lResults.indexOf(result))
+                );
+            } else {
+                Logger.error(String.join(result.getErrors(), '\n---\n') + '\nFULL JSON: ' + requestBody);
+            }
+        }
+        delete lOpportunityHotelsToDelete;
+
+        return mOpportunityHotels;
     }
 
-    private static Map<Boolean, Map<String, List<Opportunity_Account__c>>> processOpportunityAccounts(List<IntegrationDTO.SCOpportunityDTO> lRequestedOpportunities, Map<String, Opportunity> mOpportunitiesSuccess) {
-        Map<Boolean, Map<String, List<Opportunity_Account__c>>> mResults = new Map<Boolean, Map<String, List<Opportunity_Account__c>>>{
-            true => new Map<String, List<Opportunity_Account__c>>(),
-            false => new Map<String, List<Opportunity_Account__c>>()
-        };
+    private static Map<String, List<Opportunity_Account__c>> processOpportunityAccounts(List<IntegrationDTO.SCOpportunityDTO> lRequestedOpportunities, Map<String, Opportunity> mOpportunitiesSuccess, String requestBody) {
+        Map<String, List<Opportunity_Account__c>> mOpportunityAccounts = new Map<String, List<Opportunity_Account__c>>();
 
         List<Opportunity_Account__c> lOpportunityAccountsToInsert = new List<Opportunity_Account__c>();
-        for (IntegrationDTO.SCOpportunityDTO requestedOpportunity : lRequestedOpportunities) lOpportunityAccountsToInsert.addAll(requestedOpportunity.parseOpportunityAccounts(mOpportunitiesSuccess.get(requestedOpportunity.codReserva).Id));
+        List<Opportunity_Account__c> lOpportunityAccountsToDelete = new List<Opportunity_Account__c>();
 
-        // Invert map to get externalId by sfId
-        Map<Id, String> mOppExternalIdById = new Map<Id, String>();
-        for (String oppExternalId : mOpportunitiesSuccess.keySet()) mOppExternalIdById.put(mOpportunitiesSuccess.get(oppExternalId).Id, oppExternalId);
+        // Get already opportunity accounts created
+        Set<String> sCustomIdsFromOpportunityAccounts = new Set<String>();
+        for (Opportunity opportunity : mOpportunitiesSuccess.values()) {
+            if (opportunity.Opportunity_Accounts__r != null && !opportunity.Opportunity_Accounts__r.isEmpty())
+            for (Opportunity_Account__c opportunityAccount : opportunity.Opportunity_Accounts__r) {
+                sCustomIdsFromOpportunityAccounts.add(opportunityAccount.Opportunity__r.SalesCatering_External_ID__c + '-' + opportunityAccount.Account__r.Account_External_ID__c + '-' + opportunityAccount.Rol__c);
+            }
+        }
+
+        // Check which records needs to be created
+        Set<String> sAllRequestedOppAccountsCustomIds = new Set<String>();
+        for (IntegrationDTO.SCOpportunityDTO requestedOpportunity : lRequestedOpportunities) {
+            List<Opportunity_Account__c> lOpportunityAccounts = requestedOpportunity.parseOpportunityAccounts();
+            for (Opportunity_Account__c oppAccount : lOpportunityAccounts) {
+                String customId = requestedOpportunity.codReserva + '-' + oppAccount.Account__r.Account_External_ID__c + '-' + oppAccount.Rol__c;
+                sAllRequestedOppAccountsCustomIds.add(customId);
+                if (!sCustomIdsFromOpportunityAccounts.contains(customId)) {
+                    lOpportunityAccountsToInsert.add(oppAccount);
+                }
+            }
+        }
+
+        // Check which records already created needs to be deleted
+        for (Opportunity opportunity : mOpportunitiesSuccess.values()) {
+            if (opportunity.Opportunity_Accounts__r != null && !opportunity.Opportunity_Accounts__r.isEmpty())
+            for (Opportunity_Account__c opportunityAccount : opportunity.Opportunity_Accounts__r) {
+                String oppAccountCustomId = opportunityAccount.Opportunity__r.SalesCatering_External_ID__c + '-' + opportunityAccount.Account__r.Account_External_ID__c + '-' + opportunityAccount.Rol__c;
+                if (!sAllRequestedOppAccountsCustomIds.contains(oppAccountCustomId)) lOpportunityAccountsToDelete.add(opportunityAccount);
+            }
+        }
+
+        // Convert map to get externalId by sfId
+        Map<Id, String> mOppExternalIdById = mapOppExternalIdByOppId(mOpportunitiesSuccess);
 
         List<Database.SaveResult> lResults = Database.insert(lOpportunityAccountsToInsert, false);
         for (Database.SaveResult result : lResults) {
-            Map<String, List<Opportunity_Account__c>> mOpportunityAccountsByExternalId = mResults.get(result.isSuccess());
-            List<Opportunity_Account__c> lOpportunityAccounts = mOpportunityAccountsByExternalId.get(mOppExternalIdById.get(lOpportunityAccountsToInsert.get(lResults.indexOf(result)).Opportunity__c));
-            if (lOpportunityAccounts == null) lOpportunityAccounts = new List<Opportunity_Account__c>();
-            lOpportunityAccounts.add(lOpportunityAccountsToInsert.get(lResults.indexOf(result)));
-            mOpportunityAccountsByExternalId.put(
-                lRequestedOpportunities.get(lResults.indexOf(result)).codReserva,
-                lOpportunityAccounts
-            );
-            mResults.put(result.isSuccess(), mOpportunityAccountsByExternalId);
+            if (result.isSuccess()) {
+                String relatedOppExternalId = mOppExternalIdById.get(lOpportunityAccountsToInsert.get(lResults.indexOf(result)).Opportunity__c);
+                List<Opportunity_Account__c> lOpportunityAccounts = mOpportunityAccounts.get(relatedOppExternalId);
+                if (lOpportunityAccounts == null) lOpportunityAccounts = new List<Opportunity_Account__c>();
+                lOpportunityAccounts.add(lOpportunityAccountsToInsert.get(lResults.indexOf(result)));
+                mOpportunityAccounts.put(
+                    relatedOppExternalId,
+                    lOpportunityAccounts
+                );
+            } else {
+                Logger.error(String.join(result.getErrors(), '\n---\n') + '\nFULL JSON: ' + requestBody);
+            }
+        }
+        delete lOpportunityAccountsToDelete;
+
+        return mOpportunityAccounts;
+    }
+
+    private static Map<String, List<QuoteLineItem>> processOpportunityItems(List<IntegrationDTO.SCOpportunityDTO> lRequestedOpportunities, Map<String, Opportunity> mOpportunitiesSuccess, String requestBody) {
+        Map<String, List<QuoteLineItem>> mOpportunityItems = new Map<String, List<QuoteLineItem>>();
+
+        List<QuoteLineItem> lOpportunityItemsToInsert = new List<QuoteLineItem>();
+        Set<Id> sRelatedQuoteIds = new Set<Id>();
+        for (IntegrationDTO.SCOpportunityDTO requestedOpportunity : lRequestedOpportunities) {
+            List<Quote> lOpportunityQuotes = mOpportunitiesSuccess.get(requestedOpportunity.codReserva)?.Quotes;
+            Id quoteId = lOpportunityQuotes != null && !lOpportunityQuotes.isEmpty() ? lOpportunityQuotes.get(0).Id : null;
+            if (String.isNotBlank(quoteId)) {
+                lOpportunityItemsToInsert.addAll(requestedOpportunity.parseQuoteLineItems(quoteId));
+                sRelatedQuoteIds.add(quoteId);
+            }
         }
 
-        return mResults;
+        // Convert map to get externalId by quoteId
+        Map<Id, String> mOppExternalIdById = mapOppExternalIdByQuoteId(mOpportunitiesSuccess);
+
+        // Delete previous quoteLineItems
+        delete [SELECT Id FROM QuoteLineItem WHERE QuoteId IN :sRelatedQuoteIds];
+
+        System.debug('##test## - lOpportunityItemsToInsert: ' + lOpportunityItemsToInsert);
+        List<Database.SaveResult> lResults = Database.insert(lOpportunityItemsToInsert, false);
+        for (Database.SaveResult result : lResults) {
+            if (result.isSuccess()) {
+                String relatedOppExternalId = mOppExternalIdById.get(lOpportunityItemsToInsert.get(lResults.indexOf(result)).QuoteId);
+                List<QuoteLineItem> lOpportunityItems = mOpportunityItems.get(relatedOppExternalId);
+                if (lOpportunityItems == null) lOpportunityItems = new List<QuoteLineItem>();
+                lOpportunityItems.add(lOpportunityItemsToInsert.get(lResults.indexOf(result)));
+                mOpportunityItems.put(
+                    relatedOppExternalId,
+                    lOpportunityItems
+                );
+            } else {
+                System.debug('##test## - result.getErrors(): ' + result.getErrors());
+                Logger.error(String.join(result.getErrors(), '\n---\n') + '\nFULL JSON: ' + requestBody);
+            }
+        }
+
+        return mOpportunityItems;
+    }
+
+    // AUX METHODS
+
+    private static Map<Id, String> mapOppExternalIdByOppId(Map<String, Opportunity> mOpportunities) {
+        Map<Id, String> mOppExternalIdById = new Map<Id, String>();
+        for (String oppExternalId : mOpportunities.keySet()) mOppExternalIdById.put(mOpportunities.get(oppExternalId).Id, oppExternalId);
+        return mOppExternalIdById;
+    }
+
+    private static Map<Id, String> mapOppExternalIdByQuoteId(Map<String, Opportunity> mOpportunities) {
+        Map<Id, String> mOppExternalIdByQuoteId = new Map<Id, String>();
+        for (String oppExternalId : mOpportunities.keySet()) {
+            List<Quote> lOpportunityQuotes = mOpportunities.get(oppExternalId).Quotes;
+            Id quoteId = lOpportunityQuotes != null && !lOpportunityQuotes.isEmpty() ? lOpportunityQuotes.get(0).Id : null;
+            if (String.isNotBlank(quoteId)) mOppExternalIdByQuoteId.put(quoteId, oppExternalId);
+        }
+        return mOppExternalIdByQuoteId;
     }
 }

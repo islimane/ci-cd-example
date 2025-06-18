@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-12-2025
+ * @last modified on  : 06-18-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 global without sharing class IntegrationDTO {
@@ -10,8 +10,6 @@ global without sharing class IntegrationDTO {
     global class SCResponseAPI {
         public Boolean success;
         public String message;
-        //public Object resultOpp;
-        //public Object resultItems;
     }
 
     public class AccountDTO {
@@ -181,7 +179,7 @@ global without sharing class IntegrationDTO {
 
         //Metadata to parse data
         private Map<String, Id> mProductIdByType;
-        private Id pricebookId = null;
+        private Pricebook2 pricebook = null;
         private Map<String, Id> mPricebookEntryIdByType;
 
         private void buildMetadata() {
@@ -196,11 +194,11 @@ global without sharing class IntegrationDTO {
             mProductIdByType = new Map<String, Id>();
             mPricebookEntryIdByType = new Map<String, Id>();
 
-            pricebookId = [SELECT Id FROM Pricebook2 WHERE Name = :pricebookName LIMIT 1].Id;
+            pricebook = [SELECT Id, CurrencyISOCode FROM Pricebook2 WHERE Name = :pricebookName LIMIT 1];
             for(Product2 product : [SELECT Id, Name FROM Product2 WHERE Name IN :productCodesByNames.keySet()]) {
                 mProductIdByType.put(productCodesByNames.get(product.Name), product.Id);
             }
-            for(PricebookEntry pbe : [SELECT Id, Product2.Name FROM PricebookEntry WHERE Pricebook2Id = :pricebookId AND Product2.Name IN :productCodesByNames.keySet()]) {
+            for(PricebookEntry pbe : [SELECT Id, Product2.Name FROM PricebookEntry WHERE Pricebook2Id = :pricebook.Id AND Product2.Name IN :productCodesByNames.keySet() AND CurrencyISOCode = :pricebook.CurrencyISOCode]) {
                 mPricebookEntryIdByType.put(productCodesByNames.get(pbe.Product2.Name), pbe.Id);
             }
         }
@@ -223,26 +221,35 @@ global without sharing class IntegrationDTO {
                 CloseDate = Date.parse(this.fechaHasta),
                 BlockingDate__c = Date.parse(this.fechaBloq),
                 Reason__c = this.motNoForm, //loss_reason__c no existe
-                Pricebook2Id = pricebookId,
+                Pricebook2Id = pricebook.Id,
+                Hotel__r = new Hotel__c(ID_PMS__c = this.idHotel),
+                RecordTypeId = GlobalConstants.OPPORTUNITY_RT_MICE_ID
+            );
+        }
+
+        public Opportunity_Hotel__c parseOpportunityHotel() {
+            return new Opportunity_Hotel__c(
+                Name = this.descripcion + ' - ' + this.idHotel,
+                Opportunity__r = new Opportunity(SalesCatering_External_ID__c = this.codReserva),
                 Hotel__r = new Hotel__c(ID_PMS__c = this.idHotel)
             );
         }
 
-        public List<Opportunity_Account__c> parseOpportunityAccounts(Id opportunityId) {
+        public List<Opportunity_Account__c> parseOpportunityAccounts() {
             List<Opportunity_Account__c> lOpportunityAccounts = new List<Opportunity_Account__c>();
             if (String.isNotBlank(this.cliEmp)) lOpportunityAccounts.add(new Opportunity_Account__c(
                 Account__r = new Account(Account_External_ID__c = this.cliEmp),
-                Opportunity__c = opportunityId,
+                Opportunity__r = new Opportunity(SalesCatering_External_ID__c = this.codReserva),
                 Rol__c = GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_CUSTOMER)
             );
             if (String.isNotBlank(this.cliAgen)) lOpportunityAccounts.add(new Opportunity_Account__c(
                 Account__r = new Account(Account_External_ID__c = this.cliAgen),
-                Opportunity__c = opportunityId,
+                Opportunity__r = new Opportunity(SalesCatering_External_ID__c = this.codReserva),
                 Rol__c = GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_INTERMEDIARY)
             );
             if (String.isNotBlank(this.delegacion)) lOpportunityAccounts.add(new Opportunity_Account__c(
                 Account__r = new Account(Account_External_ID__c = this.delegacion),
-                Opportunity__c = opportunityId,
+                Opportunity__r = new Opportunity(SalesCatering_External_ID__c = this.codReserva),
                 Rol__c = GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_DELEGATION)
             );
             return lOpportunityAccounts;
@@ -371,6 +378,7 @@ global without sharing class IntegrationDTO {
             QuoteId = quoteId,
             Product2Id = productId,
             PricebookEntryId = pricebookEntryId,
+            Quantity = 1,
             UnitPrice = unitPrice,
             TaxPercentage__c = taxPercentage,
             TaxIncluded__c = taxIncluded,
