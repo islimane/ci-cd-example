@@ -75,6 +75,7 @@ export default class QuoteManagerPriceConfig extends RateManagerExtendedDataTabl
         } else {
             console.error('Error fetching data: ', response?.errorMsg || 'Unknown error')
             this.showToast(this.labels.error, response.errorMsg, 'error', 'dismissable')
+            this.close()
         }
     }
 
