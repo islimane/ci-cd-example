@@ -2,7 +2,7 @@
  * @description       : Unified model class for Rate Manager controllers
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             :
- * @last modified on  : 16-06-2025
+ * @last modified on  : 19-06-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 public with sharing class RateManagerModel {
@@ -75,6 +75,7 @@ public with sharing class RateManagerModel {
         String ApplicationType;
         String Observations;
         Boolean Base;
+        Boolean Relative;
 
         @TestVisible
         Map<String, Period__c> mPeriodsByPeriodKey = new Map<String, Period__c>();
@@ -94,6 +95,7 @@ public with sharing class RateManagerModel {
             this.HotelId = rateLine.Hotel__c;
             this.RatePlannerId = rateLine.RatePlanner__c;
             this.ProductId = rateLine.Product__c;
+            this.Relative = rateLine.RelativeRoom__c;
 
             // These fields might be null for some RateLine records (e.g., supplements)
             this.Characteristic = rateLine.Product__r.Characteristic__c;
