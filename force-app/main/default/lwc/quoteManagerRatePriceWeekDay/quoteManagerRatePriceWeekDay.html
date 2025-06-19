@@ -2,12 +2,12 @@
   @description       :
   @author            : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
   @group             :
-  @last modified on  : 06-11-2025
+  @last modified on  : 17-06-2025
   @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 -->
 <template>
     <!--* HEADER -->
-    <lightning-quick-action-panel header="Configure prices & allotments">
+    <lightning-quick-action-panel header={modalHeader}>
 
         <template lwc:if={isLoading}>
             <div class="slds-is-relative" style="min-height: 80px;">
@@ -34,6 +34,7 @@
                     <c-quote-manager-price-config
                         record-id={recordId}
                         weekday-set-id={weekdaySetId}
+                        onclosemodal={close}
                     ></c-quote-manager-price-config>
                 </template>
             </div>

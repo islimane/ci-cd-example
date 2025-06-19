@@ -5,21 +5,27 @@ import { CloseActionScreenEvent } from 'lightning/actions'
 import { ShowToastEvent } from 'lightning/platformShowToastEvent'
 import getWeekdaySets from '@salesforce/apex/QuoteManagerPriceConfigController.getWeekDaySet'
 
+const HEADER = 'Configure prices & allotments'
 export default class QuoteManagerRatePriceWeekDay extends LightningElement {
     @api recordId
     showWeekdaySelector = false
     showRatePricesTable = false
     showBackButton = false
     weekdaySetId = null
+    weekdaySetName
     optionsWeekDay = []
     disableButton = false
     isLoading = true
+
+    get modalHeader() {
+        return this.weekdaySetId? HEADER + ' - for ' + this.weekdaySetName : HEADER
+    }
 
     connectedCallback() {
         loadStyle(this, modalCss)
     }
 
-    @wire(getWeekdaySets, { quoteId: '$recordId' })
+    @wire(getWeekdaySets, { recordId: '$recordId' })
     wiredWeekdaySets({ error, data }) {
         if (data) {
             this.optionsWeekDay = data.map((item) => {
@@ -75,5 +81,6 @@ export default class QuoteManagerRatePriceWeekDay extends LightningElement {
 
     handleChange(event) {
         this.weekdaySetId = event.detail.value
+        this.weekdaySetName = this.optionsWeekDay.find(item => item.value === this.weekdaySetId).label
     }
 }

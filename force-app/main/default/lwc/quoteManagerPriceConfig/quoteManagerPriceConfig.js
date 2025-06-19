@@ -1,10 +1,7 @@
 import { api, wire, track } from 'lwc'
-import modalCss from '@salesforce/resourceUrl/customModal'
 import LwcDCExtension from 'c/lwcDCExtension'
 import { RateManagerMixin } from 'c/rateManagerMixin'
 import { RateManagerExtendedDataTableMixin } from 'c/rateManagerExtendedDataTableMixin'
-import { CloseActionScreenEvent } from 'lightning/actions'
-import { loadStyle } from 'lightning/platformResourceLoader'
 import LABELS from './labels'
 
 import { getPicklistValues } from 'lightning/uiObjectInfoApi'
@@ -17,13 +14,7 @@ const MASTER_RECORD_TYPE_ID = '012000000000000AAA'
 const CONTROLLER_NAME = 'QuoteManagerPriceConfigController'
 
 export default class QuoteManagerPriceConfig extends RateManagerExtendedDataTableMixin(RateManagerMixin(LwcDCExtension)) {
-    @api invoke() {
-        console.log('QuoteManagerPriceConfig invoked.')
-        this.setWireParams()
-    }
-
     connectedCallback() {
-        loadStyle(this, modalCss)
         if (this.recordId && !this._wireParams) {
             this.setWireParams()
         }
@@ -62,10 +53,6 @@ export default class QuoteManagerPriceConfig extends RateManagerExtendedDataTabl
         return this.labels.supplements + suffix
     }
 
-    async close() {
-        this.dispatchEvent(new CloseActionScreenEvent())
-    }
-
     /**
      * @description: Sets the wire parameters for the component.
      **/
@@ -82,11 +69,10 @@ export default class QuoteManagerPriceConfig extends RateManagerExtendedDataTabl
      * @param {Object} response - The response object from the server.
      **/
     fetch = (response) => {
-        if (response?.success){
+        if (response?.success) {
             this.fetchedData = response?.data?.data
             this.checkAllPicklistsLoaded()
-        }
-        else {
+        } else {
             console.error('Error fetching data: ', response?.errorMsg || 'Unknown error')
             this.showToast(this.labels.error, response.errorMsg, 'error', 'dismissable')
         }
@@ -168,6 +154,10 @@ export default class QuoteManagerPriceConfig extends RateManagerExtendedDataTabl
         await this.template.querySelectorAll('c-quote-manager-rate-price-table').forEach((table) => {
             table.toggleQuota()
         })
+    }
+
+    close() {
+        this.dispatchEvent(new CustomEvent('closemodal'))
     }
 
     // #region Picklist wire

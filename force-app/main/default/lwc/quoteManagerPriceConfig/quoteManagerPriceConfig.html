@@ -2,7 +2,7 @@
   @description       :
   @author            : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
   @group             :
-  @last modified on  : 06-09-2025
+  @last modified on  : 17-06-2025
   @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 -->
 <template>
@@ -24,6 +24,7 @@
             <div data-id={roomsContainer} class="accordion-container slds-p-around_medium slds-m-bottom_medium">
                 <c-quote-manager-rate-price-table
                     onsave={handleSave}
+                    onclosemodal={close}
                     render-rooms="true"
                     rows-data={roomsData}
                     quota-selected={quotaSelected}
