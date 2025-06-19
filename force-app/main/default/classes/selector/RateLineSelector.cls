@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 12-06-2025
+ * @last modified on  : 16-06-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 public class RateLineSelector {
@@ -25,6 +25,8 @@ public class RateLineSelector {
                 Rate__c,
                 RatePlanner__c,
                 Observations__c,
+                Applicable__c,
+                Regime__c,
                 Product__r.Name,
                 Product__r.Family,
                 Product__r.Description,
@@ -63,6 +65,8 @@ public class RateLineSelector {
                 Id,
                 Product__c,
                 ProductName__c,
+                Applicable__c,
+                Regime__c,
                 Product__r.Name,
                 Product__r.Family,
                 Product__r.Description,
@@ -96,7 +100,18 @@ public class RateLineSelector {
      **/
     public static List<RateLine__c> getRatesLinesByRatePlannerId(Set<Id> ratePlannerIds) {
         return [
-            SELECT Id, Product__c, ProductName__c, Room__c, Hotel__c, Rate__c, RatePlanner__c, Description__c, Opportunity__c
+            SELECT
+                Id,
+                Product__c,
+                ProductName__c,
+                Room__c,
+                Hotel__c,
+                Rate__c,
+                RatePlanner__c,
+                Description__c,
+                Opportunity__c,
+                Applicable__c,
+                Regime__c
             FROM RateLine__c
             WHERE RatePlanner__c IN :ratePlannerIds
         ];
@@ -114,6 +129,8 @@ public class RateLineSelector {
                 Id,
                 Product__c,
                 ProductName__c,
+                Applicable__c,
+                Regime__c,
                 Product__r.Name,
                 Product__r.Family,
                 Product__r.Description,
