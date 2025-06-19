@@ -2,7 +2,7 @@
  * @description       : Unified model class for Rate Manager controllers
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             :
- * @last modified on  : 22-05-2025
+ * @last modified on  : 16-06-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 public with sharing class RateManagerModel {
@@ -86,8 +86,8 @@ public with sharing class RateManagerModel {
         public RateLine(RateLine__c rateLine, List<Period__c> lPeriods) {
             this.Id = rateLine.Id;
             this.Name = rateLine.Product__r.Name;
-            this.RegimenType = rateLine.Product__r.Regimen_Type__c;
-            this.Applicable = rateLine.Product__r.Applicable__c;
+            this.RegimenType = rateLine.Regime__c;
+            this.Applicable = rateLine.Applicable__c;
             this.ApplicationType = rateLine.Product__r.ApplicationType__c;
             this.Base = rateLine.Product__r.Base__c;
             this.RateId = rateLine.Rate__c;
@@ -158,6 +158,7 @@ public with sharing class RateManagerModel {
         Date StartDate;
         Date EndDate;
         Decimal TotalPrice;
+        Decimal Quota;
 
         //FROM EXISTING RATE PRICES
         public RatePrice(String periodKey, RatePrice__c rateP) {
@@ -166,6 +167,7 @@ public with sharing class RateManagerModel {
             this.ParentRateId = rateP.Rate__c;
             this.ParentProductId = rateP.Product__c;
             this.TotalPrice = rateP.TotalPrice__c;
+            this.Quota = rateP.Quota__c;
         }
 
         //FOR NEW EMPTY RATE PRICES
@@ -186,6 +188,10 @@ public with sharing class RateManagerModel {
 
         public Decimal getTotalPrice() {
             return this.TotalPrice;
+        }
+
+        public Decimal getQuota() {
+            return this.Quota;
         }
 
         public RatePrice__c getRatePrice() {
