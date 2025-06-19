@@ -59,13 +59,13 @@ export const RateManagerExtendedDataTableMixin = (BaseClass) =>
                     this._columns.push({
                         label: period,
                         fieldName: period,
-                        type: isQuota ? 'number' : 'currency',
+                        type: isQuota ? 'number' : 'number', // use the currency type and currencyIsoCode
                         editable: true,
                         fixedWidth: 100,
                         hideDefaultActions: true
                     })
                 } else {
-                    this._columns[index] = { ...this._columns[index], type: isQuota ? 'number' : 'currency' }
+                    this._columns[index] = { ...this._columns[index], type: isQuota ? 'number' : 'number' }
                 }
             })
             this._columns = JSON.parse(JSON.stringify(this._columns))
