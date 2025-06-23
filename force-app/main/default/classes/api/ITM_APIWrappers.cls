@@ -18,13 +18,10 @@ global with sharing class ITM_APIWrappers {
 
 	global class ErrorDTO extends DTO {
 		public String source;
-		public String externalId;
-		public String sObjectType;
 		public String errorMsg;
-        public String errorType;
 
 		public Integer hash() {
-			String uniqueKey = this.errorMsg+'_'+this.errorType+'_'+this.source+'_'+this.externalId+'_'+this.sObjectType;
+			String uniqueKey = this.errorMsg+'_'+this.source;
 			return uniqueKey.hashCode();
 		}
 	}

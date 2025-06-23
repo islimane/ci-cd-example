@@ -2,14 +2,15 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-10-2025
+ * @last modified on  : 06-23-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
  **/
 public with sharing class AccountSyncQueueable implements Queueable, Database.AllowsCallouts {
 
     private static final Map<String, String> MAP_ENDPOINT_BY_TYPEOF_REQUEST = new Map<String, String>{
         'sync' => 'callout:SyncAccountMulesoft',
-        'retry' => 'callout:RetryAccountMulesoft'
+        'retry' => 'callout:RetryAccountMulesoft',
+        'reject' => 'callout:RejectAccountMulesoft'
     };
 
     private List<IntegrationDTO.IAccountDTO> lAccountsToSync;
@@ -30,21 +31,22 @@ public with sharing class AccountSyncQueueable implements Queueable, Database.Al
         // Build common parameters
         request.setMethod('POST');
         request.setHeader('Content-Type', 'application/json');
+        request.setHeader('client_id', '5bb26228-0cd4-4861-b98d-2ae655157266');
+        request.setHeader('client_secret', 'UID8Q~ybZdkIOb9d1BCraMwOXTmLD3SApcrocddX');
 
         for (IntegrationDTO.IAccountDTO currentAccount : lWorkingData) {
             // Build specific request
             /*if (currentAccount instanceof IntegrationDTO.AccountDTO) request.setEndpoint(MAP_ENDPOINT_BY_TYPEOF_REQUEST.get('sync'));
-            else if (currentAccount instanceof IntegrationDTO.AccountRejectedDTO) request.setEndpoint(MAP_ENDPOINT_BY_TYPEOF_REQUEST.get('retry'));*/
+            else if (currentAccount instanceof IntegrationDTO.AccountRetryDTO) request.setEndpoint(MAP_ENDPOINT_BY_TYPEOF_REQUEST.get('retry'));
+            else if (currentAccount instanceof IntegrationDTO.AccountRejectedDTO) request.setEndpoint(MAP_ENDPOINT_BY_TYPEOF_REQUEST.get('reject'));*/
 
             //TESTING VALUES
-            if (currentAccount instanceof IntegrationDTO.AccountDTO || currentAccount instanceof IntegrationDTO.AccountRetryDTO) {
+            if (currentAccount instanceof IntegrationDTO.AccountDTO) {
                 request.setEndpoint('https://bhg-eapi-crm-dev-diqyem.6adi94.irl-e1.cloudhub.io:443/api/salesforce/customer');
-                request.setHeader('client_id', '5bb26228-0cd4-4861-b98d-2ae655157266');
-                request.setHeader('client_secret', 'UID8Q~ybZdkIOb9d1BCraMwOXTmLD3SApcrocddX');
+            } else if (currentAccount instanceof IntegrationDTO.AccountRetryDTO) {
+                request.setEndpoint('https://bhg-eapi-crm-dev-diqyem.6adi94.irl-e1.cloudhub.io:443/api/salesforce/customer/retry');
             } else if (currentAccount instanceof IntegrationDTO.AccountRejectedDTO) {
-                request.setEndpoint('https://bhg-eapi-crm-dev-diqyem.6adi94.irl-e1.cloudhub.io:443/api/salesforce/retry');
-                request.setHeader('client_id', '5bb26228-0cd4-4861-b98d-2ae655157266');
-                request.setHeader('client_secret', 'UID8Q~ybZdkIOb9d1BCraMwOXTmLD3SApcrocddX');
+                request.setEndpoint('https://bhg-eapi-crm-dev-diqyem.6adi94.irl-e1.cloudhub.io:443/api/salesforce/accountReject');
             }
             //TESTING VALUES
 

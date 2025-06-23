@@ -10,14 +10,16 @@ global class ITM_SyncErrorsAPI {
 	global static String doPost() {
 		RestRequest request = RestContext.request;
 		//String response = NBK_SyncErrorsAPIHelper.RESPONSE_KO;
+		String response = 'KO';
 		try {
-			List<ITM_APIWrappers.ErrorDTO> lErrorDTOs = (List<ITM_APIWrappers.ErrorDTO>) JSON.deserialize(request.requestBody.toString(), List<ITM_APIWrappers.ErrorDTO>.class);
-			String response = ITM_SyncErrorsAPIHelper.insertErrors(lErrorDTOs);
+            Type listType = Type.forName('List<ITM_APIWrappers.ErrorDTO>');
+            List<ITM_APIWrappers.ErrorDTO> lErrorDTOs =  (List<ITM_APIWrappers.ErrorDTO>) JSON.deserialize(request.requestBody.toString(), listType);
+			response = ITM_SyncErrorsAPIHelper.insertErrors(lErrorDTOs);
 		} catch (Exception e) {
-            Logger.error(e.getMessage()).addTag(/*NBK_GlobalConstants.INTEGRATION.API_SYNC_ERRORS_ERROR_TAG*/'');
+            //Logger.error(e.getMessage()).addTag(/*NBK_GlobalConstants.INTEGRATION.API_SYNC_ERRORS_ERROR_TAG*/'');
+            Logger.error(e.getMessage());
         }
 
-		//return response;
-        return '';
+		return response;
 	}
 }

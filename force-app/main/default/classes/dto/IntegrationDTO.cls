@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-18-2025
+ * @last modified on  : 06-23-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 public without sharing class IntegrationDTO {
@@ -55,7 +55,7 @@ public without sharing class IntegrationDTO {
         public Boolean SendToPMS;
         public String Description;
 
-        public ContactDTO Contact;
+        //public ContactDTO Contact;
         public List<AccountPmsDTO> PMSExternalId;
 
         public AccountDTO(Account account, AccountRequest__c request) {
@@ -104,7 +104,7 @@ public without sharing class IntegrationDTO {
             this.SendToPMS = account.SendToPMS__c;
             this.Description = account.Description;
 
-            this.Contact = account.Contacts != null && !account.Contacts.isEmpty() ? new ContactDTO(account.Contacts[0]) : null;
+            //this.Contact = account.Contacts != null && !account.Contacts.isEmpty() ? new ContactDTO(account.Contacts[0]) : null;
 
             this.PMSExternalId = new List<AccountPmsDTO>();
             for (Account_PMS__c pms : account.Accounts_PMS__r) {
