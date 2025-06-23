@@ -2,10 +2,11 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-18-2025
+ * @last modified on  : 06-19-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
-public with sharing class SCOpportunityAPIHelper {
+public without sharing class SCOpportunityAPIHelper {
+
     public static void processPostRequest(RestRequest request) {
         IntegrationDTO.SCResponseAPI response = new IntegrationDTO.SCResponseAPI();
         response.success = true;
@@ -16,7 +17,7 @@ public with sharing class SCOpportunityAPIHelper {
             String requestBody = request.requestBody.toString();
             List<IntegrationDTO.SCOpportunityDTO> lRequestedOpportunities = parseRequest(requestBody);
 
-            Map<String, Opportunity> mOpportunitiesSuccessByExternalId = processOpportunities(lRequestedOpportunities, requestBody);
+            Map<String, Opportunity> mOpportunitiesSuccessByExternalId = processOpportunities(lRequestedOpportunities, requestBody, buildMetadata());
             processOpportunityAccounts(lRequestedOpportunities, mOpportunitiesSuccessByExternalId, requestBody);
             processOpportunityItems(lRequestedOpportunities, mOpportunitiesSuccessByExternalId, requestBody);
 
@@ -37,9 +38,9 @@ public with sharing class SCOpportunityAPIHelper {
         return (List<IntegrationDTO.SCOpportunityDTO>) JSON.deserialize(requestBody, listType);
     }
 
-    private static Map<String, Opportunity> processOpportunities(List<IntegrationDTO.SCOpportunityDTO> lRequestedOpportunities, String requestBody) {
+    private static Map<String, Opportunity> processOpportunities(List<IntegrationDTO.SCOpportunityDTO> lRequestedOpportunities, String requestBody, IntegrationDTO.SCAPIMetadataWrapper metadata) {
         List<Opportunity> lOpportunitiesToInsert = new List<Opportunity>();
-        for (IntegrationDTO.SCOpportunityDTO requestedOpportunity : lRequestedOpportunities) lOpportunitiesToInsert.add(requestedOpportunity.parse());
+        for (IntegrationDTO.SCOpportunityDTO requestedOpportunity : lRequestedOpportunities) lOpportunitiesToInsert.add(requestedOpportunity.parse(metadata));
 
         List<IntegrationDTO.SCOpportunityDTO> lRequestedOpportunitiesToProcessHotels = new List<IntegrationDTO.SCOpportunityDTO>();
         List<Database.UpsertResult> lResults = Database.upsert(lOpportunitiesToInsert, Opportunity.Fields.SalesCatering_External_ID__c, false);
@@ -50,7 +51,7 @@ public with sharing class SCOpportunityAPIHelper {
                 sOpportunitySuccessExternalIds.add(lRequestedOpportunities.get(lResults.indexOf(result)).codReserva);
                 lRequestedOpportunitiesToProcessHotels.add(lRequestedOpportunities.get(lResults.indexOf(result)));
             } else {
-                Logger.error(String.join(result.getErrors(), '\n---\n') + '\nFULL JSON: ' + requestBody);
+                Logger.error(String.join(result.getErrors(), '\n---\n'));
             }
         }
         Map<String, Opportunity> mOpportunities = OpportunitySelector.getOpportunityIdBySCExternalId(sOpportunitySuccessExternalIds);
@@ -100,7 +101,7 @@ public with sharing class SCOpportunityAPIHelper {
                     lOpportunityHotelsToInsert.get(lResults.indexOf(result))
                 );
             } else {
-                Logger.error(String.join(result.getErrors(), '\n---\n') + '\nFULL JSON: ' + requestBody);
+                Logger.error(String.join(result.getErrors(), '\n---\n'));
             }
         }
         delete lOpportunityHotelsToDelete;
@@ -126,12 +127,14 @@ public with sharing class SCOpportunityAPIHelper {
         // Check which records needs to be created
         Set<String> sAllRequestedOppAccountsCustomIds = new Set<String>();
         for (IntegrationDTO.SCOpportunityDTO requestedOpportunity : lRequestedOpportunities) {
-            List<Opportunity_Account__c> lOpportunityAccounts = requestedOpportunity.parseOpportunityAccounts();
-            for (Opportunity_Account__c oppAccount : lOpportunityAccounts) {
-                String customId = requestedOpportunity.codReserva + '-' + oppAccount.Account__r.Account_External_ID__c + '-' + oppAccount.Rol__c;
-                sAllRequestedOppAccountsCustomIds.add(customId);
-                if (!sCustomIdsFromOpportunityAccounts.contains(customId)) {
-                    lOpportunityAccountsToInsert.add(oppAccount);
+            if (mOpportunitiesSuccess.containsKey(requestedOpportunity.codReserva)) {
+                List<Opportunity_Account__c> lOpportunityAccounts = requestedOpportunity.parseOpportunityAccounts();
+                for (Opportunity_Account__c oppAccount : lOpportunityAccounts) {
+                    String customId = requestedOpportunity.codReserva + '-' + oppAccount.Account__r.Account_External_ID__c + '-' + oppAccount.Rol__c;
+                    sAllRequestedOppAccountsCustomIds.add(customId);
+                    if (!sCustomIdsFromOpportunityAccounts.contains(customId)) {
+                        lOpportunityAccountsToInsert.add(oppAccount);
+                    }
                 }
             }
         }
@@ -160,7 +163,7 @@ public with sharing class SCOpportunityAPIHelper {
                     lOpportunityAccounts
                 );
             } else {
-                Logger.error(String.join(result.getErrors(), '\n---\n') + '\nFULL JSON: ' + requestBody);
+                Logger.error(String.join(result.getErrors(), '\n---\n'));
             }
         }
         delete lOpportunityAccountsToDelete;
@@ -174,11 +177,13 @@ public with sharing class SCOpportunityAPIHelper {
         List<QuoteLineItem> lOpportunityItemsToInsert = new List<QuoteLineItem>();
         Set<Id> sRelatedQuoteIds = new Set<Id>();
         for (IntegrationDTO.SCOpportunityDTO requestedOpportunity : lRequestedOpportunities) {
-            List<Quote> lOpportunityQuotes = mOpportunitiesSuccess.get(requestedOpportunity.codReserva)?.Quotes;
-            Id quoteId = lOpportunityQuotes != null && !lOpportunityQuotes.isEmpty() ? lOpportunityQuotes.get(0).Id : null;
-            if (String.isNotBlank(quoteId)) {
-                lOpportunityItemsToInsert.addAll(requestedOpportunity.parseQuoteLineItems(quoteId));
-                sRelatedQuoteIds.add(quoteId);
+            if (mOpportunitiesSuccess.containsKey(requestedOpportunity.codReserva)) {
+                List<Quote> lOpportunityQuotes = mOpportunitiesSuccess.get(requestedOpportunity.codReserva)?.Quotes;
+                Id quoteId = lOpportunityQuotes != null && !lOpportunityQuotes.isEmpty() ? lOpportunityQuotes.get(0).Id : null;
+                if (String.isNotBlank(quoteId)) {
+                    lOpportunityItemsToInsert.addAll(requestedOpportunity.parseQuoteLineItems(quoteId));
+                    sRelatedQuoteIds.add(quoteId);
+                }
             }
         }
 
@@ -202,7 +207,7 @@ public with sharing class SCOpportunityAPIHelper {
                 );
             } else {
                 System.debug('##test## - result.getErrors(): ' + result.getErrors());
-                Logger.error(String.join(result.getErrors(), '\n---\n') + '\nFULL JSON: ' + requestBody);
+                Logger.error(String.join(result.getErrors(), '\n---\n'));
             }
         }
 
@@ -210,6 +215,31 @@ public with sharing class SCOpportunityAPIHelper {
     }
 
     // AUX METHODS
+
+    private static IntegrationDTO.SCAPIMetadataWrapper buildMetadata() {
+        IntegrationDTO.SCAPIMetadataWrapper metadata = new IntegrationDTO.SCAPIMetadataWrapper();
+
+        Map<String, String> productCodesByNames = new Map<String, String> {
+            'Room' => 'room',
+            'Food & Beverage' => 'food_beverage',
+            'Venue Room' => 'venue_room',
+            'Audiovisuals' => 'audiovisuals',
+            'Other' => 'others'
+        };
+        String pricebookName = 'MICE Price Book';
+        metadata.mProductIdByType = new Map<String, Id>();
+        metadata.mPricebookEntryIdByType = new Map<String, Id>();
+
+        metadata.pricebook = [SELECT Id, CurrencyISOCode FROM Pricebook2 WHERE Name = :pricebookName LIMIT 1];
+        for(Product2 product : [SELECT Id, Name FROM Product2 WHERE Name IN :productCodesByNames.keySet()]) {
+            metadata.mProductIdByType.put(productCodesByNames.get(product.Name), product.Id);
+        }
+        for(PricebookEntry pbe : [SELECT Id, Product2.Name FROM PricebookEntry WHERE Pricebook2Id = :metadata.pricebook.Id AND Product2.Name IN :productCodesByNames.keySet() AND CurrencyISOCode = :metadata.pricebook.CurrencyISOCode]) {
+            metadata.mPricebookEntryIdByType.put(productCodesByNames.get(pbe.Product2.Name), pbe.Id);
+        }
+
+        return metadata;
+    }
 
     private static Map<Id, String> mapOppExternalIdByOppId(Map<String, Opportunity> mOpportunities) {
         Map<Id, String> mOppExternalIdById = new Map<Id, String>();

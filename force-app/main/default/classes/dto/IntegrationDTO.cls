@@ -154,6 +154,11 @@ global without sharing class IntegrationDTO {
         }
     }
 
+    public class SCAPIMetadataWrapper {
+        public Pricebook2 pricebook = null;
+        public Map<String, Id> mProductIdByType;
+        public Map<String, Id> mPricebookEntryIdByType;
+    }
     public class SCOpportunityDTO {
         public String idHotel;
         public String codReserva;
@@ -178,34 +183,17 @@ global without sharing class IntegrationDTO {
         public SCOthersDTO otros;
 
         //Metadata to parse data
-        private Map<String, Id> mProductIdByType;
         private Pricebook2 pricebook = null;
+        private Map<String, Id> mProductIdByType;
         private Map<String, Id> mPricebookEntryIdByType;
 
-        private void buildMetadata() {
-            Map<String, String> productCodesByNames = new Map<String, String> {
-                'Room' => 'room',
-                'Food & Beverage' => 'food_beverage',
-                'Venue Room' => 'venue_room',
-                'Audiovisuals' => 'audiovisuals',
-                'Others' => 'others'
-            };
-            String pricebookName = 'MICE Price Book';
-            mProductIdByType = new Map<String, Id>();
-            mPricebookEntryIdByType = new Map<String, Id>();
+        public Opportunity parse(SCAPIMetadataWrapper metadata) {
+            // Assign metadata
+            this.pricebook = metadata.pricebook;
+            this.mProductIdByType = metadata.mProductIdByType;
+            this.mPricebookEntryIdByType = metadata.mPricebookEntryIdByType;
 
-            pricebook = [SELECT Id, CurrencyISOCode FROM Pricebook2 WHERE Name = :pricebookName LIMIT 1];
-            for(Product2 product : [SELECT Id, Name FROM Product2 WHERE Name IN :productCodesByNames.keySet()]) {
-                mProductIdByType.put(productCodesByNames.get(product.Name), product.Id);
-            }
-            for(PricebookEntry pbe : [SELECT Id, Product2.Name FROM PricebookEntry WHERE Pricebook2Id = :pricebook.Id AND Product2.Name IN :productCodesByNames.keySet() AND CurrencyISOCode = :pricebook.CurrencyISOCode]) {
-                mPricebookEntryIdByType.put(productCodesByNames.get(pbe.Product2.Name), pbe.Id);
-            }
-        }
-
-        public Opportunity parse() {
-            system.debug('test this: ' + this.toString());
-            buildMetadata();
+            // Parse data
             String accountExternalId = String.isNotBlank(this.cliEmp) ? this.cliEmp : this.cliAgen;
             Account relatedAccount = new Account(Account_External_ID__c = accountExternalId);
             return new Opportunity(
@@ -216,12 +204,12 @@ global without sharing class IntegrationDTO {
                 EventType__c = this.tipoEvento,
                 PAXNoGroup__c = this.numPers,
                 CurrencyISOCode = this.moneda,
-                EventStartDate__c = Date.parse(this.fechaDesde),
-                EventEndDate__c = Date.parse(this.fechaHasta),
-                CloseDate = Date.parse(this.fechaHasta),
-                BlockingDate__c = Date.parse(this.fechaBloq),
+                EventStartDate__c = (String.isNotBlank(this.fechaDesde)) ? Date.parse(this.fechaDesde) : null,
+                EventEndDate__c = (String.isNotBlank(this.fechaHasta)) ? Date.parse(this.fechaHasta) : null,
+                CloseDate = (String.isNotBlank(this.fechaHasta)) ? Date.parse(this.fechaHasta) : null,
+                BlockingDate__c = (String.isNotBlank(this.fechaBloq)) ? Date.parse(this.fechaBloq) : null,
                 Reason__c = this.motNoForm, //loss_reason__c no existe
-                Pricebook2Id = pricebook.Id,
+                Pricebook2Id = this.pricebook?.Id,
                 Hotel__r = new Hotel__c(ID_PMS__c = this.idHotel),
                 RecordTypeId = GlobalConstants.OPPORTUNITY_RT_MICE_ID
             );
