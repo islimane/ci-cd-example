@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-19-2025
+ * @last modified on  : 06-24-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 public without sharing class SCOpportunityAPIHelper {
@@ -120,7 +120,7 @@ public without sharing class SCOpportunityAPIHelper {
         for (Opportunity opportunity : mOpportunitiesSuccess.values()) {
             if (opportunity.Opportunity_Accounts__r != null && !opportunity.Opportunity_Accounts__r.isEmpty())
             for (Opportunity_Account__c opportunityAccount : opportunity.Opportunity_Accounts__r) {
-                sCustomIdsFromOpportunityAccounts.add(opportunityAccount.Opportunity__r.SalesCatering_External_ID__c + '-' + opportunityAccount.Account__r.Account_External_ID__c + '-' + opportunityAccount.Rol__c);
+                sCustomIdsFromOpportunityAccounts.add(opportunityAccount.Opportunity__r.SalesCatering_External_ID__c + '-' /*+ opportunityAccount.Account__r.Account_External_ID__c*/ + '-' + opportunityAccount.Rol__c);
             }
         }
 
@@ -130,7 +130,7 @@ public without sharing class SCOpportunityAPIHelper {
             if (mOpportunitiesSuccess.containsKey(requestedOpportunity.codReserva)) {
                 List<Opportunity_Account__c> lOpportunityAccounts = requestedOpportunity.parseOpportunityAccounts();
                 for (Opportunity_Account__c oppAccount : lOpportunityAccounts) {
-                    String customId = requestedOpportunity.codReserva + '-' + oppAccount.Account__r.Account_External_ID__c + '-' + oppAccount.Rol__c;
+                    String customId = requestedOpportunity.codReserva + '-' /*+ oppAccount.Account__r.Account_External_ID__c*/ + '-' + oppAccount.Rol__c;
                     sAllRequestedOppAccountsCustomIds.add(customId);
                     if (!sCustomIdsFromOpportunityAccounts.contains(customId)) {
                         lOpportunityAccountsToInsert.add(oppAccount);
@@ -143,7 +143,7 @@ public without sharing class SCOpportunityAPIHelper {
         for (Opportunity opportunity : mOpportunitiesSuccess.values()) {
             if (opportunity.Opportunity_Accounts__r != null && !opportunity.Opportunity_Accounts__r.isEmpty())
             for (Opportunity_Account__c opportunityAccount : opportunity.Opportunity_Accounts__r) {
-                String oppAccountCustomId = opportunityAccount.Opportunity__r.SalesCatering_External_ID__c + '-' + opportunityAccount.Account__r.Account_External_ID__c + '-' + opportunityAccount.Rol__c;
+                String oppAccountCustomId = opportunityAccount.Opportunity__r.SalesCatering_External_ID__c + '-' /*+ opportunityAccount.Account__r.Account_External_ID__c*/ + '-' + opportunityAccount.Rol__c;
                 if (!sAllRequestedOppAccountsCustomIds.contains(oppAccountCustomId)) lOpportunityAccountsToDelete.add(opportunityAccount);
             }
         }

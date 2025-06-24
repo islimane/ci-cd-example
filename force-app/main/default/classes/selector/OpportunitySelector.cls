@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-18-2025
+ * @last modified on  : 06-24-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 public with sharing class OpportunitySelector {
@@ -33,7 +33,7 @@ public with sharing class OpportunitySelector {
                 Hotel__c,
                 (SELECT Id FROM Quotes ORDER BY CreatedDate DESC LIMIT 1),
                 (SELECT Id, Opportunity__r.SalesCatering_External_ID__c, Hotel__r.ID_PMS__c FROM Opportunity_Hotels__r),
-                (SELECT Id, Opportunity__r.SalesCatering_External_ID__c, Account__r.Account_External_ID__c, Rol__c FROM Opportunity_Accounts__r)
+                (SELECT Id, Opportunity__r.SalesCatering_External_ID__c, /*Account__r.Account_External_ID__c, */Rol__c FROM Opportunity_Accounts__r)
             FROM Opportunity
             WHERE SalesCatering_External_ID__c IN :sOpportunityExternalIds
 		]) {

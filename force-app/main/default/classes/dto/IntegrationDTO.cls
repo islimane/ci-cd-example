@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-18-2025
+ * @last modified on  : 06-24-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 global without sharing class IntegrationDTO {
@@ -64,7 +64,7 @@ global without sharing class IntegrationDTO {
         public AccountDTO(Account account) {
             this.Id = account.Id;
             //this.AccountRequestID = account.AccountRequestID__c;
-            this.AccountExternalID = account.Account_External_ID__c;
+            //this.AccountExternalID = account.Account_External_ID__c;
             //this.AccountRequestExternalID = account.Account_Request_External_ID__c;
             this.Name = account.Name;
             this.SocialReason = account.SocialReason__c;
@@ -195,7 +195,7 @@ global without sharing class IntegrationDTO {
 
             // Parse data
             String accountExternalId = String.isNotBlank(this.cliEmp) ? this.cliEmp : this.cliAgen;
-            Account relatedAccount = new Account(Account_External_ID__c = accountExternalId);
+            Account relatedAccount = new Account(/*Account_External_ID__c = accountExternalId*/);
             return new Opportunity(
                 SalesCatering_External_ID__c = this.codReserva,
                 Name = this.descripcion,
@@ -226,17 +226,17 @@ global without sharing class IntegrationDTO {
         public List<Opportunity_Account__c> parseOpportunityAccounts() {
             List<Opportunity_Account__c> lOpportunityAccounts = new List<Opportunity_Account__c>();
             if (String.isNotBlank(this.cliEmp)) lOpportunityAccounts.add(new Opportunity_Account__c(
-                Account__r = new Account(Account_External_ID__c = this.cliEmp),
+                //Account__r = new Account(Account_External_ID__c = this.cliEmp),
                 Opportunity__r = new Opportunity(SalesCatering_External_ID__c = this.codReserva),
                 Rol__c = GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_CUSTOMER)
             );
             if (String.isNotBlank(this.cliAgen)) lOpportunityAccounts.add(new Opportunity_Account__c(
-                Account__r = new Account(Account_External_ID__c = this.cliAgen),
+                //Account__r = new Account(Account_External_ID__c = this.cliAgen),
                 Opportunity__r = new Opportunity(SalesCatering_External_ID__c = this.codReserva),
                 Rol__c = GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_INTERMEDIARY)
             );
             if (String.isNotBlank(this.delegacion)) lOpportunityAccounts.add(new Opportunity_Account__c(
-                Account__r = new Account(Account_External_ID__c = this.delegacion),
+                //Account__r = new Account(Account_External_ID__c = this.delegacion),
                 Opportunity__r = new Opportunity(SalesCatering_External_ID__c = this.codReserva),
                 Rol__c = GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_DELEGATION)
             );
