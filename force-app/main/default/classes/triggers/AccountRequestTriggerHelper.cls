@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-10-2025
+ * @last modified on  : 06-25-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 public without sharing class AccountRequestTriggerHelper extends TriggerUtils {
@@ -52,7 +52,7 @@ public without sharing class AccountRequestTriggerHelper extends TriggerUtils {
             if (currentAccountRequest.Type__c == GlobalConstants.ACCOUNT_REQUEST_TYPE_NEW &&
                 currentAccountRequest.Closure__c == GlobalConstants.ACCOUNT_REQUEST_STATUS_PROCESSED &&
                 currentAccountRequest.Account__c != null &&
-                currentAccountRequest.Account__c != mOldAccountRequests.get(currentAccountRequest.Id).Account__c) {
+                (currentAccountRequest.Closure__c != mOldAccountRequests.get(currentAccountRequest.Id).Closure__c || currentAccountRequest.Account__c != mOldAccountRequests.get(currentAccountRequest.Id).Account__c)) {
                 lValidAccountRequests.add(currentAccountRequest);
             }
             // Is modification account request
@@ -71,7 +71,9 @@ public without sharing class AccountRequestTriggerHelper extends TriggerUtils {
                 lValidAccountRequests.add(currentAccountRequest);
             }
             // Is a rejected account request
-            else if (currentAccountRequest.Closure__c == GlobalConstants.ACCOUNT_REQUEST_STATUS_REJECTED) {
+            else if (currentAccountRequest.Closure__c == GlobalConstants.ACCOUNT_REQUEST_STATUS_REJECTED &&
+                currentAccountRequest.Closure__c != mOldAccountRequests.get(currentAccountRequest.Id).Closure__c &&
+                String.isNotBlank(currentAccountRequest.ID_BPRO__c)) {
                 lValidAccountRequests.add(currentAccountRequest);
             }
         }

@@ -9,15 +9,15 @@ global class ITM_SyncErrorsAPI {
 	@HttpPost
 	global static String doPost() {
 		RestRequest request = RestContext.request;
-		//String response = NBK_SyncErrorsAPIHelper.RESPONSE_KO;
 		String response = 'KO';
+        RestContext.response.statusCode = 500;
 		try {
             Type listType = Type.forName('List<ITM_APIWrappers.ErrorDTO>');
             List<ITM_APIWrappers.ErrorDTO> lErrorDTOs =  (List<ITM_APIWrappers.ErrorDTO>) JSON.deserialize(request.requestBody.toString(), listType);
 			response = ITM_SyncErrorsAPIHelper.insertErrors(lErrorDTOs);
+            RestContext.response.statusCode = 201;
 		} catch (Exception e) {
-            //Logger.error(e.getMessage()).addTag(/*NBK_GlobalConstants.INTEGRATION.API_SYNC_ERRORS_ERROR_TAG*/'');
-            Logger.error(e.getMessage());
+            Logger.error(e.getMessage()).addTag(GlobalConstants.LOGGER_SYNC_API_TAG);
         }
 
 		return response;

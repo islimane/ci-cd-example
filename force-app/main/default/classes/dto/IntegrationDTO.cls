@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-23-2025
+ * @last modified on  : 06-24-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 public without sharing class IntegrationDTO {
@@ -54,8 +54,10 @@ public without sharing class IntegrationDTO {
         public Boolean Delegation;
         public Boolean SendToPMS;
         public String Description;
+        public String StatusDescription;
+        public String SDI;
 
-        //public ContactDTO Contact;
+        public ContactDTO Contact;
         public List<AccountPmsDTO> PMSExternalId;
 
         public AccountDTO(Account account, AccountRequest__c request) {
@@ -103,8 +105,10 @@ public without sharing class IntegrationDTO {
             this.Delegation = account.Delegation__c;
             this.SendToPMS = account.SendToPMS__c;
             this.Description = account.Description;
+            this.StatusDescription = request.ClosureDescription__c;
+            this.SDI = account.SDI__c;
 
-            //this.Contact = account.Contacts != null && !account.Contacts.isEmpty() ? new ContactDTO(account.Contacts[0]) : null;
+            this.Contact = account.Contacts != null && !account.Contacts.isEmpty() ? new ContactDTO(account.Contacts[0]) : new ContactDTO(account, request);
 
             this.PMSExternalId = new List<AccountPmsDTO>();
             for (Account_PMS__c pms : account.Accounts_PMS__r) {
@@ -140,6 +144,7 @@ public without sharing class IntegrationDTO {
         public String IDBPRO;
         public String Type;
         public Boolean SameAddress;
+        public String StatusDescription;
 
         public AccountRejectedDTO(AccountRequest__c request) {
             this.AccountRequestID = request.Id;
@@ -168,23 +173,25 @@ public without sharing class IntegrationDTO {
             this.IDBPRO = request.ID_BPRO__c;
             this.Type = request.Type__c;
             this.SameAddress = request.SameAddress__c;
+            this.StatusDescription = request.ClosureDescription__c;
         }
     }
 
     public class AccountRetryDTO implements IAccountDTO {
         public String systemPMS;
-        public String subSystem;
-        public AccountDTO account;
+        public String SubSystem;
+        public AccountDTO Account;
 
         public AccountRetryDTO(Account account, AccountRequest__c request, ResponseAccountRequest__c responseAccountRequest) {
             this.systemPMS = responseAccountRequest.PMS__c;
-            this.subSystem = responseAccountRequest.PMS_Subsystem__c;
-            this.account = new AccountDTO(account, request);
+            this.SubSystem = responseAccountRequest.PMS_Subsystem__c;
+            this.Account = new AccountDTO(account, request);
             List<AccountPmsDTO> lPMSData = new List<AccountPmsDTO>();
-            for (AccountPmsDTO pms : this.account.PMSExternalId) {
+            for (AccountPmsDTO pms : this.Account.PMSExternalId) {
                 if (pms.PMS == this.systemPMS && pms.PMSSubsystem == this.subSystem) lPMSData.add(pms);
             }
-            this.account.PMSExternalId = lPMSData;
+            if (lPMSData.isEmpty()) lPMSData.add(new AccountPmsDTO(this.systemPMS, this.subSystem, null));
+            this.Account.PMSExternalId = lPMSData;
         }
     }
 
@@ -199,6 +206,7 @@ public without sharing class IntegrationDTO {
         public String MailingCity;
         public String MailingStateCode;
         public String MailingCountryCode;
+        public String Identification;
 
         public ContactDTO(Contact contact) {
             this.FirstName = contact.FirstName;
@@ -211,6 +219,22 @@ public without sharing class IntegrationDTO {
             this.MailingCity = contact.MailingCity;
             this.MailingStateCode = contact.MailingStateCode;
             this.MailingCountryCode = contact.MailingCountryCode;
+            this.Identification = contact.Contact_Identification__c;
+        }
+
+        // Constructor to populate data without a contact
+        public ContactDTO(Account account, AccountRequest__c request) {
+            this.FirstName = request.ContactName__c;
+            this.LastName = request.ContactLastName__c;
+            this.Phone = request.ContactPhone__c;
+            this.Birthdate = request.ContactBirthdate__c;
+            this.Email = account.Email__c;
+            this.MailingStreet = request.ContactBillingStreet__c;
+            this.MailingPostalCode_c = request.ContactBillingPostalCode__c;
+            this.MailingCity = request.ContactBillingCity__c;
+            this.MailingStateCode = request.ContactBillingState__c;
+            this.MailingCountryCode = request.ContactBillingCountry__c;
+            this.Identification = request.ContactIdentification__c;
         }
     }
 
@@ -223,6 +247,12 @@ public without sharing class IntegrationDTO {
             this.PMS = pms.PMS__c;
             this.PMSSubsystem = pms.PMS_Subsystem__c;
             this.AccountPMSCode = pms.Account_PMS_Code__c;
+        }
+
+        public AccountPmsDTO(String pms, String subSystem, String code) {
+            this.PMS = pms;
+            this.PMSSubsystem = subSystem;
+            this.AccountPMSCode = code;
         }
     }
 }

@@ -2,7 +2,7 @@
  * @description       : Global constants class for the entire system.
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 06-10-2025
+ * @last modified on  : 06-25-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 @SuppressWarnings('PMD')
@@ -101,4 +101,9 @@ public without sharing class GlobalConstants {
     public static final String ACCOUNT_REQUEST_STATUS_PROCESSED { get { return 'Processed'; } }
     public static final String ACCOUNT_REQUEST_STATUS_REJECTED { get { return 'Rejected'; } }
 
+    /** Contact */
+    public static final String CONTACT_TITLE_BPRO_ADMIN { get { return 'Z24'; } }
+
+    /** Logger */
+    public static final String LOGGER_SYNC_API_TAG { get { return 'SYNC_API'; } }
 }

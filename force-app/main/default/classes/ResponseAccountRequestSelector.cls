@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-10-2025
+ * @last modified on  : 06-24-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 public with sharing class ResponseAccountRequestSelector {
@@ -22,7 +22,18 @@ public with sharing class ResponseAccountRequestSelector {
                 AccountRequest__c,
                 AccountRequest__r.Account_Request_External_ID__c,
                 AccountRequest__r.Closure__c,
-                AccountRequest__r.Account__c
+                AccountRequest__r.ClosureDescription__c,
+                AccountRequest__r.Account__c,
+                AccountRequest__r.ContactName__c,
+                AccountRequest__r.ContactLastName__c,
+                AccountRequest__r.ContactPhone__c,
+                AccountRequest__r.ContactBirthdate__c,
+                AccountRequest__r.ContactBillingStreet__c,
+                AccountRequest__r.ContactBillingPostalCode__c,
+                AccountRequest__r.ContactBillingCity__c,
+                AccountRequest__r.ContactBillingState__c,
+                AccountRequest__r.ContactBillingCountry__c,
+                AccountRequest__r.ContactIdentification__c
             FROM ResponseAccountRequest__c
             WHERE Id IN :sResponseIds
 		];

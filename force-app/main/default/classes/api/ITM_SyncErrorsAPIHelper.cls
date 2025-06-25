@@ -5,8 +5,6 @@
 **/
 public with sharing class ITM_SyncErrorsAPIHelper {
 
-	//public static final String RESPONSE_OK = NBK_GlobalConstants.INTEGRATION.API_ERROR_LOGGER_RESPONSE_OK;
-	//public static final String RESPONSE_KO = NBK_GlobalConstants.INTEGRATION.API_ERROR_LOGGER_RESPONSE_KO;
 	public static final String RESPONSE_OK = 'OK';
 	public static final String RESPONSE_KO = 'KO';
 
@@ -15,13 +13,9 @@ public with sharing class ITM_SyncErrorsAPIHelper {
 
 		if (!lErrorDTOs.isEmpty()) {
 			for (ITM_APIWrappers.ErrorDTO currentError : lErrorDTOs) {
-				if (String.isNotBlank(currentError.errorMsg) && String.isNotBlank(currentError.source)) {
-					/*if (String.isNotBlank(currentError.errorType)){
-						Logger.error(currentError.errorMsg).addTag(currentError.source).setField(LogEntryEvent__e.Error_Type__c, currentError.errorType);
-					} else {*/
-						//Logger.error(currentError.errorMsg).addTag(currentError.source);
-						Logger.error(currentError.errorMsg);
-					//}
+				if (String.isNotBlank(currentError.errorMsg)) {
+                    String tag = String.isNotBlank(currentError.source) ? currentError.source : '';
+					Logger.error(currentError.errorMsg).addTag(currentError.source);
 				}
 			}
 			Logger.saveLog();

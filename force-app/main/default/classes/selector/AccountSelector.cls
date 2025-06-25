@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-10-2025
+ * @last modified on  : 06-24-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 public with sharing class AccountSelector {
@@ -59,7 +59,8 @@ public with sharing class AccountSelector {
                 Delegation__c,
                 SendToPMS__c,
                 Description,
-                (SELECT FirstName, LastName, Phone, Birthdate, Email, MailingStreet, MailingPostalCode__c, MailingCity, MailingStateCode, MailingCountryCode FROM Contacts ORDER BY CreatedDate DESC LIMIT 1),
+                SDI__c,
+                (SELECT FirstName, LastName, Phone, Birthdate, Email, MailingStreet, MailingPostalCode__c, MailingCity, MailingStateCode, MailingCountryCode, Contact_Identification__c FROM Contacts WHERE Title__c = :GlobalConstants.CONTACT_TITLE_BPRO_ADMIN ORDER BY CreatedDate DESC LIMIT 1),
                 (SELECT Id, PMS__c, PMS_Subsystem__c, WS_URL__c, Account_PMS_Code__c FROM Accounts_PMS__r)
             FROM Account
             WHERE Id IN :sAccountIds
