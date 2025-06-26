@@ -153,8 +153,8 @@ public without sharing class AccountSyncService {
 
         } catch (Exception e) {
             Logger.error(e.getMessage()).addTag(GlobalConstants.LOGGER_SYNC_API_TAG);
+            Logger.saveLog();
         }
-        Logger.saveLog();
 
         return lAccountsDTO;
     }
@@ -170,8 +170,8 @@ public without sharing class AccountSyncService {
             }
         } catch (Exception e) {
             Logger.error(e.getMessage()).addTag(GlobalConstants.LOGGER_SYNC_API_TAG);
+            Logger.saveLog();
         }
-        Logger.saveLog();
 
         return lAccountsRetryDTO;
     }

@@ -76,7 +76,12 @@ public without sharing class AccountRequestTriggerHelper extends TriggerUtils {
                 String.isNotBlank(currentAccountRequest.ID_BPRO__c)) {
                 lValidAccountRequests.add(currentAccountRequest);
             }
+            // Save log not valid to sync
+            else {
+                Logger.warn('Request not valid to sync:\nActual: \n' + JSON.serialize(currentAccountRequest) + '\n\nOld: ' + JSON.serialize(mOldAccountRequests.get(currentAccountRequest.Id))).addTag(GlobalConstants.LOGGER_SYNC_API_TAG);
+            }
         }
+        Logger.saveLog();
 
         return lValidAccountRequests;
     }

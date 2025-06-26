@@ -18,7 +18,6 @@ public with sharing class ITM_SyncErrorsAPIHelper {
 					Logger.error(currentError.errorMsg).addTag(currentError.source);
 				}
 			}
-			Logger.saveLog();
 			response = RESPONSE_OK;
 		}
 

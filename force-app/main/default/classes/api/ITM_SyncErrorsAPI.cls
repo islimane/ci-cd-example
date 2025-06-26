@@ -19,6 +19,7 @@ global class ITM_SyncErrorsAPI {
 		} catch (Exception e) {
             Logger.error(e.getMessage()).addTag(GlobalConstants.LOGGER_SYNC_API_TAG);
         }
+        Logger.saveLog();
 
 		return response;
 	}
