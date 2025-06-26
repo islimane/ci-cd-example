@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-25-2025
+ * @last modified on  : 06-26-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 public without sharing class AccountSyncService {
@@ -48,6 +48,8 @@ public without sharing class AccountSyncService {
 		} else {
 			INSTANCE.addRecords(lAccounts);
 		}
+        Logger.info('Data to sync:\n' + JSON.serialize(lAccounts)).addTag(GlobalConstants.LOGGER_SYNC_API_TAG);
+        Logger.saveLog();
 		return INSTANCE;
 	}
 
