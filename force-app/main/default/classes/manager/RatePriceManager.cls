@@ -53,10 +53,49 @@ public with sharing class RatePriceManager {
                 Logger.info('before upsert - lratePricesToUpsert: ' + lratePricesToUpsert);
                 upsert lratePricesToUpsert;
             }
-
         } catch (Exception e) {
-            System.debug(LoggingLevel.ERROR, 'Error in upsertRatePricesEditedFromRatePlanner: ' + e.getMessage() + ' ' + e.getStackTraceString());
-            Logger.info('Error in RatePriceManager.upsertRatePricesEditedFromRatePlanner: ' + e.getMessage() + ' ' + e.getStackTraceString());
+            System.debug(
+                LoggingLevel.ERROR,
+                'Error in upsertRatePricesEditedFromRatePlanner: ' + e.getMessage() + ' ' + e.getStackTraceString()
+            );
+            Logger.info(
+                'Error in RatePriceManager.upsertRatePricesEditedFromRatePlanner: ' + e.getMessage() + ' ' + e.getStackTraceString()
+            );
+            Logger.saveLog();
+            throw new RatePriceManagerException(e.getMessage() + ' ' + e.getStackTraceString());
+        }
+    }
+
+    /**
+     * @description From RateManagerModel.RateLine, it creates a RatePrice__c and upsert it multiplying the price by the multiplier
+     *           Receives the list of RatePrices with values pointing the Rate__c, RateLine__c and Period__c
+     *           Use multiplier by 0 to keep the same price
+     * @author Inetum Team <ruben.sanchez-gonzalez@inetum.com> | 05-05-2025
+     * @param lRateLines
+     * @param multiplier
+     **/
+    public static void upsertRatePricesWithMultiplier(List<RateManagerModel.RatePrice> lRatePrices, Decimal multiplier) {
+        List<RatePrice__c> lRatePricesToUpsert = new List<RatePrice__c>();
+        try {
+            if (lRatePrices != null) {
+                for (RateManagerModel.RatePrice ratePrice : lRatePrices) {
+                    RatePrice__c vRatePrice = new RatePrice__c(
+                        RateLine__c = ratePrice.ParentRateLineId,
+                        Rate__c = ratePrice.ParentRateId,
+                        Period__c = ratePrice.ParentPeriodId,
+                        Product__c = ratePrice.ParentProductId,
+                        TotalPrice__c = ratePrice.getTotalPrice() == null ? null : ratePrice.getTotalPrice() * (1 + multiplier)
+                    );
+                    lRatePricesToUpsert.add(vRatePrice);
+                }
+
+                if (!lRatePricesToUpsert.isEmpty()) {
+                    upsert lRatePricesToUpsert;
+                }
+            }
+        } catch (Exception e) {
+            System.debug(LoggingLevel.ERROR, 'Error in upsertRatePricesWithMultiplier: ' + e.getMessage() + ' ' + e.getStackTraceString());
+            Logger.info('Error in RatePriceManager.upsertRatePricesWithMultiplier: ' + e.getMessage() + ' ' + e.getStackTraceString());
             Logger.saveLog();
             throw new RatePriceManagerException(e.getMessage() + ' ' + e.getStackTraceString());
         }
