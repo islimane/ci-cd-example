@@ -2,7 +2,7 @@
  * @description       : Unit Test Class for Setup Data Methods
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 12-06-2025
+ * @last modified on  : 01-07-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 @isTest
@@ -244,7 +244,8 @@ public class TP_SetupDataTest {
         Hotel__c hotel = new Hotel__c(
             Name = 'Default'+batteryName,
             Account__c = account?.Id,
-            RecordTypeId = GlobalConstants.HOTEL_RT_HOTEL_ID
+            RecordTypeId = GlobalConstants.HOTEL_RT_HOTEL_ID,
+            Quotation_Manager__c = UserInfo.getUserId()
         );
         mHotel = TP_SetupDataUtilsTest.setMapByName(mHotel, new List<sObject>{hotel});
         return hotel;
