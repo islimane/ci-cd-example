@@ -2,10 +2,10 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 04-24-2025
+ * @last modified on  : 06-16-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
-public with sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
+public without sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
 
     private static final List<String> EXCLUDED_CODES = new List<String>{
         'Y',

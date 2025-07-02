@@ -64,6 +64,7 @@ public without sharing class GlobalConstants {
 
     /** sObjects Share  */
     public static final String SOBJECT_SHARE_ACCESS_LEVEL_READ { get { return 'Read'; } }
+    public static final String SOBJECT_SHARE_ACCESS_LEVEL_EDIT { get { return 'Edit'; } }
 
     /** Rate */
     public static final String RATE_RATE_NAME_PICKLIST_BEST { get { return 'BEST'; } }
