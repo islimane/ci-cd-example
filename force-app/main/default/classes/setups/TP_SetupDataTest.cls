@@ -2,7 +2,7 @@
  * @description       : Unit Test Class for Setup Data Methods
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 01-07-2025
+ * @last modified on  : 02-07-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 @isTest
@@ -191,7 +191,10 @@ public class TP_SetupDataTest {
      */
     public static Season__c generateSeason() {
         Season__c season = new Season__c(
-            Name = 'Default'+batteryName
+            Name = 'Default'+batteryName,
+            Season_Start_Date__c = Date.today().addYears(-1),
+            Season_End_Date__c = Date.today().addYears(1)
+
         );
         mSeason = TP_SetupDataUtilsTest.setMapByName(mSeason, new List<sObject>{season});
         return season;
@@ -474,7 +477,9 @@ public class TP_SetupDataTest {
      */
     public static void generateQuote() {
         Quote quoteRecord = new Quote(
-            Name = 'Default'+batteryName
+            Name = 'Default'+batteryName,
+            StartDate__c = Date.today().addDays(-7),
+            EndDate__c = Date.today().addDays(60)
         );
         mQuote = TP_SetupDataUtilsTest.setMapByName(mQuote, new List<sObject>{quoteRecord});
     }
@@ -529,17 +534,17 @@ public class TP_SetupDataTest {
         insertSeasonData();
         insertHotelData();
         insertRatePlannerData();
-        insertPeriodData();
         insertRateData();
 		insertHotelTerritory();
 		insertOpportunity();
 		insertOpportunityHotel();
 		insertUserAuthorization();
 		insertOpportunityShare();
+        insertQuoteData();
+        insertPeriodData();
         insertProduct2();
         insertPricebookEntry();
         insertRateLineData();
-        insertQuoteData();
         insertWeekdaySetData();
     }
 
@@ -584,6 +589,7 @@ public class TP_SetupDataTest {
      */
     private static void insertPeriodData() {
         TP_SetupDataUtilsTest.genericParentChildRelationship(mRatePlanner.values(), mPeriod.values(), 'RatePlanner__c');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mQuote.values(), mPeriod.values(), 'Quote__c');
         lPeriodToInsert.addAll((List<Period__c>)mPeriod.values());
         insert lPeriodToInsert;
     }
@@ -705,6 +711,7 @@ public class TP_SetupDataTest {
         TP_SetupDataUtilsTest.genericParentChildRelationship(mRatePlanner.values(), mRateLineSupplement.values(), 'RatePlanner__c');
         TP_SetupDataUtilsTest.genericParentChildRelationship(mProduct2Supplement.values(), mRateLineSupplement.values(), 'Product__c');
         TP_SetupDataUtilsTest.genericParentChildRelationship(mHotel.values(), mRateLineSupplement.values(), 'Hotel__c');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mQuote.values(), mRateLineRoom.values(), 'Quote__c');
         lRateLineToInsert.addAll((List<RateLine__c>) mRateLineRoom.values());
         lRateLineToInsert.addAll((List<RateLine__c>) mRateLineSupplement.values());
         insert lRateLineToInsert;
@@ -719,8 +726,6 @@ public class TP_SetupDataTest {
         TP_SetupDataUtilsTest.genericParentChildRelationship(mOpportunity.values(), mQuote.values(), 'OpportunityId');
         lQuoteToInsert.addAll((List<Quote>) mQuote.values());
         insert lQuoteToInsert;
-        TP_SetupDataUtilsTest.genericParentChildRelationship(mQuote.values(), mRateLineRoom.values(), 'Quote__c');
-        upsert mRateLineRoom.values();
     }
 
     /**
