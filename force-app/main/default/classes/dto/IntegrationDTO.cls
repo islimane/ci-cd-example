@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-24-2025
+ * @last modified on  : 06-30-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 public without sharing class IntegrationDTO {
@@ -186,12 +186,12 @@ public without sharing class IntegrationDTO {
             this.systemPMS = responseAccountRequest.PMS__c;
             this.SubSystem = responseAccountRequest.PMS_Subsystem__c;
             this.Account = new AccountDTO(account, request);
-            List<AccountPmsDTO> lPMSData = new List<AccountPmsDTO>();
+            /*List<AccountPmsDTO> lPMSData = new List<AccountPmsDTO>();
             for (AccountPmsDTO pms : this.Account.PMSExternalId) {
                 if (pms.PMS == this.systemPMS && pms.PMSSubsystem == this.subSystem) lPMSData.add(pms);
             }
             if (lPMSData.isEmpty()) lPMSData.add(new AccountPmsDTO(this.systemPMS, this.subSystem, null));
-            this.Account.PMSExternalId = lPMSData;
+            this.Account.PMSExternalId = lPMSData;*/
         }
     }
 
