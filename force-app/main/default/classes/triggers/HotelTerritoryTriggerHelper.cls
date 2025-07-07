@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-16-2025
+ * @last modified on  : 07-07-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 public without sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
@@ -148,22 +148,24 @@ public without sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
     // PRIVATE METHODS
 
     private static String buildTerritoryCode(HotelTerritory__c hotelTerritory, Set<String> sAllTerritoryCodes) {
-        System.debug('### HotelTerritoryTriggerHelper.buildTerritoryCode() - hotelTerritory.Name: ' + hotelTerritory.Name);
-        String clearedName = removeDiacritics(hotelTerritory.Name);
-        List<String> lTerritoryNameChunks = clearedName?.split(' ');
+        if (String.isBlank(hotelTerritory.Code__c)) {
+            System.debug('### HotelTerritoryTriggerHelper.buildTerritoryCode() - hotelTerritory.Name: ' + hotelTerritory.Name);
+            String clearedName = removeDiacritics(hotelTerritory.Name);
+            List<String> lTerritoryNameChunks = clearedName?.split(' ');
 
-        String territoryCode = '';
-        if (lTerritoryNameChunks.size() == 1) {
-            territoryCode = lTerritoryNameChunks[0].left(2).toUpperCase();
-        } else {
-            for (String currentNameChunk : lTerritoryNameChunks) {
-                if (isValidChunk(currentNameChunk)) territoryCode += currentNameChunk.left(1).toUpperCase();
+            String territoryCode = '';
+            if (lTerritoryNameChunks.size() == 1) {
+                territoryCode = lTerritoryNameChunks[0].left(2).toUpperCase();
+            } else {
+                for (String currentNameChunk : lTerritoryNameChunks) {
+                    if (isValidChunk(currentNameChunk)) territoryCode += currentNameChunk.left(1).toUpperCase();
+                }
             }
-        }
-        if (!sAllTerritoryCodes.contains(territoryCode)) {
-            sAllTerritoryCodes.add(territoryCode);
-            return territoryCode;
-        } else return buildDuplicateTerritoryCode(lTerritoryNameChunks, sAllTerritoryCodes);
+            if (!sAllTerritoryCodes.contains(territoryCode)) {
+                sAllTerritoryCodes.add(territoryCode);
+                return territoryCode;
+            } else return buildDuplicateTerritoryCode(lTerritoryNameChunks, sAllTerritoryCodes);
+        } else return null;
     }
 
     private static Boolean isValidChunk(String chunk) {
