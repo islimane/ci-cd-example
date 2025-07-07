@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-24-2025
+ * @last modified on  : 07-07-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 public without sharing class SCOpportunityAPIHelper {
@@ -181,8 +181,13 @@ public without sharing class SCOpportunityAPIHelper {
                 List<Quote> lOpportunityQuotes = mOpportunitiesSuccess.get(requestedOpportunity.codReserva)?.Quotes;
                 Id quoteId = lOpportunityQuotes != null && !lOpportunityQuotes.isEmpty() ? lOpportunityQuotes.get(0).Id : null;
                 if (String.isNotBlank(quoteId)) {
-                    lOpportunityItemsToInsert.addAll(requestedOpportunity.parseQuoteLineItems(quoteId));
-                    sRelatedQuoteIds.add(quoteId);
+                    List<QuoteLineItem> lOpportunityItemsParsed = requestedOpportunity.parseQuoteLineItems(quoteId);
+                    for (QuoteLineItem opportunityItem : lOpportunityItemsParsed) {
+                        if (opportunityItem != null) {
+                            lOpportunityItemsToInsert.add(opportunityItem);
+                            sRelatedQuoteIds.add(quoteId);
+                        }
+                    }
                 }
             }
         }
@@ -219,10 +224,10 @@ public without sharing class SCOpportunityAPIHelper {
     private static IntegrationDTO.SCAPIMetadataWrapper buildMetadata() {
         IntegrationDTO.SCAPIMetadataWrapper metadata = new IntegrationDTO.SCAPIMetadataWrapper();
 
-        Map<String, String> productCodesByNames = new Map<String, String> {
+        Map<String, String> productCodesBySFCodes = new Map<String, String> {
             'Room' => 'room',
-            'Food & Beverage' => 'food_beverage',
-            'Venue Room' => 'venue_room',
+            'FoodBeverage' => 'food_beverage',
+            'VenueRoom' => 'venue_room',
             'Audiovisuals' => 'audiovisuals',
             'Other' => 'others'
         };
@@ -231,11 +236,11 @@ public without sharing class SCOpportunityAPIHelper {
         metadata.mPricebookEntryIdByType = new Map<String, Id>();
 
         metadata.pricebook = [SELECT Id, CurrencyISOCode FROM Pricebook2 WHERE Name = :pricebookName LIMIT 1];
-        for(Product2 product : [SELECT Id, Name FROM Product2 WHERE Name IN :productCodesByNames.keySet()]) {
-            metadata.mProductIdByType.put(productCodesByNames.get(product.Name), product.Id);
+        for(Product2 product : [SELECT Id, ProductCode FROM Product2 WHERE ProductCode IN :productCodesBySFCodes.keySet()]) {
+            metadata.mProductIdByType.put(productCodesBySFCodes.get(product.ProductCode), product.Id);
         }
-        for(PricebookEntry pbe : [SELECT Id, Product2.Name FROM PricebookEntry WHERE Pricebook2Id = :metadata.pricebook.Id AND Product2.Name IN :productCodesByNames.keySet() AND CurrencyISOCode = :metadata.pricebook.CurrencyISOCode]) {
-            metadata.mPricebookEntryIdByType.put(productCodesByNames.get(pbe.Product2.Name), pbe.Id);
+        for(PricebookEntry pbe : [SELECT Id, Product2.ProductCode FROM PricebookEntry WHERE Pricebook2Id = :metadata.pricebook.Id AND Product2.ProductCode IN :productCodesBySFCodes.keySet() AND CurrencyISOCode = :metadata.pricebook.CurrencyISOCode]) {
+            metadata.mPricebookEntryIdByType.put(productCodesBySFCodes.get(pbe.Product2.ProductCode), pbe.Id);
         }
 
         return metadata;

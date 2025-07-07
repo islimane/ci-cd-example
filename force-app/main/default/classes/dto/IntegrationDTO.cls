@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-24-2025
+ * @ * @last modified on  : 06-24-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 global without sharing class IntegrationDTO {
@@ -362,6 +362,11 @@ global without sharing class IntegrationDTO {
     // AUX METHODS
 
     public static QuoteLineItem generateQLI(Id quoteId, Id productId, Id pricebookEntryId, Decimal unitPrice, Decimal taxPercentage, Boolean taxIncluded, Decimal comissionPercentage, String description) {
+        if ((unitPrice == null || unitPrice == 0) &&
+            (taxPercentage == null || taxPercentage == 0) &&
+            (taxIncluded == null || !taxIncluded) &&
+            (comissionPercentage == null || comissionPercentage == 0) &&
+            (String.isBlank(description))) return null;
         return new QuoteLineItem(
             QuoteId = quoteId,
             Product2Id = productId,
