@@ -226,7 +226,7 @@ public with sharing class UserAuthorizationService {
 	private static void createGroupMembers(String lGroupMembersJSON) {
 		List<GroupMember> lGroupMembersToCreate = (List<GroupMember>)JSON.deserialize(lGroupMembersJSON, List<GroupMember>.class);
 		System.debug('### UserAuthorizationService.createGroupMembers() - [lGroupMembersToCreate]: ' + lGroupMembersToCreate);
-		if (!lGroupMembersToCreate.isEmpty()) insert lGroupMembersToCreate;
+		if (!lGroupMembersToCreate.isEmpty()) upsert lGroupMembersToCreate;
 	}
 
 	@future
