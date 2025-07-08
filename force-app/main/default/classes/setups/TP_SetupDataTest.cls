@@ -2,7 +2,7 @@
  * @description       : Unit Test Class for Setup Data Methods
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 02-07-2025
+ * @last modified on  : 08-07-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 @isTest
@@ -52,6 +52,7 @@ public class TP_SetupDataTest {
     }set{
         if(pricebookSingleton == null) insert value;
     }}
+    public static List<HotelTerritory__c> lTerritoriesToInsert = new List<HotelTerritory__c>();
 
 
 	/*********************************/
@@ -281,6 +282,7 @@ public class TP_SetupDataTest {
 		hotelTerritoryArea.Code__c = GlobalConstants.HOTEL_TERRITORY_RT_AREA_NAME;
 		hotelTerritoryArea.RecordTypeId = GlobalConstants.HOTEL_TERRITORY_RT_AREA_ID;
         mHotelTerritoryArea = TP_SetupDataUtilsTest.setMapByName(mHotelTerritoryArea, new List<sObject>{hotelTerritoryArea});
+        lTerritoriesToInsert.add(hotelTerritoryArea);
         return hotelTerritoryArea;
     }
 
@@ -293,6 +295,7 @@ public class TP_SetupDataTest {
 		hotelTerritoryContinent.Code__c = GlobalConstants.HOTEL_TERRITORY_RT_CONTINENT_NAME;
 		hotelTerritoryContinent.RecordTypeId = GlobalConstants.HOTEL_TERRITORY_RT_CONTINENT_ID;
         mHotelTerritoryContinent = TP_SetupDataUtilsTest.setMapByName(mHotelTerritoryContinent, new List<sObject>{hotelTerritoryContinent});
+        lTerritoriesToInsert.add(hotelTerritoryContinent);
         return hotelTerritoryContinent;
     }
 
@@ -305,6 +308,7 @@ public class TP_SetupDataTest {
 		hotelTerritoryZone.Code__c = GlobalConstants.HOTEL_TERRITORY_RT_ZONE_NAME;
 		hotelTerritoryZone.RecordTypeId = GlobalConstants.HOTEL_TERRITORY_RT_ZONE_ID;
         mHotelTerritoryZone = TP_SetupDataUtilsTest.setMapByName(mHotelTerritoryZone, new List<sObject>{hotelTerritoryZone});
+        lTerritoriesToInsert.add(hotelTerritoryZone);
         return hotelTerritoryZone;
     }
 
@@ -317,6 +321,7 @@ public class TP_SetupDataTest {
 		hotelTerritorySubzone.Code__c = GlobalConstants.HOTEL_TERRITORY_RT_SUBZONE_NAME;
 		hotelTerritorySubzone.RecordTypeId = GlobalConstants.HOTEL_TERRITORY_RT_SUBZONE_ID;
         mHotelTerritorySubzone = TP_SetupDataUtilsTest.setMapByName(mHotelTerritorySubzone, new List<sObject>{hotelTerritorySubzone});
+        lTerritoriesToInsert.add(hotelTerritorySubzone);
         return hotelTerritorySubzone;
     }
 
@@ -329,6 +334,7 @@ public class TP_SetupDataTest {
 		hotelTerritoryHotel.Code__c = GlobalConstants.HOTEL_TERRITORY_RT_HOTEL_NAME;
 		hotelTerritoryHotel.RecordTypeId = GlobalConstants.HOTEL_TERRITORY_RT_HOTEL_ID;
         mHotelTerritoryHotel = TP_SetupDataUtilsTest.setMapByName(mHotelTerritoryHotel, new List<sObject>{hotelTerritoryHotel});
+        lTerritoriesToInsert.add(hotelTerritoryHotel);
         return hotelTerritoryHotel;
     }
 
@@ -535,6 +541,7 @@ public class TP_SetupDataTest {
         insertHotelData();
         insertRatePlannerData();
         insertRateData();
+        insert lTerritoriesToInsert; // need to be inserted separately before all other HotelTerritory reference other territories
 		insertHotelTerritory();
 		insertOpportunity();
 		insertOpportunityHotel();
@@ -608,26 +615,31 @@ public class TP_SetupDataTest {
     * @author Inetum Team <alvaro.marin@inetum.com> | 06-03-2025
     **/
     private static void insertHotelTerritory(){
-		insert mHotelTerritoryArea.values();
-        TP_SetupDataUtilsTest.setMapByName(mHotelTerritoryArea, mHotelTerritoryArea.values());
+        // Insert Areas
+        update mHotelTerritoryArea.values();
+        mHotelTerritoryArea = TP_SetupDataUtilsTest.setMapByName(mHotelTerritoryArea, mHotelTerritoryArea.values());
+        // Set Area__c on Continent with real Ids, then update Continents
         TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryArea.values(), mHotelTerritoryContinent.values(), 'Area__c');
-		insert mHotelTerritoryContinent.values();
-        TP_SetupDataUtilsTest.setMapByName(mHotelTerritoryContinent, mHotelTerritoryContinent.values());
+		update mHotelTerritoryContinent.values();
+        mHotelTerritoryContinent = TP_SetupDataUtilsTest.setMapByName(mHotelTerritoryContinent, mHotelTerritoryContinent.values());
+        // Set lookups for Zone, then update
         TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryArea.values(), mHotelTerritoryZone.values(), 'Area__c');
         TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryContinent.values(), mHotelTerritoryZone.values(), 'Continent__c');
-		insert mHotelTerritoryZone.values();
-        TP_SetupDataUtilsTest.setMapByName(mHotelTerritoryZone, mHotelTerritoryZone.values());
+		update mHotelTerritoryZone.values();
+        mHotelTerritoryZone = TP_SetupDataUtilsTest.setMapByName(mHotelTerritoryZone, mHotelTerritoryZone.values());
+        // Set lookups for Subzone, then update
         TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryArea.values(), mHotelTerritorySubzone.values(), 'Area__c');
         TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryContinent.values(), mHotelTerritorySubzone.values(), 'Continent__c');
         TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryZone.values(), mHotelTerritorySubzone.values(), 'Zone__c');
-		insert mHotelTerritorySubzone.values();
-        TP_SetupDataUtilsTest.setMapByName(mHotelTerritorySubzone, mHotelTerritorySubzone.values());
+		update mHotelTerritorySubzone.values();
+        mHotelTerritorySubzone = TP_SetupDataUtilsTest.setMapByName(mHotelTerritorySubzone, mHotelTerritorySubzone.values());
+        // Set lookups for Hotel, then update
         TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryArea.values(), mHotelTerritoryHotel.values(), 'Area__c');
         TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryContinent.values(), mHotelTerritoryHotel.values(), 'Continent__c');
         TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryZone.values(), mHotelTerritoryHotel.values(), 'Zone__c');
         TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritorySubzone.values(), mHotelTerritoryHotel.values(), 'Subzone__c');
-		insert mHotelTerritoryHotel.values();
-        TP_SetupDataUtilsTest.setMapByName(mHotelTerritoryHotel, mHotelTerritoryHotel.values());
+		update mHotelTerritoryHotel.values();
+        mHotelTerritoryHotel = TP_SetupDataUtilsTest.setMapByName(mHotelTerritoryHotel, mHotelTerritoryHotel.values());
     }
 
     /**
@@ -659,9 +671,10 @@ public class TP_SetupDataTest {
         TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryZone.values(), mUserAuthorization.values(), 'Zone__c');
         TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritorySubzone.values(), mUserAuthorization.values(), 'Subzone__c');
         TP_SetupDataUtilsTest.genericParentChildRelationship(mHotelTerritoryHotel.values(), mUserAuthorization.values(), 'Hotel__c');
+        mUserAuthorization = TP_SetupDataUtilsTest.setMapByName(mUserAuthorization, mUserAuthorization.values());
         lUserAuthorizationToInsert.addAll((List<User_authorization__c>)mUserAuthorization.values());
 		for (User_authorization__c currentAuthorization : lUserAuthorizationToInsert) currentAuthorization.User__c = UserInfo.getUserId();
-        // insert lUserAuthorizationToInsert;
+        insert lUserAuthorizationToInsert;
     }
 
     /**
