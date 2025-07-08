@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 19-06-2025
+ * @last modified on  : 08-07-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 public class RateLineSelector {
@@ -38,7 +38,7 @@ public class RateLineSelector {
                 Product__r.ApplicationType__c,
                 Product__r.Base__c,
                 (
-                    SELECT Id, RateLine__c, Period__r.StartDate__c, Period__r.EndDate__c, Period__r.Type__c, TotalPrice__c
+                    SELECT Id, RateLine__c, Period__r.StartDate__c, Period__r.EndDate__c, Period__r.Type__c, TotalPrice__c, CurrencyIsoCode
                     FROM Rates__r
                 )
             FROM RateLine__c
@@ -86,7 +86,7 @@ public class RateLineSelector {
                 Observations__c,
                 RelativeRoom__c,
                 (
-                    SELECT Id, RateLine__c, Period__r.StartDate__c, Period__r.EndDate__c, Period__r.Type__c, TotalPrice__c
+                    SELECT Id, RateLine__c, Period__r.StartDate__c, Period__r.EndDate__c, Period__r.Type__c, TotalPrice__c, CurrencyIsoCode
                     FROM Rates__r
                 )
             FROM RateLine__c
