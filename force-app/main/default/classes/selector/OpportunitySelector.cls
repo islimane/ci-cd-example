@@ -2,28 +2,45 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-16-2025
+ * @last modified on  : 06-24-2025
  * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
 **/
 public with sharing class OpportunitySelector {
 
 	/**
-    * @description Get a map of opportunity records type ids by ids
+    * @description Get a list of opportunities by external ids
     * @author Inetum Team <alvaro.marin@inetum.com>
-    * @param sOpportunityIds Opportunity ids
-    * @return Map<Id, Id>
+    * @param sAccountIds Account ids
+    * @return Map<Id, Account>
     **/
-	public static Map<Id, Id> getOpportunityRTIdById(Set<Id> sOpportunityIds) {
-        Map<Id, Id> mOpportunityRTIdById = new Map<Id, Id>();
+	public static Map<String, Opportunity> getOpportunityIdBySCExternalId(Set<String> sOpportunityExternalIds) {
+        Map<String, Opportunity> mOpportunityBySCExternalId = new Map<String, Opportunity>();
 		for (Opportunity opp : [
 			SELECT
                 Id,
-                RecordTypeId
+                SalesCatering_External_ID__c,
+                Name,
+                StageName,
+                AccountId,
+                EventType__c,
+                PAXNoGroup__c,
+                CurrencyISOCode,
+                EventStartDate__c,
+                EventEndDate__c,
+                BlockingDate__c,
+                Reason__c,
+                Pricebook2Id,
+                Hotel__c,
+                (SELECT Id FROM Quotes ORDER BY CreatedDate DESC LIMIT 1),
+                (SELECT Id, Opportunity__r.SalesCatering_External_ID__c, Hotel__r.ID_PMS__c FROM Opportunity_Hotels__r),
+                (SELECT Id, Opportunity__r.SalesCatering_External_ID__c, /*Account__r.Account_External_ID__c, */Rol__c FROM Opportunity_Accounts__r)
             FROM Opportunity
-            WHERE Id IN :sOpportunityIds
+            WHERE SalesCatering_External_ID__c IN :sOpportunityExternalIds
 		]) {
-            mOpportunityRTIdById.put(opp.Id, opp.RecordTypeId);
+            if (String.isNotBlank(opp.SalesCatering_External_ID__c)) {
+                mOpportunityBySCExternalId.put(opp.SalesCatering_External_ID__c, opp);
+            }
         }
-        return mOpportunityRTIdById;
+        return mOpportunityBySCExternalId;
     }
 }
