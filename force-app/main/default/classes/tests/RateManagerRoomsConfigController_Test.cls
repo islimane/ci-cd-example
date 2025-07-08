@@ -2,8 +2,8 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 08-04-2025
- * @last modified by  : alberto.martinez-lopez@inetum.com
+ * @last modified on  : 08-07-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 @isTest
 public class RateManagerRoomsConfigController_Test implements TP_ExecutableInterface {
@@ -32,10 +32,10 @@ public class RateManagerRoomsConfigController_Test implements TP_ExecutableInter
 
         // Verify the returned data structure
         Object responseData = response.getData();
-        Assert.isInstanceOfType(responseData, RateManagerModel.RateLineDataTableWp.class,
-            'Response data should be of type RateLineDataTableWp');
+        Assert.isInstanceOfType(responseData, RateManagerModel.RateLineDataTableByConfigurationModeWp.class,
+            'Response data should be of type RateLineDataTableByConfigurationModeWp');
 
-        RateManagerModel.RateLineDataTableWp dataTable = (RateManagerModel.RateLineDataTableWp)responseData;
+        RateManagerModel.RateLineDataTableByConfigurationModeWp dataTable = (RateManagerModel.RateLineDataTableByConfigurationModeWp)responseData;
         Assert.isNotNull(dataTable.filters, 'Filters should not be null');
         Assert.isNotNull(dataTable.data, 'Data should not be null');
         Assert.isTrue(dataTable.filters.size() > 0, 'Filters should contain elements');
@@ -79,14 +79,14 @@ public class RateManagerRoomsConfigController_Test implements TP_ExecutableInter
         Assert.isTrue(initResponse.getSuccess(), 'Init response should be successful');
         Assert.isNotNull(initResponse.getData(), 'Init response should contain data');
 
-        RateManagerModel.RateLineDataTableWp filterWp = (RateManagerModel.RateLineDataTableWp)JSON.deserialize(
+        RateManagerModel.RateLineDataTableByConfigurationModeWp filterWp = (RateManagerModel.RateLineDataTableByConfigurationModeWp)JSON.deserialize(
             (String)JSON.serialize(initResponse.getData()),
-            RateManagerModel.RateLineDataTableWp.class
+            RateManagerModel.RateLineDataTableByConfigurationModeWp.class
         );
         Assert.isNotNull(filterWp.data, 'Deserialized data should not be null');
 
         List<RateManagerModel.RatePrice> ratePrices = new List<RateManagerModel.RatePrice>();
-        List<RateManagerModel.RateLine> rateLines = filterWp.data;
+        List<RateManagerModel.RateLine> rateLines = filterWp.data.values()[0];
         Assert.isTrue(rateLines.size() > 0, 'Rate lines should not be empty');
 
         for(RateManagerModel.RateLine rateLine : rateLines){
