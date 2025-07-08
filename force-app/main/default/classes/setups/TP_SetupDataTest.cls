@@ -347,7 +347,8 @@ public class TP_SetupDataTest {
             Name = 'Default'+batteryName,
             AccountId = account?.Id,
 			StageName = GlobalConstants.OPPORTUNITY_STAGE_ABIERTO,
-			CloseDate = Date.today().addYears(1)
+			CloseDate = Date.today().addYears(1),
+            SalesCatering_External_ID__c = 'ExternalId'+batteryName
         );
         mOpportunity = TP_SetupDataUtilsTest.setMapByName(mOpportunity, new List<sObject>{opportunity});
         return opportunity;

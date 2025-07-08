@@ -152,4 +152,14 @@ public with sharing class RateManagementExecutor_Test {
     static void RateLineManager_Test(){
         RateLineManager_Test.testAll();
     }
+
+    @IsTest
+    static void WeekdaySetSelector_Test(){
+        WeekdaySetSelector_Test.testAll();
+    }
+
+    @IsTest
+    static void OpportunitySelector_Test(){
+        OpportunitySelector_Test.testAll();
+    }
 }
