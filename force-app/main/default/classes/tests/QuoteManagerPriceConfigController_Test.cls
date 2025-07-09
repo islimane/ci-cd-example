@@ -21,6 +21,13 @@ public with sharing class QuoteManagerPriceConfigController_Test {
      ***************************************/
 
     @isTest
+    public static void initMethodFailTest() {
+        Test.startTest();
+        initMethodFail();
+        Test.stopTest();
+    }
+
+    @isTest
     public static void initMethodTest() {
         Test.startTest();
         initMethod();
@@ -55,6 +62,13 @@ public with sharing class QuoteManagerPriceConfigController_Test {
         Test.stopTest();
     }
 
+    @isTest
+    public static void getWeekDaySetNoWeekDaysTest() {
+        Test.startTest();
+        getWeekDaySetNoWeekDays();
+        Test.stopTest();
+    }
+
     /***************************************
      *           Operation Methods         *
      ***************************************/
@@ -67,6 +81,16 @@ public with sharing class QuoteManagerPriceConfigController_Test {
         };
         Map<String, Object> mResult = (Map<String, Object>) JSON.deserializeUntyped(DC_ControllerExecuter.getControllerData(params));
         Assert.areEqual(true, (Boolean) mResult.get('success'), 'initMethod failed without returning the correct value.');
+    }
+
+    private static void initMethodFail() {
+        Map<String, Object> params = new Map<String, Object>{
+            'controller' => 'QuoteManagerPriceConfigController',
+            'quoteId' => null,
+            'weekdaySetId' => TP_SetupSelectorTest.getWeekDaySets()[0].Id
+        };
+        Map<String, Object> mResult = (Map<String, Object>) JSON.deserializeUntyped(DC_ControllerExecuter.getControllerData(params));
+        Assert.areEqual(false, (Boolean) mResult.get('success'), 'initMethodFail did not fail as expected.');
     }
 
     private static void executeMethod() {
@@ -119,6 +143,24 @@ public with sharing class QuoteManagerPriceConfigController_Test {
         System.assert(true, 'Exception have not been thown');
     }
 
+    private static void getWeekDaySetNoWeekDays() {
+        Boolean exceptionHandled = false;
+        Quote newQuote = new Quote(
+            Name = 'TestingQuote',
+            StartDate__c = Date.today().addDays(-7),
+            EndDate__c = Date.today().addDays(60),
+            Hotel__c = TP_SetupSelectorTest.getHotel(1, 'TEST').Id,
+            OpportunityId = TP_SetupSelectorTest.getOpportunity(1, 'TEST').Id,
+            RateType__c = 'FIT'
+        );
+        try {
+            QuoteManagerPriceConfigController.getWeekDaySet(null);
+        } catch (AuraHandledException ex) {
+            exceptionHandled = false;
+        }
+        System.assert(true, 'Exception have not been thown');
+    }
+
     /***************************************
      *           TestAll Method            *
      ***************************************/
@@ -126,10 +168,12 @@ public with sharing class QuoteManagerPriceConfigController_Test {
     public static void testAll() {
         Test.startTest();
         initMethod();
+        initMethodFail();
         executeMethod();
         getWeekDaySet();
         getWeekDaySetNoQuote();
         getWeekDaySetNoRecord();
+        getWeekDaySetNoWeekDays();
         Test.stopTest();
     }
 }
