@@ -167,4 +167,9 @@ public with sharing class RateManagementExecutor_Test {
     static void QuoteManagerPriceConfigController_Test(){
         QuoteManagerPriceConfigController_Test.testAll();
     }
+
+    @IsTest
+    static void RatePriceManager_Test(){
+        RatePriceManager_Test.testAll();
+    }
 }
