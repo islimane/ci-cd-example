@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  * @group             :
- * @last modified on  : 08-07-2025
+ * @last modified on  : 09-07-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 @isTest
@@ -19,6 +19,13 @@ public with sharing class OpportunitySelector_Test {
      *           Test Methods              *
      ***************************************/
     @isTest
+    public static void getOpportunityRTIdByIdTest() {
+        Test.startTest();
+        getOpportunityRTIdById();
+        Test.stopTest();
+    }
+
+    @isTest
     public static void getOpportunityIdBySCExternalIdTest() {
         Test.startTest();
         getOpportunityIdBySCExternalId();
@@ -28,8 +35,15 @@ public with sharing class OpportunitySelector_Test {
     /***************************************
      *           Operation Methods         *
      ***************************************/
+    private static void getOpportunityRTIdById() {
+        Map<Id, Id> mResult = OpportunitySelector.getOpportunityRTIdById(
+            new Set<Id>{ TP_SetupSelectorTest.getOpportunity(1, 'TEST').Id }
+        );
+        Assert.isTrue(!mResult.isEmpty(), 'getOpportunityRTIdById failed');
+    }
+
     private static void getOpportunityIdBySCExternalId() {
-        Map<String, Opportunity> mResult = OpportunitySelector.getOpportunityIdBySCExternalId(new Set<String>{ 'ExternalId__TEST1' });
+        Map<String, Opportunity> mResult = OpportunitySelector.getOpportunityIdBySCExternalId(new Set<String>{ 'ExternalId_TEST1' });
         Assert.isTrue(!mResult.isEmpty(), 'getOpportunityIdBySCExternalId failed');
     }
 
@@ -38,6 +52,7 @@ public with sharing class OpportunitySelector_Test {
      ***************************************/
     public static void testAll() {
         Test.startTest();
+        getOpportunityRTIdById();
         getOpportunityIdBySCExternalId();
         Test.stopTest();
     }
