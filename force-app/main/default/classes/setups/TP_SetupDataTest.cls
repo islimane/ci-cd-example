@@ -2,7 +2,7 @@
  * @description       : Unit Test Class for Setup Data Methods
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 08-07-2025
+ * @last modified on  : 09-07-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 @isTest
@@ -726,6 +726,7 @@ public class TP_SetupDataTest {
         TP_SetupDataUtilsTest.genericParentChildRelationship(mProduct2Supplement.values(), mRateLineSupplement.values(), 'Product__c');
         TP_SetupDataUtilsTest.genericParentChildRelationship(mHotel.values(), mRateLineSupplement.values(), 'Hotel__c');
         TP_SetupDataUtilsTest.genericParentChildRelationship(mQuote.values(), mRateLineRoom.values(), 'Quote__c');
+        RateLine__c rLine = (RateLine__c) mRateLineRoom.values()[0];
         lRateLineToInsert.addAll((List<RateLine__c>) mRateLineRoom.values());
         lRateLineToInsert.addAll((List<RateLine__c>) mRateLineSupplement.values());
         insert lRateLineToInsert;

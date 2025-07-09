@@ -2,7 +2,7 @@
  * @description       : Provides utility methods to retrieve test records based on dynamic naming conventions.
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 07-07-2025
+ * @last modified on  : 09-07-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 
@@ -189,5 +189,13 @@ public with sharing class TP_SetupSelectorTest {
      */
     public static List<Quote> getQuotes(){
         return [SELECT Id, Name, Hotel__c, OpportunityId FROM Quote LIMIT 5];
+    }
+
+    /**
+     * Retrieves a list of WeekDaySet records based on the DB.
+     * @return Period__c.
+     */
+    public static List<WeekdaySet__c> getWeekDaySets(){
+        return [SELECT Id, Quote__c, RatePlanner__c, Rate__c FROM WeekdaySet__c LIMIT 5];
     }
 }
