@@ -2,8 +2,8 @@
  * @description       : OpportunityHotelTrigger Test
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             : Test Class
- * @last modified on  : 06-03-2025
- * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
+ * @last modified on  : 09-07-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 @isTest
 public with sharing class OpportunityHotelTrigger_Test implements TP_ExecutableInterface{
@@ -40,16 +40,24 @@ public with sharing class OpportunityHotelTrigger_Test implements TP_ExecutableI
     ***************************************/
 
     private static void beforeInsert_Method(){
-		Opportunity_Hotel__c oppHotel = TP_SetupSelectorTest.getOpportunityHotel(1, 'TEST');
-		Opportunity_Hotel__c newOppHotel = oppHotel.clone(false, false, false, false);
+		Opportunity_Hotel__c newOppHotel = new Opportunity_Hotel__c(
+			Name = 'DefaultTestOppHotel',
+            Opportunity__c = TP_SetupSelectorTest.getOpportunity(1, 'TEST').Id,
+            Hotel__c = TP_SetupSelectorTest.getHotel(1, 'TEST').Id
+        );
 
-		delete oppHotel;
         Database.SaveResult results = Database.insert(newOppHotel);
         Assert.areEqual(true, results.isSuccess(), 'Opportunity_Hotel__c beforeInsert failed');
     }
 
     private static void beforeDelete_Method(){
-        Database.DeleteResult results = Database.delete(TP_SetupSelectorTest.getOpportunityHotel(1, 'TEST'));
+        Opportunity_Hotel__c newOppHotel = new Opportunity_Hotel__c(
+			Name = 'DefaultTestOppHotel',
+            Opportunity__c = TP_SetupSelectorTest.getOpportunity(1, 'TEST').Id,
+            Hotel__c = TP_SetupSelectorTest.getHotel(1, 'TEST').Id
+        );
+        insert newOppHotel;
+        Database.DeleteResult results = Database.delete(newOppHotel);
         Assert.areEqual(true, results.isSuccess(), 'Opportunity_Hotel__c beforeDelete failed');
     }
 
