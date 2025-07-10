@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>GlobalConstants</members>
+        <members>ITM_APIWrappers</members>
+        <members>ITM_SyncErrorsAPI</members>
+        <members>ITM_SyncErrorsAPIHelper</members>
+        <members>IntegrationDTO</members>
+        <members>AccountSyncQueueable</members>
+        <members>ResponseAccountRequestSelector</members>
+        <members>AccountSelector</members>
+        <members>AccountSelector</members>
+        <members>AccountSyncService</members>
+        <members>AccountRequestTriggerHandler</members>
+        <members>AccountRequestTriggerHelper</members>
+        <members>OpportunityHotelTriggerHelper</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>AccountRequestTrigger</members>
+        <name>ApexTrigger</name>
+    </types>
+    <version>62.0</version>
+</Package>
