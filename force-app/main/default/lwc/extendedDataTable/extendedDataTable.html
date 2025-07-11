@@ -1,25 +1,46 @@
+<!--
+  @description       : 
+  @author            : alberto.martinez-lopez@inetum.com
+  @group             : 
+  @last modified on  : 08-04-2025
+  @last modified by  : alberto.martinez-lopez@inetum.com
+-->
 <template>
     <div class="table-container">
         <!-- Fixed Columns Table -->
-        <div class="fixed-table">
-            <lightning-datatable
-                key-field="id"
-                data={fixedTableData}
-                columns={fixedColumns}
-                resize-column-disabled="true"
-                lwc:ref="fixedTable"
-            ></lightning-datatable>
+        <div class="fixed-table hide-row-number-column-container">
+            <template if:false={fixedColumnsIsEmpty}>
+                <c-data-table-with-custom-types
+                    data-id="fixedTable"
+                    class="hide-row-number-column"
+                    key-field="id"
+                    onsave={handleSave}
+                    data={fixedTableData}
+                    columns={fixedColumns}
+                    resize-column-disabled="true"
+                    lwc:ref="fixedTable"
+                    oninnerrowaction={handleRowAction}
+                    draft-values={draftValues}
+                ></c-data-table-with-custom-types>
+            </template>
         </div>
 
         <!-- Scrollable Columns Table -->
-        <div class="scrollable-table">
-            <lightning-datatable
-                key-field="id"
-                data={scrollableTableData}
-                columns={scrollableColumns}
-                hide-checkbox-column
-                lwc:ref="scrollableTable"
+        <div class="scrollable-table hide-row-number-column-container">
+            <template if:false={scrollableColumnsIsEmpty}>
+                <lightning-datatable
+                    data-id="scrollableTable"
+                    class="hide-row-number-column"
+                    key-field="id"
+                    onsave={handleSave}
+                    data={scrollableTableData}
+                    columns={scrollableColumns}
+                    hide-checkbox-column
+                    wrap-table-header="all"
+                    lwc:ref="scrollableTable"
+                    draft-values={draftValues}
             ></lightning-datatable>
+            </template>
         </div>
     </div>
 </template>

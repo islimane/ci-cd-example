@@ -1,0 +1,10 @@
+:host .main-container{
+    background-color: #f4f4f4;
+    border-radius: 1rem;
+}
+
+:host .full-of-periods-msg {
+    font-size: 11px;
+    font-style: italic;
+    color: darkred;
+}

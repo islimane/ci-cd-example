@@ -1,0 +1,26 @@
+<!--
+  @description       :
+  @author            : Inetum Team <sara.gerico@inetum.com>
+  @group             :
+  @last modified on  : 17-03-2025
+  @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+-->
+<template>
+    <div class="slds-grid">
+        <div class="slds-col slds-size_1-of-1">
+            <template if:true={isCombobox}>
+                <lightning-combobox
+                    name={filter.fieldApiName}
+                    label={filter.label}
+                    options={comboboxOptions}
+                    onchange={handleChange}
+                    variant="label-inline"
+                ></lightning-combobox>
+            </template>
+            <template if:false={isCombobox}>
+                <lightning-input name={filter.fieldApiName} type={filter.type} label={filter.label} onchange={handleChange} checked={initValue} min={filter.min} max={filter.max} variant="label-inline"></lightning-input>
+            </template>
+        </div>
+    </div>
+
+</template>

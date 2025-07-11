@@ -1,0 +1,19 @@
+<!--
+  @description       : Enables adding Supplements and Discounts to a Rate Planner.
+  @author            : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
+  @group             :
+  @last modified on  : 31-03-2025
+  @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
+-->
+<template>
+    <c-rate-manager-modal-filters
+        filters={filters}
+        onfilterlistchange={handleOnChangeFilters}
+    ></c-rate-manager-modal-filters>
+
+    <lightning-datatable
+        key-field="id"
+        columns={columns}
+        data={filteredData}
+    ></lightning-datatable>
+</template>

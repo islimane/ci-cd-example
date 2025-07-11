@@ -1,0 +1,30 @@
+<!--
+  @description       :
+  @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
+  @group             :
+  @last modified on  : 02-04-2025
+  @last modified by  : alberto.martinez-lopez@inetum.com
+-->
+<template>
+    <div if:false={hideFilters} class="sdt-manager-filter-container slds-grid slds-p-horizontal_small slds-p-bottom_xx-small slds-p-top_small">
+
+        <div class="dt-manager-filter-container slds-col slds-size_1-of-1 slds-medium-size_2-of-3 slds-p-around_small">
+            <c-rate-manager-rate-config-filters filters={filters} onfilterlistchange={handleOnChangeFilters}></c-rate-manager-rate-config-filters>
+        </div>
+
+        <div class="dt-manager-filter-container slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-p-around_x-small">
+            <c-rate-manager-rate-bulk-actions></c-rate-manager-rate-bulk-actions>
+        </div>
+
+    </div>
+    <div class="dt-manager-table-container slds-p-horizontal_small slds-p-bottom_xx-small slds-p-top_small">
+        <c-extended-data-table
+            columns={columns}
+            table-data={filteredData}
+            fixed-column-count={fixedColumnCount}
+        ></c-extended-data-table>
+    </div>
+    <div class="dt-manager-action-container slds-p-horizontal_small slds-p-vertical_xx-small">
+        <slot name="datatable-action-buttons"></slot>
+    </div>
+</template>

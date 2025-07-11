@@ -1,0 +1,33 @@
+<!--
+  @description       : 
+  @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
+  @group             : 
+  @last modified on  : 28-02-2025
+  @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+-->
+<template>
+    <div class="slds-p-horizontal_small">
+        <lightning-card hide-header>
+            <lightning-record-view-form
+                record-id={recordId}
+                object-api-name="Period__c"
+                density="Comfy">
+                <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                    <div class="slds-col slds-size_1-of-4 slds-p-horizontal_small">
+                        <lightning-output-field field-name="StartDate__c"></lightning-output-field>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4 slds-p-horizontal_small">
+                        <lightning-output-field field-name="EndDate__c"></lightning-output-field>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4 slds-p-horizontal_small">
+                        <lightning-output-field field-name="Type__c"></lightning-output-field>
+                    </div>
+                    <div class="slds-col slds-size-1-of-4 slds-p-horizontal_small slds-grid slds-grid_align-end">
+                        <lightning-button-icon class="slds-col slds-p-horizontal_xx-small" icon-name="utility:edit" onclick={handleEdit}></lightning-button-icon>
+                        <lightning-button-icon class="slds-col slds-p-horizontal_xx-small" icon-name="utility:delete" onclick={handleDelete}></lightning-button-icon>
+                    </div>
+                </div>
+            </lightning-record-view-form>
+        </lightning-card>
+    </div>
+</template>
