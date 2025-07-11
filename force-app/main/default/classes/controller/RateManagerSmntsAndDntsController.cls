@@ -2,8 +2,8 @@
  * @description       :
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             :
- * @last modified on  : 08-04-2025
- * @last modified by  : alberto.martinez-lopez@inetum.com
+ * @last modified on  : 16-04-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 public with sharing class RateManagerSmntsAndDntsController extends DC_DynamicController {
     /**
@@ -54,17 +54,20 @@ public with sharing class RateManagerSmntsAndDntsController extends DC_DynamicCo
         Map<String, RateManagerModel.Option> mApplicableOptions = new Map<String, RateManagerModel.Option>{'All' => new RateManagerModel.Option('All', '')};
         Map<String, RateManagerModel.Option> mApplicationTypeOptions = new Map<String, RateManagerModel.Option>{'All' => new RateManagerModel.Option('All', '')};
         Map<String, RateManagerModel.Option> mTypeOptions = new Map<String, RateManagerModel.Option>{'All' => new RateManagerModel.Option('All', '')};
+        Map<String, String> mTypePicklist = RateManagerModel.getPicklistMap(Product2.fields.Regimen_Type__c);
+        Map<String, String> mApplTypePicklist = RateManagerModel.getPicklistMap(Product2.fields.ApplicationType__c);
+        Map<String, String> mApplicablePicklist = RateManagerModel.getPicklistMap(Product2.fields.Applicable__c);
 
         for (RateLine__c rateLine : data) {
             Product2 product = rateLine.getSObject('Product__r') != null ? (Product2)rateLine.getSObject('Product__r') : new Product2();
             if (!String.isEmpty(product.Regimen_Type__c) && !mTypeOptions.containsKey(product.Regimen_Type__c)) {
-                mTypeOptions.put(product.Regimen_Type__c, new RateManagerModel.Option(product.Regimen_Type__c, product.Regimen_Type__c));
+                mTypeOptions.put(product.Regimen_Type__c, new RateManagerModel.Option(mTypePicklist.get(product.Regimen_Type__c), product.Regimen_Type__c));
             }
             if(!String.isEmpty(product.ApplicationType__c) && !mApplicationTypeOptions.containsKey(product.ApplicationType__c)) {
-                mApplicationTypeOptions.put(product.ApplicationType__c, new RateManagerModel.Option(product.ApplicationType__c, product.ApplicationType__c));
+                mApplicationTypeOptions.put(product.ApplicationType__c, new RateManagerModel.Option(mApplTypePicklist.get(product.ApplicationType__c), product.ApplicationType__c));
             }
             if (!String.isEmpty(product.Applicable__c) && !mApplicableOptions.containsKey(product.Applicable__c)) {
-                mApplicableOptions.put(product.Applicable__c, new RateManagerModel.Option(product.Applicable__c, product.Applicable__c));
+                mApplicableOptions.put(product.Applicable__c, new RateManagerModel.Option(mApplicablePicklist.get(product.Applicable__c), product.Applicable__c));
             }
             wrappedData.add(new RateManagerModel.RateLine(rateLine, lPeriods));
         }
@@ -78,14 +81,13 @@ public with sharing class RateManagerSmntsAndDntsController extends DC_DynamicCo
         return new DC_ResponseWr(true, new RateManagerModel.RateLineDataTableWp(filterWp, wrappedData));
     }
 
-    /** 
+    /**
     * @description
     * @author Inetum Team <alberto.martinez-lopez@inetum.com> | 28-02-2025
     * @param params
     * @return DC_ResponseWr
-    **/ 
+    **/
     private DC_ResponseWr saveRatePrices(Map<String, Object> params){
-        
         List<RateManagerModel.RatePrice> lWrappedData = (List<RateManagerModel.RatePrice>)JSON.deserialize((String)params.get('ratePrices'), List<RateManagerModel.RatePrice>.class);
         Id ratePlannerId = (Id)params.get('ratePlannerId');
 
@@ -95,14 +97,13 @@ public with sharing class RateManagerSmntsAndDntsController extends DC_DynamicCo
     }
 
 
-    /** 
+    /**
     * @description
     * @author Inetum Team <alberto.martinez-lopez@inetum.com> | 28-02-2025
     * @param params
     * @return DC_ResponseWr
-    **/ 
+    **/
     private DC_ResponseWr saveRateLines(Map<String, Object> params){
-        
         List<RateManagerModel.RateLine> lWrappedData = (List<RateManagerModel.RateLine>)JSON.deserialize((String)params.get('rateLines'), List<RateManagerModel.RateLine>.class);
 
         RateLineManager.updateRateLinesEditedFromRatePlanner(lWrappedData);

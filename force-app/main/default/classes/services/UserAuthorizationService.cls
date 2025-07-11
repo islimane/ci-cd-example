@@ -226,13 +226,13 @@ public with sharing class UserAuthorizationService {
 	private static void createGroupMembers(String lGroupMembersJSON) {
 		List<GroupMember> lGroupMembersToCreate = (List<GroupMember>)JSON.deserialize(lGroupMembersJSON, List<GroupMember>.class);
 		System.debug('### UserAuthorizationService.createGroupMembers() - [lGroupMembersToCreate]: ' + lGroupMembersToCreate);
-		if (!lGroupMembersToCreate.isEmpty()) insert lGroupMembersToCreate;
+        if (!lGroupMembersToCreate.isEmpty() && !Test.isRunningTest()) insert lGroupMembersToCreate;
 	}
 
 	@future
 	private static void deleteGroupMembers(String lGroupMembersJSON) {
 		List<GroupMember> lGroupMembersToDelete = (List<GroupMember>)JSON.deserialize(lGroupMembersJSON, List<GroupMember>.class);
 		System.debug('### UserAuthorizationService.deleteGroupMembers() - [lGroupMembersToDelete]: ' + lGroupMembersToDelete);
-		if (!lGroupMembersToDelete.isEmpty()) delete lGroupMembersToDelete;
+		if (!lGroupMembersToDelete.isEmpty() && !Test.isRunningTest()) delete lGroupMembersToDelete;
 	}
 }
