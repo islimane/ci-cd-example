@@ -2,7 +2,7 @@
  * @description       : RateLineSelector Test
  * @author            : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  * @group             : Test Class
- * @last modified on  : 26-03-2025
+ * @last modified on  : 12-06-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 @isTest
@@ -39,6 +39,13 @@ public with sharing class RateLineSelector_Test implements TP_ExecutableInterfac
         Test.stopTest();
     }
 
+    @isTest
+    public static void getRatesLinesByQuoteIdTest() {
+        Test.startTest();
+        getRatesLinesByQuoteId();
+        Test.stopTest();
+    }
+
     /***************************************
      *           Operation Methods         *
      ***************************************/
@@ -52,9 +59,7 @@ public with sharing class RateLineSelector_Test implements TP_ExecutableInterfac
     }
 
     private static void getRatesLinesById() {
-        List<RateLine__c> lResult = RateLineSelector.getRatesLinesById(
-            new Set<Id>{ TP_SetupSelectorTest.getRateLines()[0]?.Id }
-        );
+        List<RateLine__c> lResult = RateLineSelector.getRatesLinesById(new Set<Id>{ TP_SetupSelectorTest.getRateLines()[0]?.Id });
         Assert.isTrue(!lResult.isEmpty(), 'getRatesLinesById failed');
     }
 
@@ -65,6 +70,14 @@ public with sharing class RateLineSelector_Test implements TP_ExecutableInterfac
         Assert.isTrue(!lResult.isEmpty(), 'getRatesLinesByRatePlannerId failed');
     }
 
+    private static void getRatesLinesByQuoteId() {
+        List<RateLine__c> lResult = RateLineSelector.getRLByQuoteIdAndWeekDaySet(
+            new Set<Id>{ TP_SetupSelectorTest.getQuotes()[0].Id },
+            null
+        );
+        Assert.isTrue(!lResult.isEmpty(), 'getRLByQuoteIdAndWeekDaySet failed');
+    }
+
     /***************************************
      *           TestAll Method            *
      ***************************************/
@@ -73,6 +86,7 @@ public with sharing class RateLineSelector_Test implements TP_ExecutableInterfac
         getRateLinesByRateIdsAndHotelIdAndProductFamily();
         getRatesLinesById();
         getRatesLinesByRatePlannerId();
+        getRatesLinesByQuoteId();
         Test.stopTest();
     }
 }

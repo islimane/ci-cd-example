@@ -1,0 +1,11 @@
+:host .accordion-container{
+    background-color: #f4f4f4;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+}
+
+.content-modal {
+    display: block;
+    max-width: 100%;
+    min-height: 65vh;
+}

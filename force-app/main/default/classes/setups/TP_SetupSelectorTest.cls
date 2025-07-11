@@ -2,8 +2,8 @@
  * @description       : Provides utility methods to retrieve test records based on dynamic naming conventions.
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 04-11-2025
- * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
+ * @last modified on  : 09-07-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 
 @isTest
@@ -123,8 +123,48 @@ public with sharing class TP_SetupSelectorTest {
      * Retrieves a list of RateLine__c records based on the DB.
      * @return List<RateLine__c>.
      */
-    public static List<RateLine__c> getRateLines(){
-        return [SELECT Id, Name, Rate__c, Hotel__c, Product__r.Family FROM RateLine__c LIMIT 5];
+    public static List<RateLine__c> getRateLines() {
+        return [
+            SELECT
+                Id,
+                Product__c,
+                ProductName__c,
+                Applicable__c,
+                Regime__c,
+                Product__r.Name,
+                Product__r.Family,
+                Product__r.Description,
+                Product__r.Room__c,
+                Product__r.Characteristic__c,
+                Product__r.Regimen_Type__c,
+                Product__r.Applicable__c,
+                Product__r.ApplicationType__c,
+                Product__r.Base__c,
+                Room__c,
+                Hotel__c,
+                Rate__c,
+                RatePlanner__c,
+                Description__c,
+                Opportunity__c,
+                Observations__c,
+                RelativeRoom__c,
+                (
+                    SELECT
+                        Id,
+                        RateLine__c,
+                        Period__r.Id,
+                        Period__r.StartDate__c,
+                        Period__r.EndDate__c,
+                        Period__r.Type__c,
+                        TotalPrice__c,
+                        Rate__c,
+                        Product__c,
+                        Quota__c
+                    FROM Rates__r
+                )
+            FROM RateLine__c
+            LIMIT 5
+        ];
     }
 
     /**
@@ -140,6 +180,22 @@ public with sharing class TP_SetupSelectorTest {
      * @return Period__c.
      */
     public static Period__c getPeriodByType(Id recordTypeId){
-        return [SELECT Id, Name, RatePlanner__c FROM Period__c WHERE RecordTypeId = :recordTypeId LIMIT 1];
+        return [SELECT Id, Name, RatePlanner__c, StartDate__c, EndDate__c, Type__c FROM Period__c WHERE RecordTypeId = :recordTypeId LIMIT 1];
+    }
+
+    /**
+     * Retrieves a list of Quote records based on the DB.
+     * @return Period__c.
+     */
+    public static List<Quote> getQuotes(){
+        return [SELECT Id, Name, Hotel__c, OpportunityId FROM Quote LIMIT 5];
+    }
+
+    /**
+     * Retrieves a list of WeekDaySet records based on the DB.
+     * @return Period__c.
+     */
+    public static List<WeekdaySet__c> getWeekDaySets(){
+        return [SELECT Id, Quote__c, RatePlanner__c, Rate__c FROM WeekdaySet__c LIMIT 5];
     }
 }

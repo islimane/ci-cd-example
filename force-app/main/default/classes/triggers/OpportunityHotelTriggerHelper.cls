@@ -4,7 +4,12 @@
     * Created Date:    20/02/2025
     * Function:        Trigger Helper of OpportunityHotelTriggerHandler
 ----------------------------------------------------------------------------------------------------------------------------------------*/
-public with sharing class OpportunityHotelTriggerHelper extends TriggerUtils {
+public without sharing class OpportunityHotelTriggerHelper extends TriggerUtils {
+
+    private static final String DEFAULT_SHARING_ACCESS = GlobalConstants.SOBJECT_SHARE_ACCESS_LEVEL_READ;
+    private static final Map<Id, String> MAP_SHARING_ACCESS_BY_OPP_RT = new Map<Id, String>{
+        GlobalConstants.OPPORTUNITY_RT_MICE_ID => GlobalConstants.SOBJECT_SHARE_ACCESS_LEVEL_EDIT
+    };
 
 	/**
 	 * Create OppShare records based on lOpportunityHotel records
@@ -13,7 +18,7 @@ public with sharing class OpportunityHotelTriggerHelper extends TriggerUtils {
 	public static void shareOpportunityHotel(List<Opportunity_Hotel__c> lOpportunityHotel) {
 		createManualOppHotelSharing(lOpportunityHotel);
     }
-	
+
 	/**
 	 * Delete OppShare records based on lOpportunityHotel records
 	 * @param lOpportunityHotel List of opp hotel to work
@@ -29,9 +34,9 @@ public with sharing class OpportunityHotelTriggerHelper extends TriggerUtils {
 	private static void createManualOppHotelSharing(List<Opportunity_Hotel__c> lOpportunityHotel) {
 		Map<Id, List<Id>> mGroupIdByOppId = getGroupIdByOppId(lOpportunityHotel);
 		Map<Id, List<OpportunityShare>> mOpportunitiesShareByOppId = getOpportunitiesShareByOppId(lOpportunityHotel);
-		List<OpportunityShare> lOppShareToCreate = getOppShareToCreate(mGroupIdByOppId, mOpportunitiesShareByOppId);
-		
-		// TODO: mover a manager
+        Map<Id, Id> mOppRTIdByOppId = OpportunitySelector.getOpportunityRTIdById(mOpportunitiesShareByOppId.keySet());
+		List<OpportunityShare> lOppShareToCreate = getOppShareToCreate(mGroupIdByOppId, mOpportunitiesShareByOppId, mOppRTIdByOppId);
+
 		insert lOppShareToCreate;
 	}
 
@@ -39,8 +44,7 @@ public with sharing class OpportunityHotelTriggerHelper extends TriggerUtils {
 		Map<Id, List<OpportunityShare>> mOpportunitiesShareByOppId = getOpportunitiesShareByOppId(lOpportunityHotel);
 		List<OpportunityShare> lOppShareToDelete = new List<OpportunityShare>();
 		for (Id currentOppId : mOpportunitiesShareByOppId.keySet()) lOppShareToDelete.addAll(mOpportunitiesShareByOppId.get(currentOppId));
-		
-		// TODO: mover a manager
+
 		if (!lOppShareToDelete.isEmpty()) delete lOppShareToDelete;
 	}
 
@@ -76,7 +80,7 @@ public with sharing class OpportunityHotelTriggerHelper extends TriggerUtils {
 	private static Map<Id, Hotel__c> getRelatedHotels(List<Opportunity_Hotel__c> lOpportunityHotel) {
 		Set<Id> sHotelIds = new Set<Id>();
 		for (Opportunity_Hotel__c currentOppHotel : lOpportunityHotel) sHotelIds.add(currentOppHotel.Hotel__c);
-		
+
 		return HotelSelector.getHotelById(sHotelIds);
 	}
 
@@ -92,27 +96,27 @@ public with sharing class OpportunityHotelTriggerHelper extends TriggerUtils {
 		return mPublicGroupByOppId;
 	}
 
-	private static List<OpportunityShare> getOppShareToCreate(Map<Id, List<Id>> mGroupIdByOppId, Map<Id, List<OpportunityShare>> mOpportunitiesShareByOppId) {
+	private static List<OpportunityShare> getOppShareToCreate(Map<Id, List<Id>> mGroupIdByOppId, Map<Id, List<OpportunityShare>> mOpportunitiesShareByOppId, Map<Id, Id> mOppRTIdByOppId) {
 		List<OpportunityShare> lOppShareToCreate = new List<OpportunityShare>();
 		for (Id currentOppId : mGroupIdByOppId.keySet()) {
 			List<Id> lGroupIdsToAssign = mGroupIdByOppId.get(currentOppId);
 			List<OpportunityShare> lOppShareAlreadyCreated = mOpportunitiesShareByOppId.containsKey(currentOppId) ? mOpportunitiesShareByOppId.get(currentOppId) : new List<OpportunityShare>();
-			lOppShareToCreate.addAll(buildOppShareToCreate(currentOppId, lGroupIdsToAssign, lOppShareAlreadyCreated));
+			lOppShareToCreate.addAll(buildOppShareToCreate(currentOppId, lGroupIdsToAssign, lOppShareAlreadyCreated, mOppRTIdByOppId));
 		}
 		return lOppShareToCreate;
 	}
 
-	private static List<OpportunityShare> buildOppShareToCreate(Id oppId, List<Id> lGroupIdsToAssign, List<OpportunityShare> lOppShareAlreadyCreated) {
+	private static List<OpportunityShare> buildOppShareToCreate(Id oppId, List<Id> lGroupIdsToAssign, List<OpportunityShare> lOppShareAlreadyCreated, Map<Id, Id> mOppRTIdByOppId) {
 		Set<Id> sGroupIdsAlreadyCreatedForOpp = new Set<Id>();
 		for (OpportunityShare currentOppShare : lOppShareAlreadyCreated) sGroupIdsAlreadyCreatedForOpp.add(currentOppShare.UserOrGroupId);
-		
+
 		List<OpportunityShare> lOppShareToCreate = new List<OpportunityShare>();
 		for (Id currentGroupId : lGroupIdsToAssign) {
 			if (!sGroupIdsAlreadyCreatedForOpp.contains(currentGroupId)) {
 				lOppShareToCreate.add(new OpportunityShare(
 					OpportunityId = oppId,
 					UserOrGroupId = currentGroupId,
-					OpportunityAccessLevel = GlobalConstants.SOBJECT_SHARE_ACCESS_LEVEL_READ
+					OpportunityAccessLevel =  MAP_SHARING_ACCESS_BY_OPP_RT.containsKey(mOppRTIdByOppId.get(oppId)) ? MAP_SHARING_ACCESS_BY_OPP_RT.get(mOppRTIdByOppId.get(oppId)) : DEFAULT_SHARING_ACCESS
 				));
 			}
 		}

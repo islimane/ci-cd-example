@@ -2,8 +2,8 @@
  * @description       : Unified model class for Rate Manager controllers
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             :
- * @last modified on  : 09-04-2025
- * @last modified by  : alberto.martinez-lopez@inetum.com
+ * @last modified on  : 19-06-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 public with sharing class RateManagerModel {
 
@@ -51,7 +51,7 @@ public with sharing class RateManagerModel {
 
     public class RateLineDataTableByConfigurationModeWp {
         public List<FilterWp> filters = new List<FilterWp>();
-        Map<String, List<RateLine>> data = new Map<String, List<RateLine>>();
+        public Map<String, List<RateLine>> data = new Map<String, List<RateLine>>();
 
 
         public RateLineDataTableByConfigurationModeWp(List<FilterWp> filters, Map<String, List<RateLine>> data) {
@@ -65,7 +65,8 @@ public with sharing class RateManagerModel {
         public Id RateId;
         public Id HotelId;
         public Id RatePlannerId;
-        
+        public Id ProductId;
+
         String Name;
         String Characteristic;
         String Room;
@@ -74,7 +75,8 @@ public with sharing class RateManagerModel {
         String ApplicationType;
         String Observations;
         Boolean Base;
-        
+        Boolean Relative;
+
         @TestVisible
         Map<String, Period__c> mPeriodsByPeriodKey = new Map<String, Period__c>();
         @TestVisible
@@ -85,14 +87,15 @@ public with sharing class RateManagerModel {
         public RateLine(RateLine__c rateLine, List<Period__c> lPeriods) {
             this.Id = rateLine.Id;
             this.Name = rateLine.Product__r.Name;
-            this.RegimenType = rateLine.Product__r.Regimen_Type__c;
-            this.Applicable = rateLine.Product__r.Applicable__c;
+            this.RegimenType = rateLine.Regime__c;
+            this.Applicable = rateLine.Applicable__c;
             this.ApplicationType = rateLine.Product__r.ApplicationType__c;
             this.Base = rateLine.Product__r.Base__c;
             this.RateId = rateLine.Rate__c;
             this.HotelId = rateLine.Hotel__c;
             this.RatePlannerId = rateLine.RatePlanner__c;
-            
+            this.ProductId = rateLine.Product__c;
+            this.Relative = rateLine.RelativeRoom__c;
 
             // These fields might be null for some RateLine records (e.g., supplements)
             this.Characteristic = rateLine.Product__r.Characteristic__c;
@@ -109,11 +112,11 @@ public with sharing class RateManagerModel {
                 if(ratePricesByPeriodString.containsKey(periodKey)) {
                     this.ratesPrices.add(ratePricesByPeriodString.get(periodKey));
                 }else{
-                    this.ratesPrices.add(new RatePrice(periodKey, this.Id, period));
+                    this.ratesPrices.add(new RatePrice(periodKey, this.Id, this.RateId, period));
                 }
 
                 if(!this.ratePricesByPeriodString.containsKey(periodKey)){
-                    this.ratePricesByPeriodString.put(periodKey, new RatePrice(periodKey, this.Id, period));
+                    this.ratePricesByPeriodString.put(periodKey, new RatePrice(periodKey, this.Id, this.RateId, period));
                 }
             }
         }
@@ -152,19 +155,21 @@ public with sharing class RateManagerModel {
         public Id Id;
         public Id ParentPeriodId;
         public Id ParentRateLineId;
+        public Id ParentRateId;
+        public Id ParentProductId;
         Date StartDate;
         Date EndDate;
         Decimal TotalPrice;
+        Decimal Quota;
 
         //FROM EXISTING RATE PRICES
         public RatePrice(String periodKey, RatePrice__c rateP) {
-            this.periodKey = periodKey;
+            this(periodKey, rateP.RateLine__c, rateP.Period__r);
             this.Id = rateP.Id;
-            this.ParentPeriodId = rateP.Period__c;
-            this.ParentRateLineId = rateP.RateLine__c;
-            this.StartDate = rateP.Period__r.StartDate__c;
-            this.EndDate = rateP.Period__r.EndDate__c;
+            this.ParentRateId = rateP.Rate__c;
+            this.ParentProductId = rateP.Product__c;
             this.TotalPrice = rateP.TotalPrice__c;
+            this.Quota = rateP.Quota__c;
         }
 
         //FOR NEW EMPTY RATE PRICES
@@ -177,8 +182,18 @@ public with sharing class RateManagerModel {
             this.ParentRateLineId = RateLineId;
         }
 
+        //FOR NEW EMPTY RATE PRICES
+        public RatePrice(String periodKey, Id RateLineId, Id RateId, Period__c period) {
+            this(periodKey, RateLineId, period);
+            this.ParentRateId = RateId;
+        }
+
         public Decimal getTotalPrice() {
             return this.TotalPrice;
+        }
+
+        public Decimal getQuota() {
+            return this.Quota;
         }
 
         public RatePrice__c getRatePrice() {
@@ -215,5 +230,19 @@ public with sharing class RateManagerModel {
             this.min = min;
             this.max = max;
         }
+    }
+
+    /**
+    * @description Aux method for retrieving the picklist values of a field
+    * @author Inetum Team <ruben.sanchez-gonzalez@inetum.com> | 16-04-2025
+    * @param field
+    * @return Map<String, String>
+    **/
+    public static Map<String, String> getPicklistMap(Schema.SObjectField field) {
+        Map<String, String> picklistMap = new Map<String, String>();
+        for (Schema.PicklistEntry pickListVal : field.getDescribe().getPicklistValues()) {
+            picklistMap.put(pickListVal.getValue(), pickListVal.getLabel());
+        }
+        return picklistMap;
     }
 }
