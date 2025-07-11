@@ -54,11 +54,9 @@ public without sharing class GlobalConstants {
         }set;
     }
     public static final String OPPORTUNITY_RT_ACUERDO_NAME { get { return 'Agreement'; } }
-    public static final String OPPORTUNITY_RT_BARCELO_RES_NAME { get { return 'BarceloRes'; } }
     public static final String OPPORTUNITY_RT_MICE_NAME { get { return 'MICE'; } }
     public static final String OPPORTUNITY_RT_TTOO_NAME { get { return 'TTOO'; } }
     public static final Id OPPORTUNITY_RT_ACUERDO_ID { get { return OPPORTUNITY_RT_BY_DEV_NAME.get(OPPORTUNITY_RT_ACUERDO_NAME).getRecordTypeId();}}
-    public static final Id OPPORTUNITY_RT_BARCELO_RES_ID { get { return OPPORTUNITY_RT_BY_DEV_NAME.get(OPPORTUNITY_RT_BARCELO_RES_NAME).getRecordTypeId();}}
     public static final Id OPPORTUNITY_RT_MICE_ID { get { return OPPORTUNITY_RT_BY_DEV_NAME.get(OPPORTUNITY_RT_MICE_NAME).getRecordTypeId();}}
     public static final Id OPPORTUNITY_RT_TTOO_ID { get { return OPPORTUNITY_RT_BY_DEV_NAME.get(OPPORTUNITY_RT_TTOO_NAME).getRecordTypeId();}}
 

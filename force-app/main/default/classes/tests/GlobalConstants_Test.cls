@@ -2,8 +2,8 @@
  * @description       : GlobalConstants Test
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Test Class
- * @last modified on  : 05-03-2025
- * @last modified by  : Inetum Team <alberto.martinez-lopez@inetum.com>
+ * @last modified on  : 11-07-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 @isTest
 public with sharing class GlobalConstants_Test implements TP_ExecutableInterface {
@@ -50,11 +50,9 @@ public with sharing class GlobalConstants_Test implements TP_ExecutableInterface
         Assert.isNotNull(GlobalConstants.OPPORTUNITY_STAGE_ABIERTO, 'GlobalConstants.OPPORTUNITY_STAGE_ABIERTO should not be null');
         Assert.isNotNull(GlobalConstants.OPPORTUNITY_RT_BY_DEV_NAME, 'GlobalConstants.OPPORTUNITY_RT_BY_DEV_NAME should not be null');
         Assert.isNotNull(GlobalConstants.OPPORTUNITY_RT_ACUERDO_NAME, 'GlobalConstants.OPPORTUNITY_RT_ACUERDO_NAME should not be null');
-        Assert.isNotNull(GlobalConstants.OPPORTUNITY_RT_BARCELO_RES_NAME, 'GlobalConstants.OPPORTUNITY_RT_BARCELO_RES_NAME should not be null');
         Assert.isNotNull(GlobalConstants.OPPORTUNITY_RT_MICE_NAME, 'GlobalConstants.OPPORTUNITY_RT_MICE_NAME should not be null');
         Assert.isNotNull(GlobalConstants.OPPORTUNITY_RT_TTOO_NAME, 'GlobalConstants.OPPORTUNITY_RT_TTOO_NAME should not be null');
         Assert.isNotNull(GlobalConstants.OPPORTUNITY_RT_ACUERDO_ID, 'GlobalConstants.OPPORTUNITY_RT_ACUERDO_ID should not be null');
-        Assert.isNotNull(GlobalConstants.OPPORTUNITY_RT_BARCELO_RES_ID, 'GlobalConstants.OPPORTUNITY_RT_BARCELO_RES_ID should not be null');
         Assert.isNotNull(GlobalConstants.OPPORTUNITY_RT_MICE_ID, 'GlobalConstants.OPPORTUNITY_RT_MICE_ID should not be null');
         Assert.isNotNull(GlobalConstants.OPPORTUNITY_RT_TTOO_ID, 'GlobalConstants.OPPORTUNITY_RT_TTOO_ID should not be null');
         Assert.isNotNull(GlobalConstants.SOBJECT_SHARE_ACCESS_LEVEL_READ, 'GlobalConstants.SOBJECT_SHARE_ACCESS_LEVEL_READ should not be null');
