@@ -1,7 +1,7 @@
 {
   "trailingComma": "none",
   "apexInsertFinalNewline": false,
-	"singleQuote": true,
+  "singleQuote": true,
   "overrides": [
     {
       "files": "**/lwc/**/*.html",
@@ -11,5 +11,7 @@
       "files": "*.{cmp,page,component}",
       "options": { "parser": "html" }
     }
-  ]
+  ],
+  "semi": false,
+  "printWidth": 140
 }
