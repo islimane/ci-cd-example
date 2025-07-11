@@ -1,59 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
         <members>GlobalConstants</members>
-        <members>GlobalConstants_Test</members>
-        <members>HotelTerritoryTrigger_Test</members>
-        <members>HotelTerritoryTriggerHelper</members>
-        <members>OpportunityHotelTrigger_Test</members>
-        <members>OpportunityHotelTriggerHandler</members>
-        <members>OpportunityHotelTriggerHelper</members>
-        <members>OpportunitySelector</members>
-        <members>OpportunitySelector_Test</members>
-        <members>PeriodSelector</members>
-        <members>QuoteManagerPriceConfigController</members>
-        <members>QuoteManagerPriceConfigController_Test</members>
-        <members>RateLineManager</members>
-        <members>RateLineManager_Test</members>
-        <members>RateLineSelector</members>
-        <members>RateLineSelector_Test</members>
-        <members>RateManagementExecutor_Test</members>
-        <members>RateManagerAddRoomController</members>
-        <members>RateManagerAddSupplDiscController</members>
-        <members>RateManagerModel</members>
-        <members>RateManagerRoomsConfigController_Test</members>
-        <members>RateManagerSmntsAndDntsController</members>
-        <members>RatePriceManager</members>
-        <members>RatePriceManager_Test</members>
-        <members>TP_SetupDataTest</members>
-        <members>TP_SetupSelectorTest</members>
-        <members>UserAuthorizationService</members>
-        <members>WeekdaySetSelector</members>
-        <members>WeekdaySetSelector_Test</members>
         <name>ApexClass</name>
     </types>
     <types>
-        <members>OpportunityHotelTrigger</members>
-        <name>ApexTrigger</name>
+        <members>Record_Trigger_Flow_Hotel_Territory_FFU</members>
+        <name>Flow</name>
     </types>
     <types>
-        <members>quoteManagerPriceConfig</members>
-        <members>quoteManagerRatePriceTable</members>
-        <members>quoteManagerRatePriceWeekDay</members>
-        <members>rateManagerAddRooms</members>
-        <members>rateManagerAddSupplementsAndDiscounts</members>
-        <members>rateManagerExtendedDataTableMixin</members>
-        <members>rateManagerModalFilters</members>
-        <members>rateManagerModalRoomHandler</members>
-        <members>rateManagerModalSupplementsAndDiscountsHandler</members>
-        <members>rateManagerRoomsConfig</members>
-        <members>rateManagerSupplementsAndDiscountsConfig</members>
+        <members>rateManagerRateConfig</members>
         <name>LightningComponentBundle</name>
-    </types>
-    <types>
-        <members>customModal</members>
-        <name>StaticResource</name>
     </types>
     <version>55.0</version>
 </Package>
