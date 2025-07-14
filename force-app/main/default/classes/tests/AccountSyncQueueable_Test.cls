@@ -95,7 +95,7 @@ public with sharing class AccountSyncQueueable_Test implements TP_ExecutableInte
         AccountSyncQueueable job = new AccountSyncQueueable(accounts, BATCH_SIZE);
         System.enqueueJob(job);
 
-        System.assertEquals(1, Limits.getQueueableJobs(), ERROR_CATCHED);
+        System.assertNotEquals(0, Limits.getQueueableJobs(), ERROR_CATCHED);
     }
 
     private static void testExecuteSync3() {

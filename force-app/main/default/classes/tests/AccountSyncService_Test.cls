@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  * @group             :
- * @last modified on  : 14-07-2025
+ * @last modified on  : 15-07-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 @isTest
@@ -16,7 +16,7 @@ public class AccountSyncService_Test {
         TP_SetupDataTest.generateAllTestData();
     }
 
-    private static Contact createContact(Id accountId) {
+    public static Contact createContact(Id accountId) {
         Contact c = new Contact(
             FirstName = 'Test',
             LastName = 'Contact',
@@ -34,7 +34,7 @@ public class AccountSyncService_Test {
         return c;
     }
 
-    private static Account_PMS__c createAccountPMS(Id accountId) {
+    public static Account_PMS__c createAccountPMS(Id accountId) {
         Account_PMS__c ap = new Account_PMS__c(
             Account__c = accountId,
             PMS__c = 'Opera',
@@ -45,10 +45,9 @@ public class AccountSyncService_Test {
         return ap;
     }
 
-    private static AccountRequest__c createAccountRequest(Id accountId) {
+    public static AccountRequest__c createAccountRequest(Id accountId) {
         AccountRequest__c ar = new AccountRequest__c(
             Account__c = accountId,
-            Closure__c = 'Processed', // O ajusta según GlobalConstants
             Account_Request_External_ID__c = 'REQ123',
             ClosureDescription__c = 'Processed ok',
             FiscalID_request__c = 'FISREQ123',
@@ -71,7 +70,7 @@ public class AccountSyncService_Test {
         return ar;
     }
 
-    private static ResponseAccountRequest__c createResponseAccountRequest(Id accountRequestId) {
+    public static ResponseAccountRequest__c createResponseAccountRequest(Id accountRequestId) {
         ResponseAccountRequest__c rar = new ResponseAccountRequest__c(
             AccountRequest__c = accountRequestId,
             PMS__c = 'Opera',

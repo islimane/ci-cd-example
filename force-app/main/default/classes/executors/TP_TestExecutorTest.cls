@@ -114,4 +114,9 @@ public class TP_TestExecutorTest implements TP_ExecutableInterface{
     static void AccountSyncQueueable_Test(){
         AccountSyncQueueable_Test.testAll();
     }
+
+    @IsTest
+    static void AccountRequestTrigger_Test(){
+        AccountRequestTrigger_Test.testAll();
+    }
 }
