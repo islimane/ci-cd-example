@@ -2,8 +2,8 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 07-07-2025
- * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
+ * @last modified on  : 14-07-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 public without sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
 
@@ -263,8 +263,9 @@ public without sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
         for (HotelTerritory__c currentTerritory : lHotelTerritories) {
             if (!mGroupsToInsertByCode.containsKey(currentTerritory.Public_Group_Code__c)
                 && !mGroupIdByGroupName.containsKey(currentTerritory.Public_Group_Code__c)) {
+                String groupName = Test.isRunningTest() ? 'TestGroup' + String.valueOf(Datetime.now().getTime()) : currentTerritory.Public_Group_Code__c;
                 mGroupsToInsertByCode.put(currentTerritory.Public_Group_Code__c, new Group(
-                    Name = currentTerritory.Public_Group_Code__c,
+                    Name = groupName,
                     DeveloperName = currentTerritory.Public_Group_Code__c,
                     Type = GlobalConstants.GROUP_TYPE_REGULAR,
                     DoesIncludeBosses = true,

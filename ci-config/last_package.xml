@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
-        <members>TriggerUtils_Test</members>
+        <members>GlobalConstants</members>
         <name>ApexClass</name>
+    </types>
+    <types>
+        <members>Record_Trigger_Flow_Hotel_Territory_FFU</members>
+        <name>Flow</name>
+    </types>
+    <types>
+        <members>rateManagerRateConfig</members>
+        <name>LightningComponentBundle</name>
     </types>
     <version>55.0</version>
 </Package>
