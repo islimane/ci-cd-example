@@ -119,4 +119,9 @@ public class TP_TestExecutorTest implements TP_ExecutableInterface{
     static void AccountRequestTrigger_Test(){
         AccountRequestTrigger_Test.testAll();
     }
+
+    @IsTest
+    static void ITM_SyncErrorsAPI_Test(){
+        ITM_SyncErrorsAPI_Test.testAll();
+    }
 }
