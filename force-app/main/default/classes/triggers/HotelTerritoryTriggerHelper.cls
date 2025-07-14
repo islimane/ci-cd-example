@@ -165,7 +165,7 @@ public without sharing class HotelTerritoryTriggerHelper extends TriggerUtils {
                 sAllTerritoryCodes.add(territoryCode);
                 return territoryCode;
             } else return buildDuplicateTerritoryCode(lTerritoryNameChunks, sAllTerritoryCodes);
-        } else return null;
+        } else return hotelTerritory.Code__c;
     }
 
     private static Boolean isValidChunk(String chunk) {
