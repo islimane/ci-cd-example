@@ -99,4 +99,9 @@ public class TP_TestExecutorTest implements TP_ExecutableInterface{
     static void OpportunityHotelTrigger_Test(){
         OpportunityHotelTrigger_Test.testAll();
     }
+
+    @IsTest
+    static void AccountSelector_Test(){
+        AccountSelector_Test.testAll();
+    }
 }
