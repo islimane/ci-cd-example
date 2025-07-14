@@ -15,6 +15,10 @@ public with sharing class AccountRequestTrigger_Test implements TP_ExecutableInt
     @testSetup
     public static void setupData(){
         TP_SetupDataTest.generateAllTestData();
+        buildData();
+    }
+
+    private static void buildData() {
         Account acc = TP_SetupSelectorTest.getAccount(1, 'TEST');
         acc.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Customer_PMS').getRecordTypeId();
         update acc;
@@ -87,6 +91,8 @@ public with sharing class AccountRequestTrigger_Test implements TP_ExecutableInt
     ***************************************/
 
     public static void testAll(){
+        buildData();
+
         Test.startTest();
         afterUpdate1_Method();
         afterUpdate2_Method();
