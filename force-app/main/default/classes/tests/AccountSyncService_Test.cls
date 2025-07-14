@@ -126,17 +126,17 @@ public class AccountSyncService_Test {
         ResponseAccountRequest__c rar = createResponseAccountRequest(ar.Id);
         IntegrationDTO.AccountRetryDTO retryDTO = new IntegrationDTO.AccountRetryDTO(acc, ar, rar);
 
-        // Test AccountSyncService con los DTOs reales
+        // Test AccountSyncService with DTOs wrapper
         List<IntegrationDTO.IAccountDTO> dtos = new List<IntegrationDTO.IAccountDTO>{ dto, rejectedDTO, retryDTO };
         AccountSyncService svc = AccountSyncService.instance(dtos);
         svc.addRecords(new List<IntegrationDTO.IAccountDTO>{ dto });
         svc.erase();
 
-        // Test método sync (requiere mock callout)
+        // Test method sync (requiere mock callout)
         Test.setMock(HttpCalloutMock.class, new AccountSyncQueueable_Test.AccountSyncHttpMock());
         svc.sync();
 
-        // Test método retry
+        // Test method retry
         List<String> toRetry = new List<String>{rar.Id};
         AccountSyncService.retry(new List<List<String>>{toRetry});
 
