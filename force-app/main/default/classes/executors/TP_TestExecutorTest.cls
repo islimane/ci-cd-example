@@ -104,4 +104,14 @@ public class TP_TestExecutorTest implements TP_ExecutableInterface{
     static void AccountSelector_Test(){
         AccountSelector_Test.testAll();
     }
+
+    @IsTest
+    static void AccountSyncService_Test(){
+        AccountSyncService_Test.testAll();
+    }
+
+    @IsTest
+    static void AccountSyncQueueable_Test(){
+        AccountSyncQueueable_Test.testAll();
+    }
 }

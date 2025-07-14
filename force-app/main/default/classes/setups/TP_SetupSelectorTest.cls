@@ -2,7 +2,7 @@
  * @description       : Provides utility methods to retrieve test records based on dynamic naming conventions.
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 09-07-2025
+ * @last modified on  : 14-07-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 
@@ -25,8 +25,56 @@ public with sharing class TP_SetupSelectorTest {
      * @param batteryCode The code used as part of the record's name.
      * @return An Account record.
      */
-    public static Account getAccount (Integer batteryNum, String batteryCode){
-        return [SELECT Id, Name  FROM Account WHERE Name =:(DEF_PREFIX+batteryCode+batteryNum) LIMIT 1];
+    public static Account getAccount(Integer batteryNum, String batteryCode) {
+        return [
+            SELECT
+                Id,
+                Name,
+                Account_External_ID__c,
+                SocialReason__c,
+                Fiscal_Id__c,
+                RecordTypeId,
+                ParentId,
+                BillingStreet,
+                BillingCity,
+                BillingState,
+                BillingPostalCode,
+                BillingCountry,
+                BillingStateCode,
+                BillingCountryCode,
+                Phone,
+                Fax,
+                MobilePhone__c,
+                CreatedDate,
+                LastModifiedDate,
+                Active__c,
+                Agency_Association__c,
+                Status__c,
+                MICE_Classification__c,
+                Market_Segment__c,
+                Motivation__c,
+                Payment_Method__c,
+                Sector__c,
+                Tax_Type__c,
+                Email__c,
+                FidelizationProgram__c,
+                IATACode__c,
+                ID_SAP__c,
+                Market__c,
+                ID_CRS__c,
+                ID_BPRO__c,
+                Inactive_Reason__c,
+                Account_Type__c,
+                Merge_Code__c,
+                Alias__c,
+                Delegation__c,
+                SendToPMS__c,
+                Description,
+                SDI__c
+            FROM Account
+            WHERE Name = :(DEF_PREFIX + batteryCode + batteryNum)
+            LIMIT 1
+        ];
     }
 
     /**
