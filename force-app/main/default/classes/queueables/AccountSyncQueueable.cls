@@ -2,8 +2,8 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-26-2025
- * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
+ * @last modified on  : 14-07-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 public with sharing class AccountSyncQueueable implements Queueable, Database.AllowsCallouts {
 
@@ -55,6 +55,7 @@ public with sharing class AccountSyncQueueable implements Queueable, Database.Al
 
                 System.debug('### AccountSyncQueueable.sync() - [request]: ' + request);
                 HttpResponse response = new Http().send(request);
+                Logger.info('Account sent: ' + response.getBody());
             } catch (CalloutException e) {
                 System.debug('### AccountSyncQueueable.sync() - sync error: ' + e.getMessage());
                 Logger.error(e.getMessage()).addTag(GlobalConstants.LOGGER_SYNC_API_TAG);
@@ -62,14 +63,17 @@ public with sharing class AccountSyncQueueable implements Queueable, Database.Al
         }
         Logger.saveLog();
 
-        if (!this.lAccountsToSync.isEmpty()) System.enqueueJob(new AccountSyncQueueable(this.lAccountsToSync, this.batchSize));
+        if (!this.lAccountsToSync.isEmpty() && !Test.isRunningTest())
+            System.enqueueJob(new AccountSyncQueueable(this.lAccountsToSync, this.batchSize));
     }
 
     // Aux methods
 
     private List<IntegrationDTO.IAccountDTO> getItemsToWork() {
         List<IntegrationDTO.IAccountDTO> lWorkingData = new List<IntegrationDTO.IAccountDTO>();
-        for (Integer i = 0; i < this.batchSize && i < this.lAccountsToSync.size(); i++) lWorkingData.add(this.lAccountsToSync.remove(i));
+        for (Integer i = 0; i < this.batchSize && !this.lAccountsToSync.isEmpty(); i++) {
+            lWorkingData.add(this.lAccountsToSync.remove(0));
+        }
         return lWorkingData;
     }
 }
