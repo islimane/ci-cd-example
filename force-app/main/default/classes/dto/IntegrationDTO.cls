@@ -2,17 +2,19 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @ * @last modified on  : 06-24-2025
- * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
-**/
+ * @last modified on  : 15-07-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
+ **/
 global without sharing class IntegrationDTO {
-
     global class SCResponseAPI {
         public Boolean success;
         public String message;
     }
 
-    public class AccountDTO {
+    public interface IAccountDTO {
+    }
+
+    public class AccountDTO implements IAccountDTO {
         public String Id;
         public String AccountRequestID;
         public String AccountExternalID;
@@ -57,15 +59,17 @@ global without sharing class IntegrationDTO {
         public Boolean Delegation;
         public Boolean SendToPMS;
         public String Description;
+        public String StatusDescription;
+        public String SDI;
 
         public ContactDTO Contact;
         public List<AccountPmsDTO> PMSExternalId;
 
-        public AccountDTO(Account account) {
+        public AccountDTO(Account account, AccountRequest__c request) {
             this.Id = account.Id;
-            //this.AccountRequestID = account.AccountRequestID__c;
-            //this.AccountExternalID = account.Account_External_ID__c;
-            //this.AccountRequestExternalID = account.Account_Request_External_ID__c;
+            this.AccountRequestID = request.Id;
+            this.AccountExternalID = account.Account_External_ID__c;
+            this.AccountRequestExternalID = request.Account_Request_External_ID__c;
             this.Name = account.Name;
             this.SocialReason = account.SocialReason__c;
             this.FiscalId = account.Fiscal_Id__c;
@@ -106,13 +110,95 @@ global without sharing class IntegrationDTO {
             this.Delegation = account.Delegation__c;
             this.SendToPMS = account.SendToPMS__c;
             this.Description = account.Description;
+            this.StatusDescription = request.ClosureDescription__c;
+            this.SDI = account.SDI__c;
 
-            this.Contact = account.Contacts != null && !account.Contacts.isEmpty() ? new ContactDTO(account.Contacts[0]) : null;
+            this.Contact = account.Contacts != null && !account.Contacts.isEmpty()
+                ? new ContactDTO(account.Contacts[0])
+                : new ContactDTO(account, request);
 
             this.PMSExternalId = new List<AccountPmsDTO>();
             for (Account_PMS__c pms : account.Accounts_PMS__r) {
                 this.PMSExternalId.add(new AccountPmsDTO(pms));
             }
+        }
+    }
+
+    public class AccountRejectedDTO implements IAccountDTO {
+        public String AccountRequestID;
+        public String AccountRequestExternalID;
+        public String Status;
+        public String FiscalID;
+        public String CustomerType;
+        public String SocialReason;
+        public String Name;
+        public String Phone;
+        public String BillingStreet;
+        public String BillingPostalCode;
+        public String BillingCity;
+        public String BillingState;
+        public String BillingCountry;
+        public String ContactName;
+        public String ContactLastName;
+        public String ContactIdentification;
+        public String ContactPhone;
+        public String ContactEmail;
+        public String ContactBillingStreet;
+        public String ContactBillingPostalCode;
+        public String ContactBillingCity;
+        public String ContactBillingState;
+        public String ContactBillingCountry;
+        public String IDBPRO;
+        public String Type;
+        public Boolean SameAddress;
+        public String StatusDescription;
+
+        public AccountRejectedDTO(AccountRequest__c request) {
+            this.AccountRequestID = request.Id;
+            this.AccountRequestExternalID = request.Account_Request_External_ID__c;
+            this.Status = request.Closure__c;
+            this.FiscalID = request.FiscalID_request__c;
+            this.CustomerType = request.Customer_Type_request__c;
+            this.SocialReason = request.SocialReason_request__c;
+            this.Name = request.Name_request__c;
+            this.Phone = request.Phone_request__c;
+            this.BillingStreet = request.Billing_Address_request__Street__s;
+            this.BillingPostalCode = request.Billing_Address_request__PostalCode__s;
+            this.BillingCity = request.Billing_Address_request__City__s;
+            this.BillingState = request.Billing_Address_request__StateCode__s;
+            this.BillingCountry = request.Billing_Address_request__CountryCode__s;
+            this.ContactName = request.ContactName__c;
+            this.ContactLastName = request.ContactLastName__c;
+            this.ContactIdentification = request.ContactIdentification__c;
+            this.ContactPhone = request.ContactPhone__c;
+            this.ContactEmail = request.Email_request__c;
+            this.ContactBillingStreet = request.ContactBillingStreet__c;
+            this.ContactBillingPostalCode = request.ContactBillingPostalCode__c;
+            this.ContactBillingCity = request.ContactBillingCity__c;
+            this.ContactBillingState = request.ContactBillingState__c;
+            this.ContactBillingCountry = request.ContactBillingCountry__c;
+            this.IDBPRO = request.ID_BPRO__c;
+            this.Type = request.Type__c;
+            this.SameAddress = request.SameAddress__c;
+            this.StatusDescription = request.ClosureDescription__c;
+        }
+    }
+
+    public class AccountRetryDTO implements IAccountDTO {
+        public String systemPMS;
+        public String SubSystem;
+        public AccountDTO Account;
+
+        public AccountRetryDTO(Account account, AccountRequest__c request, ResponseAccountRequest__c responseAccountRequest) {
+            this.systemPMS = responseAccountRequest.PMS__c;
+            this.SubSystem = responseAccountRequest.PMS_Subsystem__c;
+            this.Account = new AccountDTO(account, request);
+            /*List<AccountPmsDTO> lPMSData = new List<AccountPmsDTO>();
+            for (AccountPmsDTO pms : this.Account.PMSExternalId) {
+                if (pms.PMS == this.systemPMS && pms.PMSSubsystem == this.subSystem) lPMSData.add(pms);
+            }
+            if (lPMSData.isEmpty()) lPMSData.add(new AccountPmsDTO(this.systemPMS, this.subSystem, null));
+            this.Account.PMSExternalId = lPMSData;*/
         }
     }
 
@@ -127,6 +213,7 @@ global without sharing class IntegrationDTO {
         public String MailingCity;
         public String MailingStateCode;
         public String MailingCountryCode;
+        public String Identification;
 
         public ContactDTO(Contact contact) {
             this.FirstName = contact.FirstName;
@@ -139,18 +226,40 @@ global without sharing class IntegrationDTO {
             this.MailingCity = contact.MailingCity;
             this.MailingStateCode = contact.MailingStateCode;
             this.MailingCountryCode = contact.MailingCountryCode;
+            this.Identification = contact.Contact_Identification__c;
+        }
+
+        // Constructor to populate data without a contact
+        public ContactDTO(Account account, AccountRequest__c request) {
+            this.FirstName = request.ContactName__c;
+            this.LastName = request.ContactLastName__c;
+            this.Phone = request.ContactPhone__c;
+            this.Birthdate = request.ContactBirthdate__c;
+            this.Email = account.Email__c;
+            this.MailingStreet = request.ContactBillingStreet__c;
+            this.MailingPostalCode_c = request.ContactBillingPostalCode__c;
+            this.MailingCity = request.ContactBillingCity__c;
+            this.MailingStateCode = request.ContactBillingState__c;
+            this.MailingCountryCode = request.ContactBillingCountry__c;
+            this.Identification = request.ContactIdentification__c;
         }
     }
 
     public class AccountPmsDTO {
-        public String PMS_c;
-        public String PMS_Subsystem_c;
-        public String Account_PMS_Code_c;
+        public String PMS;
+        public String PMSSubsystem;
+        public String AccountPMSCode;
 
         public AccountPmsDTO(Account_PMS__c pms) {
-            this.PMS_c = pms.PMS__c;
-            this.PMS_Subsystem_c = pms.PMS_Subsystem__c;
-            this.Account_PMS_Code_c = pms.Account_PMS_Code__c;
+            this.PMS = pms.PMS__c;
+            this.PMSSubsystem = pms.PMS_Subsystem__c;
+            this.AccountPMSCode = pms.Account_PMS_Code__c;
+        }
+
+        public AccountPmsDTO(String pms, String subSystem, String code) {
+            this.PMS = pms;
+            this.PMSSubsystem = subSystem;
+            this.AccountPMSCode = code;
         }
     }
 
@@ -173,8 +282,8 @@ global without sharing class IntegrationDTO {
         public String fechaDesde;
         public String fechaHasta;
         public String fechaBloq;
-        public String fechaCreacion;//no esta en xml
-        public String fechaMod;//no esta en xml
+        public String fechaCreacion; //no esta en xml
+        public String fechaMod; //no esta en xml
         public String motNoForm;
         public SCAccommodationDTO alojamiento;
         public SCAyBDTO aYB;
@@ -195,7 +304,7 @@ global without sharing class IntegrationDTO {
 
             // Parse data
             String accountExternalId = String.isNotBlank(this.cliEmp) ? this.cliEmp : this.cliAgen;
-            Account relatedAccount = new Account(/*Account_External_ID__c = accountExternalId*/);
+            Account relatedAccount = new Account /*Account_External_ID__c = accountExternalId*/();
             return new Opportunity(
                 SalesCatering_External_ID__c = this.codReserva,
                 Name = this.descripcion,
@@ -225,31 +334,45 @@ global without sharing class IntegrationDTO {
 
         public List<Opportunity_Account__c> parseOpportunityAccounts() {
             List<Opportunity_Account__c> lOpportunityAccounts = new List<Opportunity_Account__c>();
-            if (String.isNotBlank(this.cliEmp)) lOpportunityAccounts.add(new Opportunity_Account__c(
-                //Account__r = new Account(Account_External_ID__c = this.cliEmp),
-                Opportunity__r = new Opportunity(SalesCatering_External_ID__c = this.codReserva),
-                Rol__c = GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_CUSTOMER)
-            );
-            if (String.isNotBlank(this.cliAgen)) lOpportunityAccounts.add(new Opportunity_Account__c(
-                //Account__r = new Account(Account_External_ID__c = this.cliAgen),
-                Opportunity__r = new Opportunity(SalesCatering_External_ID__c = this.codReserva),
-                Rol__c = GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_INTERMEDIARY)
-            );
-            if (String.isNotBlank(this.delegacion)) lOpportunityAccounts.add(new Opportunity_Account__c(
-                //Account__r = new Account(Account_External_ID__c = this.delegacion),
-                Opportunity__r = new Opportunity(SalesCatering_External_ID__c = this.codReserva),
-                Rol__c = GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_DELEGATION)
-            );
+            if (String.isNotBlank(this.cliEmp))
+                lOpportunityAccounts.add(
+                    new Opportunity_Account__c(
+                        //Account__r = new Account(Account_External_ID__c = this.cliEmp),
+                        Opportunity__r = new Opportunity(SalesCatering_External_ID__c = this.codReserva),
+                        Rol__c = GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_CUSTOMER
+                    )
+                );
+            if (String.isNotBlank(this.cliAgen))
+                lOpportunityAccounts.add(
+                    new Opportunity_Account__c(
+                        //Account__r = new Account(Account_External_ID__c = this.cliAgen),
+                        Opportunity__r = new Opportunity(SalesCatering_External_ID__c = this.codReserva),
+                        Rol__c = GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_INTERMEDIARY
+                    )
+                );
+            if (String.isNotBlank(this.delegacion))
+                lOpportunityAccounts.add(
+                    new Opportunity_Account__c(
+                        //Account__r = new Account(Account_External_ID__c = this.delegacion),
+                        Opportunity__r = new Opportunity(SalesCatering_External_ID__c = this.codReserva),
+                        Rol__c = GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_DELEGATION
+                    )
+                );
             return lOpportunityAccounts;
         }
 
         public List<QuoteLineItem> parseQuoteLineItems(Id quoteId) {
             List<QuoteLineItem> lQuoteLineItems = new List<QuoteLineItem>();
-            if (this.alojamiento != null) lQuoteLineItems.add(this.alojamiento.parse(quoteId, mProductIdByType, mPricebookEntryIdByType));
-            if (this.aYB != null) lQuoteLineItems.add(this.aYB.parse(quoteId, mProductIdByType, mPricebookEntryIdByType));
-            if (this.salas != null) lQuoteLineItems.add(this.salas.parse(quoteId, mProductIdByType, mPricebookEntryIdByType));
-            if (this.audiovisual != null) lQuoteLineItems.add(this.audiovisual.parse(quoteId, mProductIdByType, mPricebookEntryIdByType));
-            if (this.otros != null) lQuoteLineItems.add(this.otros.parse(quoteId, mProductIdByType, mPricebookEntryIdByType));
+            if (this.alojamiento != null)
+                lQuoteLineItems.add(this.alojamiento.parse(quoteId, mProductIdByType, mPricebookEntryIdByType));
+            if (this.aYB != null)
+                lQuoteLineItems.add(this.aYB.parse(quoteId, mProductIdByType, mPricebookEntryIdByType));
+            if (this.salas != null)
+                lQuoteLineItems.add(this.salas.parse(quoteId, mProductIdByType, mPricebookEntryIdByType));
+            if (this.audiovisual != null)
+                lQuoteLineItems.add(this.audiovisual.parse(quoteId, mProductIdByType, mPricebookEntryIdByType));
+            if (this.otros != null)
+                lQuoteLineItems.add(this.otros.parse(quoteId, mProductIdByType, mPricebookEntryIdByType));
             return lQuoteLineItems;
         }
     }
@@ -361,12 +484,27 @@ global without sharing class IntegrationDTO {
 
     // AUX METHODS
 
-    public static QuoteLineItem generateQLI(Id quoteId, Id productId, Id pricebookEntryId, Decimal unitPrice, Decimal taxPercentage, Boolean taxIncluded, Decimal comissionPercentage, String description) {
-        if ((unitPrice == null || unitPrice == 0) &&
-            (taxPercentage == null || taxPercentage == 0) &&
+    public static QuoteLineItem generateQLI(
+        Id quoteId,
+        Id productId,
+        Id pricebookEntryId,
+        Decimal unitPrice,
+        Decimal taxPercentage,
+        Boolean taxIncluded,
+        Decimal comissionPercentage,
+        String description
+    ) {
+        if (
+            (unitPrice == null ||
+            unitPrice == 0) &&
+            (taxPercentage == null ||
+            taxPercentage == 0) &&
             (taxIncluded == null || !taxIncluded) &&
-            (comissionPercentage == null || comissionPercentage == 0) &&
-            (String.isBlank(description))) return null;
+            (comissionPercentage == null ||
+            comissionPercentage == 0) &&
+            (String.isBlank(description))
+        )
+            return null;
         return new QuoteLineItem(
             QuoteId = quoteId,
             Product2Id = productId,
