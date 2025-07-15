@@ -304,12 +304,12 @@ global without sharing class IntegrationDTO {
 
             // Parse data
             String accountExternalId = String.isNotBlank(this.cliEmp) ? this.cliEmp : this.cliAgen;
-            Account relatedAccount = new Account /*Account_External_ID__c = accountExternalId*/();
+            List<Account> accounts = [SELECT Id FROM Account WHERE Account_External_ID__c = :accountExternalId LIMIT 1];
             return new Opportunity(
                 SalesCatering_External_ID__c = this.codReserva,
                 Name = this.descripcion,
                 StageName = this.estado,
-                Account = relatedAccount,
+                Account = accounts.isEmpty()? null : accounts[0],
                 EventType__c = this.tipoEvento,
                 PAXNoGroup__c = this.numPers,
                 CurrencyISOCode = this.moneda,

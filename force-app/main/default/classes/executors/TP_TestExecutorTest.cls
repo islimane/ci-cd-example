@@ -124,4 +124,9 @@ public class TP_TestExecutorTest implements TP_ExecutableInterface{
     static void ITM_SyncErrorsAPI_Test(){
         ITM_SyncErrorsAPI_Test.testAll();
     }
+
+    @IsTest
+    static void SCOpportunityAPIHelper_Test(){
+        SCOpportunityAPIHelper_Test.testAll();
+    }
 }
