@@ -6,7 +6,7 @@
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 @isTest
-private class ITM_SyncErrorsAPI_Test {
+public class ITM_SyncErrorsAPI_Test {
     /***************************************
      *           Test Methods              *
      ***************************************/
