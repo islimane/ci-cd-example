@@ -12,7 +12,7 @@ global class ITM_SyncErrorsAPI {
 		String response = 'KO';
         RestContext.response.statusCode = 500;
 		try {
-            Type listType = Type.forName('List<ITM_APIWrappers.ErrorDTO>');
+            Type listType = ITM_APIWrappers.ErrorDTO[].class;
             List<ITM_APIWrappers.ErrorDTO> lErrorDTOs =  (List<ITM_APIWrappers.ErrorDTO>) JSON.deserialize(request.requestBody.toString(), listType);
 			response = ITM_SyncErrorsAPIHelper.insertErrors(lErrorDTOs);
             RestContext.response.statusCode = 201;
