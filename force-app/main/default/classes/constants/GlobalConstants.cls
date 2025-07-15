@@ -2,8 +2,8 @@
  * @description       : Global constants class for the entire system.
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 06-17-2025
- * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
+ * @last modified on  : 15-07-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 @SuppressWarnings('PMD')
 public without sharing class GlobalConstants {
@@ -53,12 +53,10 @@ public without sharing class GlobalConstants {
             return OPPORTUNITY_RT_BY_DEV_NAME;
         }set;
     }
-    public static final String OPPORTUNITY_RT_ACUERDO_NAME { get { return 'Acuerdo'; } }
-    public static final String OPPORTUNITY_RT_BARCELO_RES_NAME { get { return 'BarceloRes'; } }
+    public static final String OPPORTUNITY_RT_ACUERDO_NAME { get { return 'Agreement'; } }
     public static final String OPPORTUNITY_RT_MICE_NAME { get { return 'MICE'; } }
     public static final String OPPORTUNITY_RT_TTOO_NAME { get { return 'TTOO'; } }
     public static final Id OPPORTUNITY_RT_ACUERDO_ID { get { return OPPORTUNITY_RT_BY_DEV_NAME.get(OPPORTUNITY_RT_ACUERDO_NAME).getRecordTypeId();}}
-    public static final Id OPPORTUNITY_RT_BARCELO_RES_ID { get { return OPPORTUNITY_RT_BY_DEV_NAME.get(OPPORTUNITY_RT_BARCELO_RES_NAME).getRecordTypeId();}}
     public static final Id OPPORTUNITY_RT_MICE_ID { get { return OPPORTUNITY_RT_BY_DEV_NAME.get(OPPORTUNITY_RT_MICE_NAME).getRecordTypeId();}}
     public static final Id OPPORTUNITY_RT_TTOO_ID { get { return OPPORTUNITY_RT_BY_DEV_NAME.get(OPPORTUNITY_RT_TTOO_NAME).getRecordTypeId();}}
 
@@ -69,6 +67,7 @@ public without sharing class GlobalConstants {
 
     /** sObjects Share  */
     public static final String SOBJECT_SHARE_ACCESS_LEVEL_READ { get { return 'Read'; } }
+    public static final String SOBJECT_SHARE_ACCESS_LEVEL_EDIT { get { return 'Edit'; } }
 
     /** Rate */
     public static final String RATE_RATE_NAME_PICKLIST_BEST { get { return 'BEST'; } }
@@ -98,4 +97,17 @@ public without sharing class GlobalConstants {
     /** Group */
     public static final String GROUP_TYPE_REGULAR { get { return 'Regular'; } }
 
+    /** AccountRequest__c */
+    public static final String ACCOUNT_REQUEST_TYPE_NEW { get { return 'New'; } }
+    public static final String ACCOUNT_REQUEST_TYPE_MODIFY { get { return 'Modify'; } }
+    public static final String ACCOUNT_REQUEST_TYPE_INACTIVE { get { return 'Inactive'; } }
+
+    public static final String ACCOUNT_REQUEST_STATUS_PROCESSED { get { return 'Processed'; } }
+    public static final String ACCOUNT_REQUEST_STATUS_REJECTED { get { return 'Rejected'; } }
+
+    /** Contact */
+    public static final String CONTACT_TITLE_BPRO_ADMIN { get { return 'Z24'; } }
+
+    /** Logger */
+    public static final String LOGGER_SYNC_API_TAG { get { return 'SYNC_API'; } }
 }
