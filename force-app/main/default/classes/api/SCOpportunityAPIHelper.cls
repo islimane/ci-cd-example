@@ -2,8 +2,8 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 07-07-2025
- * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
+ * @last modified on  : 15-07-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 public without sharing class SCOpportunityAPIHelper {
 
@@ -176,6 +176,7 @@ public without sharing class SCOpportunityAPIHelper {
 
         List<QuoteLineItem> lOpportunityItemsToInsert = new List<QuoteLineItem>();
         Set<Id> sRelatedQuoteIds = new Set<Id>();
+        List<Quote> lQuotesToUpdate = new List<Quote>();
         for (IntegrationDTO.SCOpportunityDTO requestedOpportunity : lRequestedOpportunities) {
             if (mOpportunitiesSuccess.containsKey(requestedOpportunity.codReserva)) {
                 List<Quote> lOpportunityQuotes = mOpportunitiesSuccess.get(requestedOpportunity.codReserva)?.Quotes;
@@ -189,6 +190,14 @@ public without sharing class SCOpportunityAPIHelper {
                         }
                     }
                 }
+                lQuotesToUpdate.add(new Quote(
+                    Id = quoteId,
+                    AudiovisualsNotes__c = requestedOpportunity.audiovisual.audComentarios,
+                    FoodNotes__c = requestedOpportunity.aYB.aybComentarios,
+                    RoomNotes__c = requestedOpportunity.salas.salComentarios,
+                    VenueNotes__c = requestedOpportunity.alojamiento.aloComentarios,
+                    OthersNotes__c = requestedOpportunity.otros.otrComentarios
+                ));
             }
         }
 
@@ -202,6 +211,7 @@ public without sharing class SCOpportunityAPIHelper {
         List<Database.SaveResult> lResults = Database.insert(lOpportunityItemsToInsert, false);
         for (Database.SaveResult result : lResults) {
             if (result.isSuccess()) {
+                update lQuotesToUpdate;
                 String relatedOppExternalId = mOppExternalIdById.get(lOpportunityItemsToInsert.get(lResults.indexOf(result)).QuoteId);
                 List<QuoteLineItem> lOpportunityItems = mOpportunityItems.get(relatedOppExternalId);
                 if (lOpportunityItems == null) lOpportunityItems = new List<QuoteLineItem>();
