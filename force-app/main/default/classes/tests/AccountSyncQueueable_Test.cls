@@ -17,6 +17,51 @@ public with sharing class AccountSyncQueueable_Test implements TP_ExecutableInte
     @testSetup
     public static void setupData() {
         TP_SetupDataTest.generateAllTestData();
+        buildData();
+    }
+
+    private static void buildData() {
+        Account acc = TP_SetupSelectorTest.getAccount(1, 'TEST');
+        acc.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Customer_PMS').getRecordTypeId();
+        update acc;
+        Account_PMS__c pms = AccountSyncService_Test.createAccountPMS(acc.Id);
+        AccountRequest__c ar = AccountSyncService_Test.createAccountRequest(acc.Id);
+    }
+
+    private static AccountRequest__c getAccountRequest() {
+        return [
+            SELECT
+                Id,
+                Account_Request_External_ID__c,
+                ClosureDescription__c,
+                Closure__c,
+                FiscalID_request__c,
+                Customer_Type_request__c,
+                SocialReason_request__c,
+                Name_request__c,
+                Phone_request__c,
+                Billing_Address_request__Street__s,
+                Billing_Address_request__PostalCode__s,
+                Billing_Address_request__City__s,
+                Billing_Address_request__StateCode__s,
+                Billing_Address_request__CountryCode__s,
+                ContactName__c,
+                ContactLastName__c,
+                ContactIdentification__c,
+                ContactPhone__c,
+                Email_request__c,
+                ContactBirthdate__c,
+                ContactBillingStreet__c,
+                ContactBillingPostalCode__c,
+                ContactBillingCity__c,
+                ContactBillingState__c,
+                ContactBillingCountry__c,
+                ID_BPRO__c,
+                Type__c,
+                SameAddress__c
+            FROM AccountRequest__c
+            LIMIT 1
+        ];
     }
 
     /***************************************
@@ -32,17 +77,6 @@ public with sharing class AccountSyncQueueable_Test implements TP_ExecutableInte
             res.setBody('{"success": true}');
             return res;
         }
-    }
-
-    // Basic mock of IntegrationDTO and its subclasses
-    public class MockAccountDTO implements IntegrationDTO.IAccountDTO {
-        public String typeField = 'AccountDTO';
-    }
-    public class MockAccountRetryDTO implements IntegrationDTO.IAccountDTO {
-        public String typeField = 'AccountRetryDTO';
-    }
-    public class MockAccountRejectedDTO implements IntegrationDTO.IAccountDTO {
-        public String typeField = 'AccountRejectedDTO';
     }
 
     /***************************************
@@ -76,11 +110,13 @@ public with sharing class AccountSyncQueueable_Test implements TP_ExecutableInte
 
     private static void testExecuteSync1() {
         Test.setMock(HttpCalloutMock.class, new AccountSyncHttpMock());
+        Account acc = TP_SetupSelectorTest.getAccount(1, 'TEST');
+        AccountRequest__c ar = getAccountRequest();
 
-        // Prepare the list of accounts to synchronize
-        List<IntegrationDTO.IAccountDTO> accounts = new List<IntegrationDTO.IAccountDTO>{ new MockAccountDTO() };
+        IntegrationDTO.AccountDTO dto = new IntegrationDTO.AccountDTO(acc, ar);
+        IntegrationDTO.AccountRejectedDTO rejectedDTO = new IntegrationDTO.AccountRejectedDTO(ar);
 
-        AccountSyncQueueable job = new AccountSyncQueueable(accounts, BATCH_SIZE);
+        AccountSyncQueueable job = new AccountSyncQueueable(new List<IntegrationDTO.AccountDTO>{ dto }, BATCH_SIZE);
         System.enqueueJob(job);
 
         System.assertNotEquals(0, Limits.getQueueableJobs(), ERROR_CATCHED);
@@ -88,11 +124,12 @@ public with sharing class AccountSyncQueueable_Test implements TP_ExecutableInte
 
     private static void testExecuteSync2() {
         Test.setMock(HttpCalloutMock.class, new AccountSyncHttpMock());
+        Account acc = TP_SetupSelectorTest.getAccount(1, 'TEST');
+        AccountRequest__c ar = getAccountRequest();
 
-        // Prepare the list of accounts to synchronize
-        List<IntegrationDTO.IAccountDTO> accounts = new List<IntegrationDTO.IAccountDTO>{ new MockAccountRetryDTO() };
-
-        AccountSyncQueueable job = new AccountSyncQueueable(accounts, BATCH_SIZE);
+        ResponseAccountRequest__c rar = AccountSyncService_Test.createResponseAccountRequest(ar.Id);
+        IntegrationDTO.AccountRetryDTO retryDTO = new IntegrationDTO.AccountRetryDTO(acc, ar, rar);
+        AccountSyncQueueable job = new AccountSyncQueueable(new List<IntegrationDTO.AccountRetryDTO>{ retryDTO }, BATCH_SIZE);
         System.enqueueJob(job);
 
         System.assertNotEquals(0, Limits.getQueueableJobs(), ERROR_CATCHED);
@@ -100,11 +137,11 @@ public with sharing class AccountSyncQueueable_Test implements TP_ExecutableInte
 
     private static void testExecuteSync3() {
         Test.setMock(HttpCalloutMock.class, new AccountSyncHttpMock());
+        Account acc = TP_SetupSelectorTest.getAccount(1, 'TEST');
+        AccountRequest__c ar = getAccountRequest();
 
-        // Prepare the list of accounts to synchronize
-        List<IntegrationDTO.IAccountDTO> accounts = new List<IntegrationDTO.IAccountDTO>{ new MockAccountRejectedDTO() };
-
-        AccountSyncQueueable job = new AccountSyncQueueable(accounts, BATCH_SIZE);
+        IntegrationDTO.AccountRejectedDTO rejectedDTO = new IntegrationDTO.AccountRejectedDTO(ar);
+        AccountSyncQueueable job = new AccountSyncQueueable(new List<IntegrationDTO.AccountRejectedDTO>{ rejectedDTO }, BATCH_SIZE);
         System.enqueueJob(job);
 
         System.assertNotEquals(0, Limits.getQueueableJobs(), ERROR_CATCHED);
@@ -115,6 +152,7 @@ public with sharing class AccountSyncQueueable_Test implements TP_ExecutableInte
      ***************************************/
 
     public static void testAll() {
+        buildData();
         Test.startTest();
         testExecuteSync1();
         testExecuteSync2();
