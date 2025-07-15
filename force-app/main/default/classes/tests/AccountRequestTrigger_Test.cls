@@ -52,6 +52,13 @@ public with sharing class AccountRequestTrigger_Test implements TP_ExecutableInt
         Test.stopTest();
     }
 
+    @isTest
+    public static void afterUpdate4_MethodTest(){
+        Test.startTest();
+        afterUpdate4_Method();
+        Test.stopTest();
+    }
+
     /***************************************
      *           Operation Methods         *
     ***************************************/
@@ -86,6 +93,15 @@ public with sharing class AccountRequestTrigger_Test implements TP_ExecutableInt
         Assert.areEqual(true, result.isSuccess(), 'AccountRequest__c afterUpdate3 failed');
     }
 
+    private static void afterUpdate4_Method(){
+        AccountRequest__c accReq = [SELECT Id, ID_BPRO__c, Account__c, Closure__c, Type__c FROM AccountRequest__c LIMIT 1];
+        accReq.Closure__c = GlobalConstants.ACCOUNT_REQUEST_STATUS_REJECTED;
+        Test.setMock(HttpCalloutMock.class, new AccountSyncQueueable_Test.AccountSyncHttpMock());
+
+		Database.SaveResult result = Database.update(accReq);
+        Assert.areEqual(true, result.isSuccess(), 'AccountRequest__c afterUpdate4 failed');
+    }
+
     /***************************************
      *           TestAll Method            *
     ***************************************/
@@ -97,6 +113,7 @@ public with sharing class AccountRequestTrigger_Test implements TP_ExecutableInt
         afterUpdate1_Method();
         afterUpdate2_Method();
         afterUpdate3_Method();
+        afterUpdate4_Method();
         Test.stopTest();
     }
 }

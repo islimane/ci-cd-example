@@ -64,7 +64,8 @@ public class AccountSyncService_Test {
             ContactLastName__c = 'Test',
             ContactIdentification__c = 'ID9876',
             ContactPhone__c = '900900900',
-            Email_request__c = 'mail@request.com'
+            Email_request__c = 'mail@request.com',
+            ID_BPRO__c = 'IdBPROTest'
         );
         insert ar;
         return ar;

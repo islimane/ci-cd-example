@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
+
+    <!-- Apex Classes -->
     <types>
         <members>GlobalConstants</members>
         <members>ITM_APIWrappers</members>
@@ -9,16 +11,34 @@
         <members>AccountSyncQueueable</members>
         <members>ResponseAccountRequestSelector</members>
         <members>AccountSelector</members>
-        <members>AccountSelector</members>
         <members>AccountSyncService</members>
         <members>AccountRequestTriggerHandler</members>
         <members>AccountRequestTriggerHelper</members>
         <members>OpportunityHotelTriggerHelper</members>
+        <members>TP_TestExecutorTest</members>
+        <members>TP_SetupSelectorTest</members>
+        <members>AccountRequestTrigger_Test</members>
+        <members>AccountSelector_Test</members>
+        <members>AccountSyncQueueable_Test</members>
+        <members>AccountSyncService_Test</members>
+        <members>GlobalConstants_Test</members>
+        <members>ITM_SyncErrorsAPI_Test</members>
+        <members>OpportunitySelector</members>
         <name>ApexClass</name>
     </types>
     <types>
         <members>AccountRequestTrigger</members>
         <name>ApexTrigger</name>
+    </types>
+    <types>
+        <members>RejectAccountMulesoft</members>
+        <members>RetryAccountMulesoft</members>
+        <members>SyncAccountMulesoft</members>
+        <name>NamedCredential</name>
+    </types>
+    <types>
+        <members>Auth_Mule</members>
+        <name>ExternalCredential</name>
     </types>
     <version>62.0</version>
 </Package>
