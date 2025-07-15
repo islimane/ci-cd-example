@@ -16,6 +16,7 @@ global with sharing class ITM_APIWrappers {
     /*    DTO ITERATORS     */
     /* -------------------- */
 
+    @TestVisible
 	global class ErrorDTO extends DTO {
 		public String source;
 		public String errorMsg;
