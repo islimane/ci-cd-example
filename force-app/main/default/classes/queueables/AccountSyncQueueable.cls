@@ -2,11 +2,10 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 14-07-2025
+ * @last modified on  : 15-07-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 public with sharing class AccountSyncQueueable implements Queueable, Database.AllowsCallouts {
-
     private static final Map<String, String> MAP_ENDPOINT_BY_TYPEOF_REQUEST = new Map<String, String>{
         'sync' => 'callout:SyncAccountMulesoft',
         'retry' => 'callout:RetryAccountMulesoft',
@@ -24,36 +23,31 @@ public with sharing class AccountSyncQueueable implements Queueable, Database.Al
     public void execute(QueueableContext context) {
         List<IntegrationDTO.IAccountDTO> lWorkingData = getItemsToWork();
 
-        HttpRequest request = new HttpRequest();
-        // Build common parameters
-        request.setMethod('POST');
-        request.setHeader('Content-Type', 'application/json');
-        request.setHeader('client_id', '5bb26228-0cd4-4861-b98d-2ae655157266');
-        request.setHeader('client_secret', 'UID8Q~ybZdkIOb9d1BCraMwOXTmLD3SApcrocddX');
-
         for (IntegrationDTO.IAccountDTO currentAccount : lWorkingData) {
+            HttpRequest request = new HttpRequest();
+            request.setMethod('POST'); // default
+
+            String endpointKey = null;
+            if (currentAccount instanceof IntegrationDTO.AccountDTO) {
+                endpointKey = 'sync';
+            } else if (currentAccount instanceof IntegrationDTO.AccountRetryDTO) {
+                endpointKey = 'retry';
+                request.setMethod('PUT');
+            } else if (currentAccount instanceof IntegrationDTO.AccountRejectedDTO) {
+                endpointKey = 'reject';
+            } else {
+                Logger.warn('Tipo de cuenta no reconocido, no se enviará: ' + currentAccount);
+                continue;
+            }
+
+            request.setEndpoint(MAP_ENDPOINT_BY_TYPEOF_REQUEST.get(endpointKey));
+
+            String body = JSON.serializePretty(currentAccount);
+            System.debug('### AccountSyncQueueable.sync() - [body]: ' + body);
+            request.setBody(body);
+            System.debug('### AccountSyncQueueable.sync() - [request]: ' + request);
+
             try {
-                // Build specific request
-                /*if (currentAccount instanceof IntegrationDTO.AccountDTO) request.setEndpoint(MAP_ENDPOINT_BY_TYPEOF_REQUEST.get('sync'));
-                else if (currentAccount instanceof IntegrationDTO.AccountRetryDTO) request.setEndpoint(MAP_ENDPOINT_BY_TYPEOF_REQUEST.get('retry'));
-                else if (currentAccount instanceof IntegrationDTO.AccountRejectedDTO) request.setEndpoint(MAP_ENDPOINT_BY_TYPEOF_REQUEST.get('reject'));*/
-
-                //TESTING VALUES
-                if (currentAccount instanceof IntegrationDTO.AccountDTO) {
-                    request.setEndpoint('https://bhg-eapi-crm-dev-diqyem.6adi94.irl-e1.cloudhub.io:443/api/salesforce/customer');
-                } else if (currentAccount instanceof IntegrationDTO.AccountRetryDTO) {
-                    request.setMethod('PUT');
-                    request.setEndpoint('https://bhg-eapi-crm-dev-diqyem.6adi94.irl-e1.cloudhub.io:443/api/salesforce/customer/retry');
-                } else if (currentAccount instanceof IntegrationDTO.AccountRejectedDTO) {
-                    request.setEndpoint('https://bhg-eapi-crm-dev-diqyem.6adi94.irl-e1.cloudhub.io:443/api/salesforce/accountReject');
-                }
-                //TESTING VALUES
-
-                String body = JSON.serializePretty(currentAccount);
-                System.debug('### AccountSyncQueueable.sync() - [body]: ' + body);
-                request.setBody(body);
-
-                System.debug('### AccountSyncQueueable.sync() - [request]: ' + request);
                 HttpResponse response = new Http().send(request);
                 Logger.info('Account sent: ' + response.getBody());
             } catch (CalloutException e) {
@@ -61,10 +55,12 @@ public with sharing class AccountSyncQueueable implements Queueable, Database.Al
                 Logger.error(e.getMessage()).addTag(GlobalConstants.LOGGER_SYNC_API_TAG);
             }
         }
+
         Logger.saveLog();
 
-        if (!this.lAccountsToSync.isEmpty() && !Test.isRunningTest())
+        if (!this.lAccountsToSync.isEmpty() && !Test.isRunningTest()) {
             System.enqueueJob(new AccountSyncQueueable(this.lAccountsToSync, this.batchSize));
+        }
     }
 
     // Aux methods
