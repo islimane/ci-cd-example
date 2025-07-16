@@ -8,7 +8,7 @@ const ROOMS_COLUMNS = [
     { label: 'ROOM', fieldName: 'RoomLabel', type: 'text', fixed: true, fixedWidth: 200, wrapText: false },
     { label: 'CHARACTERSITIC', fieldName: 'CharactLabel', type: 'text', fixed: true, fixedWidth: 200, wrapText: false },
     { label: 'APPLICABLE', fieldName: 'ApplicableLabel', type: 'text', fixed: true, fixedWidth: 114 },
-    { label: 'REGIMEN', fieldName: 'RegimenType', type: 'text', fixed: true, fixedWidth: 101 },
+    { label: 'REGIMEN', fieldName: 'RegimenLabel', type: 'text', fixed: true, fixedWidth: 101 },
     { label: 'RELATIVE', fieldName: 'Relative', type: 'boolean', fixed: true, fixedWidth: 75 },
     { label: 'AVG', fieldName: 'avg', type: 'number', fixed: true, fixedWidth: 68 } // use currency and currencyIsoCode from Quote
 ]
@@ -17,7 +17,7 @@ const SUPPLEMENT_COLUMNS = [
     { label: 'SUPPLEMENT NAME', fieldName: 'Name', type: 'text', fixed: true, fixedWidth: 210, wrapText: false },
     { label: 'APPLICATION TYPE', fieldName: 'ApplicationType', type: 'text', fixed: true, fixedWidth: 200 },
     { label: 'APPLICABLE', fieldName: 'Applicable', type: 'text', fixed: true, fixedWidth: 114 },
-    { label: 'REGIMEN', fieldName: 'RegimenType', type: 'text', fixed: true, fixedWidth: 101, wrapText: true },
+    { label: 'REGIMEN', fieldName: 'RegimenLabel', type: 'text', fixed: true, fixedWidth: 101, wrapText: true },
     { label: 'OBSERVATIONS', fieldName: 'Observations', type: 'text', fixed: true, fixedWidth: 200, wrapText: true }
 ]
 

@@ -6,9 +6,9 @@ import LABELS from './labels'
 
 import { getPicklistValues } from 'lightning/uiObjectInfoApi'
 import ROOM_FIELD from '@salesforce/schema/Product2.Room__c'
-import REGIMEN_FIELD from '@salesforce/schema/Product2.Regimen_Type__c'
+import REGIMEN_FIELD from '@salesforce/schema/RateLine__c.Regime__c'
 import CHARACTERISTIC_FIELD from '@salesforce/schema/Product2.Characteristic__c'
-import APPLICABLE_FIELD from '@salesforce/schema/Product2.Applicable__c'
+import APPLICABLE_FIELD from '@salesforce/schema/RateLine__c.Applicable__c'
 
 const MASTER_RECORD_TYPE_ID = '012000000000000AAA'
 const CONTROLLER_NAME = 'QuoteManagerPriceConfigController'
@@ -86,9 +86,10 @@ export default class QuoteManagerPriceConfig extends RateManagerExtendedDataTabl
             // modify data to add picklist values
             ;[this.roomsData, this.supplData].forEach((dataArray) => {
                 dataArray.forEach((item) => {
-                    item.RoomLabel = this._roomPicklistValues.find((picklistVal) => picklistVal.value === item.Room)?.label
-                    item.CharactLabel = this._charactPicklistValues.find((picklistVal) => picklistVal.value === item.Characteristic)?.label
-                    item.ApplicableLabel = this._applcblePicklistValues.find((picklistVal) => picklistVal.value === item.Applicable)?.label
+                    item.RoomLabel = this._roomPicklistValues.find((picklistVal) => picklistVal.value === item.Room)?.label || item.Room
+                    item.CharactLabel = this._charactPicklistValues.find((picklistVal) => picklistVal.value === item.Characteristic)?.label || item.Characteristic
+                    item.ApplicableLabel = this._applcblePicklistValues.find((picklistVal) => picklistVal.value === item.Applicable)?.label || item.Applicable
+                    item.RegimenLabel = this._regimenPicklistValues.find((picklistVal) => picklistVal.value === item.RegimenType)?.label || item.RegimenType
                 })
             })
 
