@@ -2,10 +2,16 @@
  * @description       : Controller for Quote Manager Price Config - quoteManagerPriceConfig
  * @author            : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  * @group             :
- * @last modified on  : 19-06-2025
+ * @last modified on  : 17-07-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 public with sharing class QuoteManagerPriceConfigController extends DC_DynamicController {
+    final static List<String> SUPPLEMENTS_AGGREGATION = new List<String>{
+        GlobalConstants.PRODUCT2_FAMILY_SUPPLEMENT,
+        GlobalConstants.PRODUCT2_FAMILY_REDUCTION,
+        GlobalConstants.PRODUCT2_FAMILY_ABSOLUT_CONCEPT
+    };
+
     /**
      * @description
      * @author Inetum Team <ruben.sanchez-gonzalez@inetum.com> | 28-05-2025
@@ -94,7 +100,7 @@ public with sharing class QuoteManagerPriceConfigController extends DC_DynamicCo
                         mRateLinesByType.put(GlobalConstants.PRODUCT2_FAMILY_ROOM, new List<RateManagerModel.RateLine>());
                     }
                     mRateLinesByType.get(GlobalConstants.PRODUCT2_FAMILY_ROOM).add(new RateManagerModel.RateLine(rateLine, lPeriods));
-                } else if (product.Family == GlobalConstants.PRODUCT2_FAMILY_SUPPLEMENT) {
+                } else if (SUPPLEMENTS_AGGREGATION.contains(product.Family)) {
                     if (!mRateLinesByType.containsKey(GlobalConstants.PRODUCT2_FAMILY_SUPPLEMENT)) {
                         mRateLinesByType.put(GlobalConstants.PRODUCT2_FAMILY_SUPPLEMENT, new List<RateManagerModel.RateLine>());
                     }

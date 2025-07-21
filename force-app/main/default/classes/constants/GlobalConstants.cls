@@ -2,7 +2,7 @@
  * @description       : Global constants class for the entire system.
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 15-07-2025
+ * @last modified on  : 18-07-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 @SuppressWarnings('PMD')
@@ -93,6 +93,8 @@ public without sharing class GlobalConstants {
     /** Product2 */
     public static final String PRODUCT2_FAMILY_ROOM { get { return 'Room'; } }
     public static final String PRODUCT2_FAMILY_SUPPLEMENT { get { return 'Supplement'; } }
+    public static final String PRODUCT2_FAMILY_REDUCTION { get { return 'Reduction'; } }
+    public static final String PRODUCT2_FAMILY_ABSOLUT_CONCEPT { get { return 'Absolute Concept'; } }
 
     /** Group */
     public static final String GROUP_TYPE_REGULAR { get { return 'Regular'; } }

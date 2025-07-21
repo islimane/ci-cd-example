@@ -2,7 +2,7 @@
  * @description       : Unified model class for Rate Manager controllers
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             :
- * @last modified on  : 19-06-2025
+ * @last modified on  : 21-07-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 public with sharing class RateManagerModel {
@@ -68,6 +68,7 @@ public with sharing class RateManagerModel {
         public Id ProductId;
 
         String Name;
+        String Family;
         String Characteristic;
         String Room;
         String RegimenType;
@@ -87,6 +88,7 @@ public with sharing class RateManagerModel {
         public RateLine(RateLine__c rateLine, List<Period__c> lPeriods) {
             this.Id = rateLine.Id;
             this.Name = rateLine.Product__r.Name;
+            this.Family = rateLine.Product__r.Family;
             this.RegimenType = rateLine.Regime__c;
             this.Applicable = rateLine.Applicable__c;
             this.ApplicationType = rateLine.Product__r.ApplicationType__c;
