@@ -13,5 +13,5 @@ export default {
     success,
     noRecordsSelected,
     rooms: 'Rooms',
-    supplements: 'Supplements'
+    supplements: 'Supplements, Reductions & Absolute Concepts'
 }

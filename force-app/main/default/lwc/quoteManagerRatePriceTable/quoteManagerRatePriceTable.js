@@ -15,8 +15,9 @@ const ROOMS_COLUMNS = [
 
 const SUPPLEMENT_COLUMNS = [
     { label: 'SUPPLEMENT NAME', fieldName: 'Name', type: 'text', fixed: true, fixedWidth: 210, wrapText: false },
+    { label: 'FAMILY', fieldName: 'Family', type: 'text', fixed: true, fixedWidth: 120 },
     { label: 'APPLICATION TYPE', fieldName: 'ApplicationType', type: 'text', fixed: true, fixedWidth: 200 },
-    { label: 'APPLICABLE', fieldName: 'Applicable', type: 'text', fixed: true, fixedWidth: 114 },
+    { label: 'APPLICABLE', fieldName: 'ApplicableLabel', type: 'text', fixed: true, fixedWidth: 120 },
     { label: 'REGIMEN', fieldName: 'RegimenLabel', type: 'text', fixed: true, fixedWidth: 101, wrapText: true },
     { label: 'OBSERVATIONS', fieldName: 'Observations', type: 'text', fixed: true, fixedWidth: 200, wrapText: true }
 ]
