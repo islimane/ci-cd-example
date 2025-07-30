@@ -21533,7 +21533,8 @@ handleCountryChange(event) {
             city: '',
             state: '',
             requestComments: '',
-            addressSearch: ''
+            addressSearch: '',
+            userEmail: '',
         };
         // Forzar el reseteo visual de los selects y textarea
         const selects = this.template.querySelectorAll('select');
@@ -21546,7 +21547,7 @@ handleCountryChange(event) {
     }
 
     validateForm() {
-        const requiredFields = ['name', 'corporateName', 'taxNumber', 'marketSegment', 'motivationType', 'customerType', 'email','country', 'street', 'city'];
+        const requiredFields = ['name', 'corporateName', 'taxNumber', 'marketSegment', 'motivationType', 'customerType', 'email','country', 'street', 'city', 'userEmail', 'hotel'];
         const missingFields = [];
         requiredFields.forEach(field => {
             if (!this.formData[field] || this.formData[field].trim() === '') {

@@ -7,6 +7,7 @@
             <lightning-spinner if:true={isSubmitting} alternative-text="Procesando..." size="medium"></lightning-spinner>
             <form onsubmit={handleSubmit}>
                 <div class="form-section">
+                    <div class="slds-text-heading_large slds-m-around_medium">USER REQUEST INFORMATION</div>
                     <!-- Primera fila: Name | Corporate name -->
                     <div class="input-row">
                         <div class="input-group half-width">
@@ -146,8 +147,16 @@
                             </div>
                         </div>
                     </div>
-                    <!--Hotel-->
+                </div>
+                
+                <div class="form-section">
+                    <div class="slds-text-heading_large slds-m-around_medium">REQUEST INFORMATION</div>
                     <div class="input-row">
+                        <div class="input-group half-width">
+                            <div class="custom-input-container">
+                                <input type="text" name="userEmail" placeholder="* User Email" value={formData.userEmail} onchange={handleInputChange} class="custom-input-field">
+                            </div>
+                        </div>
                         <div class="input-group half-width">
                             <div class="custom-input-container">
                                 <div class="custom-select-wrapper">
@@ -158,11 +167,6 @@
                                         </template>
                                     </select>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="input-group half-width">
-                            <div class="custom-input-container">
-                                <input type="text" name="userEmail" placeholder="* User Email" value={formData.userEmail} onchange={handleInputChange} class="custom-input-field">
                             </div>
                         </div>
                     </div>
