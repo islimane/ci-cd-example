@@ -8,6 +8,21 @@
             <form onsubmit={handleSubmit}>
                 <div class="form-section">
                     <div class="slds-text-heading_large slds-m-around_medium">USER REQUEST INFORMATION</div>
+                    <div class="input-row">
+                        <div class="input-group half-width">
+                            <div class="custom-input-container">
+                                <input type="text" name="userEmail" placeholder="* User Email" value={formData.userEmail} onchange={handleInputChange} class="custom-input-field">
+                            </div>
+                        </div>
+                        <div class="input-group half-width">
+                            <div class="custom-input-container">
+                                <input type="text" name="hotel" placeholder="* Hotel" value={formData.hotel} onchange={handleInputChange} class="custom-input-field">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-section">
+                    <div class="slds-text-heading_large slds-m-around_medium">REQUEST INFORMATION</div>
                     <!-- Primera fila: Name | Corporate name -->
                     <div class="input-row">
                         <div class="input-group half-width">
@@ -103,7 +118,7 @@
                             <div class="custom-input-container">
                                 <div class="custom-select-wrapper">
                                 <select name="country" onchange={handleInputChange} required class="custom-select-field">
-                                        <option value="" disabled selected hidden>Country</option>
+                                        <option value="" disabled selected hidden>* Country</option>
                                         <template for:each={countryOptions} for:item="option">
                                             <option key={option.value} value={option.value}>{option.label}</option>
                                         </template>
@@ -144,29 +159,6 @@
                         <div class="input-group full-width">
                             <div class="custom-input-container">
                                 <textarea name="requestComments" placeholder="Request Comments" onchange={handleInputChange} maxlength="1000" class="custom-textarea-field">{formData.requestComments}</textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-section">
-                    <div class="slds-text-heading_large slds-m-around_medium">REQUEST INFORMATION</div>
-                    <div class="input-row">
-                        <div class="input-group half-width">
-                            <div class="custom-input-container">
-                                <input type="text" name="userEmail" placeholder="* User Email" value={formData.userEmail} onchange={handleInputChange} class="custom-input-field">
-                            </div>
-                        </div>
-                        <div class="input-group half-width">
-                            <div class="custom-input-container">
-                                <div class="custom-select-wrapper">
-                                    <select name="hotel" onchange={handleInputChange} class="custom-select-field">
-                                        <option value="" disabled selected hidden>* Hotel</option>
-                                        <template for:each={hotelOptions} for:item="option">
-                                            <option key={option.value} value={option.value}>{option.label}</option>
-                                        </template>
-                                    </select>
-                                </div>
                             </div>
                         </div>
                     </div>

@@ -2,7 +2,6 @@ import { LightningElement, track } from 'lwc';
 import LOGO from '@salesforce/resourceUrl/barcelo_logo_cuestionario';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import createAccountRequest from '@salesforce/apex/AccountRequestController.createAccountRequest';
-import getHotelNames from '@salesforce/apex/AccountRequestController.getHotelNames';
 
 export default class AccountRequestForm extends LightningElement {
     logoUrl = LOGO;
@@ -74,21 +73,6 @@ export default class AccountRequestForm extends LightningElement {
     @track errorMessage = '';
 
     @track hotelOptions = [];
-
-    connectedCallback() {
-        getHotelNames()
-            .then(result => {
-                const map = JSON.parse(result);
-                this.hotelOptions = Object.entries(map).map(([value, label]) => ({
-                    label,
-                    value
-                }));
-            })
-            .catch(error => {
-                // Manejo de errores si lo necesitas
-                this.hotelOptions = [];
-            });
-    }
 
     countryOptions = [
         { label: '--None--', value: '' },
