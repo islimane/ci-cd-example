@@ -15,29 +15,29 @@ export default class AccountRequestForm extends LightningElement {
     ];
     motivationTypeOptions = [
         { label: '--None--', value: '' },
-        { label: 'All included resorts', value: 'M01' },
-        { label: 'Beaches', value: 'M02' },
-        { label: 'Nature', value: 'M03' },
-        { label: 'City Breaks', value: 'M04' },
-        { label: 'Golf', value: 'M05' },
-        { label: 'Diving', value: 'M06' },
-        { label: 'Couples and honeymoons', value: 'M07' },
-        { label: 'Family and Kids', value: 'M08' },
-        { label: 'Seniors', value: 'M09' },
-        { label: 'Spa', value: 'M010' },
-        { label: 'Casino', value: 'M011' },
-        { label: 'Circuits', value: 'M012' },
-        { label: 'Fairs', value: 'M013' },
-        { label: 'Cycling', value: 'M014' },
-        { label: 'Soccer', value: 'M015' },
-        { label: 'MICE', value: 'M016' },
-        { label: 'Business', value: 'M017' },
-        { label: 'Gastronomy', value: 'M018' },
-        { label: 'Sports', value: 'M019' },
-        { label: 'Snow', value: 'M020' },
-        { label: 'Other', value: 'M021' },
-        { label: '+55', value: 'M022' },
-        { label: 'Audiovisuals', value: 'M023' }
+        { label: 'All included resorts', value: 'MO1' },
+        { label: 'Beaches', value: 'MO2' },
+        { label: 'Nature', value: 'MO3' },
+        { label: 'City Breaks', value: 'MO4' },
+        { label: 'Golf', value: 'MO5' },
+        { label: 'Diving', value: 'MO6' },
+        { label: 'Couples and honeymoons', value: 'MO7' },
+        { label: 'Family and Kids', value: 'MO8' },
+        { label: 'Seniors', value: 'MO9' },
+        { label: 'Spa', value: 'MO10' },
+        { label: 'Casino', value: 'MO11' },
+        { label: 'Circuits', value: 'MO12' },
+        { label: 'Fairs', value: 'MO13' },
+        { label: 'Cycling', value: 'MO14' },
+        { label: 'Soccer', value: 'MO15' },
+        { label: 'MICE', value: 'MO16' },
+        { label: 'Business', value: 'MO17' },
+        { label: 'Gastronomy', value: 'MO18' },
+        { label: 'Sports', value: 'MO19' },
+        { label: 'Snow', value: 'MO20' },
+        { label: 'Other', value: 'MO21' },
+        { label: '+55', value: 'MO22' },
+        { label: 'Audiovisuals', value: 'MO23' }
     ];
     marketSegmentOptions = [
         { label: '--None--', value: '' },
@@ -21579,7 +21579,7 @@ handleCountryChange(event) {
                 // Do not hide the success message immediately for Guest
                 setTimeout(() => {
                     this.showSuccess = false;
-                }, 4000);
+                }, 4000); 
                 this.handleReset();
             } else {
                 this.errorMessage = result.message || 'Error processing the request';
