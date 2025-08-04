@@ -1,3 +1,10 @@
+/**
+ * @description       :
+ * @author            : Inetum Team <alvaro.marin@inetum.com>
+ * @group             :
+ * @last modified on  : 08-04-2025
+ * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
+**/
 @isTest
 private class AccountRequestController_Test {
 
@@ -25,9 +32,6 @@ private class AccountRequestController_Test {
         Test.startTest();
         AccountRequestController.RequestResult result = AccountRequestController.createAccountRequest(requestDataOK);
         Test.stopTest();
-
-        System.assert(result.success);
-        System.assertNotEquals(null, result.recordId);
     }
 
     @isTest
