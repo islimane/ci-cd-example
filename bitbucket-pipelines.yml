@@ -5,14 +5,21 @@ pipelines:
     '**': #this runs as default for any branch not elsewhere defined
       - step:
           name: Show SFDX Version
+          condition:
+            changesets:
+              includePaths:
+                - "force-app/**"
           runs-on:
             - self.hosted
           script:
-            - sfdx update
             - sfdx --version
             - sfdx plugins --core
       - step:
           name: Check for Duplicates
+          condition:
+            changesets:
+              includePaths:
+                - "force-app/**"
           runs-on:
             - self.hosted
           script:
@@ -20,6 +27,10 @@ pipelines:
             - scripts/bash/checkDuplicates ./force-app ".cls\|.trigger"
       - step:
           name: Validate
+          condition:
+            changesets:
+              includePaths:
+                - "force-app/**"
           runs-on:
             - self.hosted
           script:
@@ -38,6 +49,10 @@ pipelines:
     develop:
       - step:
           name: Show SFDX Version
+          condition:
+            changesets:
+              includePaths:
+                - "force-app/**"
           runs-on:
             - self.hosted
           script:
@@ -46,6 +61,10 @@ pipelines:
             - sfdx plugins --core
       - step:
           name: Deploy to Test
+          condition:
+            changesets:
+              includePaths:
+                - "force-app/**"
           runs-on:
             - self.hosted
           deployment: Test
@@ -60,6 +79,10 @@ pipelines:
     uat:
       - step:
           name: Show SFDX Version
+          condition:
+            changesets:
+              includePaths:
+                - "force-app/**"
           runs-on:
             - self.hosted
           script:
@@ -68,6 +91,10 @@ pipelines:
             - sfdx plugins --core
       - step:
           name: Deploy to Staging
+          condition:
+            changesets:
+              includePaths:
+                - "force-app/**"
           runs-on:
             - self.hosted
           deployment: Staging
@@ -82,6 +109,10 @@ pipelines:
     main:
       - step:
           name: Show SFDX Version
+          condition:
+            changesets:
+              includePaths:
+                - "force-app/**"
           runs-on:
             - self.hosted
           script:
@@ -90,6 +121,10 @@ pipelines:
             - sfdx plugins --core
       - step:
           name: Deploy to Production
+          condition:
+            changesets:
+              includePaths:
+                - "force-app/**"
           runs-on:
             - self.hosted
           deployment: Production
