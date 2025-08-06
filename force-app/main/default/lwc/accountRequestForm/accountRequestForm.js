@@ -5294,10 +5294,6 @@ export default class AccountRequestForm extends LightningElement {
     "label": "Spain",
     "states": [
       {
-        "value": "35",
-        "label": "Las Palmas"
-      },
-      {
         "value": "A",
         "label": "Alicante"
       },
@@ -21466,6 +21462,26 @@ export default class AccountRequestForm extends LightningElement {
 
     stateOptions = [];
 
+    sortCountryOptions() {
+        // Ordena los países por label
+        this.countryOptions.sort((a, b) => {
+            if (!a.label) return -1;
+            if (!b.label) return 1;
+            return a.label.localeCompare(b.label);
+        });
+
+        // Ordena los estados de cada país por label
+        this.countryOptions.forEach(country => {
+            if (country.states && Array.isArray(country.states)) {
+                country.states.sort((a, b) => {
+                    if (!a.label) return -1;
+                    if (!b.label) return 1;
+                    return a.label.localeCompare(b.label);
+                });
+            }
+        });
+    }
+
     handleInputChange(event) {
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
@@ -21602,5 +21618,10 @@ handleCountryChange(event) {
             mode: 'dismissable'
         });
         this.dispatchEvent(evt);
+    }
+
+    constructor() {
+        super();
+        this.sortCountryOptions();
     }
 }
