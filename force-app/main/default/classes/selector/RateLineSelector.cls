@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 08-07-2025
+ * @last modified on  : 18-08-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 public class RateLineSelector {
@@ -133,6 +133,7 @@ public class RateLineSelector {
                 Product__c,
                 ProductName__c,
                 Applicable__c,
+                Application_Type__c,
                 Regime__c,
                 Product__r.Name,
                 Product__r.Family,
