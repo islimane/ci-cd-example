@@ -2,7 +2,7 @@
  * @description       : Controller for Quote Manager Price Config - quoteManagerPriceConfig
  * @author            : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  * @group             :
- * @last modified on  : 17-07-2025
+ * @last modified on  : 19-08-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 public with sharing class QuoteManagerPriceConfigController extends DC_DynamicController {
@@ -76,22 +76,22 @@ public with sharing class QuoteManagerPriceConfigController extends DC_DynamicCo
                 Product2 product = rateLine.getSObject('Product__r') != null
                     ? (Product2) rateLine.getSObject('Product__r')
                     : new Product2();
-                if (!String.isEmpty(product.Regimen_Type__c) && !mTypeOptions.containsKey(product.Regimen_Type__c)) {
+                if (!String.isEmpty(rateLine.Regime__c) && !mTypeOptions.containsKey(rateLine.Regime__c)) {
                     mTypeOptions.put(
-                        product.Regimen_Type__c,
-                        new RateManagerModel.Option(mTypePicklist.get(product.Regimen_Type__c), product.Regimen_Type__c)
+                        rateLine.Regime__c,
+                        new RateManagerModel.Option(mTypePicklist.get(rateLine.Regime__c), rateLine.Regime__c)
                     );
                 }
-                if (!String.isEmpty(product.ApplicationType__c) && !mApplicationTypeOptions.containsKey(product.ApplicationType__c)) {
+                if (!String.isEmpty(rateLine.Application_Type__c) && !mApplicationTypeOptions.containsKey(rateLine.Application_Type__c)) {
                     mApplicationTypeOptions.put(
-                        product.ApplicationType__c,
-                        new RateManagerModel.Option(mApplTypePicklist.get(product.ApplicationType__c), product.ApplicationType__c)
+                        rateLine.Application_Type__c,
+                        new RateManagerModel.Option(mApplTypePicklist.get(rateLine.Application_Type__c), rateLine.Application_Type__c)
                     );
                 }
-                if (!String.isEmpty(product.Applicable__c) && !mApplicableOptions.containsKey(product.Applicable__c)) {
+                if (!String.isEmpty(rateLine.Applicable__c) && !mApplicableOptions.containsKey(rateLine.Applicable__c)) {
                     mApplicableOptions.put(
-                        product.Applicable__c,
-                        new RateManagerModel.Option(mApplicablePicklist.get(product.Applicable__c), product.Applicable__c)
+                        rateLine.Applicable__c,
+                        new RateManagerModel.Option(mApplicablePicklist.get(rateLine.Applicable__c), rateLine.Applicable__c)
                     );
                 }
 

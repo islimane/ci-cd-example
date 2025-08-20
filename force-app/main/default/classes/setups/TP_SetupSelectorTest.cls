@@ -2,7 +2,7 @@
  * @description       : Provides utility methods to retrieve test records based on dynamic naming conventions.
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 09-07-2025
+ * @last modified on  : 19-08-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 
@@ -26,7 +26,10 @@ public with sharing class TP_SetupSelectorTest {
      * @return An Account record.
      */
     public static Account getAccount (Integer batteryNum, String batteryCode){
-        return [SELECT Id, Name  FROM Account WHERE Name =:(DEF_PREFIX+batteryCode+batteryNum) LIMIT 1];
+        return [SELECT Id, ID_BPRO__c, ID_CRS__c, ID_SAP__c, Account_External_ID__c, Account_Type__c, Active__c, Agency_Association__c, Alias__c, BillingCity, BillingCountry, BillingCountryCode, BillingPostalCode, BillingState, BillingStateCode, BillingStreet, CreatedDate, Delegation__c, Description, Email__c, Fax, FidelizationProgram__c, Fiscal_Id__c, IATACode__c, Inactive_Reason__c, LastModifiedDate, Market__c, Market_Segment__c, Merge_Code__c, MICE_Classification__c, MobilePhone__c, Motivation__c, Name, ParentId, Payment_Method__c, PEC__c, Phone, RecordTypeId, SDI__c, Sector__c, SendToPMS__c, SocialReason__c, Status__c, Tax_Type__c,
+        (SELECT PMS__c, PMS_Subsystem__c, Account_PMS_Code__c FROM 	Accounts_PMS__r),
+        (SELECT FirstName, LastName, Phone, Birthdate, Email, MailingStreet, MailingPostalCode__c, MailingCity, MailingStateCode, MailingCountryCode, Contact_Identification__c FROM Contacts)
+        FROM Account WHERE Name =:(DEF_PREFIX+batteryCode+batteryNum) LIMIT 1];
     }
 
     /**
@@ -46,7 +49,7 @@ public with sharing class TP_SetupSelectorTest {
      * @return A Hotel__c record.
      */
     public static Hotel__c getHotel (Integer batteryNum, String batteryCode){
-        return [SELECT Id, Name  FROM Hotel__c WHERE Name =:(DEF_PREFIX+batteryCode+batteryNum) LIMIT 1];
+        return [SELECT Id, Name, ID_PMS__c FROM Hotel__c WHERE Name =:(DEF_PREFIX+batteryCode+batteryNum) LIMIT 1];
     }
 
     /**
@@ -130,6 +133,7 @@ public with sharing class TP_SetupSelectorTest {
                 Product__c,
                 ProductName__c,
                 Applicable__c,
+                Application_Type__c,
                 Regime__c,
                 Product__r.Name,
                 Product__r.Family,

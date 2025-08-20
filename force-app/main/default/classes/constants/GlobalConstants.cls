@@ -2,7 +2,7 @@
  * @description       : Global constants class for the entire system.
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 18-07-2025
+ * @last modified on  : 22-07-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 @SuppressWarnings('PMD')
@@ -112,4 +112,14 @@ public without sharing class GlobalConstants {
 
     /** Logger */
     public static final String LOGGER_SYNC_API_TAG { get { return 'SYNC_API'; } }
+
+    /** Quote */
+	public static Map<String,Schema.RecordTypeInfo> QUOTE_RT_BY_DEV_NAME {
+        get{
+            if(QUOTE_RT_BY_DEV_NAME == null) QUOTE_RT_BY_DEV_NAME = Schema.SObjectType.Quote.getRecordTypeInfosByDeveloperName();
+            return QUOTE_RT_BY_DEV_NAME;
+        }set;
+    }
+    public static final String QUOTE_RT_MICE_NAME { get { return 'MICE'; } }
+    public static final Id QUOTE_RT_MICE_ID { get { return QUOTE_RT_BY_DEV_NAME.get(QUOTE_RT_MICE_NAME).getRecordTypeId();}}
 }
