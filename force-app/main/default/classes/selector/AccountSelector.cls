@@ -60,6 +60,7 @@ public with sharing class AccountSelector {
                 SendToPMS__c,
                 Description,
                 SDI__c,
+                PEC__c,
                 (SELECT FirstName, LastName, Phone, Birthdate, Email, MailingStreet, MailingPostalCode__c, MailingCity, MailingStateCode, MailingCountryCode, Contact_Identification__c FROM Contacts WHERE Title__c = :GlobalConstants.CONTACT_TITLE_BPRO_ADMIN ORDER BY CreatedDate DESC LIMIT 1),
                 (SELECT Id, PMS__c, PMS_Subsystem__c, WS_URL__c, Account_PMS_Code__c FROM Accounts_PMS__r)
             FROM Account
