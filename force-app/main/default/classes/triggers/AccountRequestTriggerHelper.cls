@@ -64,12 +64,12 @@ public without sharing class AccountRequestTriggerHelper extends TriggerUtils {
                 lValidAccountRequests.add(currentAccountRequest);
             }
             // Is inactive account request
-            else if (currentAccountRequest.Type__c == GlobalConstants.ACCOUNT_REQUEST_TYPE_INACTIVE &&
+            /*else if (currentAccountRequest.Type__c == GlobalConstants.ACCOUNT_REQUEST_TYPE_INACTIVE &&
                 currentAccountRequest.Closure__c == GlobalConstants.ACCOUNT_REQUEST_STATUS_PROCESSED &&
                 currentAccountRequest.Closure__c != mOldAccountRequests.get(currentAccountRequest.Id).Closure__c &&
                 currentAccountRequest.Account__c != null) {
                 lValidAccountRequests.add(currentAccountRequest);
-            }
+            }*/
             // Is a rejected account request
             else if (currentAccountRequest.Closure__c == GlobalConstants.ACCOUNT_REQUEST_STATUS_REJECTED &&
                 currentAccountRequest.Closure__c != mOldAccountRequests.get(currentAccountRequest.Id).Closure__c &&
