@@ -1,0 +1,201 @@
+<template>
+    <div class="modern-form-container slds-form">
+        <div class="progress-header">
+            <img src={logoUrl} alt="Barceló Logo" class="form-title" />
+        </div>
+        <div class="form-content">
+            <lightning-spinner if:true={isSubmitting} alternative-text="Procesando..." size="medium"></lightning-spinner>
+            <form onsubmit={handleSubmit}>
+                <div class="form-section">
+                    <div class="slds-text-heading_large slds-m-around_medium">USER REQUEST INFORMATION</div>
+                    <div class="input-row">
+                        <div class="input-group half-width">
+                            <div class="custom-input-container">
+                                <input type="text" name="userEmail" placeholder="* User Email" value={formData.userEmail} onchange={handleInputChange} class="custom-input-field">
+                            </div>
+                        </div>
+                        <div class="input-group half-width">
+                            <div class="custom-input-container">
+                                <input type="text" name="hotel" placeholder="* Hotel" value={formData.hotel} onchange={handleInputChange} class="custom-input-field">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-section">
+                    <div class="slds-text-heading_large slds-m-around_medium">REQUEST INFORMATION</div>
+                    <!-- Primera fila: Name | Corporate name -->
+                    <div class="input-row">
+                        <div class="input-group half-width">
+                            <div class="custom-input-container">
+                                <input type="text" name="name" placeholder="* Name" value={formData.name} onchange={handleInputChange} required class="custom-input-field" maxlength="60">
+                            </div>
+                        </div>
+                        <div class="input-group half-width">
+                            <div class="custom-input-container">
+                                <input type="text" name="corporateName" placeholder="* Corporate name" value={formData.corporateName} onchange={handleInputChange} required class="custom-input-field" maxlength="60">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Segunda fila: Tax Number | Market Segment -->
+                    <div class="input-row">
+                        <div class="input-group half-width">
+                            <div class="custom-input-container">
+                                <input type="text" name="taxNumber" placeholder="* Tax Number" value={formData.taxNumber} onchange={handleInputChange} required class="custom-input-field">
+                            </div>
+                        </div>
+                        <div class="input-group half-width">
+                            <div class="custom-input-container">
+                                <div class="custom-select-wrapper">
+                                    <select name="marketSegment" onchange={handleInputChange} required class="custom-select-field">
+                                        <option value="" disabled selected hidden>* Market Segment</option>
+                                        <template for:each={marketSegmentOptions} for:item="option">
+                                            <option key={option.value} value={option.value}>{option.label}</option>
+                                        </template>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Tercera fila: Customer Type | Motivation Type -->
+                    <div class="input-row">
+                        <div class="input-group half-width">
+                            <div class="custom-input-container">
+                                <div class="custom-select-wrapper">
+                                    <select name="customerType" onchange={handleInputChange} required class="custom-select-field">
+                                        <option value="" disabled selected hidden>* Customer Type</option>
+                                        <template for:each={customerTypeOptions} for:item="option">
+                                            <option key={option.value} value={option.value}>{option.label}</option>
+                                        </template>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group half-width">
+                            <div class="custom-input-container">
+                                <div class="custom-select-wrapper">
+                                    <select name="motivationType" onchange={handleInputChange} required class="custom-select-field">
+                                        <option value="" disabled selected hidden>* Motivation Type</option>
+                                        <template for:each={motivationTypeOptions} for:item="option">
+                                            <option key={option.value} value={option.value}>{option.label}</option>
+                                        </template>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Cuarta fila: Email | Customer Type -->
+                    <div class="input-row">
+                        <div class="input-group half-width">
+                            <div class="custom-input-container">
+                                <input type="email" name="email" placeholder="* Email" value={formData.email} onchange={handleInputChange} required class="custom-input-field">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Quinta fila: Phone | Fax -->
+                    <div class="input-row">
+                        <div class="input-group half-width">
+                            <div class="custom-input-container">
+                                <input type="tel" name="phone" placeholder="Phone" value={formData.phone} onchange={handleInputChange} class="custom-input-field">
+                            </div>
+                        </div>
+                        <div class="input-group half-width">
+                            <div class="custom-input-container">
+                                <input type="text" name="fax" placeholder="Fax" value={formData.fax} onchange={handleInputChange} class="custom-input-field">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Sexta fila: Mobile Phone -->
+                    <div class="input-row">
+                        <div class="input-group full-width">
+                            <div class="custom-input-container">
+                                <input type="tel" name="mobilePhone" placeholder="Mobile Phone" value={formData.mobilePhone} onchange={handleInputChange} class="custom-input-field">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Dirección -->
+                    <div class="input-row">
+                        <div class="input-group half-width">
+                            <div class="custom-input-container">
+                                <div class="custom-select-wrapper">
+                                <select name="country" onchange={handleInputChange} required class="custom-select-field">
+                                        <option value="" disabled selected hidden>* Country</option>
+                                        <template for:each={countryOptions} for:item="option">
+                                            <option key={option.value} value={option.value}>{option.label}</option>
+                                        </template>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group half-width">
+                            <div class="custom-input-container">
+                                <input type="text" name="street" placeholder="* Street" value={formData.street} onchange={handleInputChange} required class="custom-input-field" maxlength="60">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group third-width">
+                            <div class="custom-input-container">
+                                <input type="text" name="postalCode" placeholder="Zip/Postal Code" value={formData.postalCode} onchange={handleInputChange} class="custom-input-field">
+                            </div>
+                        </div>
+                        <div class="input-group third-width">
+                            <div class="custom-input-container">
+                                <input type="text" name="city" placeholder="* City" value={formData.city} onchange={handleInputChange} required class="custom-input-field">
+                            </div>
+                        </div>
+                        <div class="input-group third-width">
+                            <div class="custom-input-container">
+                                <select name="state" onchange={handleInputChange} class="custom-select-field">
+                                        <option value="" disabled selected hidden>State</option>
+                                        <template for:each={stateOptions} for:item="option">
+                                            <option key={option.value} value={option.value}>{option.label}</option>
+                                        </template>
+                                    </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Request Comments -->
+                    <div class="input-row">
+                        <div class="input-group full-width">
+                            <div class="custom-input-container">
+                                <textarea name="requestComments" placeholder="Request Comments" onchange={handleInputChange} maxlength="1000" class="custom-textarea-field">{formData.requestComments}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="navigation-buttons">
+                    <button
+                        type="button"
+                        onclick={handleReset}
+                        class="nav-button prev-button">
+                        CLEAR
+                    </button>
+                    <div class="button-spacer"></div>
+                    <button
+                        type="button"
+                        onclick={handleSubmit}
+                        disabled={isSubmitting}
+                        class="nav-button submit-button">
+                        SUBMIT REQUEST
+                    </button>
+                </div>
+            </form>
+            <!-- Success Message -->
+            <div if:true={showSuccess} class="success-message">
+                <div class="success-content">
+                    <lightning-icon icon-name="utility:success" size="medium" class="success-icon"></lightning-icon>
+                    <div class="success-text">
+                        <h3>Request submitted successfully!</h3>
+                    </div>
+                </div>
+            </div>
+            <!-- Error Message -->
+            <div if:true={errorMessage} class="error-message">
+                <div class="error-content">
+                    <lightning-icon icon-name="utility:error" size="small" class="error-icon"></lightning-icon>
+                    <span class="error-text">{errorMessage}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
