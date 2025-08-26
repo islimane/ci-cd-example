@@ -49,7 +49,8 @@ public with sharing class AccountSyncQueueable implements Queueable, Database.Al
 
             try {
                 HttpResponse response = new Http().send(request);
-                Logger.info('Account sent: ' + response.getBody());
+                Integer statusCodePrefix = response.getStatusCode() / 100;
+                if (statusCodePrefix != 2) Logger.error('Response error: ' + response).addTag(GlobalConstants.LOGGER_SYNC_API_TAG);
             } catch (CalloutException e) {
                 System.debug('### AccountSyncQueueable.sync() - sync error: ' + e.getMessage());
                 Logger.error(e.getMessage()).addTag(GlobalConstants.LOGGER_SYNC_API_TAG);
