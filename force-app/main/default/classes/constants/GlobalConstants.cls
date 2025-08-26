@@ -2,7 +2,7 @@
  * @description       : Global constants class for the entire system.
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 11-07-2025
+ * @last modified on  : 15-07-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 @SuppressWarnings('PMD')
@@ -59,6 +59,11 @@ public without sharing class GlobalConstants {
     public static final Id OPPORTUNITY_RT_ACUERDO_ID { get { return OPPORTUNITY_RT_BY_DEV_NAME.get(OPPORTUNITY_RT_ACUERDO_NAME).getRecordTypeId();}}
     public static final Id OPPORTUNITY_RT_MICE_ID { get { return OPPORTUNITY_RT_BY_DEV_NAME.get(OPPORTUNITY_RT_MICE_NAME).getRecordTypeId();}}
     public static final Id OPPORTUNITY_RT_TTOO_ID { get { return OPPORTUNITY_RT_BY_DEV_NAME.get(OPPORTUNITY_RT_TTOO_NAME).getRecordTypeId();}}
+
+    /* Opportunity Account */
+    public static final String OPPORTUNITY_ACCOUNT_ROL_CUSTOMER { get { return 'End Customer'; } }
+    public static final String OPPORTUNITY_ACCOUNT_ROL_INTERMEDIARY { get { return 'Intermediary'; } }
+    public static final String OPPORTUNITY_ACCOUNT_ROL_DELEGATION { get { return 'Delegation'; } }
 
     /** sObjects Share  */
     public static final String SOBJECT_SHARE_ACCESS_LEVEL_READ { get { return 'Read'; } }

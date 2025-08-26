@@ -2,12 +2,17 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 06-30-2025
- * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
-**/
-public without sharing class IntegrationDTO {
+ * @last modified on  : 15-07-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
+ **/
+global without sharing class IntegrationDTO {
+    global class SCResponseAPI {
+        public Boolean success;
+        public String message;
+    }
 
-    public interface IAccountDTO {}
+    public interface IAccountDTO {
+    }
 
     public class AccountDTO implements IAccountDTO {
         public String Id;
@@ -108,7 +113,9 @@ public without sharing class IntegrationDTO {
             this.StatusDescription = request.ClosureDescription__c;
             this.SDI = account.SDI__c;
 
-            this.Contact = account.Contacts != null && !account.Contacts.isEmpty() ? new ContactDTO(account.Contacts[0]) : new ContactDTO(account, request);
+            this.Contact = account.Contacts != null && !account.Contacts.isEmpty()
+                ? new ContactDTO(account.Contacts[0])
+                : new ContactDTO(account, request);
 
             this.PMSExternalId = new List<AccountPmsDTO>();
             for (Account_PMS__c pms : account.Accounts_PMS__r) {
@@ -254,5 +261,260 @@ public without sharing class IntegrationDTO {
             this.PMSSubsystem = subSystem;
             this.AccountPMSCode = code;
         }
+    }
+
+    public class SCAPIMetadataWrapper {
+        public Pricebook2 pricebook = null;
+        public Map<String, Id> mProductIdByType;
+        public Map<String, Id> mPricebookEntryIdByType;
+    }
+    public class SCOpportunityDTO {
+        public String idHotel;
+        public String codReserva;
+        public String descripcion;
+        public String estado;
+        public String cliAgen;
+        public String cliEmp;
+        public String delegacion;
+        public String tipoEvento;
+        public Integer numPers;
+        public String moneda;
+        public String fechaDesde;
+        public String fechaHasta;
+        public String fechaBloq;
+        public String fechaCreacion; //no esta en xml
+        public String fechaMod; //no esta en xml
+        public String motNoForm;
+        public SCAccommodationDTO alojamiento;
+        public SCAyBDTO aYB;
+        public SCRoomDTO salas;
+        public SCAudiovisualDTO audiovisual;
+        public SCOthersDTO otros;
+
+        //Metadata to parse data
+        private Pricebook2 pricebook = null;
+        private Map<String, Id> mProductIdByType;
+        private Map<String, Id> mPricebookEntryIdByType;
+
+        public Opportunity parse(SCAPIMetadataWrapper metadata) {
+            // Assign metadata
+            this.pricebook = metadata.pricebook;
+            this.mProductIdByType = metadata.mProductIdByType;
+            this.mPricebookEntryIdByType = metadata.mPricebookEntryIdByType;
+
+            // Parse data
+            String accountExternalId = String.isNotBlank(this.cliEmp) ? this.cliEmp : this.cliAgen;
+            List<Account> accounts = [SELECT Id FROM Account WHERE Account_External_ID__c = :accountExternalId LIMIT 1];
+            return new Opportunity(
+                SalesCatering_External_ID__c = this.codReserva,
+                Name = this.descripcion,
+                StageName = this.estado,
+                Account = accounts.isEmpty()? null : accounts[0],
+                EventType__c = this.tipoEvento,
+                PAXNoGroup__c = this.numPers,
+                CurrencyISOCode = this.moneda,
+                EventStartDate__c = (String.isNotBlank(this.fechaDesde)) ? Date.parse(this.fechaDesde) : null,
+                EventEndDate__c = (String.isNotBlank(this.fechaHasta)) ? Date.parse(this.fechaHasta) : null,
+                CloseDate = (String.isNotBlank(this.fechaHasta)) ? Date.parse(this.fechaHasta) : null,
+                BlockingDate__c = (String.isNotBlank(this.fechaBloq)) ? Date.parse(this.fechaBloq) : null,
+                Reason__c = this.motNoForm, //loss_reason__c no existe
+                Pricebook2Id = this.pricebook?.Id,
+                Hotel__r = new Hotel__c(ID_PMS__c = this.idHotel),
+                RecordTypeId = GlobalConstants.OPPORTUNITY_RT_MICE_ID
+            );
+        }
+
+        public Opportunity_Hotel__c parseOpportunityHotel() {
+            return new Opportunity_Hotel__c(
+                Name = this.descripcion + ' - ' + this.idHotel,
+                Opportunity__r = new Opportunity(SalesCatering_External_ID__c = this.codReserva),
+                Hotel__r = new Hotel__c(ID_PMS__c = this.idHotel)
+            );
+        }
+
+        public List<Opportunity_Account__c> parseOpportunityAccounts() {
+            List<Opportunity_Account__c> lOpportunityAccounts = new List<Opportunity_Account__c>();
+            if (String.isNotBlank(this.cliEmp))
+                lOpportunityAccounts.add(
+                    new Opportunity_Account__c(
+                        //Account__r = new Account(Account_External_ID__c = this.cliEmp),
+                        Opportunity__r = new Opportunity(SalesCatering_External_ID__c = this.codReserva),
+                        Rol__c = GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_CUSTOMER
+                    )
+                );
+            if (String.isNotBlank(this.cliAgen))
+                lOpportunityAccounts.add(
+                    new Opportunity_Account__c(
+                        //Account__r = new Account(Account_External_ID__c = this.cliAgen),
+                        Opportunity__r = new Opportunity(SalesCatering_External_ID__c = this.codReserva),
+                        Rol__c = GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_INTERMEDIARY
+                    )
+                );
+            if (String.isNotBlank(this.delegacion))
+                lOpportunityAccounts.add(
+                    new Opportunity_Account__c(
+                        //Account__r = new Account(Account_External_ID__c = this.delegacion),
+                        Opportunity__r = new Opportunity(SalesCatering_External_ID__c = this.codReserva),
+                        Rol__c = GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_DELEGATION
+                    )
+                );
+            return lOpportunityAccounts;
+        }
+
+        public List<QuoteLineItem> parseQuoteLineItems(Id quoteId) {
+            List<QuoteLineItem> lQuoteLineItems = new List<QuoteLineItem>();
+            if (this.alojamiento != null)
+                lQuoteLineItems.add(this.alojamiento.parse(quoteId, mProductIdByType, mPricebookEntryIdByType));
+            if (this.aYB != null)
+                lQuoteLineItems.add(this.aYB.parse(quoteId, mProductIdByType, mPricebookEntryIdByType));
+            if (this.salas != null)
+                lQuoteLineItems.add(this.salas.parse(quoteId, mProductIdByType, mPricebookEntryIdByType));
+            if (this.audiovisual != null)
+                lQuoteLineItems.add(this.audiovisual.parse(quoteId, mProductIdByType, mPricebookEntryIdByType));
+            if (this.otros != null)
+                lQuoteLineItems.add(this.otros.parse(quoteId, mProductIdByType, mPricebookEntryIdByType));
+            return lQuoteLineItems;
+        }
+    }
+
+    public class SCAccommodationDTO {
+        public Decimal aloSubtotal;
+        public Decimal aloPorImpto;
+        public Boolean aloImpIncluidos;
+        public Decimal aloPorComision;
+        public String aloComentarios;
+
+        public QuoteLineItem parse(Id quoteId, Map<String, Id> mProductIdByType, Map<String, Id> mPricebookEntryIdByType) {
+            return IntegrationDTO.generateQLI(
+                quoteId,
+                mProductIdByType.get('room'),
+                mPricebookEntryIdByType.get('room'),
+                this.aloSubtotal,
+                this.aloPorImpto,
+                this.aloImpIncluidos,
+                this.aloPorComision,
+                this.aloComentarios
+            );
+        }
+    }
+
+    public class SCAyBDTO {
+        public Decimal aybSubtotal;
+        public Decimal aybPorImpto;
+        public Boolean aybImpIncluidos;
+        public Decimal aybPorComision;
+        public String aybComentarios;
+
+        public QuoteLineItem parse(Id quoteId, Map<String, Id> mProductIdByType, Map<String, Id> mPricebookEntryIdByType) {
+            return IntegrationDTO.generateQLI(
+                quoteId,
+                mProductIdByType.get('food_beverage'),
+                mPricebookEntryIdByType.get('food_beverage'),
+                this.aybSubtotal,
+                this.aybPorImpto,
+                this.aybImpIncluidos,
+                this.aybPorComision,
+                this.aybComentarios
+            );
+        }
+    }
+
+    public class SCRoomDTO {
+        public Decimal salSubtotal;
+        public Decimal salPorImpto;
+        public Boolean salImpIncluidos;
+        public Decimal salPorComision;
+        public String salComentarios;
+
+        public QuoteLineItem parse(Id quoteId, Map<String, Id> mProductIdByType, Map<String, Id> mPricebookEntryIdByType) {
+            return IntegrationDTO.generateQLI(
+                quoteId,
+                mProductIdByType.get('venue_room'),
+                mPricebookEntryIdByType.get('venue_room'),
+                this.salSubtotal,
+                this.salPorImpto,
+                this.salImpIncluidos,
+                this.salPorComision,
+                this.salComentarios
+            );
+        }
+    }
+
+    public class SCAudiovisualDTO {
+        public Decimal audSubtotal;
+        public Decimal audPorImpto;
+        public Boolean audImpIncluidos;
+        public Decimal audPorComision;
+        public String audComentarios;
+
+        public QuoteLineItem parse(Id quoteId, Map<String, Id> mProductIdByType, Map<String, Id> mPricebookEntryIdByType) {
+            return IntegrationDTO.generateQLI(
+                quoteId,
+                mProductIdByType.get('audiovisuals'),
+                mPricebookEntryIdByType.get('audiovisuals'),
+                this.audSubtotal,
+                this.audPorImpto,
+                this.audImpIncluidos,
+                this.audPorComision,
+                this.audComentarios
+            );
+        }
+    }
+
+    public class SCOthersDTO {
+        public Decimal otrSubtotal;
+        public Decimal otrPorImpto;
+        public Boolean otrImpIncluidos;
+        public Decimal otrPorComision;
+        public String otrComentarios;
+
+        public QuoteLineItem parse(Id quoteId, Map<String, Id> mProductIdByType, Map<String, Id> mPricebookEntryIdByType) {
+            return IntegrationDTO.generateQLI(
+                quoteId,
+                mProductIdByType.get('others'),
+                mPricebookEntryIdByType.get('others'),
+                this.otrSubtotal,
+                this.otrPorImpto,
+                this.otrImpIncluidos,
+                this.otrPorComision,
+                this.otrComentarios
+            );
+        }
+    }
+
+    // AUX METHODS
+
+    public static QuoteLineItem generateQLI(
+        Id quoteId,
+        Id productId,
+        Id pricebookEntryId,
+        Decimal unitPrice,
+        Decimal taxPercentage,
+        Boolean taxIncluded,
+        Decimal comissionPercentage,
+        String description
+    ) {
+        if (
+            (unitPrice == null ||
+            unitPrice == 0) &&
+            (taxPercentage == null ||
+            taxPercentage == 0) &&
+            (taxIncluded == null || !taxIncluded) &&
+            (comissionPercentage == null ||
+            comissionPercentage == 0) &&
+            (String.isBlank(description))
+        )
+            return null;
+        return new QuoteLineItem(
+            QuoteId = quoteId,
+            Product2Id = productId,
+            PricebookEntryId = pricebookEntryId,
+            Quantity = 1,
+            UnitPrice = unitPrice,
+            TaxPercentage__c = taxPercentage,
+            TaxIncluded__c = taxIncluded,
+            ComissionPercentage__c = comissionPercentage,
+            Description = description
+        );
     }
 }

@@ -2,7 +2,7 @@
  * @description       : Provides utility methods to retrieve test records based on dynamic naming conventions.
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 14-07-2025
+ * @last modified on  : 15-07-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 
@@ -94,7 +94,7 @@ public with sharing class TP_SetupSelectorTest {
      * @return A Hotel__c record.
      */
     public static Hotel__c getHotel (Integer batteryNum, String batteryCode){
-        return [SELECT Id, Name  FROM Hotel__c WHERE Name =:(DEF_PREFIX+batteryCode+batteryNum) LIMIT 1];
+        return [SELECT Id, Name, ID_PMS__c  FROM Hotel__c WHERE Name =:(DEF_PREFIX+batteryCode+batteryNum) LIMIT 1];
     }
 
     /**

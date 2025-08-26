@@ -2,7 +2,7 @@
  * @description       : GlobalConstants Test
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Test Class
- * @last modified on  : 11-07-2025
+ * @last modified on  : 15-07-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 @isTest
@@ -52,6 +52,9 @@ public with sharing class GlobalConstants_Test implements TP_ExecutableInterface
         Assert.isNotNull(GlobalConstants.OPPORTUNITY_RT_ACUERDO_NAME, 'GlobalConstants.OPPORTUNITY_RT_ACUERDO_NAME should not be null');
         Assert.isNotNull(GlobalConstants.OPPORTUNITY_RT_MICE_NAME, 'GlobalConstants.OPPORTUNITY_RT_MICE_NAME should not be null');
         Assert.isNotNull(GlobalConstants.OPPORTUNITY_RT_TTOO_NAME, 'GlobalConstants.OPPORTUNITY_RT_TTOO_NAME should not be null');
+        Assert.isNotNull(GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_CUSTOMER, 'GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_CUSTOMER should not be null');
+        Assert.isNotNull(GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_INTERMEDIARY, 'GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_INTERMEDIARY should not be null');
+        Assert.isNotNull(GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_DELEGATION, 'GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_DELEGATION should not be null');
         Assert.isNotNull(GlobalConstants.OPPORTUNITY_RT_ACUERDO_ID, 'GlobalConstants.OPPORTUNITY_RT_ACUERDO_ID should not be null');
         Assert.isNotNull(GlobalConstants.OPPORTUNITY_RT_MICE_ID, 'GlobalConstants.OPPORTUNITY_RT_MICE_ID should not be null');
         Assert.isNotNull(GlobalConstants.OPPORTUNITY_RT_TTOO_ID, 'GlobalConstants.OPPORTUNITY_RT_TTOO_ID should not be null');
