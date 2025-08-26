@@ -435,14 +435,15 @@ public class TP_SetupDataTest {
             Name = 'Default'+batteryName,
             Room__c = 'Z002',
             Characteristic__c = 'Z342',
-            Regimen_Type__c = 'AD',
+            Regimen_Type__c = 'Z2',
             Family = GlobalConstants.PRODUCT2_FAMILY_ROOM,
             isActive = true
         );
         Product2 product2_Supplement = new Product2(
             Name = 'Default'+batteryName,
-            Applicable__c = 'PPD',
-            Regimen_Type__c = 'AD',
+            Applicable__c = 'Z05',
+            Regimen_Type__c = 'Z2',
+            Supplement_Absolute_Concept__c = 'Z001',
             Family = GlobalConstants.PRODUCT2_FAMILY_SUPPLEMENT,
             isActive = true
         );
