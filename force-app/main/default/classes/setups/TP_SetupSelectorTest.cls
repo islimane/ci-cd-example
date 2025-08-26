@@ -2,7 +2,7 @@
  * @description       : Provides utility methods to retrieve test records based on dynamic naming conventions.
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 15-07-2025
+ * @last modified on  : 19-08-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 
@@ -70,7 +70,10 @@ public with sharing class TP_SetupSelectorTest {
                 Delegation__c,
                 SendToPMS__c,
                 Description,
-                SDI__c
+                PEC__c,
+                SDI__c,
+                (SELECT PMS__c, PMS_Subsystem__c, Account_PMS_Code__c FROM 	Accounts_PMS__r),
+                (SELECT FirstName, LastName, Phone, Birthdate, Email, MailingStreet, MailingPostalCode__c, MailingCity, MailingStateCode, MailingCountryCode, Contact_Identification__c FROM Contacts)
             FROM Account
             WHERE Name = :(DEF_PREFIX + batteryCode + batteryNum)
             LIMIT 1
@@ -94,7 +97,7 @@ public with sharing class TP_SetupSelectorTest {
      * @return A Hotel__c record.
      */
     public static Hotel__c getHotel (Integer batteryNum, String batteryCode){
-        return [SELECT Id, Name, ID_PMS__c  FROM Hotel__c WHERE Name =:(DEF_PREFIX+batteryCode+batteryNum) LIMIT 1];
+        return [SELECT Id, Name, ID_PMS__c FROM Hotel__c WHERE Name =:(DEF_PREFIX+batteryCode+batteryNum) LIMIT 1];
     }
 
     /**
@@ -178,6 +181,7 @@ public with sharing class TP_SetupSelectorTest {
                 Product__c,
                 ProductName__c,
                 Applicable__c,
+                Application_Type__c,
                 Regime__c,
                 Product__r.Name,
                 Product__r.Family,
