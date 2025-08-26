@@ -61,6 +61,7 @@ global without sharing class IntegrationDTO {
         public String Description;
         public String StatusDescription;
         public String SDI;
+        public String PEC;
 
         public ContactDTO Contact;
         public List<AccountPmsDTO> PMSExternalId;
@@ -112,6 +113,7 @@ global without sharing class IntegrationDTO {
             this.Description = account.Description;
             this.StatusDescription = request.ClosureDescription__c;
             this.SDI = account.SDI__c;
+            this.PEC = account.PEC__c;
 
             this.Contact = account.Contacts != null && !account.Contacts.isEmpty()
                 ? new ContactDTO(account.Contacts[0])
@@ -262,12 +264,6 @@ global without sharing class IntegrationDTO {
             this.AccountPMSCode = code;
         }
     }
-
-    public class SCAPIMetadataWrapper {
-        public Pricebook2 pricebook = null;
-        public Map<String, Id> mProductIdByType;
-        public Map<String, Id> mPricebookEntryIdByType;
-    }
     public class SCOpportunityDTO {
         public String idHotel;
         public String codReserva;
@@ -294,86 +290,130 @@ global without sharing class IntegrationDTO {
         //Metadata to parse data
         private Pricebook2 pricebook = null;
         private Map<String, Id> mProductIdByType;
-        private Map<String, Id> mPricebookEntryIdByType;
+        private Map<String, Map<String,Id>> mPricebookEntryIdByTypeByCurrency;
+        private Map<String, Id> mAccountIdsByExternalId;
+        private Map<String, Map<String, String>> mOppStageBySCStage;
 
         public Opportunity parse(SCAPIMetadataWrapper metadata) {
             // Assign metadata
             this.pricebook = metadata.pricebook;
             this.mProductIdByType = metadata.mProductIdByType;
-            this.mPricebookEntryIdByType = metadata.mPricebookEntryIdByType;
+            this.mPricebookEntryIdByTypeByCurrency = metadata.mPricebookEntryIdByTypeByCurrency;
+            this.mAccountIdsByExternalId = metadata.mAccountIdsByExternalId;
+            this.mOppStageBySCStage = metadata.mOppStageBySCStage;
 
             // Parse data
             String accountExternalId = String.isNotBlank(this.cliEmp) ? this.cliEmp : this.cliAgen;
-            List<Account> accounts = [SELECT Id FROM Account WHERE Account_External_ID__c = :accountExternalId LIMIT 1];
             return new Opportunity(
-                SalesCatering_External_ID__c = this.codReserva,
+                // Para construir el SalesCatering External, es posible que se tenga que concatenar el campo codReserva + idHotel para asegurar que es único (ahora mismo existen SC External Ids duplicados)
+                SalesCatering_External_ID__c = this.getSalesAndCateringExternalId(),
                 Name = this.descripcion,
-                StageName = this.estado,
-                Account = accounts.isEmpty()? null : accounts[0],
-                EventType__c = this.tipoEvento,
+                StageName = mapSCValue(this.mOppStageBySCStage, 'Opportunity', 'StageName', this.estado),
+                AccountId = mAccountIdsByExternalId.containsKey(accountExternalId) ? mAccountIdsByExternalId.get(accountExternalId) : null,
+                EventType__c = mapSCValue(this.mOppStageBySCStage, 'All', 'EventType__c', this.tipoEvento),
                 PAXNoGroup__c = this.numPers,
                 CurrencyISOCode = this.moneda,
                 EventStartDate__c = (String.isNotBlank(this.fechaDesde)) ? Date.parse(this.fechaDesde) : null,
                 EventEndDate__c = (String.isNotBlank(this.fechaHasta)) ? Date.parse(this.fechaHasta) : null,
                 CloseDate = (String.isNotBlank(this.fechaHasta)) ? Date.parse(this.fechaHasta) : null,
                 BlockingDate__c = (String.isNotBlank(this.fechaBloq)) ? Date.parse(this.fechaBloq) : null,
-                Reason__c = this.motNoForm, //loss_reason__c no existe
+                Reason__c = mapSCValue(this.mOppStageBySCStage, 'All', 'Reason__c', this.motNoForm),
                 Pricebook2Id = this.pricebook?.Id,
                 Hotel__r = new Hotel__c(ID_PMS__c = this.idHotel),
                 RecordTypeId = GlobalConstants.OPPORTUNITY_RT_MICE_ID
             );
         }
 
+        public Quote parseQuote(Opportunity sourceOpportunity, SCAPIMetadataWrapper metadata) {
+            this.mOppStageBySCStage = metadata.mOppStageBySCStage;
+            return new Quote(
+                Id = (sourceOpportunity.Quotes != null && sourceOpportunity.Quotes.size() > 0) ? sourceOpportunity.Quotes[0].Id : null,
+                Name = sourceOpportunity.Name,
+                OpportunityId = sourceOpportunity.Id,
+                CurrencyIsoCode = sourceOpportunity.CurrencyIsoCode,
+                Pricebook2Id = sourceOpportunity.Pricebook2Id,
+                EventType__c = sourceOpportunity.EventType__c,
+                PAXNoGroup__c = sourceOpportunity.PAXNoGroup__c,
+                EventStartDate__c = sourceOpportunity.EventStartDate__c,
+                EventEndDate__c = sourceOpportunity.EventEndDate__c,
+                BlockingDate__c = sourceOpportunity.BlockingDate__c,
+                Hotel__c = sourceOpportunity.Hotel__c,
+                ExpirationDate = sourceOpportunity.CloseDate,
+                ClosedReason__c = sourceOpportunity.Reason__c,
+                FlowNotSignedExecuted__c = true,
+                Status = mapSCValue(this.mOppStageBySCStage, 'Quote', 'Status', this.estado),
+                Quote_External_Id__c = sourceOpportunity.SalesCatering_External_ID__c,
+                RecordTypeId = GlobalConstants.QUOTE_RT_MICE_ID
+            );
+        }
+
         public Opportunity_Hotel__c parseOpportunityHotel() {
             return new Opportunity_Hotel__c(
                 Name = this.descripcion + ' - ' + this.idHotel,
-                Opportunity__r = new Opportunity(SalesCatering_External_ID__c = this.codReserva),
+                Opportunity__r = new Opportunity(SalesCatering_External_ID__c = this.getSalesAndCateringExternalId()),
                 Hotel__r = new Hotel__c(ID_PMS__c = this.idHotel)
             );
         }
 
-        public List<Opportunity_Account__c> parseOpportunityAccounts() {
+        public List<Opportunity_Account__c> parseOpportunityAccounts(SCAPIMetadataWrapper metadata) {
+            Map<String,Id> mAccountIdsByExternalId = metadata.mAccountIdsByExternalId;
             List<Opportunity_Account__c> lOpportunityAccounts = new List<Opportunity_Account__c>();
-            if (String.isNotBlank(this.cliEmp))
+            if (String.isNotBlank(this.cliEmp) && mAccountIdsByExternalId.containsKey(this.cliEmp))
                 lOpportunityAccounts.add(
                     new Opportunity_Account__c(
-                        //Account__r = new Account(Account_External_ID__c = this.cliEmp),
-                        Opportunity__r = new Opportunity(SalesCatering_External_ID__c = this.codReserva),
+                        Account__c = mAccountIdsByExternalId.get(this.cliEmp),
+                        Opportunity__r = new Opportunity(SalesCatering_External_ID__c = this.getSalesAndCateringExternalId()),
                         Rol__c = GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_CUSTOMER
                     )
                 );
-            if (String.isNotBlank(this.cliAgen))
+            if (String.isNotBlank(this.cliAgen) && mAccountIdsByExternalId.containsKey(this.cliAgen))
                 lOpportunityAccounts.add(
                     new Opportunity_Account__c(
-                        //Account__r = new Account(Account_External_ID__c = this.cliAgen),
-                        Opportunity__r = new Opportunity(SalesCatering_External_ID__c = this.codReserva),
+                        Account__c = mAccountIdsByExternalId.get(this.cliAgen),
+                        Opportunity__r = new Opportunity(SalesCatering_External_ID__c = this.getSalesAndCateringExternalId()),
                         Rol__c = GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_INTERMEDIARY
                     )
                 );
-            if (String.isNotBlank(this.delegacion))
+            if (String.isNotBlank(this.delegacion) && mAccountIdsByExternalId.containsKey(this.delegacion))
                 lOpportunityAccounts.add(
                     new Opportunity_Account__c(
-                        //Account__r = new Account(Account_External_ID__c = this.delegacion),
-                        Opportunity__r = new Opportunity(SalesCatering_External_ID__c = this.codReserva),
+                        Account__c = mAccountIdsByExternalId.get(this.delegacion),
+                        Opportunity__r = new Opportunity(SalesCatering_External_ID__c = this.getSalesAndCateringExternalId()),
                         Rol__c = GlobalConstants.OPPORTUNITY_ACCOUNT_ROL_DELEGATION
                     )
                 );
             return lOpportunityAccounts;
         }
 
-        public List<QuoteLineItem> parseQuoteLineItems(Id quoteId) {
+        public List<QuoteLineItem> parseQuoteLineItems(Id quoteId, Opportunity sourceOpportunity, SCAPIMetadataWrapper metadata) {
             List<QuoteLineItem> lQuoteLineItems = new List<QuoteLineItem>();
-            if (this.alojamiento != null)
-                lQuoteLineItems.add(this.alojamiento.parse(quoteId, mProductIdByType, mPricebookEntryIdByType));
-            if (this.aYB != null)
-                lQuoteLineItems.add(this.aYB.parse(quoteId, mProductIdByType, mPricebookEntryIdByType));
-            if (this.salas != null)
-                lQuoteLineItems.add(this.salas.parse(quoteId, mProductIdByType, mPricebookEntryIdByType));
-            if (this.audiovisual != null)
-                lQuoteLineItems.add(this.audiovisual.parse(quoteId, mProductIdByType, mPricebookEntryIdByType));
-            if (this.otros != null)
-                lQuoteLineItems.add(this.otros.parse(quoteId, mProductIdByType, mPricebookEntryIdByType));
+            Map<String, Id> mPricebookEntryIdByType = metadata.mPricebookEntryIdByTypeByCurrency.get(sourceOpportunity.CurrencyISOCode);
+            if (this.alojamiento != null) {
+                QuoteLineItem qliToAdd = this.alojamiento.parse(quoteId, mProductIdByType, mPricebookEntryIdByType);
+                if (qliToAdd != null) lQuoteLineItems.add(qliToAdd);
+            }
+            if (this.aYB != null){
+                QuoteLineItem qliToAdd = this.aYB.parse(quoteId, mProductIdByType, mPricebookEntryIdByType);
+                if (qliToAdd != null) lQuoteLineItems.add(qliToAdd);
+            }
+            if (this.salas != null){
+                QuoteLineItem qliToAdd = this.salas.parse(quoteId, mProductIdByType, mPricebookEntryIdByType);
+                if (qliToAdd != null) lQuoteLineItems.add(qliToAdd);
+            }
+            if (this.audiovisual != null){
+                QuoteLineItem qliToAdd = this.audiovisual.parse(quoteId, mProductIdByType, mPricebookEntryIdByType);
+                if (qliToAdd != null) lQuoteLineItems.add(qliToAdd);
+            }
+            if (this.otros != null){
+                QuoteLineItem qliToAdd = this.otros.parse(quoteId, mProductIdByType, mPricebookEntryIdByType);
+                if (qliToAdd != null) lQuoteLineItems.add(qliToAdd);
+            }
             return lQuoteLineItems;
+        }
+
+        public String getSalesAndCateringExternalId() {
+            // Return the booking code concatenated with the hotel ID to ensure uniqueness
+            return this.codReserva + '-' + this.idHotel;
         }
     }
 
@@ -387,8 +427,8 @@ global without sharing class IntegrationDTO {
         public QuoteLineItem parse(Id quoteId, Map<String, Id> mProductIdByType, Map<String, Id> mPricebookEntryIdByType) {
             return IntegrationDTO.generateQLI(
                 quoteId,
-                mProductIdByType.get('room'),
-                mPricebookEntryIdByType.get('room'),
+                mProductIdByType.get('Room'),
+                mPricebookEntryIdByType?.get('Room'),
                 this.aloSubtotal,
                 this.aloPorImpto,
                 this.aloImpIncluidos,
@@ -408,8 +448,8 @@ global without sharing class IntegrationDTO {
         public QuoteLineItem parse(Id quoteId, Map<String, Id> mProductIdByType, Map<String, Id> mPricebookEntryIdByType) {
             return IntegrationDTO.generateQLI(
                 quoteId,
-                mProductIdByType.get('food_beverage'),
-                mPricebookEntryIdByType.get('food_beverage'),
+                mProductIdByType.get('FoodBeverage'),
+                mPricebookEntryIdByType?.get('FoodBeverage'),
                 this.aybSubtotal,
                 this.aybPorImpto,
                 this.aybImpIncluidos,
@@ -429,8 +469,8 @@ global without sharing class IntegrationDTO {
         public QuoteLineItem parse(Id quoteId, Map<String, Id> mProductIdByType, Map<String, Id> mPricebookEntryIdByType) {
             return IntegrationDTO.generateQLI(
                 quoteId,
-                mProductIdByType.get('venue_room'),
-                mPricebookEntryIdByType.get('venue_room'),
+                mProductIdByType.get('VenueRoom'),
+                mPricebookEntryIdByType?.get('VenueRoom'),
                 this.salSubtotal,
                 this.salPorImpto,
                 this.salImpIncluidos,
@@ -450,8 +490,8 @@ global without sharing class IntegrationDTO {
         public QuoteLineItem parse(Id quoteId, Map<String, Id> mProductIdByType, Map<String, Id> mPricebookEntryIdByType) {
             return IntegrationDTO.generateQLI(
                 quoteId,
-                mProductIdByType.get('audiovisuals'),
-                mPricebookEntryIdByType.get('audiovisuals'),
+                mProductIdByType.get('Audiovisuals'),
+                mPricebookEntryIdByType?.get('Audiovisuals'),
                 this.audSubtotal,
                 this.audPorImpto,
                 this.audImpIncluidos,
@@ -471,8 +511,8 @@ global without sharing class IntegrationDTO {
         public QuoteLineItem parse(Id quoteId, Map<String, Id> mProductIdByType, Map<String, Id> mPricebookEntryIdByType) {
             return IntegrationDTO.generateQLI(
                 quoteId,
-                mProductIdByType.get('others'),
-                mPricebookEntryIdByType.get('others'),
+                mProductIdByType.get('Other'),
+                mPricebookEntryIdByType?.get('Other'),
                 this.otrSubtotal,
                 this.otrPorImpto,
                 this.otrImpIncluidos,
@@ -482,9 +522,17 @@ global without sharing class IntegrationDTO {
         }
     }
 
-    // AUX METHODS
+    // AUX METHODS AND WRAPPER
 
-    public static QuoteLineItem generateQLI(
+    public class SCAPIMetadataWrapper {
+        public Pricebook2 pricebook = null;
+        public Map<String, Id> mProductIdByType = new Map<String, Id>();
+        public Map<String, Map<String,Id>> mPricebookEntryIdByTypeByCurrency = new Map<String, Map<String,Id>>();
+        public Map<String,Id> mAccountIdsByExternalId = new Map<String, Id>();
+        public Map<String, Map<String, String>> mOppStageBySCStage = new Map<String, Map<String, String>>();
+    }
+
+    private static QuoteLineItem generateQLI(
         Id quoteId,
         Id productId,
         Id pricebookEntryId,
@@ -513,8 +561,23 @@ global without sharing class IntegrationDTO {
             UnitPrice = unitPrice,
             TaxPercentage__c = taxPercentage,
             TaxIncluded__c = taxIncluded,
-            ComissionPercentage__c = comissionPercentage,
-            Description = description
+            ComissionPercentage__c = comissionPercentage
+            //Description = description => No mapeado por fallo de longitud de campo, es posible que el futuro se añada otro campo. Referencias en el resto del código no se tocan
         );
+    }
+
+    private static String mapSCValue(Map<String, Map<String, String>> mValues, String principalObject, String field, String value) {
+        String mappedValue = value;
+
+        String key = principalObject + '.' + field;
+        if (mValues.containsKey(key)) {
+            Map<String, String> mValuesForField = mValues.get(key);
+            if (mValuesForField != null && mValuesForField.containsKey(value)) mappedValue = mValuesForField.get(value);
+        } else {
+            key  = 'All.' + field;
+            Map<String, String> mValuesForAll = mValues.get(key);
+            if (mValuesForAll != null && mValuesForAll.containsKey(value)) mappedValue = mValuesForAll.get(value);
+        }
+        return mappedValue;
     }
 }

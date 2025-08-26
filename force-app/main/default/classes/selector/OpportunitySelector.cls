@@ -38,6 +38,7 @@ public with sharing class OpportunitySelector {
                 SalesCatering_External_ID__c,
                 Name,
                 StageName,
+                CloseDate,
                 AccountId,
                 EventType__c,
                 PAXNoGroup__c,
@@ -48,10 +49,17 @@ public with sharing class OpportunitySelector {
                 Reason__c,
                 Pricebook2Id,
                 Hotel__c,
-                (SELECT Id FROM Quotes ORDER BY CreatedDate DESC LIMIT 1),
-                (SELECT Id, Opportunity__r.SalesCatering_External_ID__c, Hotel__r.ID_PMS__c FROM Opportunity_Hotels__r),
                 (
-                    SELECT Id, Opportunity__r.SalesCatering_External_ID__c, /*Account__r.Account_External_ID__c, */ Rol__c
+                    SELECT Id, OpportunityId, Name, CurrencyIsoCode, AccountId, Pricebook2Id, EventType__c, PAXNoGroup__c, EventStartDate__c, EventEndDate__c, BlockingDate__c, Hotel__c, ExpirationDate, Status, RecordTypeId, Quote_External_Id__c
+                    FROM Quotes ORDER BY CreatedDate DESC
+                    LIMIT 1
+                ),
+                (
+                    SELECT Id, Opportunity__r.SalesCatering_External_ID__c, Hotel__r.ID_PMS__c
+                    FROM Opportunity_Hotels__r
+                ),
+                (
+                    SELECT Id, Opportunity__r.SalesCatering_External_ID__c, Account__r.Account_External_ID__c, Rol__c
                     FROM Opportunity_Accounts__r
                 )
             FROM Opportunity
