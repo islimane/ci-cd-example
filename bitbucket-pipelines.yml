@@ -35,6 +35,7 @@ pipelines:
             - self.hosted
           script:
             - '[[ "${BITBUCKET_PR_DESTINATION_BRANCH}" == "main" ]] && SFDX_AUTH_URL=$PRO_SFDX_AUTH_URL'
+            - '[[ "${BITBUCKET_PR_DESTINATION_BRANCH}" == "qa" ]] && SFDX_AUTH_URL=$QA_SFDX_AUTH_URL'
             - '[[ "${BITBUCKET_PR_DESTINATION_BRANCH}" == "uat" ]] && SFDX_AUTH_URL=$UAT_SFDX_AUTH_URL'
             - '[[ "${BITBUCKET_PR_DESTINATION_BRANCH}" == "develop" ]] && SFDX_AUTH_URL=$DEV_SFDX_AUTH_URL'
             - if [ -z "$SFDX_AUTH_URL" ]; then echo "No SFDX_AUTH_URL defined for branch ${BITBUCKET_PR_DESTINATION_BRANCH}"; exit; fi
@@ -76,6 +77,43 @@ pipelines:
             #- sfdx config:get defaultusername
             #- tests=$(cat ci-config/specified_tests.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
             #- '[[ -z "$tests" ]] && sf project deploy start --source-dir force-app/ --test-level NoTestRun || sf project deploy start --source-dir force-app/ --test-level RunSpecifiedTests --tests $tests'
+    qa:
+      - step:
+          name: Show SFDX Version
+          runs-on:
+            - self.hosted
+          script:
+            - sfdx update
+            - sfdx --version
+            - sfdx plugins --core
+      - step:
+          name: Deploy to Staging
+          runs-on:
+            - self.hosted
+          deployment: Staging
+          script:
+            - echo $QA_SFDX_AUTH_URL > sfdx_auth_url.txt
+            - sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth_url.txt --setalias $SF_USERNAME --json
+            - sfdx force:config:set defaultusername=$SF_USERNAME
+            - sfdx config:get defaultusername
+            - |
+              if [ ! -s ci-config/last_successful_commit.txt ]; then
+                echo "Using manifest/package.xml for deployment"
+                MANIFEST_PATH="manifest/package.xml"
+              else
+                LAST_SUCCESSFUL_COMMIT=$(cat ci-config/last_successful_commit.txt)
+                sfdx sgd:source:delta --to $BITBUCKET_COMMIT --from $LAST_SUCCESSFUL_COMMIT --output .
+                MANIFEST_PATH="package/package.xml"
+              fi
+            - echo $MANIFEST_PATH
+            - tests=$(cat ci-config/specified_tests.txt | tr '\n' ' ' | sed 's/ $//')
+            - '[[ -z "$tests" ]] && sf project deploy start --manifest $MANIFEST_PATH --test-level RunLocalTests || sf project deploy start --manifest $MANIFEST_PATH --test-level RunSpecifiedTests --tests $tests'
+            - echo $BITBUCKET_COMMIT > ci-config/last_successful_commit.txt
+            - cat "$MANIFEST_PATH" > ci-config/last_package.xml
+            - git add ci-config/last_successful_commit.txt
+            - git add ci-config/last_package.xml
+            - git commit -m '[skip ci]'
+            - git push origin ${BITBUCKET_BRANCH}
     uat:
       - step:
           name: Show SFDX Version
