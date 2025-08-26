@@ -2,20 +2,18 @@
  * @description       : Unit Test Class for Setup Data Methods
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 09-07-2025
+ * @last modified on  : 15-07-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 @isTest
 public class TP_SetupDataTest {
 
-    static final Integer STANDARD_SIZE_TEST_LIST = 5;
-    static final String PRICEBOOK_NAME_TEST = 'TestPricebook';
-
     /*********************************/
     /*     CONSTANTS DEFINITIONS     */
     /*********************************/
 
-
+    static final Integer STANDARD_SIZE_TEST_LIST = 5;
+    static final String PRICEBOOK_NAME_TEST = 'TestPricebook';
 
     /*********************************/
     /*       MAPS DEFINITIONS       */
@@ -249,7 +247,8 @@ public class TP_SetupDataTest {
             Name = 'Default'+batteryName,
             Account__c = account?.Id,
             RecordTypeId = GlobalConstants.HOTEL_RT_HOTEL_ID,
-            Quotation_Manager__c = UserInfo.getUserId()
+            Quotation_Manager__c = UserInfo.getUserId(),
+            ID_PMS__c = 'Default'+batteryName
         );
         mHotel = TP_SetupDataUtilsTest.setMapByName(mHotel, new List<sObject>{hotel});
         return hotel;
@@ -436,14 +435,15 @@ public class TP_SetupDataTest {
             Name = 'Default'+batteryName,
             Room__c = 'Z002',
             Characteristic__c = 'Z342',
-            Regimen_Type__c = 'AD',
+            Regimen_Type__c = 'Z2',
             Family = GlobalConstants.PRODUCT2_FAMILY_ROOM,
             isActive = true
         );
         Product2 product2_Supplement = new Product2(
             Name = 'Default'+batteryName,
-            Applicable__c = 'PPD',
-            Regimen_Type__c = 'AD',
+            Applicable__c = 'Z05',
+            Regimen_Type__c = 'Z2',
+            Supplement_Absolute_Concept__c = 'Z001',
             Family = GlobalConstants.PRODUCT2_FAMILY_SUPPLEMENT,
             isActive = true
         );

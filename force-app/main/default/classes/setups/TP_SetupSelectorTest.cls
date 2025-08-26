@@ -25,11 +25,59 @@ public with sharing class TP_SetupSelectorTest {
      * @param batteryCode The code used as part of the record's name.
      * @return An Account record.
      */
-    public static Account getAccount (Integer batteryNum, String batteryCode){
-        return [SELECT Id, ID_BPRO__c, ID_CRS__c, ID_SAP__c, Account_External_ID__c, Account_Type__c, Active__c, Agency_Association__c, Alias__c, BillingCity, BillingCountry, BillingCountryCode, BillingPostalCode, BillingState, BillingStateCode, BillingStreet, CreatedDate, Delegation__c, Description, Email__c, Fax, FidelizationProgram__c, Fiscal_Id__c, IATACode__c, Inactive_Reason__c, LastModifiedDate, Market__c, Market_Segment__c, Merge_Code__c, MICE_Classification__c, MobilePhone__c, Motivation__c, Name, ParentId, Payment_Method__c, PEC__c, Phone, RecordTypeId, SDI__c, Sector__c, SendToPMS__c, SocialReason__c, Status__c, Tax_Type__c,
-        (SELECT PMS__c, PMS_Subsystem__c, Account_PMS_Code__c FROM 	Accounts_PMS__r),
-        (SELECT FirstName, LastName, Phone, Birthdate, Email, MailingStreet, MailingPostalCode__c, MailingCity, MailingStateCode, MailingCountryCode, Contact_Identification__c FROM Contacts)
-        FROM Account WHERE Name =:(DEF_PREFIX+batteryCode+batteryNum) LIMIT 1];
+    public static Account getAccount(Integer batteryNum, String batteryCode) {
+        return [
+            SELECT
+                Id,
+                Name,
+                Account_External_ID__c,
+                SocialReason__c,
+                Fiscal_Id__c,
+                RecordTypeId,
+                ParentId,
+                BillingStreet,
+                BillingCity,
+                BillingState,
+                BillingPostalCode,
+                BillingCountry,
+                BillingStateCode,
+                BillingCountryCode,
+                Phone,
+                Fax,
+                MobilePhone__c,
+                CreatedDate,
+                LastModifiedDate,
+                Active__c,
+                Agency_Association__c,
+                Status__c,
+                MICE_Classification__c,
+                Market_Segment__c,
+                Motivation__c,
+                Payment_Method__c,
+                Sector__c,
+                Tax_Type__c,
+                Email__c,
+                FidelizationProgram__c,
+                IATACode__c,
+                ID_SAP__c,
+                Market__c,
+                ID_CRS__c,
+                ID_BPRO__c,
+                Inactive_Reason__c,
+                Account_Type__c,
+                Merge_Code__c,
+                Alias__c,
+                Delegation__c,
+                SendToPMS__c,
+                Description,
+                PEC__c,
+                SDI__c,
+                (SELECT PMS__c, PMS_Subsystem__c, Account_PMS_Code__c FROM 	Accounts_PMS__r),
+                (SELECT FirstName, LastName, Phone, Birthdate, Email, MailingStreet, MailingPostalCode__c, MailingCity, MailingStateCode, MailingCountryCode, Contact_Identification__c FROM Contacts)
+            FROM Account
+            WHERE Name = :(DEF_PREFIX + batteryCode + batteryNum)
+            LIMIT 1
+        ];
     }
 
     /**

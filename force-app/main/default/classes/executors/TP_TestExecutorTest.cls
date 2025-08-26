@@ -99,4 +99,34 @@ public class TP_TestExecutorTest implements TP_ExecutableInterface{
     static void OpportunityHotelTrigger_Test(){
         OpportunityHotelTrigger_Test.testAll();
     }
+
+    @IsTest
+    static void AccountSelector_Test(){
+        AccountSelector_Test.testAll();
+    }
+
+    @IsTest
+    static void AccountSyncService_Test(){
+        AccountSyncService_Test.testAll();
+    }
+
+    @IsTest
+    static void AccountSyncQueueable_Test(){
+        AccountSyncQueueable_Test.testAll();
+    }
+
+    @IsTest
+    static void AccountRequestTrigger_Test(){
+        AccountRequestTrigger_Test.testAll();
+    }
+
+    @IsTest
+    static void ITM_SyncErrorsAPI_Test(){
+        ITM_SyncErrorsAPI_Test.testAll();
+    }
+
+    @IsTest
+    static void SCOpportunityAPIHelper_Test(){
+        SCOpportunityAPIHelper_Test.testAll();
+    }
 }
