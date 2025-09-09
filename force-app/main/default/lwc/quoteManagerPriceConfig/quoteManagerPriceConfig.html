@@ -2,11 +2,10 @@
   @description       :
   @author            : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
   @group             :
-  @last modified on  : 17-06-2025
+  @last modified on  : 09-09-2025
   @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 -->
 <template>
-
     <lightning-button-stateful
         class="slds-button slds-m-left_x-small"
         label-when-off="Switch to Allotments"
@@ -16,11 +15,12 @@
         variant="brand-outline"
         selected={quotaSelected}
         onclick={handleClick}
-        disabled={preventChange}>
+        disabled={preventChange}
+    >
     </lightning-button-stateful>
 
     <lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
-        <lightning-accordion-section name="rooms" label={roomHeaderLabel} >
+        <lightning-accordion-section name="rooms" label={roomHeaderLabel}>
             <div data-id={roomsContainer} class="accordion-container slds-p-around_medium slds-m-bottom_medium">
                 <c-quote-manager-rate-price-table
                     onsave={handleSave}
@@ -31,15 +31,25 @@
                 ></c-quote-manager-rate-price-table>
             </div>
         </lightning-accordion-section>
+
         <lightning-accordion-section name="supplements" label={supplementsHeaderLabel}>
-            <div data-id={supplContainer} class="accordion-container slds-p-around_medium slds-m-bottom_medium">
-                <c-quote-manager-rate-price-table
-                    onsave={handleSave}
-                    render-rooms="false"
-                    rows-data={supplData}
-                ></c-quote-manager-rate-price-table>
+            <div
+                class="dt-wrap slds-is-relative"
+                aria-disabled={disableTable}
+                data-disabled={disableTable}
+                onkeydown={handleKeydownWhenDisabled}
+            >
+                <div data-id={supplContainer} class="accordion-container slds-p-around_medium slds-m-bottom_medium">
+                    <c-quote-manager-rate-price-table
+                        onsave={handleSave}
+                        render-rooms="false"
+                        rows-data={supplData}
+                    ></c-quote-manager-rate-price-table>
+                </div>
+                <template if:true={disableTable}>
+                    <div class="dt-overlay" title="Bloqueado"></div>
+                </template>
             </div>
         </lightning-accordion-section>
     </lightning-accordion>
-
 </template>

@@ -1,4 +1,4 @@
-:host .accordion-container{
+:host .accordion-container {
     background-color: #f4f4f4;
     border-radius: 1rem;
     margin-bottom: 1rem;
@@ -8,4 +8,19 @@
     display: block;
     max-width: 100%;
     min-height: 65vh;
+}
+
+.dt-wrap[data-disabled='true'] {
+    filter: grayscale(100%);
+    opacity: 0.85;
+}
+
+.dt-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 8001;
+    pointer-events: auto; /* capta clicks para bloquear la tabla */
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(1px);
+    bottom: -25px; /* extiende 25px por debajo */
 }
