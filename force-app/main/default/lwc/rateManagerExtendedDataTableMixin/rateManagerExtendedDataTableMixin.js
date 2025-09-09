@@ -79,11 +79,13 @@ export const RateManagerExtendedDataTableMixin = (BaseClass) =>
                 let acum = 0
                 let count = 0
                 periods.forEach((period) => {
+                    const [startDate, endDate] = period.split(' - ')
+                    const diffInDays = this.diffInDays(startDate, endDate)
                     const rate = item.ratesPrices.find((element) => element.periodKey === period)
                     newItem[period] = rate ? (isQuota ? rate.Quota : rate.TotalPrice) : null
                     if (rate.TotalPrice) {
-                        acum += rate.TotalPrice
-                        count++
+                        acum += rate.TotalPrice * diffInDays
+                        count += diffInDays
                     }
                 })
                 newItem.avg = count === 0 ? null : Math.round((acum / count) * 100) / 100
@@ -177,5 +179,23 @@ export const RateManagerExtendedDataTableMixin = (BaseClass) =>
                     message: message
                 })
             )
+        }
+
+        // Function to convert 'dd/mm/yyyy' to Date again
+        parseDate(str) {
+            const [day, month, year] = str.split('/').map(Number)
+            return new Date(year, month - 1, day)
+        }
+
+        // Function to calculate difference in days
+        diffInDays(dateStr1, dateStr2) {
+            const d1 = this.parseDate(dateStr1)
+            const d2 = this.parseDate(dateStr2)
+
+            const diffMs = d2 - d1 // difference in milliseconds
+            // Convert to days. Include beginning and ending date (both because periods do not overlap)
+            const diffDays = diffMs / (1000 * 60 * 60 * 24) + 1
+
+            return diffDays
         }
     }
