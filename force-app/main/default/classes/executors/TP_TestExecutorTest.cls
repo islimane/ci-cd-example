@@ -129,4 +129,75 @@ public class TP_TestExecutorTest implements TP_ExecutableInterface{
     static void SCOpportunityAPIHelper_Test(){
         SCOpportunityAPIHelper_Test.testAll();
     }
+
+
+    @IsTest
+    static void RateManagerPeriodListController_Test(){
+        RateManagerPeriodListController_Test.testAll();
+    }
+
+    @IsTest
+    static void RateManagerRoomsConfigController_Test(){
+        RateManagerRoomsConfigController_Test.testAll();
+    }
+
+    @IsTest
+    static void RateManagerRateConfigController_Test(){
+        RateManagerRateConfigController_Test.testAll();
+    }
+
+    @IsTest
+    static void RateManagerSmntsAndDntsController_Test(){
+        RateManagerSmntsAndDntsController_Test.testAll();
+    }
+
+    @IsTest
+    static void RateManagerAddRoomController_Test(){
+        RateManagerAddRoomController_Test.testAll();
+    }
+
+    @IsTest
+    static void RateManagerAddSupplDiscController_Test(){
+        RateManagerAddSupplDiscController_Test.testAll();
+    }
+
+    @IsTest
+    static void RateLineSelector_Test(){
+        RateLineSelector_Test.testAll();
+    }
+
+    @IsTest
+    static void PeriodSelector_Test(){
+        PeriodSelector_Test.testAll();
+    }
+
+    @IsTest
+    static void HotelTerritoryTrigger_Test(){
+        HotelTerritoryTrigger_Test.testAll();
+    }
+
+    @IsTest
+    static void RateLineManager_Test(){
+        RateLineManager_Test.testAll();
+    }
+
+    @IsTest
+    static void WeekdaySetSelector_Test(){
+        WeekdaySetSelector_Test.testAll();
+    }
+
+    @IsTest
+    static void OpportunitySelector_Test(){
+        OpportunitySelector_Test.testAll();
+    }
+
+    @IsTest
+    static void QuoteManagerPriceConfigController_Test(){
+        QuoteManagerPriceConfigController_Test.testAll();
+    }
+
+    @IsTest
+    static void RatePriceManager_Test(){
+        RatePriceManager_Test.testAll();
+    }
 }
