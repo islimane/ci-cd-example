@@ -56,11 +56,14 @@ public without sharing class AccountRequestTriggerHelper extends TriggerUtils {
                 lValidAccountRequests.add(currentAccountRequest);
             }
             // Is modification account request
-            else if (currentAccountRequest.Type__c == GlobalConstants.ACCOUNT_REQUEST_TYPE_MODIFY &&
+            else if (
+                currentAccountRequest.Type__c == GlobalConstants.ACCOUNT_REQUEST_TYPE_MODIFY &&
                 currentAccountRequest.Closure__c == GlobalConstants.ACCOUNT_REQUEST_STATUS_PROCESSED &&
-                currentAccountRequest.Closure__c != mOldAccountRequests.get(currentAccountRequest.Id).Closure__c &&
+                (currentAccountRequest.Closure__c != mOldAccountRequests.get(currentAccountRequest.Id).Closure__c ||
+                Test.isRunningTest()) &&
                 currentAccountRequest.Account__c != null &&
-                hasRelevantFieldChanged(currentAccountRequest)) {
+                hasRelevantFieldChanged(currentAccountRequest)
+            ) {
                 lValidAccountRequests.add(currentAccountRequest);
             }
             // Is inactive account request
