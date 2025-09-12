@@ -1,9 +1,9 @@
 /**
- * @description       :
+ * @description       : AccountRequest Trigger Helper
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 07-07-2025
- * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
+ * @last modified on  : 12-09-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 public without sharing class AccountRequestTriggerHelper extends TriggerUtils {
 
