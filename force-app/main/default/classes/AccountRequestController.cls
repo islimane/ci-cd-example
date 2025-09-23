@@ -1,3 +1,10 @@
+/**
+ * @description       :
+ * @author            : Inetum Team <alvaro.marin@inetum.com>
+ * @group             :
+ * @last modified on  : 12-09-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
+**/
 public with sharing class AccountRequestController {
     // Asigna el valor al campo si existe y no está vacío
     private static void setFieldIfExists(SObject obj, String fieldName, String value) {
@@ -9,19 +16,19 @@ public with sharing class AccountRequestController {
             }
         }
     }
-    
+
     public class RequestResult {
         @AuraEnabled public Boolean success { get; set; }
         @AuraEnabled public String message { get; set; }
         @AuraEnabled public String recordId { get; set; }
-        
+
         public RequestResult(Boolean success, String message, String recordId) {
             this.success = success;
             this.message = message;
             this.recordId = recordId;
         }
     }
-    
+
     public class RequestData {
         @AuraEnabled public String name { get; set; }
         @AuraEnabled public String corporateName { get; set; }
@@ -43,7 +50,7 @@ public with sharing class AccountRequestController {
         @AuraEnabled public String hotel { get; set; }
         @AuraEnabled public String userEmail { get; set; }
     }
-    
+
     @AuraEnabled
     public static RequestResult createAccountRequest(RequestData requestData) {
         try {
@@ -57,7 +64,7 @@ public with sharing class AccountRequestController {
                 String.isBlank(requestData.email)) {
                 return new RequestResult(false, 'Todos los campos obligatorios deben completarse.', null);
             }
-            
+
             // Validar email
             if (!isValidEmail(requestData.email)) {
                 return new RequestResult(false, 'El formato del email no es válido.', null);
@@ -66,10 +73,10 @@ public with sharing class AccountRequestController {
             if (!isValidEmail(requestData.userEmail)) {
                 return new RequestResult(false, 'El formato del email no es válido.', null);
             }
-            
+
             // Verificar si el objeto Account_Request__c existe
             // Si no existe, podemos crear un Lead como alternativa
-            
+
             // Intentar crear AccountRequest__c y devolver error si falla
             try {
                 SObject accountRequest = createAccountRequestRecord(requestData);
@@ -79,13 +86,13 @@ public with sharing class AccountRequestController {
                 System.debug('Error al crear AccountRequest__c: ' + e.getMessage());
                 return new RequestResult(false, 'No se pudo crear la solicitud. Por favor, contacte al administrador.', e.getMessage());
             }
-            
+
         } catch (Exception e) {
             System.debug('Error en createAccountRequest: ' + e.getMessage());
             return new RequestResult(false, 'Error interno del servidor. Por favor, contacte al administrador.', e.getMessage());
         }
     }
-    
+
     private static SObject createAccountRequestRecord(RequestData data) {
         System.debug('BillingStreet_request__c: ' + data.street);
         System.debug('BillingCity_request__c: ' + data.city);
@@ -120,11 +127,16 @@ public with sharing class AccountRequestController {
 
         return accountRequest;
     }
-    
+
     private static Boolean isValidEmail(String email) {
-        String emailRegex = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$';
-        Pattern pattern = Pattern.compile(emailRegex);
-        return pattern.matcher(email).matches();
+        final Pattern EMAIL_PATTERN = Pattern.compile(
+            '^[A-Za-z0-9._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,}$'
+        );
+        System.debug('Validating email: ' + email);
+        if (String.isBlank(email)) {
+            return false;
+        }
+        return EMAIL_PATTERN.matcher(email).matches();
     }
 
     @AuraEnabled(cacheable=true)
