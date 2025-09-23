@@ -200,4 +200,9 @@ public class TP_TestExecutorTest implements TP_ExecutableInterface{
     static void RatePriceManager_Test(){
         RatePriceManager_Test.testAll();
     }
+
+    @IsTest
+    static void AccountRequestController_Test(){
+        AccountRequestController_Test.testAll();
+    }
 }

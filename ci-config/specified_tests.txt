@@ -1,7 +1,6 @@
 TriggerUtils_Test
 TriggerHandler_Test
 TP_TestExecutorTest
-AccountRequestController_Test
 CommunitiesSelfRegConfirmControllerTest
 CommunitiesSelfRegControllerTest
 CommunitiesLandingControllerTest
