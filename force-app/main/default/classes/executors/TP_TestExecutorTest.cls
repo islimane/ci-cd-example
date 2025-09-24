@@ -202,7 +202,35 @@ public class TP_TestExecutorTest implements TP_ExecutableInterface{
     }
 
     @IsTest
-    static void AccountRequestController_Test(){
-        AccountRequestController_Test.testAll();
+    static void AccountRequestController_Test1(){
+        AccountRequestController_Test.testCreateAccountRequestOK();
     }
+
+    @IsTest
+    static void AccountRequestController_Test2(){
+        AccountRequestController_Test.testCreateAccountRequestKO();
+    }
+
+    @IsTest
+    static void IntegrationDTOTest1(){
+        IntegrationDTOTest.test_AccountDTO_and_related_DTOs();
+    }
+
+    @IsTest
+    static void IntegrationDTOTest2(){
+        IntegrationDTOTest.test_AccountDTO_without_contact_uses_fallback();
+    }
+    @IsTest
+    static void IntegrationDTOTest3(){
+        IntegrationDTOTest.test_SCOpportunityDTO_parse_and_related_methods();
+    }
+    @IsTest
+    static void IntegrationDTOTest4(){
+        IntegrationDTOTest.test_getSalesAndCateringExternalId();
+    }
+    @IsTest
+    static void IntegrationDTOTest5(){
+        IntegrationDTOTest.test_mapSCValue_fallback_paths_via_parsers();
+    }
+
 }
