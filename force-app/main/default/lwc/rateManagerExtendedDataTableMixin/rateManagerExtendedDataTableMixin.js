@@ -50,7 +50,7 @@ export const RateManagerExtendedDataTableMixin = (BaseClass) =>
         }
 
         mixinBuildTable(columns, listDataName, isQuota = false) {
-            this._columns = columns
+            this._columns = this.fixedColumnCount > 0 ? columns.slice(0, this.fixedColumnCount) : columns // reset columns to initial state
             const periods = this.getPeriodsFromData(listDataName)
 
             periods.forEach((period) => {
