@@ -472,7 +472,7 @@ public class TP_SetupDataTest {
      * @return A new RateLine__c object with dummy values for a test environment.
      */
     public static void generateRateLine() { // no va aquí porque no se hace insert de los records relacionados
-        RateLine__c rateLineRoom = new RateLine__c(Room__c = 'Z001', Regime__c = 'Z1', Application_Type__c = 'Absolute', Applicable__c = 'PPN' );
+        RateLine__c rateLineRoom = new RateLine__c(Room__c = 'Z001', Regime__c = 'Z1', Application_Type__c = 'Absolute', Applicable__c = 'Z09' );
         RateLine__c rateLineSupplement = new RateLine__c(Description__c = 'Children');
         mRateLineRoom = TP_SetupDataUtilsTest.setMapByName(mRateLineRoom, new List<sObject>{rateLineRoom});
         mRateLineSupplement = TP_SetupDataUtilsTest.setMapByName(mRateLineSupplement, new List<sObject>{rateLineSupplement});
