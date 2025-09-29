@@ -42,15 +42,18 @@ export default class QuoteManagerPriceConfig extends RateManagerExtendedDataTabl
     quotaSelected = false
     preventChange = false
     savingQuota = false
+    disableTable = false
 
     get roomHeaderLabel() {
-        let suffix = this.quotaSelected ? ' - Allotments' : ' - Prices'
-        return this.labels.rooms + suffix
+        return this.labels.rooms + this.suffix
     }
 
     get supplementsHeaderLabel() {
-        let suffix = ' - Prices'
-        return this.labels.supplements + suffix
+        return this.labels.supplements + this.suffix
+    }
+
+    get suffix() {
+        return this.quotaSelected ? ' - Allotments' : ' - Prices'
     }
 
     /**
@@ -87,9 +90,13 @@ export default class QuoteManagerPriceConfig extends RateManagerExtendedDataTabl
             ;[this.roomsData, this.supplData].forEach((dataArray) => {
                 dataArray.forEach((item) => {
                     item.RoomLabel = this._roomPicklistValues.find((picklistVal) => picklistVal.value === item.Room)?.label || item.Room
-                    item.CharactLabel = this._charactPicklistValues.find((picklistVal) => picklistVal.value === item.Characteristic)?.label || item.Characteristic
-                    item.ApplicableLabel = this._applcblePicklistValues.find((picklistVal) => picklistVal.value === item.Applicable)?.label || item.Applicable
-                    item.RegimenLabel = this._regimenPicklistValues.find((picklistVal) => picklistVal.value === item.RegimenType)?.label || item.RegimenType
+                    item.CharactLabel =
+                        this._charactPicklistValues.find((picklistVal) => picklistVal.value === item.Characteristic)?.label ||
+                        item.Characteristic
+                    item.ApplicableLabel =
+                        this._applcblePicklistValues.find((picklistVal) => picklistVal.value === item.Applicable)?.label || item.Applicable
+                    item.RegimenLabel =
+                        this._regimenPicklistValues.find((picklistVal) => picklistVal.value === item.RegimenType)?.label || item.RegimenType
                 })
             })
 
@@ -134,6 +141,7 @@ export default class QuoteManagerPriceConfig extends RateManagerExtendedDataTabl
     handleClick() {
         this.quotaSelected = !this.quotaSelected
         this.template.querySelectorAll('c-quote-manager-rate-price-table')[0]?.toggleQuota()
+        this.disableTable = this.quotaSelected
     }
 
     checkAllPicklistsLoaded() {
@@ -208,4 +216,12 @@ export default class QuoteManagerPriceConfig extends RateManagerExtendedDataTabl
         }
     }
     // #endregion Picklist wire
+
+    handleKeydownWhenDisabled(e) {
+        if (this.disabled) {
+            // Bloquea edición por teclado (F2, Enter, etc.)
+            e.stopPropagation()
+            e.preventDefault()
+        }
+    }
 }
