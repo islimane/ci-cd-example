@@ -18,7 +18,8 @@ const SUPPLEMENT_COLUMNS = [
     { label: 'FAMILY', fieldName: 'Family', type: 'text', fixed: true, fixedWidth: 120 },
     { label: 'APPLICATION TYPE', fieldName: 'ApplicationType', type: 'text', fixed: true, fixedWidth: 200 },
     { label: 'APPLICABLE', fieldName: 'ApplicableLabel', type: 'text', fixed: true, fixedWidth: 120 },
-    { label: 'OBSERVATIONS', fieldName: 'Observations', type: 'tooltipText', fixed: true, fixedWidth: 318, typeAttributes: { value: { fieldName: 'Observations' }, title: { fieldName: 'Observations' } } }
+    { label: 'REGIMEN', fieldName: 'RegimenLabel', type: 'text', fixed: true, fixedWidth: 101, wrapText: false },
+    { label: 'OBSERVATIONS', fieldName: 'Observations', type: 'tooltipText', fixed: true, fixedWidth: 213, typeAttributes: { value: { fieldName: 'Observations' }, title: { fieldName: 'Observations' } } }
 ]
 
 export default class QuoteManagerRatePriceTable extends RateManagerExtendedDataTableMixin(RateManagerMixin(LwcDCExtension)) {

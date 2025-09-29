@@ -44,7 +44,7 @@ pipelines:
             - sfdx force:config:set defaultusername=$SF_USERNAME
             - sfdx config:get defaultusername
             #- tests=$(sfdx sfpowerkit:source:apextest:list -p force-app --json | jq -r '.result | join(",")')
-            - tests=$(cat ci-config/specified_tests.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
+            - tests=$(cat ci-config/specified_tests.txt | tr '\n' ' ' | sed 's/\(.*\) /\1 /')
             - '[[ -z "$tests" ]] && sf project deploy start --source-dir force-app/ --test-level NoTestRun --dry-run --verbose || sf project deploy start --source-dir force-app/ --test-level RunSpecifiedTests --tests $tests --dry-run --verbose'
   branches:
     develop:
@@ -75,11 +75,15 @@ pipelines:
             #- sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth_url.txt --setalias $SF_USERNAME --json
             #- sfdx force:config:set defaultusername=$SF_USERNAME
             #- sfdx config:get defaultusername
-            #- tests=$(cat ci-config/specified_tests.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
+            #- tests=$(cat ci-config/specified_tests.txt | tr '\n' ' ' | sed 's/\(.*\) /\1 /')
             #- '[[ -z "$tests" ]] && sf project deploy start --source-dir force-app/ --test-level NoTestRun || sf project deploy start --source-dir force-app/ --test-level RunSpecifiedTests --tests $tests'
     qa:
       - step:
           name: Show SFDX Version
+          condition:
+            changesets:
+              includePaths:
+                - "force-app/**"
           runs-on:
             - self.hosted
           script:
@@ -88,6 +92,10 @@ pipelines:
             - sfdx plugins --core
       - step:
           name: Deploy to Staging
+          condition:
+            changesets:
+              includePaths:
+                - "force-app/**"
           runs-on:
             - self.hosted
           deployment: Staging
@@ -96,53 +104,8 @@ pipelines:
             - sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth_url.txt --setalias $SF_USERNAME --json
             - sfdx force:config:set defaultusername=$SF_USERNAME
             - sfdx config:get defaultusername
-            - |
-              if [ ! -s ci-config/last_successful_commit.txt ]; then
-                echo "Using manifest/package.xml for deployment"
-                MANIFEST_PATH="manifest/package.xml"
-              else
-                LAST_SUCCESSFUL_COMMIT=$(cat ci-config/last_successful_commit.txt)
-                sfdx sgd:source:delta --to $BITBUCKET_COMMIT --from $LAST_SUCCESSFUL_COMMIT --output .
-                MANIFEST_PATH="package/package.xml"
-              fi
-            - echo $MANIFEST_PATH
-            - tests=$(cat ci-config/specified_tests.txt | tr '\n' ' ' | sed 's/ $//')
-            - '[[ -z "$tests" ]] && sf project deploy start --manifest $MANIFEST_PATH --test-level RunLocalTests || sf project deploy start --manifest $MANIFEST_PATH --test-level RunSpecifiedTests --tests $tests'
-            - echo $BITBUCKET_COMMIT > ci-config/last_successful_commit.txt
-            - cat "$MANIFEST_PATH" > ci-config/last_package.xml
-            - git add ci-config/last_successful_commit.txt
-            - git add ci-config/last_package.xml
-            - git commit -m '[skip ci]'
-            - git push origin ${BITBUCKET_BRANCH}
-    uat:
-      - step:
-          name: Show SFDX Version
-          condition:
-            changesets:
-              includePaths:
-                - "force-app/**"
-          runs-on:
-            - self.hosted
-          script:
-            - sfdx update
-            - sfdx --version
-            - sfdx plugins --core
-      - step:
-          name: Deploy to Staging
-          condition:
-            changesets:
-              includePaths:
-                - "force-app/**"
-          runs-on:
-            - self.hosted
-          deployment: Staging
-          script:
-            - echo $UAT_SFDX_AUTH_URL > sfdx_auth_url.txt
-            - sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth_url.txt --setalias $SF_USERNAME --json
-            - sfdx force:config:set defaultusername=$SF_USERNAME
-            - sfdx config:get defaultusername
             #- tests=$(sfdx sfpowerkit:source:apextest:list -p force-app --json | jq -r '.result | join(",")')
-            - tests=$(cat ci-config/specified_tests.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
+            - tests=$(cat ci-config/specified_tests.txt | tr '\n' ' ' | sed 's/\(.*\) /\1 /')
             - '[[ -z "$tests" ]] && sf project deploy start --source-dir force-app/ --test-level NoTestRun || sf project deploy start --source-dir force-app/ --test-level RunSpecifiedTests --tests $tests'
     main:
       - step:
@@ -172,5 +135,5 @@ pipelines:
             - sfdx force:config:set defaultusername=$SF_USERNAME
             - sfdx config:get defaultusername
             #- tests=$(sfdx sfpowerkit:source:apextest:list -p force-app --json | jq -r '.result | join(",")')
-            - tests=$(cat ci-config/specified_tests.txt | tr '\n' ',' | sed 's/\(.*\),/\1 /')
+            - tests=$(cat ci-config/specified_tests.txt | tr '\n' ' ' | sed 's/\(.*\) /\1 /')
             - '[[ -z "$tests" ]] && sf project deploy start --source-dir force-app/ --test-level NoTestRun || sf project deploy start --source-dir force-app/ --test-level RunSpecifiedTests --tests $tests'

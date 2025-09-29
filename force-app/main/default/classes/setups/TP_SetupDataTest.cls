@@ -2,7 +2,7 @@
  * @description       : Unit Test Class for Setup Data Methods
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 15-07-2025
+ * @last modified on  : 11-09-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 @isTest
@@ -472,7 +472,7 @@ public class TP_SetupDataTest {
      * @return A new RateLine__c object with dummy values for a test environment.
      */
     public static void generateRateLine() { // no va aquí porque no se hace insert de los records relacionados
-        RateLine__c rateLineRoom = new RateLine__c(Room__c = 'Z001');
+        RateLine__c rateLineRoom = new RateLine__c(Room__c = 'Z001', Regime__c = 'Z1', Application_Type__c = 'Absolute', Applicable__c = 'PPN' );
         RateLine__c rateLineSupplement = new RateLine__c(Description__c = 'Children');
         mRateLineRoom = TP_SetupDataUtilsTest.setMapByName(mRateLineRoom, new List<sObject>{rateLineRoom});
         mRateLineSupplement = TP_SetupDataUtilsTest.setMapByName(mRateLineSupplement, new List<sObject>{rateLineSupplement});
@@ -726,6 +726,7 @@ public class TP_SetupDataTest {
         TP_SetupDataUtilsTest.genericParentChildRelationship(mProduct2Supplement.values(), mRateLineSupplement.values(), 'Product__c');
         TP_SetupDataUtilsTest.genericParentChildRelationship(mHotel.values(), mRateLineSupplement.values(), 'Hotel__c');
         TP_SetupDataUtilsTest.genericParentChildRelationship(mQuote.values(), mRateLineRoom.values(), 'Quote__c');
+        TP_SetupDataUtilsTest.genericParentChildRelationship(mQuote.values(), mRateLineSupplement.values(), 'Quote__c');
         RateLine__c rLine = (RateLine__c) mRateLineRoom.values()[0];
         lRateLineToInsert.addAll((List<RateLine__c>) mRateLineRoom.values());
         lRateLineToInsert.addAll((List<RateLine__c>) mRateLineSupplement.values());
