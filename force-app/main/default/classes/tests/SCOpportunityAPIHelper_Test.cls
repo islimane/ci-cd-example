@@ -2,7 +2,7 @@
  * @description       : SCOpportunityAPIHelper Test
  * @author            : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  * @group             : Test Class
- * @last modified on  : 15-07-2025
+ * @last modified on  : 24-09-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 @isTest
@@ -162,6 +162,7 @@ public class SCOpportunityAPIHelper_Test {
      *           TestAll Method            *
      ***************************************/
     public static void testAll() {
+        buildData();
         Test.startTest();
         processPostRequest_Success();
         processPostRequest_InvalidJson();

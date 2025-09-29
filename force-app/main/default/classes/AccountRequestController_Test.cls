@@ -2,14 +2,14 @@
  * @description       :
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             :
- * @last modified on  : 08-04-2025
- * @last modified by  : Inetum Team <alvaro.marin@inetum.com>
+ * @last modified on  : 23-09-2025
+ * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 @isTest
-private class AccountRequestController_Test {
+public class AccountRequestController_Test {
 
     @isTest
-    static void testCreateAccountRequestOK() {
+    public static void testCreateAccountRequestOK() {
         AccountRequestController.RequestData requestDataOK = new AccountRequestController.RequestData();
         requestDataOK.name = 'Test Account';
         requestDataOK.corporateName = 'Test Corporate';
@@ -18,6 +18,7 @@ private class AccountRequestController_Test {
         requestDataOK.motivationType = 'M01';
         requestDataOK.customerType = 'AAVV';
         requestDataOK.email = 'test@test.com';
+        requestDataOK.userEmail = 'usertest@test.com';
         requestDataOK.fax = '1234567890';
         requestDataOK.mobilePhone = '9876543210';
         requestDataOK.phone = '1234567890';
@@ -35,7 +36,7 @@ private class AccountRequestController_Test {
     }
 
     @isTest
-    static void testCreateAccountRequestKO() {
+    public static void testCreateAccountRequestKO() {
         AccountRequestController.RequestData requestDataKO = new AccountRequestController.RequestData();
         Test.startTest();
         AccountRequestController.RequestResult result1 = AccountRequestController.createAccountRequest(requestDataKO);
