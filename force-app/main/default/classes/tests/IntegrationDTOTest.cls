@@ -2,7 +2,7 @@
  * @description       : IntegrationDTO Test Class
  * @author            : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  * @group             : Test Class
- * @last modified on  : 24-09-2025
+ * @last modified on  : 29-09-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 @IsTest
@@ -166,14 +166,14 @@ public class IntegrationDTOTest {
     public static void test_AccountDTO_and_related_DTOs() {
         AccountRequest__c req = buildRequest();
 
-        Account acc = createBaseAccount('Acme Corp', 'info@acme.com');
+        Account acc = createBaseAccount('Test Foo Corp', 'info@test.test.com');
 
         insert new Contact(
             FirstName = 'Ana',
             LastName = 'López',
             AccountId = acc.Id,
             Phone = '600111222',
-            Email = 'ana@acme.com',
+            Email = 'ana@test.test.com',
             MailingStreet = 'Calle B',
             MailingCity = 'Madrid',
             MailingStateCode = 'MD',
