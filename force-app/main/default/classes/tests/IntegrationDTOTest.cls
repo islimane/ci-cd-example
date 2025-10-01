@@ -2,7 +2,7 @@
  * @description       : IntegrationDTO Test Class
  * @author            : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  * @group             : Test Class
- * @last modified on  : 24-09-2025
+ * @last modified on  : 29-09-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 @IsTest
@@ -30,7 +30,7 @@ public class IntegrationDTOTest {
         meta.pricebook = pb;
 
         // 1) Un único Product2 reutilizable
-        Product2 baseProd = TP_SetupSelectorTest.getProduct(1, 'TEST'); // IsActive = true
+        Product2 baseProd = TP_SetupSelectorTest.getProduct();
         meta.mProductIdByType.put('Room', baseProd.Id);
         meta.mProductIdByType.put('FoodBeverage', baseProd.Id);
         meta.mProductIdByType.put('VenueRoom', baseProd.Id);
@@ -152,12 +152,6 @@ public class IntegrationDTOTest {
         return req;
     }
 
-    private static Account createBaseAccount(String name, String emailOpt) {
-        Account acc = new Account(Name = name, Email__c = emailOpt);
-        insert acc;
-        return acc;
-    }
-
     // ==========
     //   TESTS
     // ==========
@@ -166,14 +160,14 @@ public class IntegrationDTOTest {
     public static void test_AccountDTO_and_related_DTOs() {
         AccountRequest__c req = buildRequest();
 
-        Account acc = createBaseAccount('Acme Corp', 'info@acme.com');
+        Account acc = TP_SetupSelectorTest.getAccount(1, 'TEST');
 
         insert new Contact(
             FirstName = 'Ana',
             LastName = 'López',
             AccountId = acc.Id,
             Phone = '600111222',
-            Email = 'ana@acme.com',
+            Email = 'ana@test.test.com',
             MailingStreet = 'Calle B',
             MailingCity = 'Madrid',
             MailingStateCode = 'MD',
@@ -274,7 +268,8 @@ public class IntegrationDTOTest {
     @IsTest
     public static void test_AccountDTO_without_contact_uses_fallback() {
         AccountRequest__c req = buildRequest();
-        Account accNoContact = createBaseAccount('NoContact Corp', 'noc@corp.com');
+        Account accNoContact = TP_SetupSelectorTest.getAccount(1, 'TEST');
+        delete [SELECT Id FROM Contact WHERE AccountId = :accNoContact.Id];
 
         IntegrationDTO.AccountDTO dto = new IntegrationDTO.AccountDTO(accNoContact, req);
         System.assertEquals('Ana', dto.Contact.FirstName, 'Debe poblar desde la request cuando no hay contactos');
@@ -285,9 +280,9 @@ public class IntegrationDTOTest {
         IntegrationDTO.SCAPIMetadataWrapper meta = buildMetadata();
 
         // Cuentas y lectura de autonumérico
-        Account aCustomer = createBaseAccount('Customer SA', 'customersa.test@test.com');
-        Account aAgency = createBaseAccount('Agency SL', 'agencysl.test@test.com');
-        Account aDeleg = createBaseAccount('Deleg SL', 'delegsl.test@test.com');
+        Account aCustomer = TP_SetupSelectorTest.getAccount(1, 'TEST');
+        Account aAgency = TP_SetupSelectorTest.getAccount(2, 'TEST');
+        Account aDeleg = TP_SetupSelectorTest.getAccount(3, 'TEST');
 
         Map<Id, Account> accs = new Map<Id, Account>(
             [
