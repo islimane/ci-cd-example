@@ -2,7 +2,7 @@
  * @description       : Provides utility methods to retrieve test records based on dynamic naming conventions.
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 24-09-2025
+ * @last modified on  : 29-09-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 
@@ -252,10 +252,10 @@ public with sharing class TP_SetupSelectorTest {
     }
 
     /**
-     * Retrieves a list of Product2 records based on the DB.
+     * Retrieves a Product2 record based on the DB.
      * @return Product2.
      */
-    public static Product2 getProduct (Integer batteryNum, String batteryCode){
-        return [SELECT Id, Name, Family, Characteristic__c, Room__c FROM Product2 WHERE Name =: (DEF_PREFIX+batteryCode+batteryNum) LIMIT 1];
+    public static Product2 getProduct(){
+        return [SELECT Id, Name, Family, Characteristic__c, Room__c FROM Product2 WHERE Family = 'Room' LIMIT 1];
     }
 }
