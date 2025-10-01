@@ -2,7 +2,7 @@
  * @description       : OpportunityHotelTrigger Test
  * @author            : Inetum Team <alvaro.marin@inetum.com>
  * @group             : Test Class
- * @last modified on  : 09-07-2025
+ * @last modified on  : 01-10-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 @isTest
@@ -57,7 +57,8 @@ public with sharing class OpportunityHotelTrigger_Test implements TP_ExecutableI
             Hotel__c = TP_SetupSelectorTest.getHotel(1, 'TEST').Id
         );
         insert newOppHotel;
-        Database.DeleteResult results = Database.delete(newOppHotel);
+        newOppHotel.Delete__c = true;
+        Database.SaveResult results = Database.update(newOppHotel);
         Assert.areEqual(true, results.isSuccess(), 'Opportunity_Hotel__c beforeDelete failed');
     }
 
