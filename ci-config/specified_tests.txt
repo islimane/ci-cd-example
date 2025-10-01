@@ -1,4 +1,7 @@
-RateManagementExecutor_Test
 TriggerUtils_Test
 TriggerHandler_Test
 TP_TestExecutorTest
+CommunitiesSelfRegConfirmControllerTest
+CommunitiesSelfRegControllerTest
+CommunitiesLandingControllerTest
+CommunitiesLoginControllerTest
