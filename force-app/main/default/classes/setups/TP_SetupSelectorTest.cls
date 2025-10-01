@@ -2,7 +2,7 @@
  * @description       : Provides utility methods to retrieve test records based on dynamic naming conventions.
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 19-08-2025
+ * @last modified on  : 29-09-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 
@@ -249,5 +249,13 @@ public with sharing class TP_SetupSelectorTest {
      */
     public static List<WeekdaySet__c> getWeekDaySets(){
         return [SELECT Id, Quote__c, RatePlanner__c, Rate__c FROM WeekdaySet__c LIMIT 5];
+    }
+
+    /**
+     * Retrieves a Product2 record based on the DB.
+     * @return Product2.
+     */
+    public static Product2 getProduct(){
+        return [SELECT Id, Name, Family, Characteristic__c, Room__c FROM Product2 WHERE Family = 'Room' LIMIT 1];
     }
 }

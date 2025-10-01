@@ -46,37 +46,50 @@ public virtual class TriggerHandler {
     * @author development@nubika.com | 24-01-2023
     **/
 	public void run() {
+        try {
+            if(!validateRun()) {
+                return;
+            }
 
-		if(!validateRun()) {
-			return;
-		}
+            addToLoopCount();
 
-		addToLoopCount();
-
-		// dispatch to the correct handler method
-		switch on this.context {
-			when BEFORE_INSERT {
-				this.beforeInsert();
-			}
-			when BEFORE_UPDATE {
-				this.beforeUpdate();
-			}
-			when BEFORE_DELETE {
-				this.beforeDelete();
-			}
-			when AFTER_INSERT {
-				this.afterInsert();
-			}
-			when AFTER_UPDATE {
-				this.afterUpdate();
-			}
-			when AFTER_DELETE {
-				this.afterDelete();
-			}
-			when AFTER_UNDELETE {
-				this.afterUndelete();
-			}
-		}
+            // dispatch to the correct handler method
+            switch on this.context {
+                when BEFORE_INSERT {
+                    this.beforeInsert();
+                }
+                when BEFORE_UPDATE {
+                    this.beforeUpdate();
+                }
+                when BEFORE_DELETE {
+                    this.beforeDelete();
+                }
+                when AFTER_INSERT {
+                    this.afterInsert();
+                }
+                when AFTER_UPDATE {
+                    this.afterUpdate();
+                }
+                when AFTER_DELETE {
+                    this.afterDelete();
+                }
+                when AFTER_UNDELETE {
+                    this.afterUndelete();
+                }
+            }
+        } catch (Exception e) {
+            if(Trigger.isExecuting && !Test.isRunningTest()){
+                String newMapJSON = (Trigger.newMap!=null) ? JSON.serialize(Trigger.newMap) : null;
+                String oldMapJSON = (Trigger.oldMap!=null) ? JSON.serialize(Trigger.oldMap) : null;
+                Logger.debug('TriggerHandler - run() - mTriggerNew keySet:\n' + ((Trigger.newMap!=null) ? JSON.serialize(Trigger.newMap.keySet()) : '[]'));
+                Logger.debug('TriggerHandler - run() - mTriggerNew:\n' + (newMapJSON?.length()>131072 ? newMapJSON?.substring(0, 131072) : newMapJSON));
+                Logger.debug('TriggerHandler - run() - mTriggerOld keySet:\n' + ((Trigger.oldMap!=null) ? JSON.serialize(Trigger.oldMap.keySet()) : '[]'));
+                Logger.debug('TriggerHandler - run() - mTriggerOld:\n' + (oldMapJSON?.length()>131072 ? oldMapJSON?.substring(0, 131072) : oldMapJSON));
+            }
+            Logger.error(e.getMessage() + '\n' + e.getStackTraceString());
+            Logger.saveLog();
+            throw e;
+        }
 	}
 
 	/**
