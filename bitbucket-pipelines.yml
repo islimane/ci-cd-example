@@ -107,6 +107,36 @@ pipelines:
             #- tests=$(sfdx sfpowerkit:source:apextest:list -p force-app --json | jq -r '.result | join(",")')
             - tests=$(cat ci-config/specified_tests.txt | tr '\n' ' ' | sed 's/\(.*\) /\1 /')
             - '[[ -z "$tests" ]] && sf project deploy start --source-dir force-app/ --test-level NoTestRun || sf project deploy start --source-dir force-app/ --test-level RunSpecifiedTests --tests $tests'
+    uat:
+      - step:
+          name: Show SFDX Version
+          condition:
+            changesets:
+              includePaths:
+                - "force-app/**"
+          runs-on:
+            - self.hosted
+          script:
+            - sfdx update
+            - sfdx --version
+            - sfdx plugins --core
+      - step:
+          name: Deploy to Staging
+          condition:
+            changesets:
+              includePaths:
+                - "force-app/**"
+          runs-on:
+            - self.hosted
+          deployment: Staging
+          script:
+            - echo $UAT_SFDX_AUTH_URL > sfdx_auth_url.txt
+            - sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth_url.txt --setalias $SF_USERNAME --json
+            - sfdx force:config:set defaultusername=$SF_USERNAME
+            - sfdx config:get defaultusername
+            #- tests=$(sfdx sfpowerkit:source:apextest:list -p force-app --json | jq -r '.result | join(",")')
+            - tests=$(cat ci-config/specified_tests.txt | tr '\n' ' ' | sed 's/\(.*\) /\1 /')
+            - '[[ -z "$tests" ]] && sf project deploy start --source-dir force-app/ --test-level NoTestRun || sf project deploy start --source-dir force-app/ --test-level RunSpecifiedTests --tests $tests'
     main:
       - step:
           name: Show SFDX Version
