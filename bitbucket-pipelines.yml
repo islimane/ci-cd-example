@@ -1,4 +1,4 @@
-image: nubika/sfdxplus-delta:latest
+image: salesforce/cli:latest
 
 pipelines:
   pull-requests:
