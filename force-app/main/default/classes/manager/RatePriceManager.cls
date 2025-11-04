@@ -2,7 +2,7 @@
  * @description       : DML operations for RatePrice__c
  * @author            : alberto.martinez-lopez@inetum.com
  * @group             :
- * @last modified on  : 17-06-2025
+ * @last modified on  : 04-11-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 public with sharing class RatePriceManager {
@@ -125,7 +125,7 @@ public with sharing class RatePriceManager {
         }
 
         for (RateLine__c rateLine : RateLineSelector.getRLByQuoteIdAndWeekDaySet(new Set<Id>{ quoteId }, new Set<Id>{ weekDaySetId })) {
-            for (RatePrice__c ratePrice : rateLine.Rates__r) {
+            for (RatePrice__c ratePrice : rateLine.RatePrices__r) {
                 String linePeriodKey = rateLine.Id + '-' + ratePrice.Period__r.Id;
                 mRateLinePeriodsToPrice.put(linePeriodKey, ratePrice.Id);
             }

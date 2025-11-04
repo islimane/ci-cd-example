@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Inetum Team <alberto.martinez-lopez@inetum.com>
  * @group             :
- * @last modified on  : 19-08-2025
+ * @last modified on  : 04-11-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
  **/
 public class RateLineSelector {
@@ -40,7 +40,7 @@ public class RateLineSelector {
                 Product__r.Base__c,
                 (
                     SELECT Id, RateLine__c, Period__r.StartDate__c, Period__r.EndDate__c, Period__r.Type__c, TotalPrice__c, CurrencyIsoCode
-                    FROM Rates__r
+                    FROM RatePrices__r
                 )
             FROM RateLine__c
             WHERE
@@ -89,7 +89,7 @@ public class RateLineSelector {
                 RelativeRoom__c,
                 (
                     SELECT Id, RateLine__c, Period__r.StartDate__c, Period__r.EndDate__c, Period__r.Type__c, TotalPrice__c, CurrencyIsoCode
-                    FROM Rates__r
+                    FROM RatePrices__r
                 )
             FROM RateLine__c
             WHERE Id IN :rateIds
@@ -167,7 +167,7 @@ public class RateLineSelector {
                         Rate__c,
                         Product__c,
                         Quota__c
-                    FROM Rates__r
+                    FROM RatePrices__r
                     WHERE WeekdaySet__c IN :weekDaySetIds
                 )
             FROM RateLine__c
