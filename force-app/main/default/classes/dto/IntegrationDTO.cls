@@ -278,7 +278,7 @@ global without sharing class IntegrationDTO {
         public String fechaDesde;
         public String fechaHasta;
         public String fechaBloq;
-        public String fechaCreacion; //no esta en xml
+        public String fechaCreacion;
         public String fechaMod; //no esta en xml
         public String motNoForm;
         public SCAccommodationDTO alojamiento;
@@ -313,6 +313,7 @@ global without sharing class IntegrationDTO {
                 EventType__c = mapSCValue(this.mOppStageBySCStage, 'All', 'EventType__c', this.tipoEvento),
                 PAXNoGroup__c = this.numPers,
                 CurrencyISOCode = this.moneda,
+                StartDate__c = (String.isNotBlank(this.fechaCreacion)) ? Date.parse(this.fechaCreacion) : null,
                 EventStartDate__c = (String.isNotBlank(this.fechaDesde)) ? Date.parse(this.fechaDesde) : null,
                 EventEndDate__c = (String.isNotBlank(this.fechaHasta)) ? Date.parse(this.fechaHasta) : null,
                 CloseDate = (String.isNotBlank(this.fechaHasta)) ? Date.parse(this.fechaHasta) : null,
