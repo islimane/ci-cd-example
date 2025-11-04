@@ -2,7 +2,7 @@
  * @description       : Provides utility methods to retrieve test records based on dynamic naming conventions.
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             : Setup
- * @last modified on  : 29-09-2025
+ * @last modified on  : 04-11-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 
@@ -212,7 +212,7 @@ public with sharing class TP_SetupSelectorTest {
                         Rate__c,
                         Product__c,
                         Quota__c
-                    FROM Rates__r
+                    FROM RatePrices__r
                 )
             FROM RateLine__c
             LIMIT 5

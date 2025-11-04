@@ -2,7 +2,7 @@
  * @description       : Unified model class for Rate Manager controllers
  * @author            : Inetum Team <sara.gerico@inetum.com>
  * @group             :
- * @last modified on  : 19-08-2025
+ * @last modified on  : 04-11-2025
  * @last modified by  : Inetum Team <ruben.sanchez-gonzalez@inetum.com>
 **/
 public with sharing class RateManagerModel {
@@ -104,7 +104,7 @@ public with sharing class RateManagerModel {
             this.Room = rateLine.Product__r.Room__c;
             this.Observations = rateLine.Observations__c;
 
-            for (RatePrice__c rateP : rateLine.Rates__r) {
+            for (RatePrice__c rateP : rateLine.RatePrices__r) {
                 String periodKey = this.getPeriodKey((Period__c)rateP.getSObject('Period__r'));
                 this.ratePricesByPeriodString.put(periodKey, new RatePrice(periodKey,rateP));
             }
