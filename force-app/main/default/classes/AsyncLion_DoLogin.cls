@@ -6,7 +6,7 @@ public class AsyncLion_DoLogin {
             Lion_DoLogin.DOLOGINResponse_element response = (Lion_DoLogin.DOLOGINResponse_element)System.WebServiceCallout.endInvoke(this);
             return response.RESULT;
         }
-    }
+    }//test
     public class AsyncBasicHttpBinding_IDoLogin {
         public String endpoint_x = 'http://sw19bi1-012dev.vilocha.local/AMT/WS/DoLogin.svc';
         public Map<String,String> inputHttpHeaders_x;
