@@ -32,7 +32,7 @@ jobs:
     # -----------------------------
     pr-validate:
         if: github.event_name == 'pull_request'
-        runs-on: self-hosted
+        runs-on: ubuntu-latest
         container:
             image: salesforce/cli:2.98.6-slim
         steps:
@@ -88,7 +88,7 @@ jobs:
     # -----------------------------
     deploy-develop:
         if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
-        runs-on: self-hosted
+        runs-on: ubuntu-latest
         container:
             image: salesforce/cli:2.98.6-slim
         environment:
@@ -110,7 +110,7 @@ jobs:
     # -----------------------------
     deploy-uat:
         if: github.ref == 'refs/heads/uat' && github.event_name == 'push'
-        runs-on: self-hosted
+        runs-on: ubuntu-latest
         container:
             image: salesforce/cli:2.98.6-slim
         environment:
@@ -146,7 +146,7 @@ jobs:
     # -----------------------------
     deploy-main:
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        runs-on: self-hosted
+        runs-on: ubuntu-latest
         container:
             image: salesforce/cli:2.98.6-slim
         environment:
