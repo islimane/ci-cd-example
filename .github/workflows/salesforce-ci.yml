@@ -1,0 +1,216 @@
+name: Salesforce CI
+
+on:
+    pull_request:
+        branches: ["**"]
+        paths:
+            - "force-app/**"
+            - "scripts/bash/checkDuplicates"
+            - "ci-config/**"
+            - ".github/workflows/**"
+    push:
+        branches: [develop, uat, main]
+        paths:
+            - "force-app/**"
+            - "scripts/bash/checkDuplicates"
+            - "ci-config/**"
+
+permissions:
+    contents: read
+
+concurrency:
+    group: salesforce-${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+env:
+    # Put SF_USERNAME as a repo variable if you like (Settings → Secrets and variables → Actions → Variables)
+    SF_USERNAME: ${{ vars.SF_USERNAME }}
+
+jobs:
+    # -----------------------------
+    # PR validation (any branch)
+    # -----------------------------
+    pr-validate:
+        if: github.event_name == 'pull_request'
+        runs-on: ubuntu-latest
+        container:
+            image: salesforce/cli:2.98.6-slim
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Show SF CLI Version
+              run: |
+                  sf --version
+                  sf plugins --core
+
+            - name: Check for Duplicates
+              run: |
+                  chmod +x scripts/bash/checkDuplicates
+                  scripts/bash/checkDuplicates ./force-app ".cls\|.trigger"
+
+            # Only run validate when PR is from same repo (secrets are available).
+            - name: Validate (dry-run deploy with tests when listed)
+              if: ${{ github.event.pull_request.head.repo.fork == false }}
+              env:
+                  PRO_SFDX_AUTH_URL: ${{ secrets.PRO_SFDX_AUTH_URL }}
+                  UAT_SFDX_AUTH_URL: ${{ secrets.UAT_SFDX_AUTH_URL }}
+                  QA_SFDX_AUTH_URL: ${{ secrets.QA_SFDX_AUTH_URL }}
+                  DEV_SFDX_AUTH_URL: ${{ secrets.DEV_SFDX_AUTH_URL }}
+              run: |
+                  set -euo pipefail
+
+                  # Determine target org by base branch of the PR (main/uat/develop)
+                  case "${GITHUB_BASE_REF}" in
+                    main)    SFDX_AUTH_URL="${PRO_SFDX_AUTH_URL}" ;;
+                    uat)     SFDX_AUTH_URL="${UAT_SFDX_AUTH_URL}" ;;
+                    qa)     SFDX_AUTH_URL="${QA_SFDX_AUTH_URL}" ;;
+                    develop) SFDX_AUTH_URL="${DEV_SFDX_AUTH_URL}" ;;
+                    *) echo "No SFDX_AUTH_URL defined for base branch '${GITHUB_BASE_REF}'"; exit 1 ;;
+                  esac
+
+                  # Authenticate
+                  echo "$SFDX_AUTH_URL" > sfdx_auth_url.txt
+                  sf org login sfdx-url --sfdx-url-file sfdx_auth_url.txt --alias "$SF_USERNAME" --set-default
+                  sf org display --target-org "$SF_USERNAME"
+
+                  # Tests list (optional file)
+                  tests="$( [ -f ci-config/specified_tests.txt ] && tr '\n' ' ' < ci-config/specified_tests.txt | sed 's/\(.*\) /\1 /' || echo "" )"
+
+                  if [ -z "$tests" ]; then
+                    sf project deploy start --source-dir force-app/ --test-level NoTestRun --dry-run --verbose
+                  else
+                    sf project deploy start --source-dir force-app/ --test-level RunSpecifiedTests --tests $tests --dry-run --verbose
+                  fi
+
+    # -----------------------------
+    # Push to develop  (Test env)
+    # -----------------------------
+    deploy-develop:
+        if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+        runs-on: ubuntu-latest
+        container:
+            image: salesforce/cli:2.98.6-slim
+        environment:
+            name: Test
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Show SF CLI Version
+              run: |
+                  sf --version
+                  sf plugins --core
+
+            - name: Deploy to Test
+              run: |
+                  echo "No deployments configured for develop"
+
+    # -----------------------------
+    # Push to qa (Staging env)
+    # -----------------------------
+    deploy-qa:
+        if: github.ref == 'refs/heads/qa' && github.event_name == 'push'
+        runs-on: ubuntu-latest
+        container:
+            image: salesforce/cli:2.98.6-slim
+        environment:
+            name: Staging
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Show SF CLI Version
+              run: |
+                  sf --version
+                  sf plugins --core
+
+            - name: Deploy to Staging
+              env:
+                  QA_SFDX_AUTH_URL: ${{ secrets.QA_SFDX_AUTH_URL }}
+              run: |
+                  set -euo pipefail
+
+                  echo "$QA_SFDX_AUTH_URL" > sfdx_auth_url.txt
+                  sf org login sfdx-url --sfdx-url-file sfdx_auth_url.txt --alias "$SF_USERNAME" --set-default
+                  sf org display --target-org "$SF_USERNAME"
+
+                  tests="$( [ -f ci-config/specified_tests.txt ] && tr '\n' ' ' < ci-config/specified_tests.txt | sed 's/\(.*\) /\1 /' || echo "" )"
+
+                  if [ -z "$tests" ]; then
+                    sf project deploy start --source-dir force-app/ --test-level NoTestRun
+                  else
+                    sf project deploy start --source-dir force-app/ --test-level RunSpecifiedTests --tests $tests
+                  fi
+
+    # -----------------------------
+    # Push to uat (Staging env)
+    # -----------------------------
+    deploy-uat:
+        if: github.ref == 'refs/heads/uat' && github.event_name == 'push'
+        runs-on: ubuntu-latest
+        container:
+            image: salesforce/cli:2.98.6-slim
+        environment:
+            name: Staging
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Show SF CLI Version
+              run: |
+                  sf --version
+                  sf plugins --core
+
+            - name: Deploy to Staging
+              env:
+                  UAT_SFDX_AUTH_URL: ${{ secrets.UAT_SFDX_AUTH_URL }}
+              run: |
+                  set -euo pipefail
+
+                  echo "$UAT_SFDX_AUTH_URL" > sfdx_auth_url.txt
+                  sf org login sfdx-url --sfdx-url-file sfdx_auth_url.txt --alias "$SF_USERNAME" --set-default
+                  sf org display --target-org "$SF_USERNAME"
+
+                  tests="$( [ -f ci-config/specified_tests.txt ] && tr '\n' ' ' < ci-config/specified_tests.txt | sed 's/\(.*\) /\1 /' || echo "" )"
+
+                  if [ -z "$tests" ]; then
+                    sf project deploy start --source-dir force-app/ --test-level NoTestRun
+                  else
+                    sf project deploy start --source-dir force-app/ --test-level RunSpecifiedTests --tests $tests
+                  fi
+
+    # -----------------------------
+    # Push to main (Production env)
+    # -----------------------------
+    deploy-main:
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        runs-on: ubuntu-latest
+        container:
+            image: salesforce/cli:2.98.6-slim
+        environment:
+            name: Production
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Show SF CLI Version
+              run: |
+                  sf --version
+                  sf plugins --core
+
+            - name: Deploy to Production
+              env:
+                  PRO_SFDX_AUTH_URL: ${{ secrets.PRO_SFDX_AUTH_URL }}
+              run: |
+                  set -euo pipefail
+
+                  echo "$PRO_SFDX_AUTH_URL" > sfdx_auth_url.txt
+                  sf org login sfdx-url --sfdx-url-file sfdx_auth_url.txt --alias "$SF_USERNAME" --set-default
+                  sf org display --target-org "$SF_USERNAME"
+
+                  tests="$( [ -f ci-config/specified_tests.txt ] && tr '\n' ' ' < ci-config/specified_tests.txt | sed 's/\(.*\) /\1 /' || echo "" )"
+
+                  if [ -z "$tests" ]; then
+                    sf project deploy start --source-dir force-app/ --test-level NoTestRun
+                  else
+                    sf project deploy start --source-dir force-app/ --test-level RunSpecifiedTests --tests $tests
+                  fi
