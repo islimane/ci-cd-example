@@ -60,8 +60,6 @@ jobs:
                   QA_SFDX_AUTH_URL: ${{ secrets.QA_SFDX_AUTH_URL }}
                   DEV_SFDX_AUTH_URL: ${{ secrets.DEV_SFDX_AUTH_URL }}
               run: |
-                  set -euo pipefail
-
                   # Determine target org by base branch of the PR (main/uat/develop)
                   case "${GITHUB_BASE_REF}" in
                     main)    SFDX_AUTH_URL="${PRO_SFDX_AUTH_URL}" ;;
@@ -129,8 +127,6 @@ jobs:
               env:
                   QA_SFDX_AUTH_URL: ${{ secrets.QA_SFDX_AUTH_URL }}
               run: |
-                  set -euo pipefail
-
                   echo "$QA_SFDX_AUTH_URL" > sfdx_auth_url.txt
                   sf org login sfdx-url --sfdx-url-file sfdx_auth_url.txt --alias "$SF_USERNAME" --set-default
                   sf org display --target-org "$SF_USERNAME"
@@ -165,8 +161,6 @@ jobs:
               env:
                   UAT_SFDX_AUTH_URL: ${{ secrets.UAT_SFDX_AUTH_URL }}
               run: |
-                  set -euo pipefail
-
                   echo "$UAT_SFDX_AUTH_URL" > sfdx_auth_url.txt
                   sf org login sfdx-url --sfdx-url-file sfdx_auth_url.txt --alias "$SF_USERNAME" --set-default
                   sf org display --target-org "$SF_USERNAME"
@@ -201,8 +195,6 @@ jobs:
               env:
                   PRO_SFDX_AUTH_URL: ${{ secrets.PRO_SFDX_AUTH_URL }}
               run: |
-                  set -euo pipefail
-
                   echo "$PRO_SFDX_AUTH_URL" > sfdx_auth_url.txt
                   sf org login sfdx-url --sfdx-url-file sfdx_auth_url.txt --alias "$SF_USERNAME" --set-default
                   sf org display --target-org "$SF_USERNAME"
